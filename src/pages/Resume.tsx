@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SEOHead } from "@/components/SEOHead";
 
 const Resume = () => {
   const navigate = useNavigate();
@@ -94,21 +95,28 @@ const Resume = () => {
   ];
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-6 py-16 max-w-2xl">
-        {/* Header */}
-        <div className="mb-16">
-          <div className="flex justify-between items-start mb-8">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/")}
-              className="-ml-3"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-            <ThemeToggle />
-          </div>
+    <>
+      <SEOHead
+        title="Resume - Drew's Lab"
+        description="Cybersecurity expert with extensive experience in security architecture, threat analysis, and secure development practices."
+        keywords="cybersecurity resume, security architect, threat analyst, security consultant"
+      />
+      <main id="main-content" className="min-h-screen">
+        <div className="container mx-auto px-6 py-16 max-w-2xl">
+          {/* Header */}
+          <div className="mb-16">
+            <div className="flex justify-between items-start mb-8">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate("/")}
+                className="-ml-3"
+                aria-label="Go back to home page"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <ThemeToggle />
+            </div>
           
           <div className="space-y-4">
             <h1 className="text-3xl font-semibold text-foreground">Drew</h1>
@@ -211,8 +219,9 @@ const Resume = () => {
             ))}
           </div>
         </section>
-      </div>
-    </div>
+        </div>
+      </main>
+    </>
   );
 };
 

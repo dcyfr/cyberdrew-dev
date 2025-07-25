@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import drewProfile from "@/assets/drew-profile.png";
 import { ExternalLink, FileText, Github, Linkedin, Award, BookOpen } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SEOHead } from "@/components/SEOHead";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -62,13 +63,19 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Theme Toggle */}
-      <div className="container mx-auto px-6 py-4 max-w-4xl">
-        <div className="flex justify-end">
-          <ThemeToggle />
+    <>
+      <SEOHead
+        title="Drew's Lab - Cybersecurity Expert & Developer"
+        description="Cybersecurity expert specializing in security architecture, threat analysis, and secure development practices. Explore insights on zero-trust, MFA, and enterprise security."
+        keywords="cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security, security consultant"
+      />
+      <main id="main-content" className="min-h-screen">
+        {/* Theme Toggle */}
+        <div className="container mx-auto px-6 py-4 max-w-4xl">
+          <div className="flex justify-end">
+            <ThemeToggle />
+          </div>
         </div>
-      </div>
       
       <div className="container mx-auto px-6 py-12 max-w-4xl">
         {/* Hero Section */}
@@ -163,7 +170,8 @@ const Home = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </main>
+    </>
   );
 };
 
