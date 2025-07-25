@@ -88,7 +88,7 @@ const Blog = () => {
             <BlogBreadcrumb currentPage="Blog" />
             
             <div className="mb-8">
-              <h1 className="text-4xl font-bold text-foreground mb-4 hover-glow">Blog</h1>
+              <h1 className="text-4xl font-bold text-foreground mb-4">Blog</h1>
               <p className="text-muted-foreground text-lg">
                 Thoughts on cybersecurity, technology, and digital resilience.
               </p>
