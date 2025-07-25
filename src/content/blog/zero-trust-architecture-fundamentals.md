@@ -15,15 +15,15 @@ Zero Trust is a security framework that requires all users, whether inside or ou
 
 ## Core Principles of Zero Trust
 
-### 1\. Verify Explicitly
+### 1. Verify Explicitly
 
 Always authenticate and authorize based on all available data points, including user identity, location, device health, service or workload, data classification, and anomalies.
 
-### 2\. Use Least Privilege Access
+### 2. Use Least Privilege Access
 
 Limit user access with Just-In-Time and Just-Enough-Access (JIT/JEA), risk-based adaptive policies, and data protection to secure both data and productivity.
 
-### 3\. Assume Breach
+### 3. Assume Breach
 
 Minimize blast radius and segment access. Verify end-to-end encryption and use analytics to get visibility, drive threat detection, and improve defenses.
 
