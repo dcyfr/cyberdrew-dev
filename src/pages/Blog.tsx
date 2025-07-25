@@ -83,8 +83,7 @@ const Blog = () => {
   });
 
   const handlePostClick = (slug: string) => {
-    // In a real implementation, this would navigate to the individual blog post
-    console.log(`Navigate to blog post: ${slug}`);
+    navigate(`/blog/${slug}`);
   };
 
   const handleTagClick = (tag: string, e?: React.MouseEvent) => {
