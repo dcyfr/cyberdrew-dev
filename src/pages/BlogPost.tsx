@@ -184,7 +184,7 @@ const BlogPost = () => {
           Back to Blog
         </Button>
         
-        <article className="prose prose-invert max-w-none">
+        <article className="max-w-none">
           <header className="mb-8">
             <h1 className="text-4xl font-bold text-foreground mb-4">{post.title}</h1>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -195,7 +195,7 @@ const BlogPost = () => {
           </header>
           
           <div 
-            className="text-foreground leading-relaxed"
+            className="blog-content text-foreground leading-relaxed space-y-6"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>
