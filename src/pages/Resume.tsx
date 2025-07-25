@@ -124,7 +124,7 @@ const Resume = () => {
             <BlogBreadcrumb currentPage="Resume" />
             
             <div className="space-y-4">
-              <h1 className="text-3xl font-semibold text-foreground hover-glow">Drew</h1>
+              <h1 className="text-3xl font-semibold text-foreground">Drew</h1>
               <p className="text-lg text-foreground">Principal Cybersecurity Engineer</p>
               <p className="text-muted-foreground leading-relaxed">
                 Skilled security professional with over 5 years of experience in developing security architecture, 
