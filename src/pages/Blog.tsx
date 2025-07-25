@@ -117,10 +117,10 @@ const Blog = () => {
                 filteredPosts.map((post, index) => (
                 <div 
                   key={index} 
-                  className="cursor-pointer group border-b border-border pb-8 last:border-b-0 hover-lift"
+                  className="cursor-pointer group rounded-xl border border-border/30 hover:border-border/60 p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm"
                   onClick={() => handlePostClick(post.slug)}
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors story-link">
                       {post.title}
                     </h2>

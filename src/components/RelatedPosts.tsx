@@ -31,7 +31,7 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
         {relatedPosts.map((post) => (
           <Card 
             key={post.slug} 
-            className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
+            className="cursor-pointer group rounded-xl border border-border/50 hover:border-border hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all duration-300 hover:-translate-y-2 bg-card/80 backdrop-blur-sm"
             onClick={() => {
               navigate(`/blog/${post.slug}`);
               window.scrollTo({ top: 0, behavior: 'smooth' });
