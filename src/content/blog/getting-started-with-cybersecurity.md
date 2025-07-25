@@ -15,15 +15,15 @@ Cybersecurity refers to protecting systems, networks, and programs from digital 
 
 ## Key Cybersecurity Principles
 
-### 1\. Confidentiality
+### 1. Confidentiality
 
 Ensuring that information is accessible only to those authorized to have access.
 
-### 2\. Integrity
+### 2. Integrity
 
 Safeguarding the accuracy and completeness of information and processing methods.
 
-### 3\. Availability
+### 3. Availability
 
 Ensuring that authorized users have access to information and associated assets when required.
 
