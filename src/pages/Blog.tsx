@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Search, Tag } from "lucide-react";
+import { useState } from "react";
 
 const Blog = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTag, setSelectedTag] = useState("All Posts");
 
   const blogPosts = [
     {
@@ -35,8 +39,8 @@ const Blog = () => {
     {
       title: "Getting Started with Cybersecurity: A Beginner's Guide",
       date: "January 6, 2025",
-      readTime: "8 min read",
-      excerpt: "A comprehensive introduction to cybersecurity fundamentals for newcomers to the field, covering essential concepts and career pathways.",
+      readTime: "2 min read",
+      excerpt: "Learn the fundamental concepts of cybersecurity and discover essential practices to protect yourself and your organization from digital threats.",
       tags: ["Beginner", "Career", "Fundamentals"],
       slug: "getting-started-with-cybersecurity",
     },
@@ -58,18 +62,31 @@ const Blog = () => {
     },
   ];
 
+  // Get all unique tags
+  const allTags = ["All Posts", ...Array.from(new Set(blogPosts.flatMap(post => post.tags)))];
+
+  // Filter posts based on search and tag
+  const filteredPosts = blogPosts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesTag = selectedTag === "All Posts" || post.tags.includes(selectedTag);
+    return matchesSearch && matchesTag;
+  });
+
   const handlePostClick = (slug: string) => {
     // In a real implementation, this would navigate to the individual blog post
     console.log(`Navigate to blog post: ${slug}`);
   };
 
-  const handleTagClick = (tag: string) => {
-    console.log(`Filter by tag: ${tag}`);
+  const handleTagClick = (tag: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSelectedTag(tag);
   };
 
   return (
-    <div className="min-h-screen bg-background dark">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="min-h-screen cyber-bg dark">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="mb-8">
           <Button 
@@ -81,63 +98,108 @@ const Blog = () => {
             Back to Home
           </Button>
           
-          <h1 className="text-4xl font-bold text-foreground mb-4">Blog</h1>
-          <p className="text-muted-foreground">
-            Thoughts on cybersecurity, technology, and industry insights
-          </p>
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+            <span>Home</span>
+            <ArrowRight className="w-3 h-3" />
+            <span className="text-foreground">Blog</span>
+          </div>
         </div>
 
-        {/* Blog Posts */}
-        <div className="space-y-8">
-          {blogPosts.map((post, index) => (
-            <Card 
-              key={index} 
-              className="cursor-pointer hover:shadow-lg transition-all duration-200 bg-card border-border"
-              onClick={() => handlePostClick(post.slug)}
-            >
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold text-card-foreground hover:text-accent transition-colors">
-                    {post.title}
-                  </h2>
-                  
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>{post.date}</span>
-                    <span>•</span>
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {post.readTime}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Search */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Search</h3>
+              <div className="relative">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Search posts..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 bg-card border-border"
+                />
+                <kbd className="absolute right-3 top-1/2 transform -translate-y-1/2 px-2 py-0.5 text-xs text-muted-foreground bg-muted rounded border">
+                  ⌘K
+                </kbd>
+              </div>
+            </div>
+
+            {/* Filter by Topic */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Tag className="w-4 h-4 text-muted-foreground" />
+                <h3 className="text-lg font-semibold text-foreground">Filter by Topic</h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {allTags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant={selectedTag === tag ? "default" : "secondary"}
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                    onClick={() => handleTagClick(tag)}
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Blog Posts */}
+          <div className="lg:col-span-3 space-y-6">
+            {filteredPosts.map((post, index) => (
+              <Card 
+                key={index} 
+                className="cursor-pointer hover:shadow-lg transition-all duration-200 bg-card border-border group"
+                onClick={() => handlePostClick(post.slug)}
+              >
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-bold text-card-foreground group-hover:text-accent transition-colors">
+                      {post.title}
+                    </h2>
+                    
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span>{post.date}</span>
+                      <span>•</span>
+                      <span>{post.readTime}</span>
+                    </div>
+                    
+                    <p className="text-muted-foreground leading-relaxed">
+                      {post.excerpt}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag, tagIndex) => (
+                        <Badge 
+                          key={tagIndex} 
+                          variant="secondary"
+                          className="cursor-pointer hover:bg-accent transition-colors"
+                          onClick={(e) => handleTagClick(tag, e)}
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <div className="flex items-center justify-end text-accent group-hover:text-accent/80 transition-colors">
+                      <span className="text-sm font-medium">Read More</span>
+                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
-                  
-                  <p className="text-muted-foreground leading-relaxed">
-                    {post.excerpt}
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag, tagIndex) => (
-                      <Badge 
-                        key={tagIndex} 
-                        variant="secondary"
-                        className="cursor-pointer hover:bg-accent transition-colors"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleTagClick(tag);
-                        }}
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  
-                  <div className="flex items-center text-accent hover:text-accent/80 transition-colors">
-                    <span className="text-sm font-medium">Read More</span>
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))}
+            
+            {filteredPosts.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No posts found matching your search.</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
