@@ -114,10 +114,19 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {connectCards.map((card, index) => {
               const IconComponent = card.icon;
+              const accentColors = [
+                "bg-accent-blue/5 hover:bg-accent-blue/10 border-accent-blue/20",
+                "bg-accent-green/5 hover:bg-accent-green/10 border-accent-green/20", 
+                "bg-accent-yellow/5 hover:bg-accent-yellow/10 border-accent-yellow/20",
+                "bg-accent-red/5 hover:bg-accent-red/10 border-accent-red/20",
+                "bg-accent-blue/5 hover:bg-accent-blue/10 border-accent-blue/20",
+                "bg-accent-green/5 hover:bg-accent-green/10 border-accent-green/20"
+              ];
+              
               return (
                 <Card 
                   key={index} 
-                  className="cursor-pointer transition-colors hover:bg-accent border border-border"
+                  className={`cursor-pointer transition-colors ${accentColors[index]}`}
                   onClick={() => handleCardClick(card.link, card.internal)}
                 >
                   <CardContent className="p-4">
