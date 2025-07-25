@@ -74,6 +74,14 @@ const Blog = () => {
     return matchesSearch && matchesTag;
   });
 
+  console.log("Blog Debug:", {
+    totalPosts: blogPosts.length,
+    filteredPosts: filteredPosts.length,
+    selectedTag,
+    searchQuery,
+    allTags
+  });
+
   const handlePostClick = (slug: string) => {
     // In a real implementation, this would navigate to the individual blog post
     console.log(`Navigate to blog post: ${slug}`);
