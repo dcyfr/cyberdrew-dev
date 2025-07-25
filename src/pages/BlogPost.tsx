@@ -111,7 +111,7 @@ const BlogPost = () => {
             
             <article className="max-w-3xl">
               <header className="mb-12">
-                <h1 className="text-4xl font-bold text-foreground mb-6 leading-tight hover-glow">
+                <h1 className="text-4xl font-bold text-foreground mb-6 leading-tight">
                   {post.title}
                 </h1>
                 <div className="flex items-center justify-between mb-6">
