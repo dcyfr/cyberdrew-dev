@@ -179,3 +179,14 @@ All colors MUST be HSL.
 .blog-content hr {
   @apply border-border my-8;
 }
+
+/* Animation initial states */
+.animate-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.animate-slide-up {
+  opacity: 0;
+  transform: translateY(30px);
+}
