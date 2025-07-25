@@ -86,7 +86,7 @@ const Home = () => {
           </h1>
           
           <p className="text-lg text-muted-foreground mb-8 max-w-md">
-            Cybersecurity Architect & Independent Researcher
+            Cybersecurity Architect
           </p>
           
           <div className="flex gap-3">
