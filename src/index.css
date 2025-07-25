@@ -106,18 +106,46 @@ All colors MUST be HSL.
 
 /* Animated background for cybersecurity theme */
 .cyber-bg {
-  background: linear-gradient(120deg, 
-    hsl(var(--background)) 0%, 
-    hsl(217 32% 6%) 50%, 
-    hsl(var(--background)) 100%);
-  background-size: 200% 200%;
-  animation: cyber-gradient 8s ease infinite;
+  position: relative;
+  background: hsl(217 32% 6%);
+  overflow: hidden;
 }
 
-@keyframes cyber-gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.cyber-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, hsl(217 91% 60% / 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, hsl(217 91% 60% / 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, hsl(217 91% 60% / 0.05) 1px, transparent 1px);
+  background-size: 100px 100px, 80px 80px, 120px 120px;
+  animation: cyber-drift 20s linear infinite;
+}
+
+.cyber-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 10% 80%, hsl(217 91% 60% / 0.08) 2px, transparent 2px),
+    radial-gradient(circle at 90% 20%, hsl(217 91% 60% / 0.08) 2px, transparent 2px);
+  background-size: 150px 150px, 200px 200px;
+  animation: cyber-drift 30s linear infinite reverse;
+}
+
+@keyframes cyber-drift {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-20px, -20px) rotate(90deg); }
+  50% { transform: translate(20px, -10px) rotate(180deg); }
+  75% { transform: translate(-10px, 20px) rotate(270deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
 }
 
 /* Blog post content styling */
