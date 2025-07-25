@@ -1,3 +1,17 @@
+// Import blog post markdown files
+const blogPostModules = import.meta.glob('/src/content/blog/*.md', { 
+  query: '?raw',
+  import: 'default',
+  eager: true 
+});
+
+// Create blogPosts object from imported modules
+const blogPosts: Record<string, string> = {};
+Object.entries(blogPostModules).forEach(([path, content]) => {
+  const slug = path.split('/').pop()?.replace('.md', '') || '';
+  blogPosts[slug] = content as string;
+});
+
 // Blog post interface
 export interface BlogPost {
   title: string;
