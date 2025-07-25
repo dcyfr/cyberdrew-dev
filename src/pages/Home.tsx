@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import drewProfile from "@/assets/drew-profile.png";
 import { ExternalLink, FileText, Github, Linkedin, Award, BookOpen } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -62,7 +63,14 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto px-6 py-24 max-w-4xl">
+      {/* Theme Toggle */}
+      <div className="container mx-auto px-6 py-4 max-w-4xl">
+        <div className="flex justify-end">
+          <ThemeToggle />
+        </div>
+      </div>
+      
+      <div className="container mx-auto px-6 py-12 max-w-4xl">
         {/* Hero Section */}
         <div className="flex flex-col items-center text-center mb-24">
           <div className="mb-8">
