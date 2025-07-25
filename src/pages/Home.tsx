@@ -61,7 +61,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background dark">
+    <div className="min-h-screen cyber-bg dark">
       <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="flex flex-col items-center text-center mb-16 pt-16">
