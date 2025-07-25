@@ -117,10 +117,10 @@ const Home = () => {
               const accentColors = [
                 "bg-accent-blue/5 hover:bg-accent-blue/10 border-accent-blue/20",
                 "bg-accent-green/5 hover:bg-accent-green/10 border-accent-green/20", 
+                "bg-accent-violet/5 hover:bg-accent-violet/10 border-accent-violet/20",
+                "bg-accent-pink/5 hover:bg-accent-pink/10 border-accent-pink/20",
                 "bg-accent-yellow/5 hover:bg-accent-yellow/10 border-accent-yellow/20",
-                "bg-accent-red/5 hover:bg-accent-red/10 border-accent-red/20",
-                "bg-accent-blue/5 hover:bg-accent-blue/10 border-accent-blue/20",
-                "bg-accent-green/5 hover:bg-accent-green/10 border-accent-green/20"
+                "bg-accent-red/5 hover:bg-accent-red/10 border-accent-red/20"
               ];
               
               return (

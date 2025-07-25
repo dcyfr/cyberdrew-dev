@@ -53,6 +53,8 @@ All colors MUST be HSL.
     --accent-blue: 208 100% 50%;
     --accent-green: 173 100% 31%;
     --accent-yellow: 39 100% 46%;
+    --accent-violet: 262 83% 58%;
+    --accent-pink: 330 81% 60%;
   }
 
   .dark {
@@ -99,6 +101,8 @@ All colors MUST be HSL.
     --accent-blue: 208 100% 50%;
     --accent-green: 173 100% 31%;
     --accent-yellow: 39 100% 46%;
+    --accent-violet: 262 83% 58%;
+    --accent-pink: 330 81% 60%;
   }
 }
 
