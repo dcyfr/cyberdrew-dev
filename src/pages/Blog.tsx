@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Clock, Search, Tag } from "lucide-react";
 import { useState } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -47,14 +48,17 @@ const Blog = () => {
       <div className="container mx-auto px-6 py-16 max-w-4xl">
         {/* Header */}
         <div className="mb-12">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate("/")}
-            className="mb-8 -ml-3"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
+          <div className="flex justify-between items-start mb-8">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate("/")}
+              className="-ml-3"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+            <ThemeToggle />
+          </div>
           
           <h1 className="text-3xl font-semibold text-foreground mb-4">Blog</h1>
           <p className="text-muted-foreground">Thoughts on technology, cybersecurity, and more.</p>

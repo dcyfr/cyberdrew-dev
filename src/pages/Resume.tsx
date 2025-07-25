@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calendar } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Resume = () => {
   const navigate = useNavigate();
@@ -97,14 +98,17 @@ const Resume = () => {
       <div className="container mx-auto px-6 py-16 max-w-2xl">
         {/* Header */}
         <div className="mb-16">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate("/")}
-            className="mb-8 -ml-3"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
+          <div className="flex justify-between items-start mb-8">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate("/")}
+              className="-ml-3"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+            <ThemeToggle />
+          </div>
           
           <div className="space-y-4">
             <h1 className="text-3xl font-semibold text-foreground">Drew</h1>
