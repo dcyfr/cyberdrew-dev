@@ -32,7 +32,10 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
           <Card 
             key={post.slug} 
             className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
-            onClick={() => navigate(`/blog/${post.slug}`)}
+            onClick={() => {
+              navigate(`/blog/${post.slug}`);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           >
             <CardHeader className="pb-3">
               <CardTitle className="text-lg leading-tight hover:text-primary transition-colors">
