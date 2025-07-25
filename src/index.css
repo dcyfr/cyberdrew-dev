@@ -124,6 +124,8 @@ All colors MUST be HSL.
     radial-gradient(circle at 50% 50%, hsl(217 91% 60% / 0.05) 1px, transparent 1px);
   background-size: 100px 100px, 80px 80px, 120px 120px;
   animation: cyber-drift 20s linear infinite;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .cyber-bg::after {
@@ -138,6 +140,8 @@ All colors MUST be HSL.
     radial-gradient(circle at 90% 20%, hsl(217 91% 60% / 0.08) 2px, transparent 2px);
   background-size: 150px 150px, 200px 200px;
   animation: cyber-drift 30s linear infinite reverse;
+  z-index: -1;
+  pointer-events: none;
 }
 
 @keyframes cyber-drift {
