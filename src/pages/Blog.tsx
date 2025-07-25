@@ -8,6 +8,9 @@ import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SEOHead } from "@/components/SEOHead";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
+import { EnhancedSearch } from "@/components/EnhancedSearch";
+import { ShareButtons } from "@/components/ShareButtons";
+import { PageTransition } from "@/components/PageTransition";
 import { BlogListSkeleton } from "@/components/BlogPostSkeleton";
 
 const Blog = () => {
@@ -19,12 +22,6 @@ const Blog = () => {
   // Get all posts and tags from markdown files
   const allPosts = getAllBlogPosts();
   const allTags = getAllTags();
-  
-  // Get tag counts
-  const tagCounts = allTags.reduce((acc, tag) => {
-    acc[tag] = allPosts.filter(post => post.tags.includes(tag)).length;
-    return acc;
-  }, {} as Record<string, number>);
 
   useEffect(() => {
     // Simulate loading time for better UX
@@ -44,21 +41,16 @@ const Blog = () => {
     return matchesSearch && matchesTag;
   });
 
-  console.log("Blog Debug:", {
-    totalPosts: allPosts.length,
-    filteredPosts: filteredPosts.length,
-    selectedTag,
-    searchQuery,
-    allTags
-  });
-
   const handlePostClick = (slug: string) => {
     navigate(`/blog/${slug}`);
   };
 
-  const handleTagClick = (tag: string, e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
+  const handleTagClick = (tag: string) => {
     setSelectedTag(selectedTag === tag ? "" : tag);
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchQuery(suggestion);
   };
 
   return (
@@ -68,116 +60,105 @@ const Blog = () => {
         description="Insights on cybersecurity, security architecture, threat analysis, and secure development practices from a cybersecurity expert."
         keywords="cybersecurity blog, security architecture, threat analysis, zero trust, MFA, enterprise security"
       />
-      <main id="main-content" className="min-h-screen">
-        <div className="container mx-auto px-6 py-16 max-w-4xl">
-          {/* Header */}
-          <div className="mb-12">
-            <div className="flex justify-between items-start mb-8">
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate("/")}
-                className="-ml-3"
-                aria-label="Go back to home page"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
-              <ThemeToggle />
-            </div>
-          
-          <BlogBreadcrumb currentPage="Blog" />
-          
-          <h1 className="text-4xl font-bold text-foreground mb-4">Blog</h1>
-          <p className="text-muted-foreground text-lg">
-            Thoughts on cybersecurity, technology, and digital resilience.
-          </p>
-        </div>
-
-        <div className="space-y-8">
-          {/* Search and Filters */}
-          <div className="flex flex-col gap-4 mb-8">
-            <div className="relative max-w-md">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Search posts..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              <Badge 
-                variant={selectedTag === "" ? "default" : "outline"}
-                className="cursor-pointer hover:bg-primary/90 transition-colors"
-                onClick={() => handleTagClick("")}
-              >
-                All ({allPosts.length})
-              </Badge>
-              {allTags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant={selectedTag === tag ? "default" : "outline"}
-                  className="cursor-pointer hover:bg-primary/90 transition-colors"
-                  onClick={(e) => handleTagClick(tag, e)}
+      <PageTransition>
+        <main id="main-content" className="min-h-screen">
+          <div className="container mx-auto px-6 py-16 max-w-4xl">
+            {/* Header */}
+            <div className="mb-12">
+              <div className="flex justify-between items-start mb-8">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => navigate("/")}
+                  className="-ml-3 hover:scale-105 transition-transform duration-200"
+                  aria-label="Go back to home page"
                 >
-                  {tag} ({tagCounts[tag]})
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {/* Blog Posts */}
-          <div className="space-y-8">
-            {isLoading ? (
-              <BlogListSkeleton />
-            ) : filteredPosts.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">No posts found matching your search.</p>
-              </div>
-            ) : (
-              filteredPosts.map((post, index) => (
-              <div 
-                key={index} 
-                className="cursor-pointer group border-b border-border pb-8 last:border-b-0"
-                onClick={() => handlePostClick(post.slug)}
-              >
-                <div className="space-y-3">
-                  <h2 className="text-xl font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                    {post.title}
-                  </h2>
-                  
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span>{post.date}</span>
-                    <span>•</span>
-                    <span>{post.readTime}</span>
-                  </div>
-                  
-                  <p className="text-muted-foreground leading-relaxed">
-                    {post.excerpt}
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag, tagIndex) => (
-                      <Badge 
-                        key={tagIndex} 
-                        variant="outline"
-                        className="cursor-pointer hover:bg-accent transition-colors text-xs"
-                        onClick={(e) => handleTagClick(tag, e)}
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back
+                </Button>
+                <div className="flex items-center gap-4">
+                  <ShareButtons 
+                    title="Drew's Lab Blog"
+                    excerpt="Cybersecurity insights and technical expertise"
+                    showRSS={true}
+                  />
+                  <ThemeToggle />
                 </div>
               </div>
-              ))
-            )}
+            
+            <BlogBreadcrumb currentPage="Blog" />
+            
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold text-foreground mb-4 hover-glow">Blog</h1>
+              <p className="text-muted-foreground text-lg">
+                Thoughts on cybersecurity, technology, and digital resilience.
+              </p>
+            </div>
           </div>
-        </div>
-        </div>
-      </main>
+
+          <div className="space-y-8">
+            {/* Enhanced Search and Filters */}
+            <EnhancedSearch
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedTag={selectedTag}
+              onTagChange={handleTagClick}
+              onSuggestionClick={handleSuggestionClick}
+            />
+
+            {/* Blog Posts */}
+            <div className="space-y-8">
+              {isLoading ? (
+                <BlogListSkeleton />
+              ) : filteredPosts.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">No posts found matching your search.</p>
+                </div>
+              ) : (
+                filteredPosts.map((post, index) => (
+                <div 
+                  key={index} 
+                  className="cursor-pointer group border-b border-border pb-8 last:border-b-0 hover-lift"
+                  onClick={() => handlePostClick(post.slug)}
+                >
+                  <div className="space-y-3">
+                    <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors story-link">
+                      {post.title}
+                    </h2>
+                    
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span>{post.date}</span>
+                      <span>•</span>
+                      <span>{post.readTime}</span>
+                    </div>
+                    
+                    <p className="text-muted-foreground leading-relaxed">
+                      {post.excerpt}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag, tagIndex) => (
+                        <Badge 
+                          key={tagIndex} 
+                          variant="outline"
+                          className="cursor-pointer hover-scale transition-all text-xs"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleTagClick(tag);
+                          }}
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                ))
+              )}
+            </div>
+          </div>
+          </div>
+        </main>
+      </PageTransition>
     </>
   );
 };
