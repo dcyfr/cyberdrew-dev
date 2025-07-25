@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, Calendar, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 
 const Resume = () => {
   const navigate = useNavigate();
@@ -94,22 +93,22 @@ const Resume = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background dark">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="min-h-screen">
+      <div className="container mx-auto px-6 py-16 max-w-2xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-16">
           <Button 
             variant="ghost" 
             onClick={() => navigate("/")}
-            className="mb-6 text-muted-foreground hover:text-foreground"
+            className="mb-8 -ml-3"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
+            Back
           </Button>
           
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-foreground">Drew</h1>
-            <p className="text-xl text-accent font-medium">Principal Cybersecurity Engineer</p>
+            <h1 className="text-3xl font-semibold text-foreground">Drew</h1>
+            <p className="text-lg text-foreground">Principal Cybersecurity Engineer</p>
             <p className="text-muted-foreground leading-relaxed">
               Skilled security professional with over 5 years of experience in developing security architecture, 
               zero-trust frameworks, and threat mitigation systems.
@@ -118,109 +117,93 @@ const Resume = () => {
         </div>
 
         {/* Experience */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Experience</h2>
-          <div className="space-y-6">
+        <section className="mb-16">
+          <h2 className="text-xl font-medium text-foreground mb-8">Experience</h2>
+          <div className="space-y-12">
             {experiences.map((exp, index) => (
-              <Card key={index} className="bg-card border-border">
-                <CardHeader>
-                  <div className="space-y-2">
-                    <CardTitle className="text-card-foreground">{exp.title}</CardTitle>
-                    <p className="text-accent font-medium">{exp.company}</p>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {exp.period}
-                    </div>
+              <div key={index} className="space-y-4">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium text-foreground">{exp.title}</h3>
+                  <p className="text-foreground">{exp.company}</p>
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    {exp.period}
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {exp.achievements.map((achievement, achIndex) => (
-                      <li key={achIndex} className="text-muted-foreground">
-                        • {achievement}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+                </div>
+                <ul className="space-y-2 ml-6">
+                  {exp.achievements.map((achievement, achIndex) => (
+                    <li key={achIndex} className="text-muted-foreground leading-relaxed">
+                      • {achievement}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
         </section>
 
         {/* Education */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Education</h2>
-          <div className="space-y-6">
+        <section className="mb-16">
+          <h2 className="text-xl font-medium text-foreground mb-8">Education</h2>
+          <div className="space-y-8">
             {education.map((edu, index) => (
-              <Card key={index} className="bg-card border-border">
-                <CardHeader>
-                  <div className="space-y-2">
-                    <CardTitle className="text-card-foreground">{edu.degree}</CardTitle>
-                    <p className="text-accent font-medium">{edu.school}</p>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {edu.period}
-                    </div>
+              <div key={index} className="space-y-4">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium text-foreground">{edu.degree}</h3>
+                  <p className="text-foreground">{edu.school}</p>
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    {edu.period}
                   </div>
-                </CardHeader>
+                </div>
                 {edu.details.length > 0 && (
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {edu.details.map((detail, detIndex) => (
-                        <li key={detIndex} className="text-muted-foreground">
-                          • {detail}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
+                  <ul className="space-y-2 ml-6">
+                    {edu.details.map((detail, detIndex) => (
+                      <li key={detIndex} className="text-muted-foreground leading-relaxed">
+                        • {detail}
+                      </li>
+                    ))}
+                  </ul>
                 )}
-              </Card>
+              </div>
             ))}
           </div>
         </section>
 
         {/* Certifications */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Certifications</h2>
+        <section className="mb-16">
+          <h2 className="text-xl font-medium text-foreground mb-8">Certifications</h2>
           <div className="space-y-6">
             {certifications.map((org, index) => (
-              <Card key={index} className="bg-card border-border">
-                <CardHeader>
-                  <CardTitle className="text-card-foreground">{org.organization}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {org.certs.map((cert, certIndex) => (
-                      <Badge key={certIndex} variant="secondary" className="bg-accent/10 text-accent">
-                        {cert}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <div key={index} className="space-y-3">
+                <h3 className="text-lg font-medium text-foreground">{org.organization}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {org.certs.map((cert, certIndex) => (
+                    <Badge key={certIndex} variant="outline" className="text-xs">
+                      {cert}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </section>
 
         {/* Core Competencies */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Core Competencies</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="mb-16">
+          <h2 className="text-xl font-medium text-foreground mb-8">Core Competencies</h2>
+          <div className="space-y-8">
             {competencies.map((comp, index) => (
-              <Card key={index} className="bg-card border-border">
-                <CardHeader>
-                  <CardTitle className="text-card-foreground text-lg">{comp.category}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {comp.skills.map((skill, skillIndex) => (
-                      <li key={skillIndex} className="text-muted-foreground text-sm">
-                        • {skill}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <div key={index} className="space-y-3">
+                <h3 className="text-lg font-medium text-foreground">{comp.category}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {comp.skills.map((skill, skillIndex) => (
+                    <Badge key={skillIndex} variant="outline" className="text-xs">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </section>
