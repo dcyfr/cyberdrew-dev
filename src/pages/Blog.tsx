@@ -5,52 +5,19 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Clock, Search, Tag } from "lucide-react";
 import { useState } from "react";
+import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 
 const Blog = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("All Posts");
 
-  const blogPosts = [
-    {
-      title: "Implementing Multi-Factor Authentication: Security Best Practices",
-      date: "April 16, 2025",
-      readTime: "3 min read",
-      excerpt: "Learn how to properly implement MFA across your organization to significantly reduce security breaches and protect against credential-based attacks.",
-      tags: ["Authentication", "MFA", "Best Practices"],
-      slug: "implementing-mfa-security-best-practices",
-    },
-    {
-      title: "Securing Remote Work: An Enterprise Security Guide",
-      date: "March 21, 2025",
-      readTime: "6 min read",
-      excerpt: "Learn how to implement comprehensive security controls for remote work environments while maintaining productivity and user experience.",
-      tags: ["Remote Work", "Endpoint Security", "Zero Trust"],
-      slug: "securing-remote-work-enterprise-guide",
-    },
-    {
-      title: "Zero Trust Architecture: Fundamentals and Implementation",
-      date: "February 11, 2025",
-      readTime: "3 min read",
-      excerpt: "Explore the core principles of Zero Trust architecture and learn how this security model is revolutionizing enterprise cybersecurity strategies.",
-      tags: ["Zero Trust", "Network Security", "Architecture"],
-      slug: "zero-trust-architecture-fundamentals",
-    },
-    {
-      title: "Getting Started with Cybersecurity: A Beginner's Guide",
-      date: "January 6, 2025",
-      readTime: "2 min read",
-      excerpt: "Learn the fundamental concepts of cybersecurity and discover essential practices to protect yourself and your organization from digital threats.",
-      tags: ["Beginner", "Career", "Fundamentals"],
-      slug: "getting-started-with-cybersecurity",
-    }
-  ];
-
-  // Get all unique tags
-  const allTags = ["All Posts", ...Array.from(new Set(blogPosts.flatMap(post => post.tags)))];
+  // Get all posts and tags from markdown files
+  const allPosts = getAllBlogPosts();
+  const allTags = ["All Posts", ...getAllTags()];
 
   // Filter posts based on search and tag
-  const filteredPosts = blogPosts.filter(post => {
+  const filteredPosts = allPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -59,7 +26,7 @@ const Blog = () => {
   });
 
   console.log("Blog Debug:", {
-    totalPosts: blogPosts.length,
+    totalPosts: allPosts.length,
     filteredPosts: filteredPosts.length,
     selectedTag,
     searchQuery,
