@@ -53,6 +53,11 @@ All colors MUST be HSL.
     --accent-blue: 208 100% 50%;
     --accent-green: 173 100% 31%;
     --accent-yellow: 39 100% 46%;
+
+    /* Dynamic gradient colors */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent-blue)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--accent) / 0.3) 100%);
+    --glow-primary: 0 0 40px hsl(var(--accent-blue) / 0.3);
   }
 
   .dark {
@@ -99,6 +104,11 @@ All colors MUST be HSL.
     --accent-blue: 208 100% 50%;
     --accent-green: 173 100% 31%;
     --accent-yellow: 39 100% 46%;
+
+    /* Dynamic gradient colors */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent-blue)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--accent) / 0.3) 100%);
+    --glow-primary: 0 0 40px hsl(var(--accent-blue) / 0.3);
   }
 }
 
