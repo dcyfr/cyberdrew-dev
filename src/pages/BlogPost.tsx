@@ -11,39 +11,39 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen cyber-bg dark">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="min-h-screen">
+        <div className="container mx-auto px-6 py-16 max-w-2xl">
           <Button 
             variant="ghost" 
             onClick={() => navigate("/blog")}
-            className="mb-6 text-muted-foreground hover:text-foreground"
+            className="mb-8 -ml-3"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Blog
+            Back
           </Button>
-          <h1 className="text-4xl font-bold text-foreground">Post Not Found</h1>
-          <p className="text-muted-foreground mt-4">The blog post you're looking for doesn't exist.</p>
+          <h1 className="text-3xl font-semibold text-foreground mb-4">Post Not Found</h1>
+          <p className="text-muted-foreground">The blog post you're looking for doesn't exist.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen cyber-bg dark">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="min-h-screen">
+      <div className="container mx-auto px-6 py-16 max-w-2xl">
         <Button 
           variant="ghost" 
           onClick={() => navigate("/blog")}
-          className="mb-6 text-muted-foreground hover:text-foreground"
+          className="mb-8 -ml-3"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Blog
+          Back
         </Button>
         
-        <article className="max-w-none">
-          <header className="mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-4">{post.title}</h1>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        <article>
+          <header className="mb-12">
+            <h1 className="text-3xl font-semibold text-foreground mb-4 leading-tight">{post.title}</h1>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>{post.date}</span>
               <span>•</span>
               <span>{post.readTime}</span>
@@ -51,7 +51,7 @@ const BlogPost = () => {
           </header>
           
           <div 
-            className="blog-content text-foreground leading-relaxed space-y-6"
+            className="blog-content"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>

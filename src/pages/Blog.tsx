@@ -43,113 +43,88 @@ const Blog = () => {
   };
 
   return (
-    <div className="min-h-screen cyber-bg dark">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <div className="min-h-screen">
+      <div className="container mx-auto px-6 py-16 max-w-4xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-12">
           <Button 
             variant="ghost" 
             onClick={() => navigate("/")}
-            className="mb-6 text-muted-foreground hover:text-foreground"
+            className="mb-8 -ml-3"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
+            Back
           </Button>
           
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-            <span>Home</span>
-            <ArrowRight className="w-3 h-3" />
-            <span className="text-foreground">Blog</span>
-          </div>
+          <h1 className="text-3xl font-semibold text-foreground mb-4">Blog</h1>
+          <p className="text-muted-foreground">Thoughts on technology, cybersecurity, and more.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Search */}
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-4">Search</h3>
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search posts..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-card border-border"
-                />
-                <kbd className="absolute right-3 top-1/2 transform -translate-y-1/2 px-2 py-0.5 text-xs text-muted-foreground bg-muted rounded border">
-                  ⌘K
-                </kbd>
-              </div>
+        <div className="space-y-8">
+          {/* Search and Filters */}
+          <div className="flex flex-col gap-4 mb-8">
+            <div className="relative max-w-md">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search posts..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
             </div>
 
-            {/* Filter by Topic */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Tag className="w-4 h-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold text-foreground">Filter by Topic</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {allTags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant={selectedTag === tag ? "default" : "secondary"}
-                    className="cursor-pointer hover:bg-accent transition-colors"
-                    onClick={() => handleTagClick(tag)}
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+            <div className="flex flex-wrap gap-2">
+              {allTags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant={selectedTag === tag ? "default" : "outline"}
+                  className="cursor-pointer hover:bg-accent transition-colors"
+                  onClick={() => handleTagClick(tag)}
+                >
+                  {tag}
+                </Badge>
+              ))}
             </div>
           </div>
 
           {/* Blog Posts */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="space-y-8">
             {filteredPosts.map((post, index) => (
-              <Card 
+              <div 
                 key={index} 
-                className="cursor-pointer hover:shadow-lg transition-all duration-200 bg-card border-border group"
+                className="cursor-pointer group border-b border-border pb-8 last:border-b-0"
                 onClick={() => handlePostClick(post.slug)}
               >
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-card-foreground group-hover:text-accent transition-colors">
-                      {post.title}
-                    </h2>
-                    
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span>{post.date}</span>
-                      <span>•</span>
-                      <span>{post.readTime}</span>
-                    </div>
-                    
-                    <p className="text-muted-foreground leading-relaxed">
-                      {post.excerpt}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag, tagIndex) => (
-                        <Badge 
-                          key={tagIndex} 
-                          variant="secondary"
-                          className="cursor-pointer hover:bg-accent transition-colors"
-                          onClick={(e) => handleTagClick(tag, e)}
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    
-                    <div className="flex items-center justify-end text-accent group-hover:text-accent/80 transition-colors">
-                      <span className="text-sm font-medium">Read More</span>
-                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </div>
+                <div className="space-y-3">
+                  <h2 className="text-xl font-medium text-foreground group-hover:text-muted-foreground transition-colors">
+                    {post.title}
+                  </h2>
+                  
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>{post.date}</span>
+                    <span>•</span>
+                    <span>{post.readTime}</span>
                   </div>
-                </CardContent>
-              </Card>
+                  
+                  <p className="text-muted-foreground leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map((tag, tagIndex) => (
+                      <Badge 
+                        key={tagIndex} 
+                        variant="outline"
+                        className="cursor-pointer hover:bg-accent transition-colors text-xs"
+                        onClick={(e) => handleTagClick(tag, e)}
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
             ))}
             
             {filteredPosts.length === 0 && (

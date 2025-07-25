@@ -61,38 +61,36 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen cyber-bg">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen">
+      <div className="container mx-auto px-6 py-24 max-w-4xl">
         {/* Hero Section */}
-        <div className="flex flex-col items-center text-center mb-16 pt-16">
+        <div className="flex flex-col items-center text-center mb-24">
           <div className="mb-8">
             <img
               src={drewProfile}
               alt="Drew"
-              className="w-32 h-32 rounded-full border-4 border-border object-cover"
+              className="w-24 h-24 rounded-full object-cover"
             />
           </div>
           
-          <h1 className="text-5xl font-bold text-foreground mb-4">
+          <h1 className="text-4xl font-semibold text-foreground mb-4 leading-tight">
             Hi, I'm Drew
           </h1>
           
-          <p className="text-xl text-muted-foreground mb-8">
+          <p className="text-lg text-muted-foreground mb-8 max-w-md">
             Cybersecurity Architect & Independent Researcher
           </p>
           
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <Button 
-              variant="nav" 
+              variant="outline" 
               onClick={() => navigate("/blog")}
-              className="px-6"
             >
               Blog
             </Button>
             <Button 
-              variant="nav" 
+              variant="outline" 
               onClick={() => navigate("/resume")}
-              className="px-6"
             >
               Resume
             </Button>
@@ -100,36 +98,33 @@ const Home = () => {
         </div>
 
         {/* Connect & Explore Section */}
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground mb-4 text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-semibold text-foreground mb-8 text-center">
             Connect & Explore
           </h2>
-          <p className="text-muted-foreground text-center mb-12">
-            Discover my work and connect across the web
-          </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {connectCards.map((card, index) => {
               const IconComponent = card.icon;
               return (
                 <Card 
                   key={index} 
-                  className="cursor-pointer hover:shadow-lg transition-all duration-200 bg-card border-border hover:scale-105"
+                  className="cursor-pointer transition-colors hover:bg-accent border border-border"
                   onClick={() => handleCardClick(card.link, card.internal)}
                 >
-                  <CardContent className="p-6">
+                  <CardContent className="p-4">
                     <div className="flex items-start gap-3">
-                      <IconComponent className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
-                      <div className="flex-1">
+                      <IconComponent className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <h3 className="text-lg font-semibold text-card-foreground">
+                          <h3 className="text-sm font-medium text-foreground">
                             {card.title}
                           </h3>
                           {!card.internal && (
-                            <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                            <ExternalLink className="w-3 h-3 text-muted-foreground flex-shrink-0" />
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground mt-2">
+                        <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
                           {card.description}
                         </p>
                       </div>
@@ -144,9 +139,8 @@ const Home = () => {
         {/* Sponsor Section */}
         <div className="text-center mt-16">
           <Button 
-            variant="cyber" 
+            variant="default" 
             onClick={() => window.open("https://github.com/sponsors/dcyfr", "_blank")}
-            className="px-8"
           >
             Sponsor on GitHub
           </Button>
