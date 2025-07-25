@@ -7,17 +7,24 @@ import { useState, useEffect } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SEOHead } from "@/components/SEOHead";
+import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { BlogListSkeleton } from "@/components/BlogPostSkeleton";
 
 const Blog = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTag, setSelectedTag] = useState("All Posts");
+  const [selectedTag, setSelectedTag] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   // Get all posts and tags from markdown files
   const allPosts = getAllBlogPosts();
-  const allTags = ["All Posts", ...getAllTags()];
+  const allTags = getAllTags();
+  
+  // Get tag counts
+  const tagCounts = allTags.reduce((acc, tag) => {
+    acc[tag] = allPosts.filter(post => post.tags.includes(tag)).length;
+    return acc;
+  }, {} as Record<string, number>);
 
   useEffect(() => {
     // Simulate loading time for better UX
@@ -27,10 +34,13 @@ const Blog = () => {
 
   // Filter posts based on search and tag
   const filteredPosts = allPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesTag = selectedTag === "All Posts" || post.tags.includes(selectedTag);
+    const matchesSearch = searchQuery === "" || 
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesTag = selectedTag === "" || post.tags.includes(selectedTag);
+    
     return matchesSearch && matchesTag;
   });
 
@@ -48,7 +58,7 @@ const Blog = () => {
 
   const handleTagClick = (tag: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setSelectedTag(tag);
+    setSelectedTag(selectedTag === tag ? "" : tag);
   };
 
   return (
@@ -75,8 +85,12 @@ const Blog = () => {
               <ThemeToggle />
             </div>
           
-          <h1 className="text-3xl font-semibold text-foreground mb-4">Blog</h1>
-          <p className="text-muted-foreground">Thoughts on technology, cybersecurity, and more.</p>
+          <BlogBreadcrumb currentPage="Blog" />
+          
+          <h1 className="text-4xl font-bold text-foreground mb-4">Blog</h1>
+          <p className="text-muted-foreground text-lg">
+            Thoughts on cybersecurity, technology, and digital resilience.
+          </p>
         </div>
 
         <div className="space-y-8">
@@ -93,15 +107,22 @@ const Blog = () => {
               />
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 mb-6">
+              <Badge 
+                variant={selectedTag === "" ? "default" : "outline"}
+                className="cursor-pointer hover:bg-primary/90 transition-colors"
+                onClick={() => handleTagClick("")}
+              >
+                All ({allPosts.length})
+              </Badge>
               {allTags.map((tag) => (
                 <Badge
                   key={tag}
                   variant={selectedTag === tag ? "default" : "outline"}
-                  className="cursor-pointer hover:bg-accent transition-colors"
-                  onClick={() => handleTagClick(tag)}
+                  className="cursor-pointer hover:bg-primary/90 transition-colors"
+                  onClick={(e) => handleTagClick(tag, e)}
                 >
-                  {tag}
+                  {tag} ({tagCounts[tag]})
                 </Badge>
               ))}
             </div>

@@ -7,6 +7,9 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { SEOHead } from "@/components/SEOHead";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { BlogPostSkeleton } from "@/components/BlogPostSkeleton";
+import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
+import { BackToTop } from "@/components/BackToTop";
+import { RelatedPosts } from "@/components/RelatedPosts";
 import { useState, useEffect } from "react";
 
 const BlogPost = () => {
@@ -30,7 +33,7 @@ const BlogPost = () => {
           description="Loading blog post content..."
         />
         <main id="main-content" className="min-h-screen">
-          <div className="container mx-auto px-6 py-16 max-w-2xl">
+          <div className="container mx-auto px-6 py-16 max-w-4xl">
             <div className="flex justify-between items-start mb-8">
               <Button 
                 variant="ghost" 
@@ -58,7 +61,7 @@ const BlogPost = () => {
           description="The blog post you're looking for doesn't exist."
         />
         <main id="main-content" className="min-h-screen">
-          <div className="container mx-auto px-6 py-16 max-w-2xl">
+          <div className="container mx-auto px-6 py-16 max-w-4xl">
             <Button 
               variant="ghost" 
               onClick={() => navigate("/blog")}
@@ -68,6 +71,7 @@ const BlogPost = () => {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
+            <BlogBreadcrumb />
             <h1 className="text-3xl font-semibold text-foreground mb-4">Post Not Found</h1>
             <p className="text-muted-foreground">The blog post you're looking for doesn't exist.</p>
           </div>
@@ -84,8 +88,9 @@ const BlogPost = () => {
         keywords={`${post.tags.join(', ')}, cybersecurity, security architecture`}
       />
       <ReadingProgress />
+      <BackToTop />
       <main id="main-content" className="min-h-screen">
-        <div className="container mx-auto px-6 py-16 max-w-2xl">
+        <div className="container mx-auto px-6 py-16 max-w-4xl">
           <div className="flex justify-between items-start mb-8">
             <Button 
               variant="ghost" 
@@ -99,18 +104,20 @@ const BlogPost = () => {
             <ThemeToggle />
           </div>
           
-          <article>
+          <BlogBreadcrumb postTitle={post.title} />
+          
+          <article className="max-w-3xl">
             <header className="mb-12">
-              <h1 className="text-3xl font-semibold text-foreground mb-4 leading-tight">{post.title}</h1>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <time dateTime={post.date}>{post.date}</time>
+              <h1 className="text-4xl font-bold text-foreground mb-6 leading-tight">{post.title}</h1>
+              <div className="flex items-center gap-3 text-sm text-muted-foreground mb-6">
+                <time dateTime={post.date} className="font-medium">{post.date}</time>
                 <span aria-hidden="true">•</span>
-                <span>{post.readTime}</span>
+                <span className="font-medium">{post.readTime}</span>
               </div>
               {post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-2 mb-8">
                   {post.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-xs">
+                    <Badge key={tag} variant="secondary" className="text-sm px-3 py-1">
                       {tag}
                     </Badge>
                   ))}
@@ -119,9 +126,11 @@ const BlogPost = () => {
             </header>
             
             <div 
-              className="blog-content"
+              className="blog-content prose prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
+            
+            <RelatedPosts currentPost={post} />
           </article>
         </div>
       </main>

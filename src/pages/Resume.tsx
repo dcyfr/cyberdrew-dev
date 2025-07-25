@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SEOHead } from "@/components/SEOHead";
+import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 
 const Resume = () => {
   const navigate = useNavigate();
@@ -117,6 +118,8 @@ const Resume = () => {
               </Button>
               <ThemeToggle />
             </div>
+          
+          <BlogBreadcrumb currentPage="Resume" />
           
           <div className="space-y-4">
             <h1 className="text-3xl font-semibold text-foreground">Drew</h1>

@@ -60,28 +60,73 @@ function parseFrontmatter(content: string): { frontmatter: any; markdown: string
   return { frontmatter, markdown };
 }
 
-// Convert markdown to HTML (basic implementation)
+// Enhanced markdown to HTML converter with better formatting
 function markdownToHtml(markdown: string): string {
-  return markdown
-    // Headers
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    // Bold
-    .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-    // Paragraphs
-    .replace(/^\s*(.+)$/gim, '<p>$1</p>')
-    // Lists
-    .replace(/^\s*- (.+)$/gim, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)/gims, '<ul>$1</ul>')
-    .replace(/^\s*\d+\. (.+)$/gim, '<li>$1</li>')
-    // Clean up multiple tags
-    .replace(/<\/ul>\s*<ul>/gim, '')
-    .replace(/<\/p>\s*<p>/gim, '</p><p>')
-    // Remove empty paragraphs
-    .replace(/<p><\/p>/gim, '')
-    .replace(/<p><h/gim, '<h')
-    .replace(/<\/h([1-6])><\/p>/gim, '</h$1>');
+  let html = markdown;
+  
+  // Code blocks (before other formatting)
+  html = html.replace(/```(\w+)?\n([\s\S]*?)\n```/g, (match, language, code) => {
+    const lang = language || 'text';
+    return `<pre class="bg-muted rounded-lg p-4 mb-6 overflow-x-auto border"><code class="text-sm font-mono text-foreground whitespace-pre language-${lang}">${code.trim()}</code></pre>`;
+  });
+  
+  // Inline code
+  html = html.replace(/`([^`]+)`/g, '<code class="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">$1</code>');
+  
+  // Headers with better styling
+  html = html.replace(/^#### (.*$)/gim, '<h4 class="text-lg font-semibold text-foreground mb-3 mt-6">$1</h4>');
+  html = html.replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold text-foreground mb-4 mt-8">$1</h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2 class="text-2xl font-semibold text-foreground mb-6 mt-10 pb-2 border-b border-border">$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-foreground mb-8 mt-12">$1</h1>');
+  
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary hover:text-primary/80 underline underline-offset-4 transition-colors" target="_blank" rel="noopener noreferrer">$1</a>');
+  
+  // Bold and italic
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
+  
+  // Blockquotes
+  html = html.replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-primary pl-4 py-2 my-6 bg-muted/50 rounded-r-lg italic text-muted-foreground">$1</blockquote>');
+  
+  // Lists - improved handling
+  html = html.replace(/^\* (.*$)/gim, '<li class="mb-2 text-muted-foreground">$1</li>');
+  html = html.replace(/^(\d+)\. (.*$)/gim, '<li class="mb-2 text-muted-foreground">$2</li>');
+  
+  // Wrap consecutive list items
+  html = html.replace(/(<li class="mb-2 text-muted-foreground">.*?<\/li>\n?)+/gs, (match) => {
+    const isNumbered = /^\d+\./.test(markdown.split('\n').find(line => line.trim().startsWith('1.') || line.trim().startsWith('*')) || '');
+    const listType = isNumbered ? 'ol' : 'ul';
+    const listClass = isNumbered ? 'list-decimal' : 'list-disc';
+    return `<${listType} class="${listClass} pl-6 mb-6 space-y-1">${match}</${listType}>`;
+  });
+  
+  // Horizontal rules
+  html = html.replace(/^---$/gim, '<hr class="border-border my-8">');
+  
+  // Paragraphs - be more careful about what we wrap
+  const lines = html.split('\n');
+  const processedLines = lines.map(line => {
+    const trimmed = line.trim();
+    if (!trimmed || 
+        trimmed.startsWith('<') || 
+        trimmed.startsWith('```') ||
+        /^#{1,6}\s/.test(trimmed) ||
+        /^[\*\-\+]\s/.test(trimmed) ||
+        /^\d+\.\s/.test(trimmed) ||
+        trimmed === '---') {
+      return line;
+    }
+    return `<p class="text-muted-foreground mb-6 leading-relaxed">${trimmed}</p>`;
+  });
+  
+  html = processedLines.join('\n');
+  
+  // Clean up empty paragraphs and fix spacing
+  html = html.replace(/<p class="text-muted-foreground mb-6 leading-relaxed"><\/p>/g, '');
+  html = html.replace(/\n\s*\n/g, '\n');
+  
+  return html;
 }
 
 // Get blog post by slug
