@@ -47,6 +47,12 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 8%;
     --sidebar-border: 0 0% 90%;
     --sidebar-ring: 0 0% 8%;
+
+    /* Accent colors */
+    --accent-red: 354 87% 51%;
+    --accent-blue: 208 100% 50%;
+    --accent-green: 173 100% 31%;
+    --accent-yellow: 39 100% 46%;
   }
 
   .dark {
@@ -87,6 +93,12 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 95%;
     --sidebar-border: 0 0% 12%;
     --sidebar-ring: 0 0% 80%;
+
+    /* Accent colors */
+    --accent-red: 354 87% 51%;
+    --accent-blue: 208 100% 50%;
+    --accent-green: 173 100% 31%;
+    --accent-yellow: 39 100% 46%;
   }
 }
 
