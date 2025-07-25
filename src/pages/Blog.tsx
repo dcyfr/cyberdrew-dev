@@ -43,23 +43,7 @@ const Blog = () => {
       excerpt: "Learn the fundamental concepts of cybersecurity and discover essential practices to protect yourself and your organization from digital threats.",
       tags: ["Beginner", "Career", "Fundamentals"],
       slug: "getting-started-with-cybersecurity",
-    },
-    {
-      title: "Cloud Security Best Practices for AWS, Azure, and GCP",
-      date: "December 15, 2024",
-      readTime: "10 min read",
-      excerpt: "Master cloud security across major platforms with practical guidance on securing your cloud infrastructure and applications.",
-      tags: ["Cloud Security", "AWS", "Azure", "GCP"],
-      slug: "cloud-security-best-practices",
-    },
-    {
-      title: "The Evolution of Incident Response in Modern Organizations",
-      date: "November 28, 2024",
-      readTime: "7 min read",
-      excerpt: "How incident response has evolved with modern threats and the tools and processes needed for effective security incident management.",
-      tags: ["Incident Response", "SOC", "Threat Hunting"],
-      slug: "evolution-of-incident-response",
-    },
+    }
   ];
 
   // Get all unique tags
