@@ -33,13 +33,16 @@ export default defineConfig(({ mode }) => ({
   build: {
     // Security optimizations for production
     sourcemap: mode === 'development',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: mode === 'production',
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug']
+    // Only use terser in production mode to avoid development build issues
+    minify: mode === 'production' ? 'terser' : false,
+    ...(mode === 'production' && {
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log', 'console.info', 'console.debug']
+        }
       }
-    }
+    })
   }
 }));
