@@ -29,9 +29,9 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
       <h2 className="text-2xl font-semibold text-foreground mb-6">Related Posts</h2>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {relatedPosts.map((post) => (
-          <Card 
+           <Card 
             key={post.slug} 
-            className="cursor-pointer group rounded-xl border border-border/75 hover:border-border hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all duration-300 hover:-translate-y-2 bg-card/80 backdrop-blur-sm"
+            className="modern-card-lg"
             onClick={() => {
               navigate(`/blog/${post.slug}`);
               window.scrollTo({ top: 0, behavior: 'smooth' });

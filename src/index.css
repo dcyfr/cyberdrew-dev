@@ -55,6 +55,11 @@ All colors MUST be HSL.
     --accent-yellow: 39 100% 46%;
     --accent-violet: 262 83% 58%;
     --accent-pink: 330 81% 60%;
+
+    /* Shadow system */
+    --shadow-light: 0 4px 20px hsl(0 0% 0% / 0.05);
+    --shadow-medium: 0 8px 30px hsl(0 0% 0% / 0.06);
+    --shadow-strong: 0 12px 40px hsl(0 0% 0% / 0.08);
   }
 
   .dark {
@@ -103,6 +108,11 @@ All colors MUST be HSL.
     --accent-yellow: 39 100% 46%;
     --accent-violet: 262 83% 58%;
     --accent-pink: 330 81% 60%;
+
+    /* Shadow system for dark mode */
+    --shadow-light: 0 4px 20px hsl(0 0% 0% / 0.2);
+    --shadow-medium: 0 8px 30px hsl(0 0% 0% / 0.3);
+    --shadow-strong: 0 12px 40px hsl(0 0% 0% / 0.4);
   }
 }
 
@@ -137,6 +147,37 @@ All colors MUST be HSL.
   
   .story-link:hover::after {
     @apply scale-x-100 origin-bottom-left;
+  }
+
+  /* Modern card component */
+  .modern-card {
+    @apply cursor-pointer group rounded-xl border border-border/75 hover:border-border p-6 
+           transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm;
+    box-shadow: none;
+  }
+
+  .modern-card:hover {
+    box-shadow: var(--shadow-light);
+  }
+
+  .modern-card-sm {
+    @apply cursor-pointer group rounded-xl border border-border/75 hover:border-border p-2 
+           transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm;
+    box-shadow: none;
+  }
+
+  .modern-card-sm:hover {
+    box-shadow: var(--shadow-light);
+  }
+
+  .modern-card-lg {
+    @apply cursor-pointer group rounded-xl border border-border/75 hover:border-border p-6 
+           transition-all duration-300 hover:-translate-y-2 bg-card/80 backdrop-blur-sm;
+    box-shadow: none;
+  }
+
+  .modern-card-lg:hover {
+    box-shadow: var(--shadow-medium);
   }
 }
 

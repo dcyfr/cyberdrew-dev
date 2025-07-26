@@ -73,7 +73,7 @@ const Home = () => {
           </div> */}
           {/* Hero Section */}
           <div className="flex flex-col items-center text-center mb-6">
-            <div className="mb-8 rounded-xl border border-border/75 hover:border-border p-2 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm">
+            <div className="mb-8 modern-card-sm">
               <img src={Profile} alt="Drew's Profile" className="w-24 h-24 rounded-lg object-cover" />
             </div>
             <h1 className="text-4xl font-bold text-foreground mb-4 leading-tight">It's Drew ✨</h1>
@@ -95,7 +95,7 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {connectCards.map((card, index) => {
                 const IconComponent = card.icon;
-                return <div key={index} className="cursor-pointer group rounded-xl border border-border/75 hover:border-border p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm" onClick={() => handleCardClick(card.link, card.internal)}>
+                return <div key={index} className="modern-card" onClick={() => handleCardClick(card.link, card.internal)}>
                   <div className="flex items-start gap-4">
                     <div className="rounded-lg bg-muted/50 p-2">
                       <IconComponent className="w-5 h-5 text-foreground" />

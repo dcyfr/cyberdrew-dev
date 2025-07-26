@@ -139,7 +139,7 @@ const Resume = () => {
                 <h2 className="text-xl font-medium text-foreground mb-8">Education</h2>
                 <div className="space-y-8">
                   {education.map((edu, index) => (
-                    <div key={index} className="rounded-xl border border-border/75 hover:border-border p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm space-y-4">
+                     <div key={index} className="modern-card space-y-4">
                       <div className="space-y-2">
                         <h3 className="text-lg font-medium text-foreground">{edu.degree}</h3>
                         <p className="text-foreground">{edu.school}</p>
@@ -166,7 +166,7 @@ const Resume = () => {
                 <h2 className="text-xl font-medium text-foreground mb-8">Experience</h2>
                 <div className="space-y-12">
                   {experiences.map((exp, index) => (
-                    <div key={index} className="rounded-xl border border-border/75 hover:border-border p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm space-y-4">
+                    <div key={index} className="modern-card space-y-4">
                       <div className="space-y-2">
                         <h3 className="text-lg font-medium text-foreground">{exp.title}</h3>
                         <p className="text-foreground">{exp.company}</p>
@@ -191,7 +191,7 @@ const Resume = () => {
                 <h2 className="text-xl font-medium text-foreground mb-8">Certifications</h2>
                 <div className="space-y-6">
                   {certifications.map((org, index) => (
-                    <div key={index} className="rounded-xl border border-border/75 hover:border-border p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm space-y-3">
+                     <div key={index} className="modern-card space-y-3">
                       <h3 className="text-lg font-medium text-foreground">{org.organization}</h3>
                       <div className="flex flex-wrap gap-2">
                         {org.certs.map((cert, certIndex) => (
@@ -213,7 +213,7 @@ const Resume = () => {
                 <h2 className="text-xl font-medium text-foreground mb-8">Core Competencies</h2>
                 <div className="space-y-8">
                   {competencies.map((comp, index) => (
-                    <div key={index} className="rounded-xl border border-border/75 hover:border-border p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm space-y-3">
+                    <div key={index} className="modern-card space-y-3">
                       <h3 className="text-lg font-medium text-foreground">{comp.category}</h3>
                       <div className="flex flex-wrap gap-2">
                         {comp.skills.map((skill, skillIndex) => (

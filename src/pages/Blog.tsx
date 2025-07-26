@@ -110,9 +110,9 @@ const Blog = () => {
                   </div>
                 ) : (
                   filteredPosts.map((post, index) => (
-                  <div 
+                   <div 
                     key={index} 
-                    className="cursor-pointer group rounded-xl border border-border/75 hover:border-border p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm"
+                    className="modern-card"
                     onClick={() => handlePostClick(post.slug)}
                   >
                     <div className="space-y-4">
