@@ -12,12 +12,13 @@ import { BackToTop } from "@/components/BackToTop";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import { ShareButtons } from "@/components/ShareButtons";
 import { PageTransition } from "@/components/PageTransition";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const BlogPost = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const post = getBlogPost(slug || "");
 
@@ -26,6 +27,29 @@ const BlogPost = () => {
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
   }, [slug]);
+
+  useEffect(() => {
+    // Fix markdown-style lists after content loads
+    if (!isLoading && contentRef.current) {
+      const paragraphs = contentRef.current.querySelectorAll('p');
+      paragraphs.forEach(p => {
+        const text = p.textContent || '';
+        if (text.trim().startsWith('- ')) {
+          p.innerHTML = p.innerHTML.replace(/^- /, '');
+          p.style.position = 'relative';
+          p.style.marginLeft = '1.5rem';
+          p.style.marginBottom = '0.5rem';
+          
+          const bullet = document.createElement('span');
+          bullet.textContent = '•';
+          bullet.style.position = 'absolute';
+          bullet.style.left = '-1rem';
+          bullet.style.fontWeight = 'bold';
+          p.prepend(bullet);
+        }
+      });
+    }
+  }, [isLoading, post]);
 
   if (isLoading) {
     return (
@@ -145,6 +169,7 @@ const BlogPost = () => {
               </header>
               {/* Blog Post Content */}
               <div 
+                ref={contentRef}
                 className="blog-content prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
