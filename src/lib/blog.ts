@@ -89,16 +89,23 @@ function markdownToHtml(markdown: string): string {
   // Blockquotes
   html = html.replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-primary pl-4 py-2 my-6 bg-muted/50 rounded-r-lg italic text-muted-foreground">$1</blockquote>');
   
-  // Lists - improved handling
-  html = html.replace(/^\* (.*$)/gim, '<li class="mb-2 text-muted-foreground">$1</li>');
-  html = html.replace(/^(\d+)\. (.*$)/gim, '<li class="mb-2 text-muted-foreground">$2</li>');
+  // Lists - improved handling for both - and * formats
+  html = html.replace(/^[\-\*] (.*$)/gim, '<li class="mb-2 text-foreground leading-[1.7]">$1</li>');
+  html = html.replace(/^(\d+)\. (.*$)/gim, '<li class="mb-2 text-foreground leading-[1.7]">$2</li>');
   
-  // Wrap consecutive list items
-  html = html.replace(/(<li class="mb-2 text-muted-foreground">.*?<\/li>\n?)+/gs, (match) => {
-    const isNumbered = /^\d+\./.test(markdown.split('\n').find(line => line.trim().startsWith('1.') || line.trim().startsWith('*')) || '');
+  // Wrap consecutive list items in proper list tags
+  html = html.replace(/(<li class="mb-2 text-foreground leading-\[1\.7\]">.*?<\/li>\s*)+/gs, (match) => {
+    // Check if any of the original lines were numbered
+    const listItems = match.match(/<li[^>]*>(.*?)<\/li>/gs) || [];
+    const originalLines = markdown.split('\n').filter(line => 
+      line.trim().match(/^[\-\*\d+\.]\s/) && 
+      listItems.some(li => li.includes(line.replace(/^[\-\*\d+\.]\s/, '').trim()))
+    );
+    const isNumbered = originalLines.some(line => line.trim().match(/^\d+\./));
+    
     const listType = isNumbered ? 'ol' : 'ul';
-    const listClass = isNumbered ? 'list-decimal' : 'list-disc';
-    return `<${listType} class="${listClass} pl-6 mb-6 space-y-1">${match}</${listType}>`;
+    const listClass = isNumbered ? 'list-decimal ml-6 mb-6 space-y-2' : 'list-disc ml-6 mb-6 space-y-2';
+    return `<${listType} class="${listClass}">${match}</${listType}>`;
   });
   
   // Horizontal rules
@@ -117,13 +124,13 @@ function markdownToHtml(markdown: string): string {
         trimmed === '---') {
       return line;
     }
-    return `<p class="text-muted-foreground mb-6 leading-relaxed">${trimmed}</p>`;
+    return `<p class="text-foreground mb-6 leading-[1.7] text-[15px]">${trimmed}</p>`;
   });
   
   html = processedLines.join('\n');
   
   // Clean up empty paragraphs and fix spacing
-  html = html.replace(/<p class="text-muted-foreground mb-6 leading-relaxed"><\/p>/g, '');
+  html = html.replace(/<p class="text-foreground mb-6 leading-\[1\.7\] text-\[15px\]"><\/p>/g, '');
   html = html.replace(/\n\s*\n/g, '\n');
   
   return html;
