@@ -68,12 +68,12 @@ const Blog = () => {
               {/* Page Navigation */}
               <div className="flex justify-between items-start mb-8">
                 <Button 
-                  variant="ghost" 
+                  variant="vercel-ghost" 
                   onClick={() => navigate("/")}
-                  className="-ml-3 hover:scale-105 transition-transform duration-200"
+                  className="text-sm"
                   aria-label="Go back to home page"
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  <ArrowLeft className="w-4 h-4 mr-1" />
                   Back
                 </Button>
                 <ThemeToggle />
@@ -81,9 +81,9 @@ const Blog = () => {
               {/* Page Breadcrumbs */}
               <BlogBreadcrumb currentPage="Blog" />
               {/* Page Title */}
-              <div className="space-y-4">
-                <h1 className="text-3xl font-semibold text-foreground">Blog</h1>
-                <p className="text-muted-foreground leading-relaxed">
+              <div className="space-y-6">
+                <h1 className="vercel-heading-2 mt-0">Blog</h1>
+                <p className="vercel-text-muted max-w-2xl">
                   Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
                 </p>
               </div>

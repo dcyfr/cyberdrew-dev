@@ -38,12 +38,12 @@ const BlogPost = () => {
           <div className="container mx-auto px-6 py-16 max-w-4xl">
             <div className="flex justify-between items-start mb-8">
               <Button 
-                variant="ghost" 
+                variant="vercel-ghost" 
                 onClick={() => navigate("/blog")}
-                className="-ml-3"
+                className="text-sm"
                 aria-label="Go back to blog"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
+                <ArrowLeft className="w-4 h-4 mr-1" />
                 Back
               </Button>
               <ThemeToggle />
@@ -65,12 +65,12 @@ const BlogPost = () => {
         <main id="main-content" className="min-h-screen">
           <div className="container mx-auto px-6 py-16 max-w-4xl">
             <Button 
-              variant="ghost" 
+              variant="vercel-ghost" 
               onClick={() => navigate("/blog")}
-              className="mb-8 -ml-3"
+              className="mb-8 text-sm"
               aria-label="Go back to blog"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="w-4 h-4 mr-1" />
               Back
             </Button>
             <BlogBreadcrumb />
@@ -98,12 +98,12 @@ const BlogPost = () => {
             <div className="flex justify-between items-start mb-8">
               {/* Back Button */}
               <Button 
-                variant="ghost" 
+                variant="vercel-ghost" 
                 onClick={() => navigate("/blog")}
-                className="-ml-3 hover:scale-105 transition-transform duration-200"
+                className="text-sm"
                 aria-label="Go back to blog"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
+                <ArrowLeft className="w-4 h-4 mr-1" />
                 Back
               </Button>
               {/* Theme Toggle Button */}
@@ -112,17 +112,17 @@ const BlogPost = () => {
             {/* Page Breadcrumb */}
             <BlogBreadcrumb postTitle={post.title} />
             {/* Post Content */}
-            <article className="max-w-3xl mb-8">
+            <article className="max-w-none mb-8">
               {/* Post Header */}
-              <header className="mb-12">
-                <h1 className="text-4xl font-bold text-foreground mb-6 leading-tight">
+              <header className="mb-16">
+                <h1 className="vercel-heading-1">
                   {post.title}
                 </h1>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <time dateTime={post.date} className="font-medium">{post.date}</time>
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-2 vercel-text-muted">
+                    <time dateTime={post.date}>{post.date}</time>
                     <span aria-hidden="true">•</span>
-                    <span className="font-medium">{post.readTime}</span>
+                    <span>{post.readTime}</span>
                   </div>
                   <ShareButtons 
                     title={post.title} 
@@ -130,12 +130,12 @@ const BlogPost = () => {
                   />
                 </div>
                 {post.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-8">
+                  <div className="flex flex-wrap gap-2 mb-12">
                     {post.tags.map((tag) => (
                       <Badge 
                         key={tag} 
                         variant="secondary" 
-                        className="text-sm px-3 py-1 hover-scale"
+                        className="text-xs px-3 py-1 font-medium rounded-full"
                       >
                         {tag}
                       </Badge>

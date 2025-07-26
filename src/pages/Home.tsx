@@ -72,12 +72,12 @@ const Home = () => {
             <ThemeToggle />
           </div> */}
           {/* Hero Section */}
-          <div className="flex flex-col items-center text-center mb-6">
+          <div className="flex flex-col items-center text-center mb-12">
             <div className="mb-8 modern-card-sm">
               <img src={Profile} alt="Drew's Profile" className="w-24 h-24 rounded-lg object-cover" />
             </div>
-            <h1 className="text-4xl font-bold text-foreground mb-4 leading-tight">It's Drew ✨</h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed">Cyber Architect, Engineer, and Developer</p>
+            <h1 className="vercel-heading-1">It's Drew ✨</h1>
+            <p className="vercel-text-muted mb-8 max-w-md">Cyber Architect, Engineer, and Developer</p>
             {/* <div className="flex gap-3">
               <Button variant="outline" onClick={() => navigate("/blog")} className="hover:scale-105 transition-transform duration-200">
                 <BookOpen className="w-4 h-4 mr-2" />

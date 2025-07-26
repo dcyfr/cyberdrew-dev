@@ -174,56 +174,85 @@ All colors MUST be HSL.
   @apply bg-background;
 }
 
-/* Typography system */
+/* Vercel-inspired typography */
 .blog-content h1 {
-  @apply text-4xl font-semibold text-foreground mt-0 mb-6 leading-tight;
+  @apply text-4xl font-semibold text-foreground mt-0 mb-8 leading-[1.1] tracking-tight;
 }
 
 .blog-content h2 {
-  @apply text-3xl font-semibold text-foreground mt-12 mb-6 leading-tight;
+  @apply text-3xl font-semibold text-foreground mt-16 mb-6 leading-[1.2] tracking-tight;
 }
 
 .blog-content h3 {
-  @apply text-2xl font-medium text-foreground mt-8 mb-4 leading-tight;
+  @apply text-2xl font-medium text-foreground mt-12 mb-4 leading-[1.3] tracking-tight;
 }
 
 .blog-content h4 {
-  @apply text-xl font-medium text-foreground mt-6 mb-3 leading-tight;
+  @apply text-xl font-medium text-foreground mt-8 mb-3 leading-[1.4];
 }
 
 .blog-content p {
-  @apply text-foreground leading-7 mb-6;
+  @apply text-foreground leading-[1.7] mb-6 text-[15px];
 }
 
 .blog-content ul, .blog-content ol {
-  @apply text-foreground ml-0 mb-6 space-y-2 leading-7;
+  @apply text-foreground ml-0 mb-6 space-y-3 leading-[1.7] text-[15px];
 }
 
 .blog-content li {
-  @apply leading-7;
+  @apply leading-[1.7] pl-0;
 }
 
 .blog-content strong {
-  @apply font-medium;
+  @apply font-semibold;
 }
 
 .blog-content a {
-  @apply text-foreground underline underline-offset-4 hover:text-muted-foreground transition-colors;
+  @apply text-foreground underline underline-offset-[3px] decoration-border hover:decoration-foreground transition-colors;
 }
 
 .blog-content blockquote {
-  @apply border-l-4 border-border pl-6 italic text-muted-foreground my-6;
+  @apply border-l-2 border-border pl-6 italic text-muted-foreground my-8 bg-muted/30 py-4 rounded-r-lg;
 }
 
 .blog-content code {
-  @apply bg-muted px-1.5 py-0.5 rounded-sm text-sm font-mono;
+  @apply bg-muted px-2 py-1 rounded-md text-sm font-mono text-foreground;
 }
 
 .blog-content pre {
-  @apply bg-muted p-4 rounded-lg overflow-x-auto my-6;
+  @apply bg-muted border border-border p-4 rounded-lg overflow-x-auto my-8 text-sm;
+}
+
+.blog-content pre code {
+  @apply bg-transparent p-0 text-sm;
 }
 
 .blog-content hr {
-  @apply border-border my-8;
+  @apply border-border my-12 border-t;
+}
+
+/* Vercel-style headings with better spacing */
+.vercel-heading {
+  @apply font-semibold tracking-tight text-foreground;
+}
+
+.vercel-heading-1 {
+  @apply vercel-heading text-5xl leading-[1.1] mb-8;
+}
+
+.vercel-heading-2 {
+  @apply vercel-heading text-4xl leading-[1.1] mb-6 mt-16;
+}
+
+.vercel-heading-3 {
+  @apply vercel-heading text-3xl leading-[1.2] mb-4 mt-12;
+}
+
+.vercel-text {
+  @apply text-[15px] leading-[1.7] text-foreground;
+}
+
+.vercel-text-muted {
+  @apply text-[14px] leading-[1.6] text-muted-foreground;
 }
 }
