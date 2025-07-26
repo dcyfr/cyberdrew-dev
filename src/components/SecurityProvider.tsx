@@ -23,30 +23,33 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) 
       }
     });
 
-    // Enforce HTTPS in production
-    if (process.env.NODE_ENV === 'production' && location.protocol !== 'https:') {
+    // Enforce HTTPS in production (disabled for Lovable subdomain)
+    if (process.env.NODE_ENV === 'production' && 
+        location.protocol !== 'https:' && 
+        !location.hostname.includes('lovableproject.com')) {
       location.replace(`https:${location.href.substring(location.protocol.length)}`);
     }
 
-    // Disable right-click context menu in production (optional security measure)
+    // Disable right-click context menu in production (optional - disabled for development)
     const handleContextMenu = (e: MouseEvent) => {
-      if (process.env.NODE_ENV === 'production') {
-        e.preventDefault();
-      }
+      // Temporarily disabled to avoid interfering with development
+      // if (process.env.NODE_ENV === 'production') {
+      //   e.preventDefault();
+      // }
     };
 
-    // Disable F12 and other developer shortcuts in production
+    // Disable F12 and other developer shortcuts in production (optional - disabled for development)
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (process.env.NODE_ENV === 'production') {
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        if (
-          e.key === 'F12' ||
-          (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-          (e.ctrlKey && e.key === 'U')
-        ) {
-          e.preventDefault();
-        }
-      }
+      // Temporarily disabled to avoid interfering with development
+      // if (process.env.NODE_ENV === 'production') {
+      //   if (
+      //     e.key === 'F12' ||
+      //     (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+      //     (e.ctrlKey && e.key === 'U')
+      //   ) {
+      //     e.preventDefault();
+      //   }
+      // }
     };
 
     // Add event listeners
