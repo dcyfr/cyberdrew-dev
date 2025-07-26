@@ -1,0 +1,5 @@
+# HTTPS redirect for Netlify
+http://yoursite.lovable.app/* https://yoursite.lovable.app/:splat 301!
+
+# Fallback for SPA routing
+/*    /index.html   200
