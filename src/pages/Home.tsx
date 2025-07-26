@@ -95,7 +95,7 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {connectCards.map((card, index) => {
                 const IconComponent = card.icon;
-                return <div key={index} className="modern-card" onClick={() => handleCardClick(card.link, card.internal)}>
+                return <div key={index} className="modern-card group" onClick={() => handleCardClick(card.link, card.internal)}>
                   <div className="flex items-start gap-4">
                     <div className="rounded-lg bg-muted/50 p-2">
                       <IconComponent className="w-5 h-5 text-foreground" />

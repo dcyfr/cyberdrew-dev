@@ -151,7 +151,7 @@ All colors MUST be HSL.
 
   /* Modern card component */
   .modern-card {
-    @apply cursor-pointer group rounded-xl border border-border/75 hover:border-border p-6 
+    @apply cursor-pointer rounded-xl border border-border/75 hover:border-border p-6 
            transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm;
     box-shadow: none;
   }
@@ -161,7 +161,7 @@ All colors MUST be HSL.
   }
 
   .modern-card-sm {
-    @apply cursor-pointer group rounded-xl border border-border/75 hover:border-border p-2 
+    @apply cursor-pointer rounded-xl border border-border/75 hover:border-border p-2 
            transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm;
     box-shadow: none;
   }
@@ -171,7 +171,7 @@ All colors MUST be HSL.
   }
 
   .modern-card-lg {
-    @apply cursor-pointer group rounded-xl border border-border/75 hover:border-border p-6 
+    @apply cursor-pointer rounded-xl border border-border/75 hover:border-border p-6 
            transition-all duration-300 hover:-translate-y-2 bg-card/80 backdrop-blur-sm;
     box-shadow: none;
   }

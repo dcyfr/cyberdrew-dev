@@ -31,7 +31,7 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
         {relatedPosts.map((post) => (
            <Card 
             key={post.slug} 
-            className="modern-card-lg"
+            className="modern-card-lg group"
             onClick={() => {
               navigate(`/blog/${post.slug}`);
               window.scrollTo({ top: 0, behavior: 'smooth' });

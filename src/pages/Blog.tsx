@@ -112,7 +112,7 @@ const Blog = () => {
                   filteredPosts.map((post, index) => (
                    <div 
                     key={index} 
-                    className="modern-card"
+                    className="modern-card group"
                     onClick={() => handlePostClick(post.slug)}
                   >
                     <div className="space-y-4">
