@@ -111,24 +111,24 @@ const Resume = () => {
               {/* Page Navigation */}
               <div className="flex justify-between items-start mb-8">
                 <Button 
-                  variant="ghost" 
+                  variant="vercel-ghost" 
                   onClick={() => navigate("/")}
-                  className="-ml-3 hover:scale-105 transition-transform duration-200"
+                  className="text-sm"
                   aria-label="Go back to home page"
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back
-                </Button>
-                <ThemeToggle />
-              </div>
+                <ArrowLeft className="w-4 h-4 mr-1" />
+                Back
+              </Button>
+              <ThemeToggle />
+            </div>
             </div>
             {/* Page Breadcrumbs */}
             <BlogBreadcrumb currentPage="Resume" />
             {/* Page Title */}
             <div className="space-y-4 mb-12">
-              <h1 className="text-3xl font-semibold text-foreground">Drew</h1>
-              <p className="text-lg text-foreground">Cybersecurity Architect</p>
-              <p className="text-muted-foreground leading-relaxed">
+              <h1 className="vercel-heading-2 mt-0">Drew</h1>
+              <p className="vercel-text font-medium">Cybersecurity Architect</p>
+              <p className="vercel-text-muted max-w-2xl">
                 Cybersecurity expert with extensive experience in security architecture, threat analysis, and secure development practices. Proven track record in designing and implementing robust security solutions for large-scale enterprises.
               </p>
             </div>
@@ -136,7 +136,7 @@ const Resume = () => {
             <div className="space-y-8">
               {/* Education Section */}
               <section className="space-y-8">
-                <h2 className="text-xl font-medium text-foreground mb-8">Education</h2>
+                <h2 className="vercel-heading-3 mb-8 mt-0">Education</h2>
                 <div className="space-y-8">
                   {education.map((edu, index) => (
                      <div key={index} className="modern-card space-y-4">
@@ -163,7 +163,7 @@ const Resume = () => {
               </section>
               {/* Experience Section */}
               <section className="space-y-8">
-                <h2 className="text-xl font-medium text-foreground mb-8">Experience</h2>
+                <h2 className="vercel-heading-3 mb-8 mt-0">Experience</h2>
                 <div className="space-y-12">
                   {experiences.map((exp, index) => (
                     <div key={index} className="modern-card space-y-4">
@@ -188,7 +188,7 @@ const Resume = () => {
               </section>
               {/* Certifications */}
               <section className="space-y-8">
-                <h2 className="text-xl font-medium text-foreground mb-8">Certifications</h2>
+                <h2 className="vercel-heading-3 mb-8 mt-0">Certifications</h2>
                 <div className="space-y-6">
                   {certifications.map((org, index) => (
                      <div key={index} className="modern-card space-y-3">
@@ -210,7 +210,7 @@ const Resume = () => {
               </section>
               {/* Core Competencies */}
               <section className="space-y-8">
-                <h2 className="text-xl font-medium text-foreground mb-8">Core Competencies</h2>
+                <h2 className="vercel-heading-3 mb-8 mt-0">Core Competencies</h2>
                 <div className="space-y-8">
                   {competencies.map((comp, index) => (
                     <div key={index} className="modern-card space-y-3">

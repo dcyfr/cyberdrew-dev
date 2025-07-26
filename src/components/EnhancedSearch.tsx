@@ -63,13 +63,13 @@ export const EnhancedSearch = ({
   };
 
   return (
-    <div className="space-y-8 mb-8">
-      {/* Enhanced Search Input */}
+    <div className="space-y-6 mb-8">
+      {/* Vercel-style Search Input */}
       <div className="relative max-w-md">
         <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Search posts, tags..."
+          placeholder="Search posts..."
           value={searchQuery}
           onChange={(e) => {
             onSearchChange(e.target.value);
@@ -77,7 +77,7 @@ export const EnhancedSearch = ({
           }}
           onFocus={() => setShowSuggestions(searchQuery.length >= 2)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-          className="pl-10 pr-10 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+          className="pl-10 pr-10 h-9 border-border bg-background hover:border-foreground transition-all duration-200 focus:border-foreground focus:ring-1 focus:ring-foreground/20"
         />
         {(searchQuery || selectedTag) && (
           <button
@@ -89,16 +89,16 @@ export const EnhancedSearch = ({
           </button>
         )}
         
-        {/* Search Suggestions */}
+        {/* Vercel-style Search Suggestions */}
         {showSuggestions && suggestions.length > 0 && (
-          <div className="absolute top-full left-0 right-0 bg-background border border-border rounded-md mt-1 shadow-lg z-50 animate-fade-in">
+          <div className="absolute top-full left-0 right-0 bg-background border border-border rounded-md mt-1 shadow-md z-50 animate-fade-in">
             {suggestions.map((suggestion, index) => (
               <div
                 key={index}
-                className="px-3 py-2 hover:bg-muted cursor-pointer transition-colors border-b border-border last:border-b-0"
+                className="px-3 py-2 hover:bg-accent cursor-pointer transition-colors text-sm border-b border-border last:border-b-0 first:rounded-t-md last:rounded-b-md"
                 onClick={() => handleSuggestionClick(suggestion)}
               >
-                <span className={suggestion.type === 'tag' ? 'text-primary' : 'text-foreground'}>
+                <span className={suggestion.type === 'tag' ? 'text-muted-foreground' : 'text-foreground'}>
                   {suggestion.text}
                 </span>
               </div>
@@ -107,11 +107,11 @@ export const EnhancedSearch = ({
         )}
       </div>
 
-      {/* Enhanced Tag Filter */}
+      {/* Vercel-style Tag Filter */}
       <div className="flex flex-wrap gap-2">
         <Badge 
           variant={selectedTag === "" ? "default" : "outline"}
-          className="cursor-pointer hover:scale-105 hover:shadow-md transition-all duration-200"
+          className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all duration-200 text-xs font-medium"
           onClick={() => onTagChange("")}
         >
           All ({allPosts.length})
@@ -120,12 +120,10 @@ export const EnhancedSearch = ({
           <Badge
             key={tag}
             variant={selectedTag === tag ? "default" : "outline"}
-            className="cursor-pointer hover:scale-105 hover:shadow-md transition-all duration-200 group"
+            className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all duration-200 text-xs font-medium"
             onClick={() => onTagChange(selectedTag === tag ? "" : tag)}
           >
-            <span className="group-hover:text-primary transition-colors">
-              {tag} ({tagCounts[tag]})
-            </span>
+            {tag} ({tagCounts[tag]})
           </Badge>
         ))}
       </div>

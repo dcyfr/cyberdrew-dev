@@ -268,4 +268,19 @@ All colors MUST be HSL.
 .vercel-text-muted {
   @apply text-[14px] leading-[1.6] text-muted-foreground;
 }
+
+/* Utility classes */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 }

@@ -103,8 +103,8 @@ const Blog = () => {
                 {isLoading ? (
                   <BlogListSkeleton />
                 ) : filteredPosts.length === 0 ? (
-                  <div className="text-center py-12">
-                      <p className="text-muted-foreground">
+                  <div className="text-center py-16">
+                      <p className="vercel-text-muted">
                         No posts found matching your criteria. Try adjusting your search or filters.
                     </p>
                   </div>
@@ -115,36 +115,36 @@ const Blog = () => {
                     className="modern-card group"
                     onClick={() => handlePostClick(post.slug)}
                   >
-                    <div className="space-y-4">
-                      <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors">
-                        {post.title}
-                      </h2>
+                     <div className="space-y-3">
+                       <h2 className="vercel-heading-3 mb-0 mt-0 group-hover:text-foreground transition-colors">
+                         {post.title}
+                       </h2>
+                       
+                       <div className="flex items-center gap-2 vercel-text-muted">
+                         <span>{post.date}</span>
+                         <span>&bull;</span>
+                         <span>{post.readTime}</span>
+                       </div>
+                       
+                       <p className="vercel-text text-muted-foreground line-clamp-2">
+                         {post.excerpt}
+                       </p>
                       
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span>{post.date}</span>
-                        <span>&bull;</span>
-                        <span>{post.readTime}</span>
-                      </div>
-                      
-                      <p className="text-muted-foreground leading-relaxed">
-                        {post.excerpt}
-                      </p>
-                      
-                      <div className="flex flex-wrap gap-2">
-                        {post.tags.map((tag, tagIndex) => (
-                          <Badge 
-                            key={tagIndex} 
-                            variant="outline"
-                            className="cursor-pointer hover-scale transition-all text-xs"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleTagClick(tag);
-                            }}
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
+                       <div className="flex flex-wrap gap-2 pt-1">
+                         {post.tags.map((tag, tagIndex) => (
+                           <Badge 
+                             key={tagIndex} 
+                             variant="outline"
+                             className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs font-medium"
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               handleTagClick(tag);
+                             }}
+                           >
+                             {tag}
+                           </Badge>
+                         ))}
+                       </div>
                     </div>
                   </div>
                   ))
