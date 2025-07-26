@@ -167,7 +167,7 @@ All colors MUST be HSL.
   .modern-card-lg {
     @apply cursor-pointer rounded-lg border border-border bg-card p-8 
            transition-all duration-200 hover:shadow-lg;
-}
+  }
 
 /* Clean minimal styles */
 .min-h-screen {
