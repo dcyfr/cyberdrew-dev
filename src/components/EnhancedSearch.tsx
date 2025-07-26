@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, X } from "lucide-react";
 import { useState, useMemo } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
+import { sanitizeSearchInput } from "@/lib/security";
 
 interface EnhancedSearchProps {
   searchQuery: string;
@@ -72,7 +73,8 @@ export const EnhancedSearch = ({
           placeholder="Search posts..."
           value={searchQuery}
           onChange={(e) => {
-            onSearchChange(e.target.value);
+            const sanitized = sanitizeSearchInput(e.target.value);
+            onSearchChange(sanitized);
             setShowSuggestions(true);
           }}
           onFocus={() => setShowSuggestions(searchQuery.length >= 2)}

@@ -97,10 +97,14 @@ function markdownToHtml(markdown: string): string {
   html = html.replace(/(<li class="mb-2 text-foreground leading-\[1\.7\]">.*?<\/li>\s*)+/gs, (match) => {
     // Check if any of the original lines were numbered
     const listItems = match.match(/<li[^>]*>(.*?)<\/li>/gs) || [];
-    const originalLines = markdown.split('\n').filter(line => 
-      line.trim().match(/^[\-\*\d+\.]\s/) && 
-      listItems.some(li => li.includes(line.replace(/^[\-\*\d+\.]\s/, '').trim()))
-    );
+    const originalLines = markdown.split('\n').filter(line => {
+      const trimmed = line.trim();
+      const isListItem = trimmed.match(/^[\-\*\d+\.]\s/);
+      if (!isListItem) return false;
+      
+      const contentWithoutMarker = trimmed.replace(/^[\-\*\d+\.]\s/, '').trim();
+      return listItems.some(li => li.includes(contentWithoutMarker));
+    });
     const isNumbered = originalLines.some(line => line.trim().match(/^\d+\./));
     
     const listType = isNumbered ? 'ol' : 'ul';

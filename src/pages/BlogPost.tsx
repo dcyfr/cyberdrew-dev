@@ -12,6 +12,7 @@ import { BackToTop } from "@/components/BackToTop";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import { ShareButtons } from "@/components/ShareButtons";
 import { PageTransition } from "@/components/PageTransition";
+import { sanitizeHtml } from "@/lib/security";
 import { useState, useEffect } from "react";
 
 const BlogPost = () => {
@@ -147,7 +148,7 @@ const BlogPost = () => {
               {/* Blog Post Content */}
               <div 
                 className="blog-content prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
               />
               {/* Related Posts */}
               <RelatedPosts currentPost={post} />
