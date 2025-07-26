@@ -31,23 +31,41 @@ const BlogPost = () => {
   useEffect(() => {
     // Fix markdown-style lists after content loads
     if (!isLoading && contentRef.current) {
-      const paragraphs = contentRef.current.querySelectorAll('p');
-      paragraphs.forEach(p => {
-        const text = p.textContent || '';
-        if (text.trim().startsWith('- ')) {
-          p.innerHTML = p.innerHTML.replace(/^- /, '');
-          p.style.position = 'relative';
-          p.style.marginLeft = '1.5rem';
-          p.style.marginBottom = '0.5rem';
-          
-          const bullet = document.createElement('span');
-          bullet.textContent = '•';
-          bullet.style.position = 'absolute';
-          bullet.style.left = '-1rem';
-          bullet.style.fontWeight = 'bold';
-          p.prepend(bullet);
-        }
-      });
+      const processLists = () => {
+        const paragraphs = contentRef.current?.querySelectorAll('p') || [];
+        
+        paragraphs.forEach(p => {
+          const text = p.textContent || '';
+          // Check for both "- " and "* " markdown list formats
+          if (text.trim().startsWith('- ') || text.trim().startsWith('* ')) {
+            // Remove the markdown list marker
+            const cleanText = text.replace(/^[\s]*[-*]\s+/, '');
+            p.innerHTML = cleanText;
+            
+            // Style as list item
+            p.style.position = 'relative';
+            p.style.marginLeft = '1.5rem';
+            p.style.marginBottom = '0.5rem';
+            p.style.paddingLeft = '0.5rem';
+            
+            // Add bullet point
+            const bullet = document.createElement('span');
+            bullet.textContent = '•';
+            bullet.style.position = 'absolute';
+            bullet.style.left = '-1rem';
+            bullet.style.fontWeight = 'bold';
+            bullet.style.color = 'currentColor';
+            p.prepend(bullet);
+            
+            // Add list-item class for styling
+            p.classList.add('blog-list-item');
+          }
+        });
+      };
+      
+      // Process immediately and also after a small delay to catch any dynamic content
+      processLists();
+      setTimeout(processLists, 100);
     }
   }, [isLoading, post]);
 

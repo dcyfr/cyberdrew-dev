@@ -211,6 +211,11 @@ All colors MUST be HSL.
   @apply leading-[1.7] pl-2;
 }
 
+/* Custom styling for converted markdown list items */
+.blog-list-item {
+  @apply text-[15px] leading-[1.7] text-foreground;
+}
+
 .blog-content strong {
   @apply font-semibold;
 }
