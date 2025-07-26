@@ -4,6 +4,7 @@ import { Search, X } from "lucide-react";
 import { useState, useMemo } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 import { sanitizeSearchInput } from "@/lib/security";
+import { searchRateLimiter } from "@/lib/rate-limiter";
 
 interface EnhancedSearchProps {
   searchQuery: string;
@@ -74,8 +75,14 @@ export const EnhancedSearch = ({
           value={searchQuery}
           onChange={(e) => {
             const sanitized = sanitizeSearchInput(e.target.value);
-            onSearchChange(sanitized);
-            setShowSuggestions(true);
+            
+            // Apply rate limiting for security
+            if (searchRateLimiter.isAllowed('search')) {
+              onSearchChange(sanitized);
+              setShowSuggestions(true);
+            } else {
+              console.warn('Search rate limit exceeded');
+            }
           }}
           onFocus={() => setShowSuggestions(searchQuery.length >= 2)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}

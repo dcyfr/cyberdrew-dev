@@ -6,12 +6,18 @@ interface SecurityProviderProps {
 }
 
 /**
- * Security Provider component that applies security measures to the application
+ * Security Provider component - Lovable-compatible version
  */
 export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) => {
   useEffect(() => {
-    // Apply security meta tags
-    SECURITY_META_TAGS.forEach(tag => {
+    // Apply security meta tags that don't interfere with Lovable
+    const safeMetaTags = SECURITY_META_TAGS.filter(tag => 
+      // Only apply safe meta tags
+      tag.name === 'format-detection' || 
+      tag.name === 'robots'
+    );
+
+    safeMetaTags.forEach(tag => {
       const existingTag = document.querySelector(`meta[name="${tag.name}"], meta[http-equiv="${tag['http-equiv']}"]`);
       
       if (!existingTag) {
@@ -23,43 +29,41 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) 
       }
     });
 
-    // Enforce HTTPS in production (disabled for Lovable subdomain)
+    // Only enforce HTTPS for production custom domains, not Lovable subdomains
+    const isCustomDomain = !location.hostname.includes('lovableproject.com') && 
+                          !location.hostname.includes('localhost') &&
+                          !location.hostname.includes('127.0.0.1');
+    
     if (process.env.NODE_ENV === 'production' && 
         location.protocol !== 'https:' && 
-        !location.hostname.includes('lovableproject.com')) {
+        isCustomDomain) {
       location.replace(`https:${location.href.substring(location.protocol.length)}`);
     }
 
-    // Disable right-click context menu in production (optional - disabled for development)
-    const handleContextMenu = (e: MouseEvent) => {
-      // Temporarily disabled to avoid interfering with development
-      // if (process.env.NODE_ENV === 'production') {
-      //   e.preventDefault();
-      // }
+    // Add subtle security monitoring (non-intrusive)
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Clear sensitive data when tab becomes hidden (optional)
+        sessionStorage.removeItem('temp-data');
+      }
     };
 
-    // Disable F12 and other developer shortcuts in production (optional - disabled for development)
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Temporarily disabled to avoid interfering with development
-      // if (process.env.NODE_ENV === 'production') {
-      //   if (
-      //     e.key === 'F12' ||
-      //     (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-      //     (e.ctrlKey && e.key === 'U')
-      //   ) {
-      //     e.preventDefault();
-      //   }
-      // }
+    // Monitor for potential security issues
+    const handleError = (event: ErrorEvent) => {
+      // Log security-related errors for monitoring
+      if (event.error && event.error.name === 'SecurityError') {
+        console.warn('Security error detected:', event.error.message);
+      }
     };
 
-    // Add event listeners
-    document.addEventListener('contextmenu', handleContextMenu);
-    document.addEventListener('keydown', handleKeyDown);
+    // Add non-intrusive event listeners
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('error', handleError);
 
     // Cleanup
     return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('error', handleError);
     };
   }, []);
 

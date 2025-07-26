@@ -3,9 +3,10 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// Temporarily remove security headers that might block Lovable
+// Lovable-compatible security headers
 const securityHeaders = {
-  // Remove all headers temporarily to fix connection issue
+  'X-Content-Type-Options': 'nosniff',
+  'Referrer-Policy': 'strict-origin-when-cross-origin'
 };
 
 // https://vitejs.dev/config/

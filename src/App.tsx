@@ -16,7 +16,8 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ErrorBoundary>
+  <SecurityProvider>
+    <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="class"
@@ -41,7 +42,8 @@ const App = () => (
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
-  </ErrorBoundary>
+    </ErrorBoundary>
+  </SecurityProvider>
 );
 
 export default App;
