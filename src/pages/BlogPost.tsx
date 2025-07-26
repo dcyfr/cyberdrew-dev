@@ -31,8 +31,8 @@ const BlogPost = () => {
     return (
       <>
         <SEOHead
-          title="Loading... - Drew's Lab"
-          description="Loading blog post content..."
+          title="Loading..."
+          description="Loading post content..."
         />
         <main id="main-content" className="min-h-screen">
           <div className="container mx-auto px-6 py-16 max-w-4xl">
@@ -60,7 +60,7 @@ const BlogPost = () => {
       <>
         <SEOHead
           title="Post Not Found - Drew's Lab"
-          description="The blog post you're looking for doesn't exist."
+          description="The post you're looking for doesn't exist or has moved."
         />
         <main id="main-content" className="min-h-screen">
           <div className="container mx-auto px-6 py-16 max-w-4xl">
@@ -75,7 +75,7 @@ const BlogPost = () => {
             </Button>
             <BlogBreadcrumb />
             <h1 className="text-3xl font-semibold text-foreground mb-4">Post Not Found</h1>
-            <p className="text-muted-foreground">The blog post you're looking for doesn't exist.</p>
+            <p className="text-muted-foreground">The blog post you're looking for doesn't exist or has moved.</p>
           </div>
         </main>
       </>
@@ -87,14 +87,16 @@ const BlogPost = () => {
       <SEOHead
         title={`${post.title} - Drew's Lab`}
         description={post.excerpt}
-        keywords={`${post.tags.join(', ')}, cybersecurity, security architecture`}
+        keywords={`${post.tags.join(', ')}`}
       />
       <ReadingProgress />
       <BackToTop />
       <PageTransition>
         <main id="main-content" className="min-h-screen">
           <div className="container mx-auto px-6 py-16 max-w-4xl">
+            {/* Page Header */}
             <div className="flex justify-between items-start mb-8">
+              {/* Back Button */}
               <Button 
                 variant="ghost" 
                 onClick={() => navigate("/blog")}
@@ -104,12 +106,14 @@ const BlogPost = () => {
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back
               </Button>
+              {/* Theme Toggle Button */}
               <ThemeToggle />
             </div>
-            
+            {/* Page Breadcrumb */}
             <BlogBreadcrumb postTitle={post.title} />
-            
-            <article className="max-w-3xl">
+            {/* Post Content */}
+            <article className="max-w-3xl mb-8">
+              {/* Post Header */}
               <header className="mb-12">
                 <h1 className="text-4xl font-bold text-foreground mb-6 leading-tight">
                   {post.title}
@@ -139,12 +143,12 @@ const BlogPost = () => {
                   </div>
                 )}
               </header>
-              
+              {/* Blog Post Content */}
               <div 
                 className="blog-content prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
-              
+              {/* Related Posts */}
               <RelatedPosts currentPost={post} />
             </article>
           </div>

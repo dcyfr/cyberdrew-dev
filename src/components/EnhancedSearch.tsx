@@ -63,7 +63,7 @@ export const EnhancedSearch = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-8 mb-8">
       {/* Enhanced Search Input */}
       <div className="relative max-w-md">
         <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />

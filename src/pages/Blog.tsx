@@ -1,3 +1,5 @@
+import { SEOHead } from "@/components/SEOHead";
+import { PageTransition } from "@/components/PageTransition";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -6,11 +8,9 @@ import { ArrowLeft, Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { SEOHead } from "@/components/SEOHead";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { EnhancedSearch } from "@/components/EnhancedSearch";
 import { ShareButtons } from "@/components/ShareButtons";
-import { PageTransition } from "@/components/PageTransition";
 import { BlogListSkeleton } from "@/components/BlogPostSkeleton";
 
 const Blog = () => {
@@ -57,14 +57,15 @@ const Blog = () => {
     <>
       <SEOHead
         title="Blog - Drew's Lab"
-        description="Insights on cybersecurity, security architecture, threat analysis, and secure development practices from a cybersecurity expert."
+        description="Insights on architecture, cybersecurity, and secure development practices."
         keywords="cybersecurity blog, security architecture, threat analysis, zero trust, MFA, enterprise security"
       />
       <PageTransition>
         <main id="main-content" className="min-h-screen">
           <div className="container mx-auto px-6 py-16 max-w-4xl">
-            {/* Header */}
-            <div className="mb-12">
+            {/* Page Header */}
+            <div className="mb-16">
+              {/* Page Navigation */}
               <div className="flex justify-between items-start mb-8">
                 <Button 
                   variant="ghost" 
@@ -75,87 +76,81 @@ const Blog = () => {
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
                 </Button>
-                <div className="flex items-center gap-4">
-                  <ShareButtons 
-                    title="Drew's Lab Blog"
-                    excerpt="Cybersecurity insights and technical expertise"
-                    showRSS={true}
-                  />
-                  <ThemeToggle />
-                </div>
+                <ThemeToggle />
               </div>
-            
-            <BlogBreadcrumb currentPage="Blog" />
-            
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold text-foreground mb-4">Blog</h1>
-              <p className="text-muted-foreground text-lg">
-                Thoughts on cybersecurity, technology, and digital resilience.
-              </p>
+              {/* Page Breadcrumbs */}
+              <BlogBreadcrumb currentPage="Blog" />
+              {/* Page Title */}
+              <div className="space-y-4">
+                <h1 className="text-3xl font-semibold text-foreground">Blog</h1>
+                <p className="text-muted-foreground leading-relaxed">
+                  Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
+                </p>
+              </div>
             </div>
-          </div>
-
-          <div className="space-y-8">
-            {/* Enhanced Search and Filters */}
-            <EnhancedSearch
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              selectedTag={selectedTag}
-              onTagChange={handleTagClick}
-              onSuggestionClick={handleSuggestionClick}
-            />
-
-            {/* Blog Posts */}
-            <div className="space-y-8">
-              {isLoading ? (
-                <BlogListSkeleton />
-              ) : filteredPosts.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">No posts found matching your search.</p>
-                </div>
-              ) : (
-                filteredPosts.map((post, index) => (
-                <div 
-                  key={index} 
-                  className="cursor-pointer group rounded-xl border border-border/30 hover:border-border/60 p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm"
-                  onClick={() => handlePostClick(post.slug)}
-                >
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors story-link">
-                      {post.title}
-                    </h2>
-                    
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span>{post.date}</span>
-                      <span>•</span>
-                      <span>{post.readTime}</span>
-                    </div>
-                    
-                    <p className="text-muted-foreground leading-relaxed">
-                      {post.excerpt}
+            {/* Page Content */}
+            <div className="space-y-8 mb-8">
+              {/* Enhanced Search and Filters */}
+              <EnhancedSearch
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                selectedTag={selectedTag}
+                onTagChange={handleTagClick}
+                onSuggestionClick={handleSuggestionClick}
+              />
+              {/* Blog Posts */}
+              <div className="space-y-4">
+                {isLoading ? (
+                  <BlogListSkeleton />
+                ) : filteredPosts.length === 0 ? (
+                  <div className="text-center py-12">
+                      <p className="text-muted-foreground">
+                        No posts found matching your criteria. Try adjusting your search or filters.
                     </p>
-                    
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag, tagIndex) => (
-                        <Badge 
-                          key={tagIndex} 
-                          variant="outline"
-                          className="cursor-pointer hover-scale transition-all text-xs"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleTagClick(tag);
-                          }}
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
+                  </div>
+                ) : (
+                  filteredPosts.map((post, index) => (
+                  <div 
+                    key={index} 
+                    className="cursor-pointer group rounded-xl border border-border/75 hover:border-border p-6 hover:shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 bg-card/40 backdrop-blur-sm"
+                    onClick={() => handlePostClick(post.slug)}
+                  >
+                    <div className="space-y-4">
+                      <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors">
+                        {post.title}
+                      </h2>
+                      
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <span>{post.date}</span>
+                        <span>&bull;</span>
+                        <span>{post.readTime}</span>
+                      </div>
+                      
+                      <p className="text-muted-foreground leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                      
+                      <div className="flex flex-wrap gap-2">
+                        {post.tags.map((tag, tagIndex) => (
+                          <Badge 
+                            key={tagIndex} 
+                            variant="outline"
+                            className="cursor-pointer hover-scale transition-all text-xs"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTagClick(tag);
+                            }}
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-                ))
-              )}
+                  ))
+                )}
+              </div>
             </div>
-          </div>
           </div>
         </main>
       </PageTransition>
