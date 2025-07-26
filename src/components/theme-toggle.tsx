@@ -13,7 +13,7 @@ export function ThemeToggle() {
   ]
 
   return (
-    <div className="flex items-center bg-muted rounded-lg p-1">
+    <div className="flex items-center border border-border rounded-md p-0.5 bg-background">
       {themes.map(({ value, icon: Icon, label }) => (
         <Button
           key={value}
@@ -21,12 +21,14 @@ export function ThemeToggle() {
           size="sm"
           onClick={() => setTheme(value)}
           className={cn(
-            "h-8 w-8 p-0 transition-colors",
-            theme === value && "bg-background shadow-sm"
+            "h-7 w-7 p-0 rounded-sm transition-all duration-200",
+            theme === value 
+              ? "bg-accent text-accent-foreground shadow-sm" 
+              : "hover:bg-accent/50"
           )}
           aria-label={`Switch to ${label} theme`}
         >
-          <Icon className="h-4 w-4" />
+          <Icon className="h-3.5 w-3.5" />
         </Button>
       ))}
     </div>
