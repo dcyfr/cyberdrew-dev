@@ -82,7 +82,7 @@ const Home = () => {
             {/* Hero Section */}
             <div className="flex flex-col items-center text-center mb-12">
               {/* Profile Image */}
-              <img src={Profile} alt="Profile" className="rounded-2xl border border-border w-28 h-28 p-2 md:w-32 md:h-32 mb-8 hover:scale-105 transition-transform duration-200" />
+              <img src={Profile} alt="Profile" className="rounded-2xl border border-border w-28 h-28 p-2 md:w-32 md:h-32 mb-8 bg-accent/50 hover:bg-accent/65 hover:scale-105 transition-all duration-200" />
               {/* Profile Name and Title */}
               <h1 className="text-4xl font-bold space-x-2 text-primary mb-2">
                 <span>It's Drew</span>
@@ -126,6 +126,7 @@ const Home = () => {
                     link={card.link}
                     internal={card.internal}
                     icon={card.icon}
+                    className="hover:bg-accent/50 hover:scale-105 transition-all duration-200"
                   />
                 ))}
               </div>

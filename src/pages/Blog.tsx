@@ -178,7 +178,7 @@ const Blog = () => {
                   filteredPosts.map((post, index) => (
                     <div 
                       key={index} 
-                      className="p-6 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors modern-card group"
+                      className="p-6 rounded-lg hover:bg-accent/50 hover:scale-105 cursor-pointer transition-all modern-card group"
                       onClick={() => handlePostClick(post.slug)}
                     >
                       <div className="space-y-2">
