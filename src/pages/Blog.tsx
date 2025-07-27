@@ -61,8 +61,8 @@ const Blog = () => {
       />
       <PageTransition>
         <SidebarProvider>
-          <div className="min-h-screen flex w-full">
-            {/* Sidebar for desktop */}
+          <div className="flex w-full">
+            {/* Desktop Sidebar */}
             <BlogSidebar
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -70,6 +70,7 @@ const Blog = () => {
               onTagChange={handleTagClick}
             />
 
+            {/* Main content */}
             <main className="flex-1 min-h-screen">
               <div className="container mx-auto px-6 py-16 max-w-4xl">
                 {/* Mobile sidebar trigger */}

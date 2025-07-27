@@ -46,7 +46,7 @@ export function BlogSidebar({
   };
 
   return (
-    <Sidebar className={isCollapsed ? "w-14" : "w-80"} collapsible="icon">
+    <Sidebar className={isCollapsed ? "w-14 hidden lg:flex" : "w-80 hidden lg:flex"} collapsible="icon">
       <SidebarContent className="px-4 py-6">
         {/* Search Section */}
         {!isCollapsed && (
