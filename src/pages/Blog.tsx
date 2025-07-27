@@ -6,10 +6,8 @@ import { useState, useEffect } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { BlogListSkeleton } from "@/components/BlogPostSkeleton";
-import { BlogSidebar } from "@/components/BlogSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Search, FileText, Tag } from "lucide-react";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -60,96 +58,165 @@ const Blog = () => {
         keywords="cybersecurity blog, security architecture, threat analysis, zero trust, MFA, enterprise security"
       />
       <PageTransition>
-        <SidebarProvider>
-          <div className="flex w-full">
-            {/* Desktop Sidebar */}
-            <BlogSidebar
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              selectedTag={selectedTag}
-              onTagChange={handleTagClick}
-            />
+        <div className="flex w-full min-h-screen">
+          {/* Desktop Sidebar - Fixed width, takes up space */}
+          <aside className="hidden lg:block w-80 border-r border-border bg-card">
+            <div className="sticky top-0 h-screen overflow-y-auto px-4 py-6">
+              {/* Search Section */}
+              <div className="mb-8">
+                <div className="flex items-center gap-2 text-sm font-medium mb-3">
+                  <Search className="w-4 h-4" />
+                  Search
+                </div>
+                <Input
+                  type="text"
+                  placeholder="Search posts..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full"
+                />
+              </div>
 
-            {/* Main content */}
-            <main className="flex-1 min-h-screen">
-              <div className="container mx-auto px-6 py-16 max-w-4xl">
-                {/* Mobile sidebar trigger */}
-                <div className="lg:hidden mb-4">
-                  <SidebarTrigger className="flex items-center gap-2 px-3 py-2 text-sm border border-border rounded-md hover:bg-accent">
-                    <Menu className="w-4 h-4" />
-                    Filters & Search
-                  </SidebarTrigger>
+              {/* Recent Posts */}
+              <div className="mb-8">
+                <div className="flex items-center gap-2 text-sm font-medium mb-3">
+                  <FileText className="w-4 h-4" />
+                  Recent Posts
                 </div>
-                
-                {/* Page Header */}
-                <div className="mb-16">
-                  {/* Page Breadcrumbs */}
-                  <BlogBreadcrumb currentPage="Blog" />
-                  {/* Page Title */}
-                  <div className="space-y-6">
-                    <h1 className="vercel-heading-2 mt-0">Blog</h1>
-                    <p className="vercel-text-muted max-w-2xl">
-                      Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
-                    </p>
-                  </div>
-                </div>
-                
-                {/* Blog Posts */}
-                <div className="space-y-4">
-                  {isLoading ? (
-                    <BlogListSkeleton />
-                  ) : filteredPosts.length === 0 ? (
-                    <div className="text-center py-16">
-                      <p className="vercel-text-muted">
-                        No posts found matching your criteria. Try adjusting your search or filters.
-                      </p>
-                    </div>
-                  ) : (
-                    filteredPosts.map((post, index) => (
-                      <div 
-                        key={index} 
-                        className="modern-card group cursor-pointer"
-                        onClick={() => handlePostClick(post.slug)}
-                      >
-                        <div className="space-y-3">
-                          <h2 className="vercel-heading-3 mb-0 mt-0 group-hover:text-foreground transition-colors">
-                            {post.title}
-                          </h2>
-                          
-                          <div className="flex items-center gap-2 vercel-text-muted">
-                            <span>{post.date}</span>
-                            <span>&bull;</span>
-                            <span>{post.readTime}</span>
-                          </div>
-                          
-                          <p className="vercel-text text-muted-foreground line-clamp-2">
-                            {post.excerpt}
-                          </p>
-                         
-                          <div className="flex flex-wrap gap-2 pt-1">
-                            {post.tags.map((tag, tagIndex) => (
-                              <Badge 
-                                key={tagIndex} 
-                                variant="outline"
-                                className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs font-medium"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleTagClick(tag);
-                                }}
-                              >
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
+                <div className="space-y-3">
+                  {allPosts.slice(0, 5).map((post, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handlePostClick(post.slug)}
+                      className="p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                    >
+                      <div className="font-medium text-sm line-clamp-2 text-left mb-1">
+                        {post.title}
                       </div>
-                    ))
-                  )}
+                      <div className="text-xs text-muted-foreground">
+                        {post.date}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </main>
-          </div>
-        </SidebarProvider>
+
+              {/* Categories/Tags */}
+              <div>
+                <div className="flex items-center gap-2 text-sm font-medium mb-3">
+                  <Tag className="w-4 h-4" />
+                  Categories
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {allTags.map((tag, index) => (
+                    <Badge
+                      key={index}
+                      variant={selectedTag === tag ? "default" : "outline"}
+                      className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
+                      onClick={() => handleTagClick(tag)}
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* Main content */}
+          <main className="flex-1 min-h-screen">
+            <div className="container mx-auto px-6 py-16 max-w-4xl">
+              {/* Mobile search and filters */}
+              <div className="lg:hidden mb-8 space-y-4">
+                <Input
+                  type="text"
+                  placeholder="Search posts..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full"
+                />
+                <div className="flex flex-wrap gap-2">
+                  {allTags.map((tag, index) => (
+                    <Badge
+                      key={index}
+                      variant={selectedTag === tag ? "default" : "outline"}
+                      className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
+                      onClick={() => handleTagClick(tag)}
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Page Header */}
+              <div className="mb-16">
+                {/* Page Breadcrumbs */}
+                <BlogBreadcrumb currentPage="Blog" />
+                {/* Page Title */}
+                <div className="space-y-6">
+                  <h1 className="vercel-heading-2 mt-0">Blog</h1>
+                  <p className="vercel-text-muted max-w-2xl">
+                    Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Blog Posts */}
+              <div className="space-y-4">
+                {isLoading ? (
+                  <BlogListSkeleton />
+                ) : filteredPosts.length === 0 ? (
+                  <div className="text-center py-16">
+                    <p className="vercel-text-muted">
+                      No posts found matching your criteria. Try adjusting your search or filters.
+                    </p>
+                  </div>
+                ) : (
+                  filteredPosts.map((post, index) => (
+                    <div 
+                      key={index} 
+                      className="modern-card group cursor-pointer"
+                      onClick={() => handlePostClick(post.slug)}
+                    >
+                      <div className="space-y-3">
+                        <h2 className="vercel-heading-3 mb-0 mt-0 group-hover:text-foreground transition-colors">
+                          {post.title}
+                        </h2>
+                        
+                        <div className="flex items-center gap-2 vercel-text-muted">
+                          <span>{post.date}</span>
+                          <span>&bull;</span>
+                          <span>{post.readTime}</span>
+                        </div>
+                        
+                        <p className="vercel-text text-muted-foreground line-clamp-2">
+                          {post.excerpt}
+                        </p>
+                       
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {post.tags.map((tag, tagIndex) => (
+                            <Badge 
+                              key={tagIndex} 
+                              variant="outline"
+                              className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs font-medium"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleTagClick(tag);
+                              }}
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </main>
+        </div>
       </PageTransition>
     </>
   );
