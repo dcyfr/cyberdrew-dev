@@ -75,24 +75,28 @@ const Home = () => {
         keywords="cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security, security consultant" 
       />
       <PageTransition>
-        <PageLayout showBackButton={false} showThemeToggle={false}>
+        <PageLayout showBackButton={false} showThemeToggle={false} maxWidth="2xl">
           {/* Hero Section */}
-          <div className="flex flex-col items-center text-center mb-12">
-            <div className="mb-8 modern-card-sm">
-              <img 
-                src={Profile} 
-                alt="Drew's Profile" 
-                className="w-24 h-24 rounded-lg object-cover" 
-              />
+          <div className="space-y-6 mb-16">
+            <div className="flex flex-col items-center text-center space-y-6">
+              <div className="modern-card-sm">
+                <img 
+                  src={Profile} 
+                  alt="Drew's Profile" 
+                  className="w-24 h-24 rounded-lg object-cover" 
+                />
+              </div>
+              <div className="space-y-4">
+                <h1 className="vercel-heading-2 mt-0">It's Drew ✨</h1>
+                <p className="vercel-text-muted max-w-md">
+                  Cyber Architect, Engineer, and Developer
+                </p>
+              </div>
             </div>
-            <h1 className="vercel-heading-1">It's Drew ✨</h1>
-            <p className="vercel-text-muted mb-8 max-w-md">
-              Cyber Architect, Engineer, and Developer
-            </p>
           </div>
           
           {/* Links Section */}
-          <div className="max-w-3xl mx-auto">
+          <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {connectCards.map((card, index) => (
                 <LinkCard
