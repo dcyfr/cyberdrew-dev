@@ -37,9 +37,9 @@ export const ShareButtons = ({
     setShowButtons(false);
   };
 
-  const shareToTwitter = () => {
+  const shareToX = () => {
     const text = `${title} ${url}`;
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+    window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     setShowButtons(false);
   };
 
@@ -85,11 +85,11 @@ export const ShareButtons = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={shareToTwitter}
+              onClick={shareToX}
               className="justify-start hover:bg-muted"
             >
               <Twitter className="w-4 h-4 mr-2" />
-              Twitter
+              X (Twitter)
             </Button>
             <Button
               variant="ghost"
