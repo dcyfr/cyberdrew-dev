@@ -26,58 +26,7 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     minify: 'terser',
     cssMinify: true,
-    
-    // Code splitting optimization
-    rollupOptions: {
-      output: {
-        manualChunks: (id) => {
-          // React and core libraries
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'react-vendor';
-          }
-          
-          // Router
-          if (id.includes('react-router')) {
-            return 'router';
-          }
-          
-          // Radix UI components (large library)
-          if (id.includes('@radix-ui')) {
-            return 'ui-vendor';
-          }
-          
-          // Lucide icons (can be large)
-          if (id.includes('lucide-react')) {
-            return 'icons';
-          }
-          
-          // TanStack Query
-          if (id.includes('@tanstack')) {
-            return 'query';
-          }
-          
-          // Security and utility libraries
-          if (id.includes('dompurify') || id.includes('clsx') || id.includes('tailwind-merge')) {
-            return 'utils';
-          }
-          
-          // Theme and styling
-          if (id.includes('next-themes') || id.includes('class-variance-authority')) {
-            return 'theme';
-          }
-          
-          // Other vendor libraries
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        },
-        // Optimize chunk names for caching
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
-      }
-    },
-    
+    // Removed custom manualChunks to avoid chunk initialization errors
     // Terser options for maximum compression
     terserOptions: {
       compress: {
@@ -93,7 +42,6 @@ export default defineConfig(({ mode }) => ({
         comments: false,
       }
     },
-    
     // Asset optimization
     assetsInlineLimit: 4096, // 4KB
     chunkSizeWarningLimit: 300, // 300KB warning limit
