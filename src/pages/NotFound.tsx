@@ -20,7 +20,7 @@ const NotFound = () => {
   return (
     <>
       <SEOHead
-        title="Page Not Found - Drew's Lab"
+        title="Page Not Found - Cyber Drew's Lab"
         description="The page you're looking for doesn't exist or has moved."
       />
       <PageTransition>

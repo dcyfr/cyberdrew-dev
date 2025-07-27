@@ -54,7 +54,7 @@ const BlogPost = () => {
     return (
       <>
         <SEOHead
-          title="Post Not Found - Drew's Lab"
+          title="Post Not Found - Cyber Drew's Lab"
           description="The post you're looking for doesn't exist or has moved."
         />
         <PageTransition>

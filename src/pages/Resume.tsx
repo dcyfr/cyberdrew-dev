@@ -97,9 +97,9 @@ const Resume = () => {
   return (
     <>
       <SEOHead
-        title="Resume - Drew's Lab"
-        description="Drew's professional resume showcasing skills, experience, and education."
-        keywords="cybersecurity, resume, skills, experience, education"
+        title="Resume - Cyber Drew's Lab"
+        description=""
+        keywords=""
       />
       <PageTransition>
         <AppHeader />

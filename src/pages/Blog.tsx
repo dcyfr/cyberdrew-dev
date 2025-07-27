@@ -54,7 +54,7 @@ const Blog = () => {
   return (
     <>
       <SEOHead
-        title="Blog - Drew's Lab"
+        title="Blog - Cyber Drew's Lab"
         description="Insights on architecture, cybersecurity, and secure development practices."
         keywords="cybersecurity blog, security architecture, threat analysis, zero trust, MFA, enterprise security"
       />
