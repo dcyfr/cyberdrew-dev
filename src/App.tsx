@@ -7,11 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { SecurityProvider } from "@/components/SecurityProvider";
 import { SkipLink } from "@/components/SkipLink";
-import Home from "./pages/Home";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
-import Resume from "./pages/Resume";
-import NotFound from "./pages/NotFound";
+import { LazyPage, Home, Blog, BlogPost, Resume, NotFound } from "@/components/LazyRoutes";
 
 const queryClient = new QueryClient();
 
@@ -31,12 +27,11 @@ const App = () => (
           <SkipLink />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/resume" element={<Resume />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
+              <Route path="/" element={<LazyPage component={Home} />} />
+              <Route path="/blog" element={<LazyPage component={Blog} />} />
+              <Route path="/blog/:slug" element={<LazyPage component={BlogPost} />} />
+              <Route path="/resume" element={<LazyPage component={Resume} />} />
+              <Route path="*" element={<LazyPage component={NotFound} />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
