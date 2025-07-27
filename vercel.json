@@ -64,7 +64,7 @@
           "value": "(?<host>.*)"
         }
       ],
-      "destination": "https://:host/blog/:slug*",
+      "destination": "/blog/:slug*",
       "permanent": false
     }
   ],
