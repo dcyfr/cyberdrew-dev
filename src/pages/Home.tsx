@@ -72,8 +72,8 @@ const Home = () => {
     <>
       <SEOHead 
         title="Cyber Drew's Lab"
-        description="" 
-        keywords="" 
+        description="Cybersecurity expert specializing in security architecture, threat analysis, and secure development practices."
+        keywords="cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security, security consultant"
       />
       <PageTransition>
         {/* <AppHeader showBackButton={true} showThemeToggle={true} /> */}

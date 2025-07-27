@@ -11,14 +11,14 @@ interface SEOHeadProps {
 }
 
 export const SEOHead = ({
-  title = "Drew's Lab - Cybersecurity Expert & Developer",
+  title = "Cyber Drew's Lab - Cybersecurity Expert & Developer",
   description = "Cybersecurity expert specializing in security architecture, threat analysis, and secure development practices.",
   keywords = "cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security",
-  ogImage = "/og-image.jpg",
+  ogImage = "/avatar.webp",
   canonicalUrl
 }: SEOHeadProps) => {
   const location = useLocation();
-  const baseUrl = "https://cyberdrew-dev.com";
+  const baseUrl = "https://cyberdrew.dev";
   const fullUrl = canonicalUrl || `${baseUrl}${location.pathname}`;
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export const SEOHead = ({
     updateMetaProperty('og:image', ogImage);
     updateMetaProperty('og:url', fullUrl);
     updateMetaProperty('og:type', 'website');
-    updateMetaProperty('og:site_name', "Drew's Lab");
+    updateMetaProperty('og:site_name', "Cyber Drew's Lab");
 
     // Update Twitter Card tags
     const updateTwitterMeta = (name: string, content: string) => {

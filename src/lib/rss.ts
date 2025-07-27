@@ -3,7 +3,7 @@ import { getAllBlogPosts } from "@/lib/blog";
 export function generateRSSFeed(): string {
   const posts = getAllBlogPosts();
   const siteUrl = "https://drews-lab.lovable.app"; // Update with your actual domain
-  const siteTitle = "Drew's Lab";
+  const siteTitle = "Cyber Drew's Lab";
   const siteDescription = "Cybersecurity insights and technical expertise";
   
   const rssItems = posts.map(post => {

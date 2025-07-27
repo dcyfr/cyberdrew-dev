@@ -74,7 +74,7 @@ const BlogPost = () => {
   return (
     <>
       <SEOHead
-        title={`${post.title} - Drew's Lab`}
+        title={`${post.title} - Cyber Drew's Lab`}
         description={post.excerpt}
         keywords={`${post.tags.join(', ')}`}
       />
@@ -90,9 +90,6 @@ const BlogPost = () => {
             {/* Main content */}
             <main className="flex-1">
               <div className="container mx-auto px-6 py-16 max-w-4xl">
-                {/* Page Breadcrumb 
-                <BlogBreadcrumb postTitle={post.title} /> */}
-                
                 {/* Post Content */}
                 <article className="max-w-none mb-8">
                     {/* Post Header */}

@@ -14,7 +14,7 @@ export const securityConfig = defineConfig({
     
     // Configure CORS
     cors: {
-      origin: process.env.NODE_ENV === 'development' ? true : ['https://cyberdrew-dev.com'],
+      origin: process.env.NODE_ENV === 'development' ? true : ['https://cyberdrew.dev'],
       credentials: true
     }
   },
