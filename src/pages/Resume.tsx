@@ -104,7 +104,7 @@ const Resume = () => {
       <PageTransition>
         <AppHeader />
         <div className="min-h-screen pt-20">
-          <div className="container mx-auto px-6 py-16 max-w-6xl">
+          <div className="container mx-auto px-6 py-16 max-w-4xl">
             {/* Page Breadcrumbs */}
             <BlogBreadcrumb currentPage="Resume" />
             

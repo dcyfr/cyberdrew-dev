@@ -75,7 +75,7 @@ const Home = () => {
         keywords="cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security, security consultant" 
       />
       <PageTransition>
-        <PageLayout showBackButton={false} showThemeToggle={false} maxWidth="6xl">
+        <PageLayout showBackButton={false} showThemeToggle={false} maxWidth="4xl">
           {/* Hero Section */}
           <div className="space-y-4 mb-12">
             <div className="flex flex-col items-center text-center space-y-6">
