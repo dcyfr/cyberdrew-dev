@@ -10,6 +10,7 @@ All colors MUST be HSL.
   html {
     font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
   }
+
   :root {
     /* Vercel Geist-inspired color system */
     --background: 0 0% 100%;
@@ -171,11 +172,6 @@ All colors MUST be HSL.
     @apply cursor-pointer rounded-lg border border-border bg-card p-8 
            transition-all duration-200 hover:shadow-lg;
   }
-
-/* Clean minimal styles */
-.min-h-screen {
-  @apply bg-background;
-}
 
 /* Vercel-inspired typography */
 .blog-content h1 {

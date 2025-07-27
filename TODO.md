@@ -32,6 +32,37 @@
 - [ ] **Deployment Docs**: Keep `DEPLOYMENT.md` up-to-date with optimizations and troubleshooting.
 - [ ] **Changelog**: Maintain a `CHANGELOG.md` for releases and major changes.
 - [ ] **Issue Templates**: Add GitHub issue/PR templates for collaboration.
+- [ ] **Cline Support Improvements**:
+  * Create `clinerules-bank/` with modular, reusable rule sets
+  * Develop specialized workflows for:
+    - Dependency upgrades
+    - Internationalization
+    - Accessibility compliance
+    - Documentation generation
+  * Add `.cline/config.json` for project-wide Cline configuration
+  * Create `.cline/docs/` for:
+    - Architectural Decision Records (ADRs)
+    - Workflow documentation
+    - Custom Cline interaction guidelines
+  * Implement intelligent rule activation system
+- [ ] **Copilot Support Enhancements**:
+  * Create `.github/copilot-config.yml` with:
+    - Custom context and training guidelines
+    - Project-specific code pattern definitions
+    - Suggestion and inline hint preferences
+  * Develop comprehensive context documentation:
+    - `ARCHITECTURE.md` with detailed project overview
+    - `DESIGN_PATTERNS.md` explaining coding conventions
+    - `CONTRIBUTION_GUIDE.md` for AI-assisted development
+  * Implement strategic code annotations and JSDoc comments
+  * Create `copilot-training/` directory with:
+    - High-quality code examples
+    - Reference implementations
+    - Pattern demonstration snippets
+  * Set up GitHub Actions for:
+    - Validating Copilot code suggestions
+    - Checking adherence to project standards
+    - Generating AI code quality reports
 
 ## 📝 2025 Content Strategy (Low Priority)
 - [ ] May: Incident Response & Disaster Recovery
