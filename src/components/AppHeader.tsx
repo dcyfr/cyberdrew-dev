@@ -47,8 +47,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               className="text-sm"
               aria-label="Go to home page"
             >
-              <Home className="w-4 h-4 mr-1" />
-              Home
+              <Home className="w-4 h-4" />
             </Button>
           )}
         </div>

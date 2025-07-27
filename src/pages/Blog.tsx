@@ -59,7 +59,7 @@ const Blog = () => {
         keywords="cybersecurity blog, security architecture, threat analysis, zero trust, MFA, enterprise security"
       />
       <PageTransition>
-        <AppHeader />
+        <AppHeader showHomeButton={true} />
         <div className="flex w-full min-h-screen">
           {/* Desktop Sidebar - Fixed width, takes up space */}
           <aside className="hidden lg:block w-80 border-r border-border bg-card pt-20">
@@ -128,7 +128,7 @@ const Blog = () => {
           {/* Main content */}
           <main className="flex-1 min-h-screen pt-20">
             <div className="container mx-auto px-6 py-16 max-w-4xl">
-              {/* Mobile search and filters */}
+              {/* Mobile search and filters
               <div className="lg:hidden mb-8 space-y-4">
                 <Input
                   type="text"
@@ -149,28 +149,28 @@ const Blog = () => {
                     </Badge>
                   ))}
                 </div>
-              </div>
+              </div> */}
               
               {/* Page Header */}
-              <div className="mb-16">
-                {/* Page Breadcrumbs */}
-                <BlogBreadcrumb currentPage="Blog" />
+              <div className="mb-8">
+                {/* Page Breadcrumbs 
+                <BlogBreadcrumb currentPage="Blog" className="hidden lg:block" /> */}
                 {/* Page Title */}
-                <div className="space-y-6">
-                  <h1 className="vercel-heading-2 mt-0">Blog</h1>
-                  <p className="vercel-text-muted max-w-2xl">
+                <div className="mb-4">
+                  <h1 className="vercel-heading-1">Blog</h1>
+                  <p className="vercel-text-muted text-lg">
                     Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
                   </p>
                 </div>
               </div>
               
               {/* Blog Posts */}
-              <div className="space-y-4">
+              <div className="space-y-8">
                 {isLoading ? (
                   <BlogListSkeleton />
                 ) : filteredPosts.length === 0 ? (
                   <div className="text-center py-16">
-                    <p className="vercel-text-muted">
+                    <p className="vercel-text-muted text-lg">
                       No posts found matching your criteria. Try adjusting your search or filters.
                     </p>
                   </div>
@@ -178,21 +178,21 @@ const Blog = () => {
                   filteredPosts.map((post, index) => (
                     <div 
                       key={index} 
-                      className="modern-card group cursor-pointer"
+                      className="p-6 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors modern-card group"
                       onClick={() => handlePostClick(post.slug)}
                     >
-                      <div className="space-y-3">
-                        <h2 className="vercel-heading-3 mb-0 mt-0 group-hover:text-foreground transition-colors">
+                      <div className="space-y-2">
+                        <h2 className="vercel-heading-2">
                           {post.title}
                         </h2>
                         
-                        <div className="flex items-center gap-2 vercel-text-muted">
+                        <div className="vercel-text-muted text-sm flex items-center gap-1">
                           <span>{post.date}</span>
                           <span>&bull;</span>
                           <span>{post.readTime}</span>
                         </div>
                         
-                        <p className="vercel-text text-muted-foreground line-clamp-2">
+                        <p className="vercel-text-muted text-sm mt-2 mb-4 line-clamp-3">
                           {post.excerpt}
                         </p>
                        
@@ -201,7 +201,7 @@ const Blog = () => {
                             <Badge 
                               key={tagIndex} 
                               variant="outline"
-                              className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs font-medium"
+                              className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleTagClick(tag);

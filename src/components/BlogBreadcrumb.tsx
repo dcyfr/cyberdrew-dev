@@ -14,11 +14,11 @@ interface BlogBreadcrumbProps {
   currentPage?: string;
 }
 
-export const BlogBreadcrumb = ({ postTitle, currentPage }: BlogBreadcrumbProps) => {
+export const BlogBreadcrumb = ({ postTitle, currentPage, className }: BlogBreadcrumbProps) => {
   const navigate = useNavigate();
 
   return (
-    <Breadcrumb className="mb-6">
+    <Breadcrumb className={`mb-6 ${className}`}>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink 

@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Home } from "lucide-react";
+import { Home } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { PageTransition } from "@/components/PageTransition";
 import { AppHeader } from "@/components/AppHeader";
@@ -24,7 +24,7 @@ const NotFound = () => {
         description="The page you're looking for doesn't exist or has moved."
       />
       <PageTransition>
-        <AppHeader showBackButton={false} showThemeToggle={false} />
+        {/* <AppHeader showBackButton={false} showThemeToggle={false} /> */}
         <div className="min-h-screen pt-20">
           <div className="container mx-auto px-6 py-16 max-w-4xl">
             <div className="text-center py-16">

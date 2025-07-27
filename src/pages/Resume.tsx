@@ -10,35 +10,70 @@ const Resume = () => {
 
   const certifications = [
     {
-      organization: "GIAC",
-      certs: ["GSEC", "GCIH", "GSTRT", "GDSA"]
+      organization: "SANS Institute",
+      certs: [
+        "GIAC Security Essentials (GSEC)",
+        "GIAC Certified Incident Handler (GCIH)",
+        "GIAC Security Threat Responder (GSTRT)",
+        "GIAC Cloud Security Essentials (GDSA)"
+      ]
     },
     {
       organization: "CompTIA",
-      certs: ["Network+", "Security+", "CySA+", "Pentest+", "SecurityX"]
+      certs: [
+        "CompTIA IT Fundamentals (ITF+)",
+        "CompTIA A+",
+        "CompTIA Network+",
+        "CompTIA Security+",
+        "CompTIA CySA+",
+        "CompTIA Pentest+",
+        "CompTIA SecurityX"
+      ]
     },
     {
       organization: "Mile2",
-      certs: ["C)ISSO", "C)PTE", "C)DFE", "C)DRE"]
-    },
-    {
-      organization: "ISC2",
-      certs: ["ISC2 Candidate"]
+      certs: [
+        "Certified Information Security Officer (CISSO)",
+        "Certified Penetration Testing Engineer (CPTE)",
+        "Certified Digital Forensics Examiner (CDFE)",
+        "Certified Disaster Recovery Expert (CDRE)"
+      ]
     }
   ];
 
   const competencies = [
     {
-      category: "Architecture & Design",
-      skills: ["Security Program Design", "Zero Trust Architecture", "Threat Modeling", "Risk Analysis"]
+      category: "Security Architecture",
+      skills: [
+        "Zero Trust Design",
+        "Threat Modeling",
+        "Enterprise Security Solutions",
+        "Cloud Security (Azure, AWS, GCP)"
+      ]
     },
     {
-      category: "Technical Skills",
-      skills: ["Enterprise Solutions", "Penetration Testing", "Incident Response", "Cloud Security"]
+      category: "Incident Response",
+      skills: [
+        "Threat Hunting",
+        "SIEM/SOAR Implementation",
+        "Vulnerability Management"
+      ]
+    },
+    {
+      category: "Network Security",
+      skills: [
+        "Firewall Configuration",
+        "Intrusion Detection Systems (IDS)",
+        "Network Segmentation"
+      ]
     },
     {
       category: "Compliance & Governance",
-      skills: ["CIS Controls", "ISO 27001", "NIST CSF", "SOC 2"]
+      skills: [
+        "NIST Frameworks",
+        "ISO 27001/27002",
+        "GDPR, HIPAA Compliance"
+      ]
     }
   ];
 
@@ -46,17 +81,16 @@ const Resume = () => {
     {
       degree: "M.S. Cybersecurity Engineering",
       school: "SANS Technology Institute",
-      period: "2024 - Present",
-      details: []
+      period: "2024 - Present"
     },
     {
       degree: "B.A.S. Cybersecurity",
       school: "Pensacola State College",
       period: "2016 - 2020",
       details: [
-        "Computer Science Academic Scholar",
-        "3x National Cyber League Gold Bracket Finalist",
-        "Cyber Defense Club Training Officer & CTF Lead"
+        "Mathematics & Computer Science Academic Scholar",
+        "Cyber Defense Club Training Officer & CTF Lead",
+        "3x National Cyber League Gold Bracket Finalist"
       ]
     }
   ];
@@ -65,11 +99,23 @@ const Resume = () => {
     {
       title: "Principal Cybersecurity Engineer",
       company: "Monks (Formerly Media.Monks)",
-      period: "2022 - Present",
+      period: "2023 - Present",
       achievements: [
-        "Designed and implemented zero-trust architecture for a 10,000+ employee organization",
-        "Reduced security incidents by 75% through advanced SIEM/SOAR implementation",
-        "Architected cloud security strategy for Azure, AWS, and GCP"
+        "Architected cloud security strategy for Azure, AWS, and GCP",
+        "Reduced security incidents by over 85% through advanced SIEM/SOAR redesign and implementation",
+        "Led threat modeling sessions to identify and mitigate security risks",
+        "Collaborated with cross-functional teams to integrate security into development processes"
+      ]
+    },
+    {
+      title: "Security Engineering & Operations Lead",
+      company: "Monks (Formerly Media.Monks)",
+      period: "2022 - 2023",
+      achievements: [
+        "Led security operations center (SOC) activities, ensuring 24/7 monitoring and response",
+        "Developed and maintained incident response plans, improving response time by over 70%",
+        "Implemented vulnerability management program, reducing critical vulnerabilities by over 65%",
+        "Conducted regular security assessments and audits, ensuring compliance with industry standards",
       ]
     },
     {
@@ -77,9 +123,10 @@ const Resume = () => {
       company: "Media.Monks (Formerly MightyHive)",
       period: "2021 - 2022",
       achievements: [
-        "Led incident response team for critical security breaches and threat hunting",
-        "Developed threat detection capabilities, reducing false positives by 60%",
-        "Managed vulnerability assessment program for critical infrastructure"
+        "Developed and maintained security policies and procedures",
+        "Implemented vulnerability management program, reducing critical vulnerabilities by over 70%",
+        "Led incident response for security breaches, improving response time by over 85%",
+        "Developed threat detection capabilities, reducing false positives by over 90%"
       ]
     },
     {
@@ -87,9 +134,10 @@ const Resume = () => {
       company: "CBI Cybersecurity Solutions",
       period: "2020 - 2021",
       achievements: [
-        "Monitored security events and performed initial incident triage",
+        "Conducted validation and triage for escalated security detections",
         "Developed SOC runbooks and standard operating procedures",
-        "Assisted in change management and SIEM tuning"
+        "Contributed to SIEM implementation and tuning activities",
+        "Participated in change management processes"
       ]
     }
   ];
@@ -98,22 +146,19 @@ const Resume = () => {
     <>
       <SEOHead
         title="Resume - Cyber Drew's Lab"
-        description=""
-        keywords=""
+        description="Drew's professional resume, showcasing expertise in cybersecurity architecture, incident response, and security operations."
+        keywords="cybersecurity, resume, security architect, zero trust, threat modeling, incident response, SIEM, SOAR, cloud security"
       />
       <PageTransition>
-        <AppHeader />
-        <div className="min-h-screen pt-20">
+        <AppHeader showHomeButton={true} />
+        <div className="min-h-screen pt-16">
           <div className="container mx-auto px-6 py-16 max-w-4xl">
-            {/* Page Breadcrumbs */}
-            <BlogBreadcrumb currentPage="Resume" />
-            
             {/* Page Title */}
             <div className="space-y-4 mb-12">
-              <h1 className="vercel-heading-2 mt-0">Drew</h1>
-              <p className="vercel-text font-medium">Cybersecurity Architect</p>
+              <h1 className="vercel-heading-1 mt-0">Drew</h1>
+              <p className="vercel-text font-medium">Security Architect</p>
               <p className="vercel-text-muted max-w-2xl">
-                Cybersecurity expert with extensive experience in security architecture, threat analysis, and secure development practices. Proven track record in designing and implementing robust security solutions for large-scale enterprises.
+                Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
               </p>
             </div>
             

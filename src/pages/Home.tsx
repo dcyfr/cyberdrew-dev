@@ -76,6 +76,7 @@ const Home = () => {
         keywords="" 
       />
       <PageTransition>
+        {/* <AppHeader showBackButton={true} showThemeToggle={true} /> */}
         <div className="min-h-screen pt-20">
           <div className="container mx-auto px-6 py-16 max-w-4xl">
             {/* Hero Section */}

@@ -39,7 +39,7 @@ const BlogPost = () => {
           description="Loading post content..."
         />
         <PageTransition>
-          <AppHeader />
+          <AppHeader showHomeButton={true} />
           <div className="min-h-screen pt-20">
             <div className="container mx-auto px-6 py-16 max-w-4xl">
               <BlogPostSkeleton />
@@ -58,7 +58,7 @@ const BlogPost = () => {
           description="The post you're looking for doesn't exist or has moved."
         />
         <PageTransition>
-          <AppHeader />
+          <AppHeader showHomeButton={true} />
           <div className="min-h-screen pt-20">
             <div className="container mx-auto px-6 py-16 max-w-4xl">
               <BlogBreadcrumb />
@@ -81,7 +81,7 @@ const BlogPost = () => {
       <ReadingProgress />
       <BackToTop />
       <PageTransition>
-        <AppHeader />
+        <AppHeader showHomeButton={true} />
         <div className="min-h-screen pt-20">
           <div className="flex w-full">
             {/* Sidebar on the left */}
@@ -90,8 +90,8 @@ const BlogPost = () => {
             {/* Main content */}
             <main className="flex-1">
               <div className="container mx-auto px-6 py-16 max-w-4xl">
-                {/* Page Breadcrumb */}
-                <BlogBreadcrumb postTitle={post.title} />
+                {/* Page Breadcrumb 
+                <BlogBreadcrumb postTitle={post.title} /> */}
                 
                 {/* Post Content */}
                 <article className="max-w-none mb-8">
