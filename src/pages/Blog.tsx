@@ -1,16 +1,12 @@
 import { SEOHead } from "@/components/SEOHead";
 import { PageTransition } from "@/components/PageTransition";
-import { Button } from "@/components/ui/button";
+import { PageLayout } from "@/components/PageLayout";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { EnhancedSearch } from "@/components/EnhancedSearch";
-import { ShareButtons } from "@/components/ShareButtons";
 import { BlogListSkeleton } from "@/components/BlogPostSkeleton";
 
 const Blog = () => {
@@ -53,6 +49,7 @@ const Blog = () => {
     setSearchQuery(suggestion);
   };
 
+
   return (
     <>
       <SEOHead
@@ -61,98 +58,85 @@ const Blog = () => {
         keywords="cybersecurity blog, security architecture, threat analysis, zero trust, MFA, enterprise security"
       />
       <PageTransition>
-        <main id="main-content" className="min-h-screen">
-          <div className="container mx-auto px-6 py-16 max-w-4xl">
-            {/* Page Header */}
-            <div className="mb-16">
-              {/* Page Navigation */}
-              <div className="flex justify-between items-start mb-8">
-                <Button 
-                  variant="vercel-ghost" 
-                  onClick={() => navigate("/")}
-                  className="text-sm"
-                  aria-label="Go back to home page"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  Back
-                </Button>
-                <ThemeToggle />
-              </div>
-              {/* Page Breadcrumbs */}
-              <BlogBreadcrumb currentPage="Blog" />
-              {/* Page Title */}
-              <div className="space-y-6">
-                <h1 className="vercel-heading-2 mt-0">Blog</h1>
-                <p className="vercel-text-muted max-w-2xl">
-                  Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
-                </p>
-              </div>
-            </div>
-            {/* Page Content */}
-            <div className="space-y-8 mb-8">
-              {/* Enhanced Search and Filters */}
-              <EnhancedSearch
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                selectedTag={selectedTag}
-                onTagChange={handleTagClick}
-                onSuggestionClick={handleSuggestionClick}
-              />
-              {/* Blog Posts */}
-              <div className="space-y-4">
-                {isLoading ? (
-                  <BlogListSkeleton />
-                ) : filteredPosts.length === 0 ? (
-                  <div className="text-center py-16">
-                      <p className="vercel-text-muted">
-                        No posts found matching your criteria. Try adjusting your search or filters.
-                    </p>
-                  </div>
-                ) : (
-                  filteredPosts.map((post, index) => (
-                   <div 
-                    key={index} 
-                    className="modern-card group"
-                    onClick={() => handlePostClick(post.slug)}
-                  >
-                     <div className="space-y-3">
-                       <h2 className="vercel-heading-3 mb-0 mt-0 group-hover:text-foreground transition-colors">
-                         {post.title}
-                       </h2>
-                       
-                       <div className="flex items-center gap-2 vercel-text-muted">
-                         <span>{post.date}</span>
-                         <span>&bull;</span>
-                         <span>{post.readTime}</span>
-                       </div>
-                       
-                       <p className="vercel-text text-muted-foreground line-clamp-2">
-                         {post.excerpt}
-                       </p>
-                      
-                       <div className="flex flex-wrap gap-2 pt-1">
-                         {post.tags.map((tag, tagIndex) => (
-                           <Badge 
-                             key={tagIndex} 
-                             variant="outline"
-                             className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs font-medium"
-                             onClick={(e) => {
-                               e.stopPropagation();
-                               handleTagClick(tag);
-                             }}
-                           >
-                             {tag}
-                           </Badge>
-                         ))}
-                       </div>
-                    </div>
-                  </div>
-                  ))
-                )}
-              </div>
+        <PageLayout>
+          {/* Page Header */}
+          <div className="mb-16">
+            {/* Page Breadcrumbs */}
+            <BlogBreadcrumb currentPage="Blog" />
+            {/* Page Title */}
+            <div className="space-y-6">
+              <h1 className="vercel-heading-2 mt-0">Blog</h1>
+              <p className="vercel-text-muted max-w-2xl">
+                Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
+              </p>
             </div>
           </div>
-        </main>
+          
+          {/* Page Content */}
+          <div className="space-y-8 mb-8">
+            {/* Enhanced Search and Filters */}
+            <EnhancedSearch
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedTag={selectedTag}
+              onTagChange={handleTagClick}
+              onSuggestionClick={handleSuggestionClick}
+            />
+            
+            {/* Blog Posts */}
+            <div className="space-y-4">
+              {isLoading ? (
+                <BlogListSkeleton />
+              ) : filteredPosts.length === 0 ? (
+                <div className="text-center py-16">
+                  <p className="vercel-text-muted">
+                    No posts found matching your criteria. Try adjusting your search or filters.
+                  </p>
+                </div>
+              ) : (
+                filteredPosts.map((post, index) => (
+                  <div 
+                    key={index} 
+                    className="modern-card group cursor-pointer"
+                    onClick={() => handlePostClick(post.slug)}
+                  >
+                    <div className="space-y-3">
+                      <h2 className="vercel-heading-3 mb-0 mt-0 group-hover:text-foreground transition-colors">
+                        {post.title}
+                      </h2>
+                      
+                      <div className="flex items-center gap-2 vercel-text-muted">
+                        <span>{post.date}</span>
+                        <span>&bull;</span>
+                        <span>{post.readTime}</span>
+                      </div>
+                      
+                      <p className="vercel-text text-muted-foreground line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                     
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {post.tags.map((tag, tagIndex) => (
+                          <Badge 
+                            key={tagIndex} 
+                            variant="outline"
+                            className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs font-medium"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTagClick(tag);
+                            }}
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </PageLayout>
       </PageTransition>
     </>
   );

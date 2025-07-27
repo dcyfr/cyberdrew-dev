@@ -12,6 +12,7 @@ import { BackToTop } from "@/components/BackToTop";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import { ShareButtons } from "@/components/ShareButtons";
 import { PageTransition } from "@/components/PageTransition";
+import { PageLayout } from "@/components/PageLayout";
 import { sanitizeHtml } from "@/lib/security";
 import { useState, useEffect } from "react";
 
@@ -36,23 +37,11 @@ const BlogPost = () => {
           title="Loading..."
           description="Loading post content..."
         />
-        <main id="main-content" className="min-h-screen">
-          <div className="container mx-auto px-6 py-16 max-w-4xl">
-            <div className="flex justify-between items-start mb-8">
-              <Button 
-                variant="vercel-ghost" 
-                onClick={() => navigate("/blog")}
-                className="text-sm"
-                aria-label="Go back to blog"
-              >
-                <ArrowLeft className="w-4 h-4 mr-1" />
-                Back
-              </Button>
-              <ThemeToggle />
-            </div>
+        <PageTransition>
+          <PageLayout showBackButton={false}>
             <BlogPostSkeleton />
-          </div>
-        </main>
+          </PageLayout>
+        </PageTransition>
       </>
     );
   }
@@ -64,22 +53,13 @@ const BlogPost = () => {
           title="Post Not Found - Drew's Lab"
           description="The post you're looking for doesn't exist or has moved."
         />
-        <main id="main-content" className="min-h-screen">
-          <div className="container mx-auto px-6 py-16 max-w-4xl">
-            <Button 
-              variant="vercel-ghost" 
-              onClick={() => navigate("/blog")}
-              className="mb-8 text-sm"
-              aria-label="Go back to blog"
-            >
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Back
-            </Button>
+        <PageTransition>
+          <PageLayout>
             <BlogBreadcrumb />
             <h1 className="text-3xl font-semibold text-foreground mb-4">Post Not Found</h1>
             <p className="text-muted-foreground">The blog post you're looking for doesn't exist or has moved.</p>
-          </div>
-        </main>
+          </PageLayout>
+        </PageTransition>
       </>
     );
   }
@@ -94,27 +74,12 @@ const BlogPost = () => {
       <ReadingProgress />
       <BackToTop />
       <PageTransition>
-        <main id="main-content" className="min-h-screen">
-          <div className="container mx-auto px-6 py-16 max-w-4xl">
-            {/* Page Header */}
-            <div className="flex justify-between items-start mb-8">
-              {/* Back Button */}
-              <Button 
-                variant="vercel-ghost" 
-                onClick={() => navigate("/blog")}
-                className="text-sm"
-                aria-label="Go back to blog"
-              >
-                <ArrowLeft className="w-4 h-4 mr-1" />
-                Back
-              </Button>
-              {/* Theme Toggle Button */}
-              <ThemeToggle />
-            </div>
-            {/* Page Breadcrumb */}
-            <BlogBreadcrumb postTitle={post.title} />
-            {/* Post Content */}
-            <article className="max-w-none mb-8">
+        <PageLayout>
+          {/* Page Breadcrumb */}
+          <BlogBreadcrumb postTitle={post.title} />
+          
+          {/* Post Content */}
+          <article className="max-w-none mb-8">
               {/* Post Header */}
               <header className="mb-16">
                 <h1 className="vercel-heading-1">
@@ -150,11 +115,10 @@ const BlogPost = () => {
                 className="blog-content prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
               />
-              {/* Related Posts */}
-              <RelatedPosts currentPost={post} />
-            </article>
-          </div>
-        </main>
+            {/* Related Posts */}
+            <RelatedPosts currentPost={post} />
+          </article>
+        </PageLayout>
       </PageTransition>
     </>
   );

@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Calendar } from "lucide-react";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { SEOHead } from "@/components/SEOHead";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { PageTransition } from "@/components/PageTransition";
+import { PageLayout } from "@/components/PageLayout";
+import { Section, SkillCategory, CertificationGroup, ExperienceItem } from "@/components/ContentBlocks";
 
 const Resume = () => {
   const navigate = useNavigate();
@@ -104,135 +102,78 @@ const Resume = () => {
         keywords="cybersecurity, resume, skills, experience, education"
       />
       <PageTransition>
-        <main id="main-content" className="min-h-screen">
-          <div className="container mx-auto px-6 py-16 max-w-2xl">
-            {/* Page Header */}
-            <div className="mb-8">
-              {/* Page Navigation */}
-              <div className="flex justify-between items-start mb-8">
-                <Button 
-                  variant="vercel-ghost" 
-                  onClick={() => navigate("/")}
-                  className="text-sm"
-                  aria-label="Go back to home page"
-                >
-                <ArrowLeft className="w-4 h-4 mr-1" />
-                Back
-              </Button>
-              <ThemeToggle />
-            </div>
-            </div>
-            {/* Page Breadcrumbs */}
-            <BlogBreadcrumb currentPage="Resume" />
-            {/* Page Title */}
-            <div className="space-y-4 mb-12">
-              <h1 className="vercel-heading-2 mt-0">Drew</h1>
-              <p className="vercel-text font-medium">Cybersecurity Architect</p>
-              <p className="vercel-text-muted max-w-2xl">
-                Cybersecurity expert with extensive experience in security architecture, threat analysis, and secure development practices. Proven track record in designing and implementing robust security solutions for large-scale enterprises.
-              </p>
-            </div>
-            {/* Page Content */}
-            <div className="space-y-8">
-              {/* Education Section */}
-              <section className="space-y-8">
-                <h2 className="vercel-heading-3 mb-8 mt-0">Education</h2>
-                <div className="space-y-8">
-                  {education.map((edu, index) => (
-                     <div key={index} className="modern-card space-y-4">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium text-foreground">{edu.degree}</h3>
-                        <p className="text-foreground">{edu.school}</p>
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4 mr-1" />
-                          {edu.period}
-                        </div>
-                      </div>
-                      {edu.details.length > 0 && (
-                        <ul className="space-y-2 ml-6">
-                          {edu.details.map((detail, detIndex) => (
-                            <li key={detIndex} className="text-muted-foreground leading-relaxed">
-                              &bull; {detail}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </section>
-              {/* Experience Section */}
-              <section className="space-y-8">
-                <h2 className="vercel-heading-3 mb-8 mt-0">Experience</h2>
-                <div className="space-y-12">
-                  {experiences.map((exp, index) => (
-                    <div key={index} className="modern-card space-y-4">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium text-foreground">{exp.title}</h3>
-                        <p className="text-foreground">{exp.company}</p>
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4 mr-1" />
-                          {exp.period}
-                        </div>
-                      </div>
-                      <ul className="space-y-2 ml-6">
-                        {exp.achievements.map((achievement, achIndex) => (
-                          <li key={achIndex} className="text-muted-foreground leading-relaxed">
-                            &bull; {achievement}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </section>
-              {/* Certifications */}
-              <section className="space-y-8">
-                <h2 className="vercel-heading-3 mb-8 mt-0">Certifications</h2>
-                <div className="space-y-6">
-                  {certifications.map((org, index) => (
-                     <div key={index} className="modern-card space-y-3">
-                      <h3 className="text-lg font-medium text-foreground">{org.organization}</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {org.certs.map((cert, certIndex) => (
-                          <Badge 
-                            key={certIndex} 
-                            variant="outline" 
-                            className="text-xs hover-scale"
-                          >
-                            {cert}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-              {/* Core Competencies */}
-              <section className="space-y-8">
-                <h2 className="vercel-heading-3 mb-8 mt-0">Core Competencies</h2>
-                <div className="space-y-8">
-                  {competencies.map((comp, index) => (
-                    <div key={index} className="modern-card space-y-3">
-                      <h3 className="text-lg font-medium text-foreground">{comp.category}</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {comp.skills.map((skill, skillIndex) => (
-                          <Badge 
-                            key={skillIndex} 
-                            variant="outline" 
-                            className="text-xs hover-scale"
-                          >
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            </div>
+        <PageLayout maxWidth="2xl">
+          {/* Page Breadcrumbs */}
+          <BlogBreadcrumb currentPage="Resume" />
+          
+          {/* Page Title */}
+          <div className="space-y-4 mb-12">
+            <h1 className="vercel-heading-2 mt-0">Drew</h1>
+            <p className="vercel-text font-medium">Cybersecurity Architect</p>
+            <p className="vercel-text-muted max-w-2xl">
+              Cybersecurity expert with extensive experience in security architecture, threat analysis, and secure development practices. Proven track record in designing and implementing robust security solutions for large-scale enterprises.
+            </p>
           </div>
-        </main>
+          
+          {/* Page Content */}
+          <div className="space-y-12">
+            {/* Education Section */}
+            <Section title="Education">
+              <div className="space-y-8">
+                {education.map((edu, index) => (
+                  <ExperienceItem
+                    key={index}
+                    title={edu.degree}
+                    company={edu.school}
+                    period={edu.period}
+                    achievements={edu.details}
+                  />
+                ))}
+              </div>
+            </Section>
+
+            {/* Experience Section */}
+            <Section title="Experience">
+              <div className="space-y-8">
+                {experiences.map((exp, index) => (
+                  <ExperienceItem
+                    key={index}
+                    title={exp.title}
+                    company={exp.company}
+                    period={exp.period}
+                    achievements={exp.achievements}
+                  />
+                ))}
+              </div>
+            </Section>
+
+            {/* Certifications */}
+            <Section title="Certifications">
+              <div className="space-y-6">
+                {certifications.map((org, index) => (
+                  <CertificationGroup
+                    key={index}
+                    organization={org.organization}
+                    certs={org.certs}
+                  />
+                ))}
+              </div>
+            </Section>
+
+            {/* Core Competencies */}
+            <Section title="Core Competencies">
+              <div className="space-y-6">
+                {competencies.map((comp, index) => (
+                  <SkillCategory
+                    key={index}
+                    category={comp.category}
+                    skills={comp.skills}
+                  />
+                ))}
+              </div>
+            </Section>
+          </div>
+        </PageLayout>
       </PageTransition>
     </>
   );
