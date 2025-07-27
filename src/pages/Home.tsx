@@ -87,7 +87,7 @@ const Home = () => {
                 />
               </div>
               <div className="space-y-4">
-                <h1 className="vercel-heading-2 mt-0">It's Drew ✨</h1>
+                <h1 className="vercel-heading-2 mt-0">It's Drew &#10022;</h1>
                 <p className="vercel-text-muted max-w-md">
                   Cyber Architect, Engineer, and Developer
                 </p>

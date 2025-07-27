@@ -18,7 +18,7 @@ export const ReadingProgress = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-20 h-1 bg-muted">
+    <div className="fixed top-0 left-0 right-0 z-[9999] h-1 bg-muted pointer-events-none">
       <div
         className="h-full bg-primary transition-all duration-150 ease-out"
         style={{ width: `${progress}%` }}
