@@ -30,15 +30,46 @@ export default defineConfig(({ mode }) => ({
     // Code splitting optimization
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Vendor chunk for React and related libraries
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          // UI components chunk
-          ui: ['@radix-ui/react-slot', '@radix-ui/react-toast', '@radix-ui/react-tooltip'],
-          // Utility libraries
-          utils: ['clsx', 'tailwind-merge', 'class-variance-authority'],
-          // Icons chunk
-          icons: ['lucide-react'],
+        manualChunks: (id) => {
+          // React and core libraries
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-vendor';
+          }
+          
+          // Router
+          if (id.includes('react-router')) {
+            return 'router';
+          }
+          
+          // Radix UI components (large library)
+          if (id.includes('@radix-ui')) {
+            return 'ui-vendor';
+          }
+          
+          // Lucide icons (can be large)
+          if (id.includes('lucide-react')) {
+            return 'icons';
+          }
+          
+          // TanStack Query
+          if (id.includes('@tanstack')) {
+            return 'query';
+          }
+          
+          // Security and utility libraries
+          if (id.includes('dompurify') || id.includes('clsx') || id.includes('tailwind-merge')) {
+            return 'utils';
+          }
+          
+          // Theme and styling
+          if (id.includes('next-themes') || id.includes('class-variance-authority')) {
+            return 'theme';
+          }
+          
+          // Other vendor libraries
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
         },
         // Optimize chunk names for caching
         chunkFileNames: 'assets/js/[name]-[hash].js',
@@ -65,20 +96,46 @@ export default defineConfig(({ mode }) => ({
     
     // Asset optimization
     assetsInlineLimit: 4096, // 4KB
-    chunkSizeWarningLimit: 500, // 500KB
+    chunkSizeWarningLimit: 300, // 300KB warning limit
   },
   
-  // Optimize dependencies
+  // Optimize dependencies - exclude large libraries from pre-bundling
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
-      'react-router-dom',
-      'lucide-react',
-      'clsx',
-      'tailwind-merge'
+      'react-router-dom'
     ],
-    exclude: ['@vite/client', '@vite/env']
+    exclude: [
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-alert-dialog', 
+      '@radix-ui/react-avatar',
+      '@radix-ui/react-checkbox',
+      '@radix-ui/react-collapsible',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-hover-card',
+      '@radix-ui/react-menubar',
+      '@radix-ui/react-navigation-menu',
+      '@radix-ui/react-popover',
+      '@radix-ui/react-progress',
+      '@radix-ui/react-radio-group',
+      '@radix-ui/react-scroll-area',
+      '@radix-ui/react-select',
+      '@radix-ui/react-separator',
+      '@radix-ui/react-sheet',
+      '@radix-ui/react-sidebar',
+      '@radix-ui/react-slider',
+      '@radix-ui/react-switch',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-textarea',
+      '@radix-ui/react-toggle',
+      '@radix-ui/react-toggle-group',
+      'lucide-react',
+      'dompurify',
+      '@vite/client', 
+      '@vite/env'
+    ]
   },
   
   // CSS optimization
