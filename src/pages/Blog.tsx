@@ -7,7 +7,9 @@ import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { BlogListSkeleton } from "@/components/BlogPostSkeleton";
 import { Input } from "@/components/ui/input";
-import { Search, FileText, Tag } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Search, FileText, Tag, ArrowLeft } from "lucide-react";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -59,8 +61,27 @@ const Blog = () => {
       />
       <PageTransition>
         <div className="flex w-full min-h-screen">
+          {/* Navigation Header */}
+          <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+            <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => navigate(-1)}
+                  className="text-sm"
+                  aria-label="Go back to previous page"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-1" />
+                  Back
+                </Button>
+              </div>
+              <ThemeToggle />
+            </div>
+          </div>
+
           {/* Desktop Sidebar - Fixed width, takes up space */}
-          <aside className="hidden lg:block w-80 border-r border-border bg-card">
+          <aside className="hidden lg:block w-80 border-r border-border bg-card pt-20">
             <div className="sticky top-0 h-screen overflow-y-auto px-4 py-6">
               {/* Search Section */}
               <div className="mb-8">
@@ -124,7 +145,7 @@ const Blog = () => {
           </aside>
 
           {/* Main content */}
-          <main className="flex-1 min-h-screen">
+          <main className="flex-1 min-h-screen pt-20">
             <div className="container mx-auto px-6 py-16 max-w-4xl">
               {/* Mobile search and filters */}
               <div className="lg:hidden mb-8 space-y-4">
