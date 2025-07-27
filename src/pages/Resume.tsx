@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { PageTransition } from "@/components/PageTransition";
-import { PageLayout } from "@/components/PageLayout";
+import { AppHeader } from "@/components/AppHeader";
 import { Section, SkillCategory, CertificationGroup, ExperienceItem } from "@/components/ContentBlocks";
 
 const Resume = () => {
@@ -102,78 +102,81 @@ const Resume = () => {
         keywords="cybersecurity, resume, skills, experience, education"
       />
       <PageTransition>
-        <PageLayout maxWidth="2xl">
-          {/* Page Breadcrumbs */}
-          <BlogBreadcrumb currentPage="Resume" />
-          
-          {/* Page Title */}
-          <div className="space-y-4 mb-12">
-            <h1 className="vercel-heading-2 mt-0">Drew</h1>
-            <p className="vercel-text font-medium">Cybersecurity Architect</p>
-            <p className="vercel-text-muted max-w-2xl">
-              Cybersecurity expert with extensive experience in security architecture, threat analysis, and secure development practices. Proven track record in designing and implementing robust security solutions for large-scale enterprises.
-            </p>
+        <AppHeader />
+        <div className="min-h-screen pt-20">
+          <div className="container mx-auto px-6 py-16 max-w-2xl">
+            {/* Page Breadcrumbs */}
+            <BlogBreadcrumb currentPage="Resume" />
+            
+            {/* Page Title */}
+            <div className="space-y-4 mb-12">
+              <h1 className="vercel-heading-2 mt-0">Drew</h1>
+              <p className="vercel-text font-medium">Cybersecurity Architect</p>
+              <p className="vercel-text-muted max-w-2xl">
+                Cybersecurity expert with extensive experience in security architecture, threat analysis, and secure development practices. Proven track record in designing and implementing robust security solutions for large-scale enterprises.
+              </p>
+            </div>
+            
+            {/* Page Content */}
+            <div className="space-y-12">
+              {/* Education Section */}
+              <Section title="Education">
+                <div className="space-y-8">
+                  {education.map((edu, index) => (
+                    <ExperienceItem
+                      key={index}
+                      title={edu.degree}
+                      company={edu.school}
+                      period={edu.period}
+                      achievements={edu.details}
+                    />
+                  ))}
+                </div>
+              </Section>
+
+              {/* Experience Section */}
+              <Section title="Experience">
+                <div className="space-y-8">
+                  {experiences.map((exp, index) => (
+                    <ExperienceItem
+                      key={index}
+                      title={exp.title}
+                      company={exp.company}
+                      period={exp.period}
+                      achievements={exp.achievements}
+                    />
+                  ))}
+                </div>
+              </Section>
+
+              {/* Certifications */}
+              <Section title="Certifications">
+                <div className="space-y-6">
+                  {certifications.map((org, index) => (
+                    <CertificationGroup
+                      key={index}
+                      organization={org.organization}
+                      certs={org.certs}
+                    />
+                  ))}
+                </div>
+              </Section>
+
+              {/* Core Competencies */}
+              <Section title="Core Competencies">
+                <div className="space-y-6">
+                  {competencies.map((comp, index) => (
+                    <SkillCategory
+                      key={index}
+                      category={comp.category}
+                      skills={comp.skills}
+                    />
+                  ))}
+                </div>
+              </Section>
+            </div>
           </div>
-          
-          {/* Page Content */}
-          <div className="space-y-12">
-            {/* Education Section */}
-            <Section title="Education">
-              <div className="space-y-8">
-                {education.map((edu, index) => (
-                  <ExperienceItem
-                    key={index}
-                    title={edu.degree}
-                    company={edu.school}
-                    period={edu.period}
-                    achievements={edu.details}
-                  />
-                ))}
-              </div>
-            </Section>
-
-            {/* Experience Section */}
-            <Section title="Experience">
-              <div className="space-y-8">
-                {experiences.map((exp, index) => (
-                  <ExperienceItem
-                    key={index}
-                    title={exp.title}
-                    company={exp.company}
-                    period={exp.period}
-                    achievements={exp.achievements}
-                  />
-                ))}
-              </div>
-            </Section>
-
-            {/* Certifications */}
-            <Section title="Certifications">
-              <div className="space-y-6">
-                {certifications.map((org, index) => (
-                  <CertificationGroup
-                    key={index}
-                    organization={org.organization}
-                    certs={org.certs}
-                  />
-                ))}
-              </div>
-            </Section>
-
-            {/* Core Competencies */}
-            <Section title="Core Competencies">
-              <div className="space-y-6">
-                {competencies.map((comp, index) => (
-                  <SkillCategory
-                    key={index}
-                    category={comp.category}
-                    skills={comp.skills}
-                  />
-                ))}
-              </div>
-            </Section>
-          </div>
-        </PageLayout>
+        </div>
       </PageTransition>
     </>
   );

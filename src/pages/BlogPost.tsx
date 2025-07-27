@@ -12,7 +12,7 @@ import { BackToTop } from "@/components/BackToTop";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import { ShareButtons } from "@/components/ShareButtons";
 import { PageTransition } from "@/components/PageTransition";
-import { PageLayout } from "@/components/PageLayout";
+import { AppHeader } from "@/components/AppHeader";
 import { sanitizeHtml } from "@/lib/security";
 import { useState, useEffect } from "react";
 
@@ -38,9 +38,12 @@ const BlogPost = () => {
           description="Loading post content..."
         />
         <PageTransition>
-          <PageLayout showBackButton={false}>
-            <BlogPostSkeleton />
-          </PageLayout>
+          <AppHeader />
+          <div className="min-h-screen pt-20">
+            <div className="container mx-auto px-6 py-16 max-w-4xl">
+              <BlogPostSkeleton />
+            </div>
+          </div>
         </PageTransition>
       </>
     );
@@ -54,11 +57,14 @@ const BlogPost = () => {
           description="The post you're looking for doesn't exist or has moved."
         />
         <PageTransition>
-          <PageLayout>
-            <BlogBreadcrumb />
-            <h1 className="text-3xl font-semibold text-foreground mb-4">Post Not Found</h1>
-            <p className="text-muted-foreground">The blog post you're looking for doesn't exist or has moved.</p>
-          </PageLayout>
+          <AppHeader />
+          <div className="min-h-screen pt-20">
+            <div className="container mx-auto px-6 py-16 max-w-4xl">
+              <BlogBreadcrumb />
+              <h1 className="text-3xl font-semibold text-foreground mb-4">Post Not Found</h1>
+              <p className="text-muted-foreground">The blog post you're looking for doesn't exist or has moved.</p>
+            </div>
+          </div>
         </PageTransition>
       </>
     );
@@ -74,51 +80,54 @@ const BlogPost = () => {
       <ReadingProgress />
       <BackToTop />
       <PageTransition>
-        <PageLayout>
-          {/* Page Breadcrumb */}
-          <BlogBreadcrumb postTitle={post.title} />
-          
-          {/* Post Content */}
-          <article className="max-w-none mb-8">
-              {/* Post Header */}
-              <header className="mb-16">
-                <h1 className="vercel-heading-1">
-                  {post.title}
-                </h1>
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-2 vercel-text-muted">
-                    <time dateTime={post.date}>{post.date}</time>
-                    <span aria-hidden="true">•</span>
-                    <span>{post.readTime}</span>
+        <AppHeader />
+        <div className="min-h-screen pt-20">
+          <div className="container mx-auto px-6 py-16 max-w-4xl">
+            {/* Page Breadcrumb */}
+            <BlogBreadcrumb postTitle={post.title} />
+            
+            {/* Post Content */}
+            <article className="max-w-none mb-8">
+                {/* Post Header */}
+                <header className="mb-16">
+                  <h1 className="vercel-heading-1">
+                    {post.title}
+                  </h1>
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-2 vercel-text-muted">
+                      <time dateTime={post.date}>{post.date}</time>
+                      <span aria-hidden="true">•</span>
+                      <span>{post.readTime}</span>
+                    </div>
+                    <ShareButtons 
+                      title={post.title} 
+                      excerpt={post.excerpt}
+                    />
                   </div>
-                  <ShareButtons 
-                    title={post.title} 
-                    excerpt={post.excerpt}
-                  />
-                </div>
-                {post.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-12">
-                    {post.tags.map((tag) => (
-                      <Badge 
-                        key={tag} 
-                        variant="secondary" 
-                        className="text-xs px-3 py-1 font-medium rounded-full"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </header>
-              {/* Blog Post Content */}
-              <div 
-                className="blog-content prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
-              />
-            {/* Related Posts */}
-            <RelatedPosts currentPost={post} />
-          </article>
-        </PageLayout>
+                  {post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-12">
+                      {post.tags.map((tag) => (
+                        <Badge 
+                          key={tag} 
+                          variant="secondary" 
+                          className="text-xs px-3 py-1 font-medium rounded-full"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </header>
+                {/* Blog Post Content */}
+                <div 
+                  className="blog-content prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
+                />
+              {/* Related Posts */}
+              <RelatedPosts currentPost={post} />
+            </article>
+          </div>
+        </div>
       </PageTransition>
     </>
   );
