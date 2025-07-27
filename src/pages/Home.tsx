@@ -77,7 +77,7 @@ const Home = () => {
       <PageTransition>
         <PageLayout showBackButton={false} showThemeToggle={false} maxWidth="2xl">
           {/* Hero Section */}
-          <div className="space-y-6 mb-16">
+          <div className="space-y-4 mb-12">
             <div className="flex flex-col items-center text-center space-y-6">
               <div className="modern-card-sm">
                 <img 
@@ -96,7 +96,7 @@ const Home = () => {
           </div>
           
           {/* Links Section */}
-          <div className="space-y-8">
+          <div className="space-y-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {connectCards.map((card, index) => (
                 <LinkCard
