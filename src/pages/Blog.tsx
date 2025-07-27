@@ -74,11 +74,9 @@ const Blog = () => {
               <div className="container mx-auto px-6 py-16 max-w-4xl">
                 {/* Mobile sidebar trigger */}
                 <div className="lg:hidden mb-4">
-                  <SidebarTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Menu className="w-4 h-4 mr-2" />
-                      Filters & Search
-                    </Button>
+                  <SidebarTrigger className="flex items-center gap-2 px-3 py-2 text-sm border border-border rounded-md hover:bg-accent">
+                    <Menu className="w-4 h-4" />
+                    Filters & Search
                   </SidebarTrigger>
                 </div>
                 
