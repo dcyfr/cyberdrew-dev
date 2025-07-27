@@ -31,6 +31,7 @@ const App = () => (
               <Route path="/blog" element={<LazyPage component={Blog} />} />
               <Route path="/blog/:slug" element={<LazyPage component={BlogPost} />} />
               <Route path="/resume" element={<LazyPage component={Resume} />} />
+              <Route path="/notfound" element={<LazyPage component={NotFound} />} />
               <Route path="*" element={<LazyPage component={NotFound} />} />
             </Routes>
           </BrowserRouter>

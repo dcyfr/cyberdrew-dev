@@ -152,7 +152,7 @@ export function getBlogPost(slug: string): BlogPost | null {
     title: frontmatter.title || '',
     date: frontmatter.date || '',
     readTime: frontmatter.readTime || '',
-    slug: frontmatter.slug || slug,
+    slug, // always use the filename slug for routing
     excerpt: frontmatter.excerpt || '',
     tags: frontmatter.tags || [],
     content

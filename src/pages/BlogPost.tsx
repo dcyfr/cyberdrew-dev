@@ -24,12 +24,18 @@ const BlogPost = () => {
 
   const post = getBlogPost(slug || "");
 
+  // Simulate loading time for better UX
   useEffect(() => {
-    // Simulate loading time for better UX
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
   }, [slug]);
 
+  // Redirect to NotFound page for invalid slugs after loading
+  useEffect(() => {
+    if (!isLoading && !post) {
+      navigate("/notfound", { replace: true });
+    }
+  }, [isLoading, post, navigate]);
 
   if (isLoading) {
     return (
@@ -50,25 +56,8 @@ const BlogPost = () => {
     );
   }
 
-  if (!post) {
-    return (
-      <>
-        <SEOHead
-          title="Post Not Found - Cyber Drew's Lab"
-          description="The post you're looking for doesn't exist or has moved."
-        />
-        <PageTransition>
-          <AppHeader showHomeButton={true} />
-          <div className="min-h-screen pt-20">
-            <div className="container mx-auto px-6 py-16 max-w-4xl">
-              <BlogBreadcrumb />
-              <h1 className="text-3xl font-semibold text-foreground mb-4">Post Not Found</h1>
-              <p className="text-muted-foreground">The blog post you're looking for doesn't exist or has moved.</p>
-            </div>
-          </div>
-        </PageTransition>
-      </>
-    );
+  if (!post && !isLoading) {
+    return null;
   }
 
   return (
