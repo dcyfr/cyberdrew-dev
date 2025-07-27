@@ -67,11 +67,11 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
   }
 
   return (
-    <section className="mt-20 pt-8 border-t border-border">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h2 className="vercel-heading-2 mb-2">Related Posts</h2>
-          <p className="vercel-text-muted text-sm">
+    <section className="mt-24 pt-12 border-t border-border">
+      <div className="flex items-center justify-between mb-12">
+        <div className="space-y-3">
+          <h2 className="vercel-heading-2 mb-0">Related Posts</h2>
+          <p className="vercel-text-muted">
             Continue reading about {currentPost.tags.slice(0, 2).join(' and ')}
           </p>
         </div>
@@ -86,7 +86,7 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
         </Button>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
         {relatedPosts.map((post) => (
           <Card 
             key={post.slug} 
@@ -105,36 +105,37 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
               </div>
             )}
 
-            <CardHeader className="pb-3 space-y-3">
-              <CardTitle className="text-lg font-semibold leading-tight group-hover:text-primary transition-colors duration-200 line-clamp-2 pr-4">
+            <CardHeader className="pb-4 space-y-4">
+              <CardTitle className="text-xl font-semibold leading-tight group-hover:text-primary transition-colors duration-200 line-clamp-2 pr-4">
                 {post.title}
               </CardTitle>
-              <div className="flex items-center gap-3 text-muted-foreground text-sm">
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <time dateTime={post.date}>{post.date}</time>
+              <div className="flex items-center gap-4 text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  <time dateTime={post.date} className="text-sm">{post.date}</time>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>{post.readTime}</span>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-sm">{post.readTime}</span>
                 </div>
               </div>
             </CardHeader>
 
-            <CardContent className="pt-0 space-y-4">
-              <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
+            <CardContent className="pt-0 space-y-5">
+              <p className="text-muted-foreground leading-relaxed line-clamp-3">
                 {post.excerpt}
               </p>
               
-              {post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+              <div className="space-y-4">
+                {post.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
                   {post.tags.slice(0, 3).map((tag) => {
                     const isShared = currentPost.tags.includes(tag);
                     return (
                       <Badge 
                         key={tag} 
                         variant={isShared ? "default" : "secondary"}
-                        className={`text-xs font-medium px-2.5 py-1 rounded-full transition-all duration-200 ${
+                        className={`text-sm font-medium px-3 py-2 rounded-full transition-all duration-200 ${
                           isShared 
                             ? "bg-primary/90 text-primary-foreground shadow-sm" 
                             : "bg-secondary/60 hover:bg-secondary/80"
@@ -152,13 +153,14 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
                       +{post.tags.length - 3}
                     </Badge>
                   )}
-                </div>
-              )}
+                  </div>
+                )}
 
-              {/* Read more indicator */}
-              <div className="flex items-center text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pt-2">
+                {/* Read more indicator */}
+                <div className="flex items-center text-sm text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pt-2">
                 Read more
-                <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform duration-200" />
+                  <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-200" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -166,7 +168,7 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
       </div>
 
       {/* Mobile "View All" button */}
-      <div className="sm:hidden mt-6 text-center">
+      <div className="sm:hidden mt-8 text-center">
         <Button 
           variant="outline" 
           onClick={handleViewAllPosts}
