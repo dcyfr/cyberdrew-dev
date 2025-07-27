@@ -31,7 +31,7 @@ export function BlogPostSidebar({ currentPost }: BlogPostSidebarProps) {
   };
 
   return (
-    <aside className="hidden lg:block w-80 border-l border-border bg-card">
+    <aside className="hidden lg:block w-80 border-r border-border bg-card">
       <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto px-6 py-8">
         {/* Tags Section */}
         <div className="mb-8">

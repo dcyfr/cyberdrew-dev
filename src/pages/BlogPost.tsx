@@ -84,6 +84,9 @@ const BlogPost = () => {
         <AppHeader />
         <div className="min-h-screen pt-20">
           <div className="flex w-full">
+            {/* Sidebar on the left */}
+            <BlogPostSidebar currentPost={post} />
+
             {/* Main content */}
             <main className="flex-1">
               <div className="container mx-auto px-6 py-16 max-w-4xl">
@@ -113,9 +116,6 @@ const BlogPost = () => {
                 </article>
               </div>
             </main>
-
-            {/* Sidebar */}
-            <BlogPostSidebar currentPost={post} />
           </div>
         </div>
       </PageTransition>
