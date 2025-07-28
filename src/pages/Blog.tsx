@@ -127,30 +127,7 @@ const Blog = () => {
 
           {/* Main content */}
           <main className="flex-1 min-h-screen pt-24">
-            <div className="container mx-auto max-w-4xl">
-              {/* Mobile search and filters */}
-              <div className="lg:hidden mb-8 space-y-4">
-                <Input
-                  type="text"
-                  placeholder="Search posts..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full"
-                />
-                <div className="flex flex-wrap gap-2">
-                  {allTags.map((tag, index) => (
-                    <Badge
-                      key={index}
-                      variant={selectedTag === tag ? "default" : "outline"}
-                      className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
-                      onClick={() => handleTagClick(tag)}
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              
+            <div className="container mx-auto max-w-4xl">              
               {/* Page Header */}
               <div className="mb-4 sm:mb-8">
                 {/* Page Breadcrumbs 
@@ -162,10 +139,32 @@ const Blog = () => {
                     Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
                   </p>
                 </div>
+                {/* Mobile search and filters */}
+                <div className="lg:hidden mb-8 space-y-4">
+                  <Input
+                    type="text"
+                    placeholder="Search posts..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full"
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    {allTags.map((tag, index) => (
+                      <Badge
+                        key={index}
+                        variant={selectedTag === tag ? "default" : "outline"}
+                        className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
+                        onClick={() => handleTagClick(tag)}
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
               </div>
               
               {/* Blog Posts */}
-              <div className="space-y-4 sm:space-y-8">
+              <div className="space-y-8 sm:space-y-8 mb-8">
                 {isLoading ? (
                   <BlogListSkeleton />
                 ) : filteredPosts.length === 0 ? (
