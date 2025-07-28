@@ -5,6 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // Production optimization configuration
 export default defineConfig(({ mode }) => ({
+  base: '/', // Explicitly set base path for production deployment
   server: {
     port: 8080,
   },
