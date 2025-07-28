@@ -8,6 +8,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { SecurityProvider } from "@/components/SecurityProvider";
 import { SkipLink } from "@/components/SkipLink";
 import { LazyPage, Home, Blog, BlogPost, Resume, NotFound } from "@/components/LazyRoutes";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
+        <SpeedInsights />
       </ThemeProvider>
     </QueryClientProvider>
     </ErrorBoundary>
