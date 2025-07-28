@@ -11,6 +11,7 @@ interface ShareButtonsProps {
   showRSS?: boolean;
 }
 
+
 export const ShareButtons = ({ 
   title, 
   url = window.location.href, 
@@ -20,9 +21,25 @@ export const ShareButtons = ({
   const [showButtons, setShowButtons] = useState(false);
   const { toast } = useToast();
 
+  // Helper to get the full URL with protocol and domain
+  const getFullUrl = () => {
+    // If url already starts with http(s), return as is
+    if (/^https?:\/\//.test(url)) return url;
+    // Determine environment
+    const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+    const base = isDev
+      ? `http://localhost:8080` // Vite dev port
+      : `https://cyberdrew.dev`;
+    // Ensure url starts with /
+    const path = url.startsWith('/') ? url : `/${url}`;
+    return `${base}${path}`;
+  };
+
+  const fullUrl = getFullUrl();
+
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(fullUrl);
       toast({
         title: "Link copied!",
         description: "The link has been copied to your clipboard.",
@@ -38,13 +55,13 @@ export const ShareButtons = ({
   };
 
   const shareToX = () => {
-    const text = `${title} ${url}`;
+    const text = `${title} ${fullUrl}`;
     window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     setShowButtons(false);
   };
 
   const shareToLinkedIn = () => {
-    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(fullUrl)}`;
     window.open(linkedInUrl, '_blank');
     setShowButtons(false);
   };
