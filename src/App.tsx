@@ -8,7 +8,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { SecurityProvider } from "@/components/SecurityProvider";
 import { SkipLink } from "@/components/SkipLink";
 import { LazyPage, Home, Blog, BlogPost, Resume, NotFound } from "@/components/LazyRoutes";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const queryClient = new QueryClient();
 
