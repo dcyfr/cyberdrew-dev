@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { PageTransition } from "@/components/PageTransition";
-import { AppHeader } from "@/components/AppHeader";
+import { PageLayout } from "@/components/PageLayout";
 import { Section, SkillCategory, CertificationGroup, ExperienceItem } from "@/components/ContentBlocks";
 
 const Resume = () => {
@@ -149,24 +149,23 @@ const Resume = () => {
         description="Drew's professional resume, showcasing expertise in cybersecurity architecture, incident response, and security operations."
         keywords="cybersecurity, resume, security architect, zero trust, threat modeling, incident response, SIEM, SOAR, cloud security"
       />
-      <PageTransition>
-        <AppHeader showHomeButton={true} />
-        <div className="min-h-screen pt-16">
-          <div className="container mx-auto px-6 py-16 max-w-4xl">
-            {/* Page Title */}
-            <div className="space-y-4 mb-12">
-              <h1 className="vercel-heading-1 mt-0">Drew</h1>
-              <p className="vercel-text font-medium">Security Architect</p>
-              <p className="vercel-text-muted max-w-2xl">
-                Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
-              </p>
-            </div>
-            
-            {/* Page Content */}
-            <div className="space-y-12">
-              {/* Education Section */}
-              <Section title="Education">
-                <div className="space-y-8">
+      <PageLayout>
+        <PageTransition>
+          {/* Page Title */}
+          <div className="space-y-4 mb-8 sm:mb-12">
+            <BlogBreadcrumb currentPage="Resume" />
+            <h1 className="vercel-heading-1 mt-4">Drew</h1>
+            <p className="vercel-text font-medium">Security Architect</p>
+            <p className="vercel-text-muted max-w-2xl">
+              Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
+            </p>
+          </div>
+          
+          {/* Page Content */}
+          <div className="space-y-8 sm:space-y-12">
+            {/* Education Section */}
+            <Section title="Education">
+                <div className="space-y-4 sm:space-y-8">
                   {education.map((edu, index) => (
                     <ExperienceItem
                       key={index}
@@ -181,7 +180,7 @@ const Resume = () => {
 
               {/* Experience Section */}
               <Section title="Experience">
-                <div className="space-y-8">
+                <div className="space-y-4 sm:space-y-8">
                   {experiences.map((exp, index) => (
                     <ExperienceItem
                       key={index}
@@ -196,7 +195,7 @@ const Resume = () => {
 
               {/* Certifications */}
               <Section title="Certifications">
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {certifications.map((org, index) => (
                     <CertificationGroup
                       key={index}
@@ -209,7 +208,7 @@ const Resume = () => {
 
               {/* Core Competencies */}
               <Section title="Core Competencies">
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {competencies.map((comp, index) => (
                     <SkillCategory
                       key={index}
@@ -220,9 +219,8 @@ const Resume = () => {
                 </div>
               </Section>
             </div>
-          </div>
-        </div>
-      </PageTransition>
+        </PageTransition>
+      </PageLayout>
     </>
   );
 };

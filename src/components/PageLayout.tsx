@@ -40,7 +40,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
   
   return (
     <main id="main-content" className={cn("min-h-screen", className)}>
-      <div className={cn("container mx-auto px-6 py-16", maxWidthClasses[maxWidth])}>
+      <div className={cn("container mx-auto px-4 sm:px-6 py-8 sm:py-16", maxWidthClasses[maxWidth])}>
         {/* Navigation Header */}
         {(showBackButton || showHomeButton || showThemeToggle) && !isHomePage && (
           <div className="flex justify-between items-start mb-8">

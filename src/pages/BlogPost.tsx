@@ -46,8 +46,8 @@ const BlogPost = () => {
         />
         <PageTransition>
           <AppHeader showHomeButton={true} />
-          <div className="min-h-screen pt-20">
-            <div className="container mx-auto px-6 py-16 max-w-4xl">
+          <div className="min-h-screen pt-24">
+            <div className="container mx-auto max-w-4xl">
               <BlogPostSkeleton />
             </div>
           </div>
@@ -71,19 +71,20 @@ const BlogPost = () => {
       <BackToTop />
       <PageTransition>
         <AppHeader showHomeButton={true} />
-        <div className="min-h-screen pt-20">
+        <div className="min-h-screen pt-24">
           <div className="flex w-full">
             {/* Sidebar on the left */}
             <BlogPostSidebar currentPost={post} />
 
             {/* Main content */}
             <main className="flex-1">
-              <div className="container mx-auto px-6 py-16 max-w-4xl">
+              <div className="container mx-auto max-w-4xl">
                 {/* Post Content */}
                 <article className="max-w-none mb-8">
                     {/* Post Header */}
-                    <header className="mb-16">
-                      <h1 className="vercel-heading-1">
+                    <header className="mb-8 sm:mb-16">
+                      <BlogBreadcrumb currentPage={post.title} />
+                      <h1 className="vercel-heading-1 mt-4">
                         {post.title}
                       </h1>
                       <div className="flex items-center gap-2 vercel-text-muted mb-8">
@@ -97,6 +98,10 @@ const BlogPost = () => {
                       className="blog-content prose prose-lg max-w-none"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
                     />
+                  {/* Share Buttons */}
+                  <div className="mt-8">
+                    <ShareButtons title={post.title} url={`/blog/${post.slug}`} excerpt={post.excerpt} />
+                  </div>
                   {/* Related Posts */}
                   <RelatedPosts currentPost={post} />
                 </article>

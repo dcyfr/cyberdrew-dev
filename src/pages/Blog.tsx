@@ -62,7 +62,7 @@ const Blog = () => {
         <AppHeader showHomeButton={true} />
         <div className="flex w-full min-h-screen">
           {/* Desktop Sidebar - Fixed width, takes up space */}
-          <aside className="hidden lg:block w-80 border-r border-border bg-card pt-20">
+          <aside className="hidden lg:block w-80 border-r border-border bg-card pt-24">
             <div className="sticky top-0 h-screen overflow-y-auto px-4 py-6">
               {/* Search Section */}
               <div className="mb-8">
@@ -126,9 +126,9 @@ const Blog = () => {
           </aside>
 
           {/* Main content */}
-          <main className="flex-1 min-h-screen pt-20">
-            <div className="container mx-auto px-6 py-16 max-w-4xl">
-              {/* Mobile search and filters
+          <main className="flex-1 min-h-screen pt-24">
+            <div className="container mx-auto max-w-4xl">
+              {/* Mobile search and filters */}
               <div className="lg:hidden mb-8 space-y-4">
                 <Input
                   type="text"
@@ -149,10 +149,10 @@ const Blog = () => {
                     </Badge>
                   ))}
                 </div>
-              </div> */}
+              </div>
               
               {/* Page Header */}
-              <div className="mb-8">
+              <div className="mb-4 sm:mb-8">
                 {/* Page Breadcrumbs 
                 <BlogBreadcrumb currentPage="Blog" className="hidden lg:block" /> */}
                 {/* Page Title */}
@@ -165,7 +165,7 @@ const Blog = () => {
               </div>
               
               {/* Blog Posts */}
-              <div className="space-y-8">
+              <div className="space-y-4 sm:space-y-8">
                 {isLoading ? (
                   <BlogListSkeleton />
                 ) : filteredPosts.length === 0 ? (
@@ -178,7 +178,7 @@ const Blog = () => {
                   filteredPosts.map((post, index) => (
                     <div 
                       key={index} 
-                      className="p-6 rounded-lg hover:bg-accent/50 hover:scale-105 cursor-pointer transition-all modern-card group"
+                      className="p-4 sm:p-6 rounded-lg hover:bg-accent/50 hover:scale-105 cursor-pointer transition-all modern-card group"
                       onClick={() => handlePostClick(post.slug)}
                     >
                       <div className="space-y-2">
@@ -192,7 +192,7 @@ const Blog = () => {
                           <span>{post.readTime}</span>
                         </div>
                         
-                        <p className="vercel-text-muted text-sm mt-2 mb-4 line-clamp-3">
+                        <p className="vercel-text-muted text-sm my-2 line-clamp-3">
                           {post.excerpt}
                         </p>
                        

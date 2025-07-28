@@ -1,19 +1,9 @@
-import {  
-  FileBadge, 
-  FileText, 
-  Github, 
-  LibraryBig, 
-  Linkedin, 
-  Rss, 
-  HeartHandshake, 
-  BookOpen
-} from "lucide-react";
+import { motion } from 'framer-motion';
+import { FileBadge, FileText, Github, LibraryBig, Linkedin, Rss, HeartHandshake } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import { PageTransition } from "@/components/PageTransition";
+import { PageLayout } from "@/components/PageLayout";
 import { LinkCard } from "@/components/LinkCard";
-import { Button } from "@/components/ui/button";
 import Profile from "@/assets/profile.png";
-import { Logo } from "@/components/Logo";
 
 const Home = () => {
   const connectCards = [
@@ -68,6 +58,30 @@ const Home = () => {
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        type: 'spring' as any,
+        stiffness: 100,
+      },
+    },
+  };
+
   return (
     <>
       <SEOHead 
@@ -75,65 +89,51 @@ const Home = () => {
         description="Cybersecurity expert specializing in security architecture, threat analysis, and secure development practices."
         keywords="cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security, security consultant"
       />
-      <PageTransition>
-        {/* <AppHeader showBackButton={true} showThemeToggle={true} /> */}
-        <div className="min-h-screen pt-20">
-          <div className="container mx-auto px-6 py-16 max-w-4xl">
-            {/* Hero Section */}
-            <div className="flex flex-col items-center text-center mb-12">
-              {/* Profile Image */}
-              <img src={Profile} alt="Profile" className="rounded-2xl border border-border w-28 h-28 p-2 md:w-32 md:h-32 mb-8 bg-accent/50 hover:bg-accent/65 hover:scale-105 transition-all duration-200" />
-              {/* Profile Name and Title */}
-              <h1 className="text-4xl font-bold space-x-2 text-primary mb-2">
-                <span>It's Drew</span>
-                <span className="inline-block">&#10022;</span>
-              </h1>
-              <p className="text-muted-foreground max-w-2xl leading-relaxed pb-4">
-                Cyber Architect, Developer, and Researcher
-              </p>
-              {/* Call to Action */}
-              <div className="flex space-x-4 mt-4">
-                <Button 
-                  asChild 
-                  variant="default" 
-                  className="bg-primary text-primary-foreground"
-                >
-                  <a href="/resume">
-                    <FileText className="mr-2" />
-                    View Resume
-                  </a>
-                </Button>
-                <Button 
-                  asChild 
-                  variant="outline" 
-                  className="bg-background hover:bg-accent hover:text-accent-foreground text-primary border border-border"
-                >
-                  <a href="/blog">
-                    <BookOpen className="mr-2" />
-                    Read My Blog
-                  </a>
-                </Button>
-              </div>
-            </div>
-            {/* Links Section */}
-            <div className="space-y-12">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {connectCards.map((card, index) => (
-                  <LinkCard
-                    key={index}
-                    title={card.title}
-                    description={card.description}
-                    link={card.link}
-                    internal={card.internal}
-                    icon={card.icon}
-                    className="hover:bg-accent/50 hover:scale-105 transition-all duration-200"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+      <PageLayout showBackButton={false} maxWidth="2xl">
+        <div className="flex flex-col items-center">
+          {/* Profile Image */}
+          <motion.img 
+            src={Profile} 
+            alt="Profile" 
+            className="rounded-full border-2 border-border w-32 h-32 mb-6 shadow-lg"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.2 }}
+            whileHover={{ scale: 1.1, rotate: 3 }}
+          />
+          
+          {/* Profile Name and Title */}
+          <motion.div variants={itemVariants}>
+            <h1 className="text-4xl font-bold text-primary mb-2 text-center">
+              It's Drew &#10022;
+            </h1>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Cyber Architect, Developer, and Researcher
+            </p>
+          </motion.div>
+
+          {/* Links Section */}
+          <motion.div 
+            className="w-full max-w-md space-y-4 mt-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {connectCards.map((card) => (
+              <motion.div key={card.title} variants={itemVariants}>
+                <LinkCard
+                  title={card.title}
+                  description={card.description}
+                  link={card.link}
+                  internal={card.internal}
+                  icon={card.icon}
+                  className="hover:bg-accent/50 hover:scale-105 transition-all duration-200 ease-in-out"
+                />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-      </PageTransition>
+      </PageLayout>
     </>
   );
 };
