@@ -9,6 +9,7 @@ import { SecurityProvider } from "@/components/SecurityProvider";
 import { SkipLink } from "@/components/SkipLink";
 import { LazyPage, Home, Blog, BlogPost, Resume, NotFound } from "@/components/LazyRoutes";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
           </BrowserRouter>
         </TooltipProvider>
         <SpeedInsights />
+        <Analytics />
       </ThemeProvider>
     </QueryClientProvider>
     </ErrorBoundary>
