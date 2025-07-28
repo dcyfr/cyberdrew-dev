@@ -23,8 +23,16 @@ export interface BlogPost {
   content: string;
 }
 
+interface Frontmatter {
+  title?: string;
+  date?: string;
+  readTime?: string;
+  excerpt?: string;
+  tags?: string[];
+}
+
 // Parse frontmatter from markdown content
-function parseFrontmatter(content: string): { frontmatter: any; markdown: string } {
+function parseFrontmatter(content: string): { frontmatter: Frontmatter; markdown: string } {
   const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
   const match = content.match(frontmatterRegex);
   
@@ -36,7 +44,7 @@ function parseFrontmatter(content: string): { frontmatter: any; markdown: string
   const markdown = content.replace(frontmatterRegex, '');
   
   // Simple YAML parser for frontmatter
-  const frontmatter: any = {};
+  const frontmatter: Frontmatter = {};
   frontmatterText.split('\n').forEach(line => {
     const colonIndex = line.indexOf(':');
     if (colonIndex > 0) {
@@ -48,11 +56,14 @@ function parseFrontmatter(content: string): { frontmatter: any; markdown: string
         value = value.slice(1, -1);
       }
       
-      // Handle arrays (tags)
-      if (value.startsWith('[') && value.endsWith(']')) {
-        frontmatter[key] = value.slice(1, -1).split(',').map(item => item.trim().replace(/"/g, ''));
-      } else {
-        frontmatter[key] = value;
+      if (key === 'tags') {
+        if (value.startsWith('[') && value.endsWith(']')) {
+          frontmatter.tags = value.slice(1, -1).split(',').map(item => item.trim().replace(/"/g, ''));
+        } else {
+          frontmatter.tags = [value]; // Assume single tag if not array format
+        }
+      } else if (key === 'title' || key === 'date' || key === 'readTime' || key === 'excerpt') {
+        (frontmatter as { [k: string]: string })[key] = value;
       }
     }
   });
@@ -90,20 +101,20 @@ function markdownToHtml(markdown: string): string {
   html = html.replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-primary pl-4 py-2 my-6 bg-muted/50 rounded-r-lg italic text-muted-foreground">$1</blockquote>');
   
   // Lists - improved handling for both - and * formats
-  html = html.replace(/^[\-\*] (.*$)/gim, '<li class="mb-2 text-foreground leading-[1.7]">$1</li>');
+  html = html.replace(/^[*-] (.*$)/gim, '<li class="mb-2 text-foreground leading-[1.7]">$1</li>');
   html = html.replace(/^(\d+)\. (.*$)/gim, '<li class="mb-2 text-foreground leading-[1.7]">$2</li>');
   
   // Wrap consecutive list items in proper list tags
   html = html.replace(/(<li class="mb-2 text-foreground leading-\[1\.7\]">.*?<\/li>\s*)+/gs, (match) => {
     // Check if any of the original lines were numbered
-    const listItems = match.match(/<li[^>]*>(.*?)<\/li>/gs) || [];
+    const listItems: string[] = match.match(/<li[^>]*>(.*?)<\/li>/gs) || [];
     const originalLines = markdown.split('\n').filter(line => {
       const trimmed = line.trim();
-      const isListItem = trimmed.match(/^[\-\*\d+\.]\s/);
+      const isListItem = trimmed.match(/^[*-+\d.]\s/);
       if (!isListItem) return false;
       
-      const contentWithoutMarker = trimmed.replace(/^[\-\*\d+\.]\s/, '').trim();
-      return listItems.some(li => li.includes(contentWithoutMarker));
+      const contentWithoutMarker = trimmed.replace(/^[*-+\d.]\s/, '').trim();
+      return listItems.some((li: string) => li.includes(contentWithoutMarker));
     });
     const isNumbered = originalLines.some(line => line.trim().match(/^\d+\./));
     
@@ -123,7 +134,7 @@ function markdownToHtml(markdown: string): string {
         trimmed.startsWith('<') || 
         trimmed.startsWith('```') ||
         /^#{1,6}\s/.test(trimmed) ||
-        /^[\*\-\+]\s/.test(trimmed) ||
+        /^[*-+]\s/.test(trimmed) ||
         /^\d+\.\s/.test(trimmed) ||
         trimmed === '---') {
       return line;

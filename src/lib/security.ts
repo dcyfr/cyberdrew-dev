@@ -18,7 +18,7 @@ export function sanitizeHtml(html: string): string {
       'href', 'title', 'alt', 'src', 'width', 'height',
       'class', 'id', 'target', 'rel'
     ],
-    ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+    ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+. -]+(?:[^a-z+.\-:]|$))/i,
     ADD_ATTR: ['target'],
     FORBID_TAGS: ['script', 'object', 'embed', 'iframe', 'form', 'input', 'textarea', 'button'],
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit']
@@ -43,5 +43,5 @@ export function sanitizeHtml(html: string): string {
  * Validates and sanitizes user input for search queries
  */
 export function sanitizeSearchInput(input: string): string {
-  return input.trim().replace(/[<>\"'&]/g, '');
+  return input.trim().replace(/[<>"'&]/g, '');
 }

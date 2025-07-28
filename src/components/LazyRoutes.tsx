@@ -9,7 +9,7 @@ const Resume = lazy(() => import('../pages/Resume'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
 interface LazyPageProps {
-  component: React.LazyExoticComponent<React.ComponentType<any>>;
+  component: React.LazyExoticComponent<React.ComponentType<Record<string, unknown>>>;
 }
 
 export const LazyPage: React.FC<LazyPageProps> = ({ component: Component }) => (

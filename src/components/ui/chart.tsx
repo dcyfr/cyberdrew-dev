@@ -70,10 +70,6 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     ([_, config]) => config.theme || config.color
   )
 
-  if (!colorConfig.length) {
-    return null
-  }
-
   // Safely build CSS custom properties without dangerouslySetInnerHTML
   const cssVariables = React.useMemo(() => {
     const variables: Record<string, string> = {}
@@ -93,6 +89,10 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     
     return variables
   }, [colorConfig])
+
+  if (!colorConfig.length) {
+    return null
+  }
 
   return (
     <style>

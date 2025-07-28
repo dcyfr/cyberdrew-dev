@@ -14,6 +14,12 @@ interface EnhancedSearchProps {
   onSuggestionClick: (suggestion: string) => void;
 }
 
+interface Suggestion {
+  type: 'title' | 'tag';
+  text: string;
+  value: string;
+}
+
 export const EnhancedSearch = ({
   searchQuery,
   onSearchChange,
@@ -38,17 +44,17 @@ export const EnhancedSearch = ({
     const titleSuggestions = allPosts
       .filter(post => post.title.toLowerCase().includes(searchQuery.toLowerCase()))
       .slice(0, 3)
-      .map(post => ({ type: 'title', text: post.title, value: post.title }));
+      .map(post => ({ type: 'title' as const, text: post.title, value: post.title }));
     
     const tagSuggestions = allTags
       .filter(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
       .slice(0, 2)
-      .map(tag => ({ type: 'tag', text: `Tag: ${tag}`, value: tag }));
+      .map(tag => ({ type: 'tag' as const, text: `Tag: ${tag}`, value: tag }));
     
     return [...titleSuggestions, ...tagSuggestions];
   }, [searchQuery, allPosts, allTags]);
 
-  const handleSuggestionClick = (suggestion: any) => {
+  const handleSuggestionClick = (suggestion: Suggestion) => {
     if (suggestion.type === 'tag') {
       onTagChange(suggestion.value);
       onSearchChange('');

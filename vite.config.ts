@@ -44,6 +44,24 @@ export default defineConfig(({ mode }) => ({
     // Asset optimization
     assetsInlineLimit: 4096, // 4KB
     chunkSizeWarningLimit: 300, // 300KB warning limit
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-lucide';
+            }
+            if (id.includes('@radix-ui')) {
+              return 'vendor-radix';
+            }
+            return 'vendor'; // all other node_modules go here
+          }
+        },
+      },
+    },
   },
   
   // Optimize dependencies - exclude large libraries from pre-bundling

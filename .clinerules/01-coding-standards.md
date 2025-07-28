@@ -14,6 +14,8 @@
 - Implement proper error handling in all components
 - Use React.memo(), useCallback, and useMemo judiciously for performance
 - Avoid inline function definitions in render methods
+- Ensure all React components are explicitly typed, avoiding `any` for props or state.
+- When defining component props, use precise types to prevent type inference issues (e.g., `as const` for literal types).
 
 ## Naming Conventions
 
@@ -29,3 +31,7 @@ Use consistent naming patterns:
 - Separate concerns: Components for UI, Hooks for logic, Utilities in separate files
 - Use barrel exports (`index.ts`) for cleaner imports
 - Organize files logically within the established project structure
+- **Fast Refresh Compatibility:** Component files (`src/components/ui/`) should only export React components. Move constants, hooks, and utility functions to separate files (e.g., `src/lib/`) to ensure optimal Fast Refresh performance.
+- **File Modification Best Practices:**
+    - For targeted changes, prefer `replace_in_file` with exact `SEARCH` blocks.
+    - For extensive changes or when `replace_in_file` is problematic, use `write_to_file` but ensure the `content` parameter contains *only* the file's content, without any extraneous information.
