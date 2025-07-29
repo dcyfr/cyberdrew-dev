@@ -51,19 +51,6 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/blog/:slug*",
-      "has": [
-        {
-          "type": "host",
-          "value": "(?<host>.*)"
-        }
-      ],
-      "destination": "/blog/:slug*",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     {
       "source": "/((?!api/).*)",
