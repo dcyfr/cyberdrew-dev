@@ -90,8 +90,7 @@ function parseFrontmatter(content: string): { frontmatter: Frontmatter; markdown
 import { formatDate } from "./utils";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
-import "highlight.js/styles/github.css"; // Light theme
-import "highlight.js/styles/github-dark.css"; // Dark theme
+import "highlight.js/styles/devibeans.min.css";
 
 const md = new MarkdownIt({
   html: true,

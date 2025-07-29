@@ -4,7 +4,6 @@ date: "2025-07-28"
 excerpt: "A demonstration of all supported markdown and formatting features including code blocks, lists, and more."
 tags: ["demo", "formatting", "markdown"]
 [//]: # (draft: "true")
-[//]: # (featureImage: "/dark.webp")
 featureImage: "/dark.webp"
 ---
 

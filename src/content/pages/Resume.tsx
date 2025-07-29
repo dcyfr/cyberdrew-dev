@@ -25,7 +25,6 @@ const Resume = () => {
               Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
             </p>
           </div>
-          
           {/* Page Content */}
           <div className="space-y-8 sm:space-y-12">
             {/* Education Section */}

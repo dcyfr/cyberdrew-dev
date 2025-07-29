@@ -1,9 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 import { getBlogPost } from "@/lib/blog";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { SEOHead } from "@/components/SEOHead";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { BlogPostSkeleton } from "@/components/BlogPostSkeleton";
@@ -85,7 +82,7 @@ const BlogPost = () => {
                     {/* Feature Image */}
                     {post.featureImage && (
                       <div className="mb-4">
-                        <AspectRatio ratio={16 / 9}>
+                        <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
                           <img 
                             src={post.featureImage} 
                             alt={post.title} 

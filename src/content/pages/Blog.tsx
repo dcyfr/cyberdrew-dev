@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
-import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { BlogListSkeleton } from "@/components/BlogPostSkeleton";
 import { Input } from "@/components/ui/input";
 import { AppHeader } from "@/components/AppHeader";
@@ -133,8 +132,6 @@ const Blog = () => {
             <div className="container mx-auto max-w-4xl">              
               {/* Page Header */}
               <div className="mb-4 sm:mb-8">
-                {/* Page Breadcrumbs 
-                <BlogBreadcrumb currentPage="Blog" className="hidden lg:block" /> */}
                 {/* Page Title */}
                 <div className="mb-4">
                   <h1 className="vercel-heading-1">Blog</h1>
@@ -185,8 +182,8 @@ const Blog = () => {
                     >
                       <div className="flex flex-col sm:flex-row">
                         {post.featureImage && (
-                        <div className="w-full sm:w-1/3 lg:w-1/4 mb-6">
-                          <AspectRatio ratio={16/9}>
+                        <div className="w-full sm:w-1/3 lg:w-1/4 mb-6 sm:mb-0  mr-0 sm:mr-6">
+                          <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
                             <img
                               src={post.featureImage || (theme === "dark" ? "/dark.webp" : "/light.webp")}
                               alt={post.title}
