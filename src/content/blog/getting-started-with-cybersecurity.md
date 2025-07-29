@@ -1,7 +1,6 @@
 ---
 title: "Getting Started with Cybersecurity: A Beginner's Guide"
 date: "January 6, 2025"
-readTime: "2 min read"
 slug: "getting-started-with-cybersecurity"
 excerpt: "Your guide to understanding cybersecurity fundamentals and starting your career journey."
 tags: ["Beginner", "Career", "Fundamentals"]

@@ -1,10 +1,11 @@
 ---
-title: "Theme Demo"
+title: "Blog Post Demo"
 date: "2025-07-28"
-readTime: "3 min read"
 excerpt: "A demonstration of all supported markdown and formatting features including code blocks, lists, and more."
 tags: ["demo", "formatting", "markdown"]
-draft: true
+[//]: # (draft: "true")
+[//]: # (featureImage: "/dark.webp")
+featureImage: "/dark.webp"
 ---
 
 ## Paragraphs

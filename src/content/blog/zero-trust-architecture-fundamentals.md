@@ -1,7 +1,6 @@
 ---
 title: "Zero Trust Architecture: Fundamentals and Implementation"
 date: "February 11, 2025"
-readTime: "3 min read"
 slug: "zero-trust-architecture-fundamentals"
 excerpt: "Understanding the fundamental shift from perimeter-based security to Zero Trust architecture."
 tags: ["Zero Trust", "Architecture", "Security"]

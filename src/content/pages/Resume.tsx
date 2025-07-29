@@ -1,0 +1,93 @@
+import { SEOHead } from "@/components/SEOHead";
+import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
+import { PageTransition } from "@/components/PageTransition";
+import { PageLayout } from "@/components/PageLayout";
+import { Section, SkillCategory, CertificationGroup, ExperienceItem } from "@/components/ContentBlocks";
+import { certifications, competencies, education, experiences } from "./resume-data";
+
+const Resume = () => {
+
+  return (
+    <>
+      <SEOHead
+        title="Resume - Cyber Drew's Lab"
+        description="Drew's professional resume, showcasing expertise in cybersecurity architecture, incident response, and security operations."
+        keywords="cybersecurity, resume, security architect, zero trust, threat modeling, incident response, SIEM, SOAR, cloud security"
+      />
+      <PageLayout>
+        <PageTransition>
+          {/* Page Title */}
+          <div className="space-y-4 mb-8 sm:mb-12">
+            <BlogBreadcrumb currentPage="Resume" />
+            <h1 className="vercel-heading-1 mt-4">Drew</h1>
+            <p className="vercel-text font-medium">Security Architect</p>
+            <p className="vercel-text-muted max-w-2xl">
+              Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
+            </p>
+          </div>
+          
+          {/* Page Content */}
+          <div className="space-y-8 sm:space-y-12">
+            {/* Education Section */}
+            <Section title="Education">
+                <div className="space-y-4 sm:space-y-8">
+                  {education.map((edu, index) => (
+                    <ExperienceItem
+                      key={index}
+                      title={edu.degree}
+                      company={edu.school}
+                      period={edu.period}
+                      achievements={edu.details}
+                    />
+                  ))}
+                </div>
+              </Section>
+
+              {/* Experience Section */}
+              <Section title="Experience">
+                <div className="space-y-4 sm:space-y-8">
+                  {experiences.map((exp, index) => (
+                    <ExperienceItem
+                      key={index}
+                      title={exp.title}
+                      company={exp.company}
+                      period={exp.period}
+                      achievements={exp.achievements}
+                    />
+                  ))}
+                </div>
+              </Section>
+
+              {/* Certifications */}
+              <Section title="Certifications">
+                <div className="space-y-4 sm:space-y-6">
+                  {certifications.map((org, index) => (
+                    <CertificationGroup
+                      key={index}
+                      organization={org.organization}
+                      certs={org.certs}
+                    />
+                  ))}
+                </div>
+              </Section>
+
+              {/* Core Competencies */}
+              <Section title="Core Competencies">
+                <div className="space-y-4 sm:space-y-6">
+                  {competencies.map((comp, index) => (
+                    <SkillCategory
+                      key={index}
+                      category={comp.category}
+                      skills={comp.skills}
+                    />
+                  ))}
+                </div>
+              </Section>
+            </div>
+        </PageTransition>
+      </PageLayout>
+    </>
+  );
+};
+
+export default Resume;

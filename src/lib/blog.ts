@@ -17,20 +17,31 @@ export interface BlogPost {
   title: string;
   date: string;
   readTime: string;
-  slug: string;
+  slug:string;
   excerpt: string;
   tags: string[];
   content: string;
   draft?: boolean;
+  featureImage?: string;
+  sharedTags?: number;
+  relevanceScore?: number;
 }
 
 interface Frontmatter {
   title?: string;
   date?: string;
-  readTime?: string;
   excerpt?: string;
   tags?: string[];
   draft?: boolean;
+  featureImage?: string;
+}
+
+// Calculate reading time from markdown content
+function calculateReadingTime(markdown: string): string {
+  const wordsPerMinute = 225;
+  const words = markdown.trim().split(/\s+/).length;
+  const readTime = Math.ceil(words / wordsPerMinute);
+  return `${readTime} min read`;
 }
 
 // Parse frontmatter from markdown content
@@ -65,8 +76,8 @@ function parseFrontmatter(content: string): { frontmatter: Frontmatter; markdown
           frontmatter.tags = [value]; // Assume single tag if not array format
         }
       } else if (key === 'draft') {
-        frontmatter.draft = value === 'true';
-      } else if (key === 'title' || key === 'date' || key === 'readTime' || key === 'excerpt') {
+        frontmatter.draft = value === 'false' ? false : true;
+      } else if (key === 'title' || key === 'date' || key === 'excerpt' || key === 'featureImage') {
         (frontmatter as { [k: string]: string })[key] = value;
       }
     }
@@ -76,9 +87,11 @@ function parseFrontmatter(content: string): { frontmatter: Frontmatter; markdown
 }
 
 // --- MARKDOWN RENDERING WITH MARKDOWN-IT ---
+import { formatDate } from "./utils";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
-import "highlight.js/styles/github.css"; // You can change the theme
+import "highlight.js/styles/github.css"; // Light theme
+import "highlight.js/styles/github-dark.css"; // Dark theme
 
 const md = new MarkdownIt({
   html: true,
@@ -91,7 +104,9 @@ const md = new MarkdownIt({
         return '<pre class="hljs"><code>' +
           hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
           '</code></pre>';
-      } catch (__) {}
+      } catch (error) {
+        console.error("Error highlighting code:", error);
+      }
     }
     return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
   }
@@ -108,16 +123,18 @@ export function getBlogPost(slug: string): BlogPost | null {
 
   const { frontmatter, markdown } = parseFrontmatter(markdownContent);
   const content = markdownToHtml(markdown);
+  const readTime = calculateReadingTime(markdown);
 
   return {
     title: frontmatter.title || '',
-    date: frontmatter.date || '',
-    readTime: frontmatter.readTime || '',
+    date: frontmatter.date ? formatDate(frontmatter.date) : '',
+    readTime,
     slug, // always use the filename slug for routing
     excerpt: frontmatter.excerpt || '',
     tags: frontmatter.tags || [],
     content,
-    draft: frontmatter.draft || false
+    draft: frontmatter.draft !== false, // Default to true if not specified
+    featureImage: frontmatter.featureImage || ''
   };
 }
 
@@ -133,4 +150,34 @@ export function getAllBlogPosts(): BlogPost[] {
 export function getAllTags(): string[] {
   const allTags = getAllBlogPosts().flatMap(post => post.tags);
   return [...new Set(allTags)];
+}
+
+// Get related posts
+export function getRelatedPosts(currentPost: BlogPost, maxPosts: number = 3): BlogPost[] {
+  const allPosts = getAllBlogPosts();
+  
+  const relatedPosts = allPosts
+    .filter(post => post.slug !== currentPost.slug)
+    .map(post => {
+      const sharedTags = post.tags.filter(tag => currentPost.tags.includes(tag)).length;
+      const tagRelevanceScore = sharedTags / Math.max(currentPost.tags.length, post.tags.length);
+      
+      const exactTagMatches = post.tags.filter(tag => currentPost.tags.includes(tag));
+      const hasHighValueTags = exactTagMatches.some(tag => 
+        ['cybersecurity', 'security', 'zero trust', 'architecture'].includes(tag.toLowerCase())
+      );
+      
+      const finalScore = tagRelevanceScore + (hasHighValueTags ? 0.2 : 0);
+      
+      return {
+        ...post,
+        sharedTags,
+        relevanceScore: finalScore
+      };
+    })
+    .filter(post => post.sharedTags > 0)
+    .sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0))
+    .slice(0, maxPosts);
+
+  return relatedPosts;
 }

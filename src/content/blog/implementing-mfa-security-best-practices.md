@@ -1,7 +1,6 @@
 ---
 title: "Implementing Multi-Factor Authentication: Security Best Practices"
 date: "April 16, 2025"
-readTime: "3 min read"
 slug: "implementing-mfa-security-best-practices"
 excerpt: "Learn how to implement MFA properly to protect your organization from credential-based attacks."
 tags: ["Security", "Authentication", "Best Practices"]

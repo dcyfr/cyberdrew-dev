@@ -255,11 +255,11 @@ All colors MUST be HSL.
 }
 
 .vercel-heading-2 {
-  @apply vercel-heading text-4xl leading-[1.1] mb-6 mt-16;
+  @apply vercel-heading text-4xl leading-[1.1] mb-6;
 }
 
 .vercel-heading-3 {
-  @apply vercel-heading text-3xl leading-[1.2] mb-4 mt-12;
+  @apply vercel-heading text-3xl leading-[1.2] mb-4;
 }
 
 .vercel-text {

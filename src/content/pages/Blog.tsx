@@ -9,12 +9,15 @@ import { BlogListSkeleton } from "@/components/BlogPostSkeleton";
 import { Input } from "@/components/ui/input";
 import { AppHeader } from "@/components/AppHeader";
 import { Search, FileText, Tag } from "lucide-react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { useTheme } from "next-themes";
 
 const Blog = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const { resolvedTheme: theme } = useTheme();
 
   // Get all posts and tags from markdown files
   const allPosts = getAllBlogPosts();
@@ -168,7 +171,7 @@ const Blog = () => {
                 {isLoading ? (
                   <BlogListSkeleton />
                 ) : filteredPosts.length === 0 ? (
-                  <div className="text-center py-16">
+                  <div className="text-center py-8">
                     <p className="vercel-text-muted text-lg">
                       No posts found matching your criteria. Try adjusting your search or filters.
                     </p>
@@ -180,10 +183,22 @@ const Blog = () => {
                       className="p-4 sm:p-6 rounded-lg hover:bg-accent/50 hover:scale-105 cursor-pointer transition-all modern-card group"
                       onClick={() => handlePostClick(post.slug)}
                     >
-                      <div className="space-y-2">
-                        <h2 className="vercel-heading-2 flex items-center gap-2">
-                          {post.title}
-                          {(post.draft && (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development")) && (
+                      <div className="flex flex-col sm:flex-row">
+                        {post.featureImage && (
+                        <div className="w-full sm:w-1/3 lg:w-1/4 mb-6">
+                          <AspectRatio ratio={16/9}>
+                            <img
+                              src={post.featureImage || (theme === "dark" ? "/dark.webp" : "/light.webp")}
+                              alt={post.title}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </AspectRatio>
+                        </div>
+                        )}
+                        <div className="flex-1 sm:w-2/3 lg:w-3/4 space-y-2">
+                          <h2 className="vercel-heading-2 flex items-center gap-2">
+                            {post.title}
+                            {(post.draft && (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development")) && (
                             <Badge variant="destructive" className="ml-2 text-xs font-semibold uppercase tracking-wide">
                               Draft
                             </Badge>
@@ -214,6 +229,7 @@ const Blog = () => {
                               {tag}
                             </Badge>
                           ))}
+                        </div>
                         </div>
                       </div>
                     </div>

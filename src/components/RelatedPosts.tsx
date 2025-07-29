@@ -1,4 +1,4 @@
-import { getAllBlogPosts, type BlogPost } from "@/lib/blog";
+import { getRelatedPosts, type BlogPost } from "@/lib/blog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,32 +12,7 @@ interface RelatedPostsProps {
 
 export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) => {
   const navigate = useNavigate();
-  const allPosts = getAllBlogPosts();
-  
-  // Enhanced algorithm for finding related posts
-  const relatedPosts = allPosts
-    .filter(post => post.slug !== currentPost.slug)
-    .map(post => {
-      const sharedTags = post.tags.filter(tag => currentPost.tags.includes(tag)).length;
-      const tagRelevanceScore = sharedTags / Math.max(currentPost.tags.length, post.tags.length);
-      
-      // Boost score for posts with exact tag matches
-      const exactTagMatches = post.tags.filter(tag => currentPost.tags.includes(tag));
-      const hasHighValueTags = exactTagMatches.some(tag => 
-        ['cybersecurity', 'security', 'zero trust', 'architecture'].includes(tag.toLowerCase())
-      );
-      
-      const finalScore = tagRelevanceScore + (hasHighValueTags ? 0.2 : 0);
-      
-      return {
-        ...post,
-        sharedTags,
-        relevanceScore: finalScore
-      };
-    })
-    .filter(post => post.sharedTags > 0) // Only show posts with at least one shared tag
-    .sort((a, b) => b.relevanceScore - a.relevanceScore)
-    .slice(0, maxPosts);
+  const relatedPosts = getRelatedPosts(currentPost, maxPosts);
 
   const handlePostClick = (slug: string) => {
     navigate(`/blog/${slug}`);
@@ -94,13 +69,13 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
             onClick={() => handlePostClick(post.slug)}
           >
             {/* Relevance indicator */}
-            {post.sharedTags > 1 && (
+            {(post.relevanceScore && post.relevanceScore > 0.5) && (
               <div className="absolute top-3 right-3 z-10">
                 <Badge 
                   variant="default" 
                   className="text-xs font-medium px-2 py-1 bg-primary/90 text-primary-foreground"
                 >
-                  {post.sharedTags} tags match
+                  Hot
                 </Badge>
               </div>
             )}

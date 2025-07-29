@@ -3,10 +3,10 @@ import { lazy } from 'react';
 // Pre-load critical route components
 export const preloadRoutes = () => {
   // Preload home page (most likely to be visited first)
-  const Home = lazy(() => import('../pages/Home'));
+  const Home = lazy(() => import('../content/pages/Home'));
   
   // Preload blog page on hover or after initial load
-  const Blog = lazy(() => import('../pages/Blog'));
+  const Blog = lazy(() => import('../content/pages/Blog'));
   
   return { Home, Blog };
 };

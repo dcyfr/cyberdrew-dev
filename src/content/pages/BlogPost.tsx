@@ -16,6 +16,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { BlogPostSidebar } from "@/components/BlogPostSidebar";
 import { sanitizeHtml } from "@/lib/security";
 import { useState, useEffect } from "react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const BlogPost = () => {
   const navigate = useNavigate();
@@ -81,6 +82,18 @@ const BlogPost = () => {
               <div className="container mx-auto max-w-4xl">
                 {/* Post Content */}
                 <article className="max-w-none mb-8">
+                    {/* Feature Image */}
+                    {post.featureImage && (
+                      <div className="mb-4">
+                        <AspectRatio ratio={16 / 9}>
+                          <img 
+                            src={post.featureImage} 
+                            alt={post.title} 
+                            className="w-full h-full object-cover rounded-lg" 
+                          />
+                        </AspectRatio>
+                      </div>
+                    )}
                     {/* Post Header */}
                     <header className="mb-8 sm:mb-16">
                       <BlogBreadcrumb currentPage={post.title} />
