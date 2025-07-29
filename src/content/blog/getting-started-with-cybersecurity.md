@@ -5,6 +5,7 @@ readTime: "2 min read"
 slug: "getting-started-with-cybersecurity"
 excerpt: "Your guide to understanding cybersecurity fundamentals and starting your career journey."
 tags: ["Beginner", "Career", "Fundamentals"]
+draft: false
 ---
 
 Cybersecurity has become one of the most critical concerns in our digital age. Whether you're an individual looking to protect your personal information or a business owner safeguarding your company's assets, understanding cybersecurity fundamentals is essential.

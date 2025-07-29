@@ -5,6 +5,7 @@ readTime: "3 min read"
 slug: "zero-trust-architecture-fundamentals"
 excerpt: "Understanding the fundamental shift from perimeter-based security to Zero Trust architecture."
 tags: ["Zero Trust", "Architecture", "Security"]
+draft: false
 ---
 
 Traditional perimeter-based security models are no longer sufficient in today's rapidly evolving threat landscape. Zero Trust architecture represents a paradigm shift in how organizations approach cybersecurity, moving from "trust but verify" to "never trust, always verify."

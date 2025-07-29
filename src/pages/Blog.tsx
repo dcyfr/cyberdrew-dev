@@ -181,8 +181,13 @@ const Blog = () => {
                       onClick={() => handlePostClick(post.slug)}
                     >
                       <div className="space-y-2">
-                        <h2 className="vercel-heading-2">
+                        <h2 className="vercel-heading-2 flex items-center gap-2">
                           {post.title}
+                          {(post.draft && (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development")) && (
+                            <Badge variant="destructive" className="ml-2 text-xs font-semibold uppercase tracking-wide">
+                              Draft
+                            </Badge>
+                          )}
                         </h2>
                         
                         <div className="vercel-text-muted text-sm flex items-center gap-1">

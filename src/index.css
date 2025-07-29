@@ -237,6 +237,8 @@ All colors MUST be HSL.
 
 .blog-content pre code {
   @apply bg-transparent p-0 text-sm;
+  white-space: pre-wrap; /* Ensures long lines wrap */
+  word-wrap: break-word; /* Breaks words if necessary to prevent overflow */
 }
 
 .blog-content hr {

@@ -84,8 +84,13 @@ const BlogPost = () => {
                     {/* Post Header */}
                     <header className="mb-8 sm:mb-16">
                       <BlogBreadcrumb currentPage={post.title} />
-                      <h1 className="vercel-heading-1 mt-4">
+                      <h1 className="vercel-heading-1 mt-4 flex items-center gap-2">
                         {post.title}
+                        {(post.draft && (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development")) && (
+                          <Badge variant="destructive" className="ml-2 text-xs font-semibold uppercase tracking-wide">
+                            Draft
+                          </Badge>
+                        )}
                       </h1>
                       <div className="flex items-center gap-2 vercel-text-muted mb-8">
                         <time dateTime={post.date}>{post.date}</time>
