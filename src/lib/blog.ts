@@ -88,6 +88,7 @@ function parseFrontmatter(content: string): { frontmatter: Frontmatter; markdown
 
 // --- MARKDOWN RENDERING WITH MARKDOWN-IT ---
 import { formatDate } from "./utils";
+import { sanitizeHtml } from "./security";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
 import "highlight.js/styles/devibeans.min.css";
@@ -121,7 +122,7 @@ export function getBlogPost(slug: string): BlogPost | null {
   if (!markdownContent) return null;
 
   const { frontmatter, markdown } = parseFrontmatter(markdownContent);
-  const content = markdownToHtml(markdown);
+  const content = sanitizeHtml(markdownToHtml(markdown));
   const readTime = calculateReadingTime(markdown);
 
   return {
