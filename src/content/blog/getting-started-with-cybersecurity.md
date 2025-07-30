@@ -1,10 +1,10 @@
 ---
-title: "Getting Started with Cybersecurity: A Beginner's Guide"
+title: "Cybersecurity: A Beginner's Guide"
 date: "January 6, 2025"
-slug: "getting-started-with-cybersecurity"
-excerpt: "Your guide to understanding cybersecurity fundamentals and starting your career journey."
+slug: "cybersecurity-a-beginners-guide"
+excerpt: "Essential cybersecurity concepts and practices for individuals and businesses."
 tags: ["Beginner", "Career", "Fundamentals"]
-draft: false
+draft: true
 ---
 
 Cybersecurity has become one of the most critical concerns in our digital age. Whether you're an individual looking to protect your personal information or a business owner safeguarding your company's assets, understanding cybersecurity fundamentals is essential.

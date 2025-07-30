@@ -4,7 +4,7 @@ date: "April 16, 2025"
 slug: "implementing-mfa-security-best-practices"
 excerpt: "Learn how to implement MFA properly to protect your organization from credential-based attacks."
 tags: ["Security", "Authentication", "Best Practices"]
-draft: false
+draft: true
 ---
 
 Multi-Factor Authentication (MFA) has become a critical security control in today's threat landscape. With credential-based attacks accounting for over 80% of data breaches, implementing MFA properly can be the difference between a secure organization and a compromised one.

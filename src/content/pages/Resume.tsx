@@ -19,7 +19,7 @@ const Resume = () => {
           {/* Page Title */}
           <div className="space-y-4 mb-8 sm:mb-12">
             <BlogBreadcrumb currentPage="Resume" />
-            <h1 className="vercel-heading-1 mt-4">Drew</h1>
+            <h1 className="vercel-heading-1">Drew</h1>
             <p className="vercel-text font-medium">Security Architect</p>
             <p className="vercel-text-muted max-w-2xl">
               Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
@@ -59,7 +59,7 @@ const Resume = () => {
 
               {/* Certifications */}
               <Section title="Certifications">
-                <div className="space-y-4 sm:space-y-6">
+                <div className="space-y-4 sm:space-y-8">
                   {certifications.map((org, index) => (
                     <CertificationGroup
                       key={index}
@@ -72,7 +72,7 @@ const Resume = () => {
 
               {/* Core Competencies */}
               <Section title="Core Competencies">
-                <div className="space-y-4 sm:space-y-6">
+                <div className="space-y-4 sm:space-y-8">
                   {competencies.map((comp, index) => (
                     <SkillCategory
                       key={index}

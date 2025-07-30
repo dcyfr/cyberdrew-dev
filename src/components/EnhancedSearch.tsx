@@ -72,7 +72,7 @@ export const EnhancedSearch = ({
 
   return (
     <div className="space-y-6 mb-8">
-      {/* Vercel-style Search Input */}
+      {/* Search Input */}
       <div className="relative max-w-md">
         <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -104,7 +104,7 @@ export const EnhancedSearch = ({
           </button>
         )}
         
-        {/* Vercel-style Search Suggestions */}
+        {/* Search Suggestions */}
         {showSuggestions && suggestions.length > 0 && (
           <div className="absolute top-full left-0 right-0 bg-background border border-border rounded-md mt-1 shadow-md z-50 animate-fade-in">
             {suggestions.map((suggestion, index) => (
@@ -122,7 +122,7 @@ export const EnhancedSearch = ({
         )}
       </div>
 
-      {/* Vercel-style Tag Filter */}
+      {/* Tag Filter */}
       <div className="flex flex-wrap gap-2">
         <Badge 
           variant={selectedTag === "" ? "default" : "outline"}

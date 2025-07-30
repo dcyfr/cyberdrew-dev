@@ -11,7 +11,7 @@ export const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // Vercel-inspired variants
+        // Variants
         vercel: "bg-background border border-border text-foreground hover:border-foreground hover:shadow-sm",
         "vercel-ghost": "text-muted-foreground hover:text-foreground hover:bg-accent/50",
         "vercel-primary": "bg-foreground text-background hover:bg-foreground/90 shadow-sm",

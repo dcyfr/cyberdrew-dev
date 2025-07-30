@@ -177,13 +177,13 @@ const Blog = () => {
                   filteredPosts.map((post, index) => (
                     <div 
                       key={index} 
-                      className="p-4 sm:p-6 rounded-lg hover:bg-accent/50 hover:scale-105 cursor-pointer transition-all modern-card group"
+                      className="p-4 sm:p-6 rounded-lg hover:bg-accent/50 cursor-pointer transition-all modern-card group"
                       onClick={() => handlePostClick(post.slug)}
                     >
                       <div className="flex flex-col sm:flex-row">
                         {post.featureImage && (
                         <div className="w-full sm:w-1/3 lg:w-1/4 mb-6 sm:mb-0  mr-0 sm:mr-6">
-                          <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
+                          <AspectRatio ratio={16/9}>
                             <img
                               src={post.featureImage || (theme === "dark" ? "/dark.webp" : "/light.webp")}
                               alt={post.title}
