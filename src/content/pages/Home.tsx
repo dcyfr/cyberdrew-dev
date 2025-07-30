@@ -3,7 +3,7 @@ import { FileBadge, FileText, Github, LibraryBig, Linkedin, Rss, HeartHandshake 
 import { SEOHead } from "@/components/SEOHead";
 import { PageLayout } from "@/components/PageLayout";
 import { LinkCard } from "@/components/LinkCard";
-import Avatar from "@/assets/avatar.webp";
+import DisplayPicture from "@/assets/logo.webp";
 
 const Home = () => {
   const connectCards = [
@@ -93,8 +93,8 @@ const Home = () => {
         <div className="flex flex-col items-center">
           {/* Avatar / Logo */}
           <motion.img 
-            src={Avatar}
-            alt="Drew's Avatar"
+            src={DisplayPicture}
+            alt="Drew's Display Picture"
             className="rounded-full border-2 border-border w-32 h-32 mb-6 shadow-lg"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

@@ -177,3 +177,9 @@ The CompTIA Security+ certification is valid for three \(3\) years and there are
 * Complete the paid CompTIA CertMaster CE Training Course.
 * Earn a higher-level certification that will renew all previously earned certificates.
 * Earn Continuing Education Units \(CEUs\) by earning non-CompTIA IT industry standards certifications, completing training and higher education, participating in IT industry activities, publishing relevant articles, white papers, blog posts, books, or by gaining related work experience. Use the CompTIA CEU Assessment App to determine CE eligibility.
+
+---
+
+This guide has been featured on [X64: The Independent Security Publication](https://x64.onl/passing-comptia-security-plus). If you found this guide helpful, please consider sharing it with others who may benefit from it.
+
+Thank you for reading, and best of luck on your own Security+ journey!
