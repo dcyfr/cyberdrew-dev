@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { PageTransition } from "@/components/PageTransition";
+import { motion } from "framer-motion";
+import { itemVariants } from "@/lib/animations";
 
 const NotFound = () => {
   const location = useLocation();
@@ -25,7 +27,12 @@ const NotFound = () => {
       <PageTransition>
         <div className="min-h-screen pt-24">
           <div className="container mx-auto max-w-4xl px-4 py-24">
-            <div className="text-center mb-12">
+            <motion.div
+              className="text-center mb-12"
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {/* Main Heading and Description */}
               <div className="mb-6">
                 <h1 className="vercel-heading-1 mb-4">Page Not Found</h1>
@@ -51,7 +58,7 @@ const NotFound = () => {
                   Go Back
                 </Button>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </PageTransition>

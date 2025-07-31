@@ -1,5 +1,7 @@
 import { SEOHead } from "@/components/SEOHead";
 import { PageTransition } from "@/components/PageTransition";
+import { motion } from "framer-motion";
+import { itemVariants } from "@/lib/animations";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -175,10 +177,13 @@ const Blog = () => {
                   </div>
                 ) : (
                   filteredPosts.map((post, index) => (
-                    <div 
-                      key={index} 
+                    <motion.div
+                      key={index}
                       className="p-4 sm:p-6 rounded-lg hover:bg-accent/50 cursor-pointer transition-all modern-card group"
                       onClick={() => handlePostClick(post.slug)}
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
                     >
                       <div className="flex flex-col sm:flex-row">
                         {post.featureImage && (
@@ -229,7 +234,7 @@ const Blog = () => {
                         </div>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   ))
                 )}
               </div>

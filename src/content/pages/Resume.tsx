@@ -4,6 +4,8 @@ import { PageTransition } from "@/components/PageTransition";
 import { PageLayout } from "@/components/PageLayout";
 import { Section, SkillCategory, CertificationGroup, ExperienceItem } from "@/components/ContentBlocks";
 import { certifications, competencies, education, experiences } from "./resume-data";
+import { motion } from "framer-motion";
+import { itemVariants } from "@/lib/animations";
 
 const Resume = () => {
 
@@ -17,14 +19,19 @@ const Resume = () => {
       <PageLayout>
         <PageTransition>
           {/* Page Title */}
-          <div className="space-y-4 mb-8 sm:mb-12">
+          <motion.div
+            className="space-y-4 mb-8 sm:mb-12"
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <BlogBreadcrumb currentPage="Resume" />
             <h1 className="vercel-heading-1">Drew</h1>
             <p className="vercel-text font-medium">Security Architect</p>
             <p className="vercel-text-muted max-w-2xl">
               Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
             </p>
-          </div>
+          </motion.div>
           {/* Page Content */}
           <div className="space-y-8 sm:space-y-12">
             {/* Education Section */}

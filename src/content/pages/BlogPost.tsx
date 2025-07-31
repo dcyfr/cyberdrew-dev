@@ -14,6 +14,8 @@ import { BlogPostSidebar } from "@/components/BlogPostSidebar";
 import { sanitizeHtml } from "@/lib/security";
 import { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { motion } from "framer-motion";
+import { itemVariants } from "@/lib/animations";
 
 const BlogPost = () => {
   const navigate = useNavigate();
@@ -78,7 +80,12 @@ const BlogPost = () => {
             <main className="flex-1">
               <div className="container mx-auto max-w-4xl">
                 {/* Post Content */}
-                <article className="max-w-none mb-8">
+                <motion.article
+                  className="max-w-none mb-8"
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
                     {/* Feature Image */}
                     {post.featureImage && (
                       <div className="mb-4">
@@ -119,7 +126,7 @@ const BlogPost = () => {
                   </div>
                   {/* Related Posts */}
                   <RelatedPosts currentPost={post} />
-                </article>
+                </motion.article>
               </div>
             </main>
           </div>
