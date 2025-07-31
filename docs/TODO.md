@@ -3,35 +3,31 @@
 This document outlines the prioritized backlog of tasks for the project, categorized by urgency and importance. Each task is marked with its current status and any relevant actions required.
 
 ## 🟥 Critical
-- [~] **Dependency Audit**: Non-breaking vulnerabilities fixed as of July 2025. Remaining moderate/low issues require breaking changes or have no fix available. Documented for future review.
-
 
 ## 🟧 High
-- [ ] **Accessibility**: Add ARIA labels, keyboard navigation, and semantic HTML for all interactive elements.
+- [~] **Dependency Audit**: Non-breaking vulnerabilities fixed as of July 2025. Remaining moderate/low issues require breaking changes or have no fix available. Documented for future review.
+- [ ] **Content Security Policy (CSP):** **Action:** Implement a strict CSP via meta tag or HTTP header to mitigate XSS (add to `SecurityProvider.tsx` and/or server config).
+- [ ] **Accessibility**:  
+    - [ ] Audit all custom UI components for ARIA labels, keyboard navigation, and semantic HTML (no direct interactive native elements found in codebase search; manual review required).
+    - [ ] Ensure all interactive elements are accessible by keyboard (tab/arrow navigation, focus indicators).
+    - [ ] Use semantic HTML elements (button, nav, main, etc.) for all interactive roles.
+    - [ ] Add appropriate ARIA attributes (aria-label, aria-labelledby, aria-describedby, role, etc.) where needed.
+    - [ ] Test with screen readers and keyboard-only navigation.
 - [ ] **Testing**: Add or expand unit/integration tests for critical components and pages.
 - [ ] **Performance**: Monitor Core Web Vitals (Lighthouse, Vercel Analytics). Optimize images, fonts, and static assets.
-- [ ] **CORS Policy**: CORS restricted in `vite-security.config.ts`. **Action:** Periodically review allowed origins and credentials policy.
-- [ ] **Content Security Policy (CSP):** **Action:** Implement a strict CSP via meta tag or HTTP header to mitigate XSS (add to `SecurityProvider.tsx` and/or server config).
-- [ ] **Security Monitoring:** **Action:** Expand runtime monitoring to detect suspicious activity (e.g., repeated errors, tampering).
 
 ## 🟨 Medium
-- [ ] **Bundle Size**: Keep all chunks < 300kB. Review `BUNDLE_OPTIMIZATION.md` for improvements.
-- [ ] **Component Reuse**: Audit for duplicate UI logic/components. Modularize as needed (`REFACTORING_SUMMARY.md`).
+- [ ] **Bundle Size**: Keep all chunks < 300kB.
+- [ ] **Component Reuse**: Audit for duplicate UI logic/components.
 - [ ] **Analytics**: Integrate privacy-respecting analytics (e.g., Plausible, Vercel Analytics).
-- [ ] **Session/Local Storage Review:** **Action:** Document all uses of browser storage, ensure no sensitive data is persisted longer than necessary, and encrypt if possible.
-- [ ] **Admin Panel Security:** If/when implemented, enforce RBAC, audit logging, and strong authentication.
-- [ ] **API Security:** If backend APIs are added, implement rate limiting, input validation, and monitoring (reference `src/lib/rate-limiter.ts`).
 
 ## 🟩 Low / Future
 - [ ] **Search Improvements**: Add fuzzy matching, tag filtering, and suggestions to blog search.
-- [ ] **Blog Features**: Add comments (with moderation), post sharing, and author profiles.
-- [ ] **Admin Panel**: Build a secure admin dashboard for content management (if needed).
-- [ ] **User Accounts**: Add user registration, profiles, and role-based access control (optional).
-- [ ] **Security Blog Series**: Publish advanced security guides (Zero Trust, DLP, remote work, etc.).
+- [ ] **Admin Panel**: Build a secure admin panel for content management.
 - [ ] **API Security**: If adding backend APIs, implement rate limiting, input validation, and monitoring.
 - [ ] **Internationalization (i18n)**: Add support for multiple languages if targeting a global audience.
 
-## 📋 Documentation & Dev Experience
+## Documentation & Dev Experience
 - [ ] **Update README**: Add architecture overview, contribution guidelines, and security contact.
 - [ ] **Deployment Docs**: Keep `DEPLOYMENT.md` up-to-date with optimizations and troubleshooting.
 - [ ] **Changelog**: Maintain a `CHANGELOG.md` for releases and major changes.
@@ -68,6 +64,12 @@ This document outlines the prioritized backlog of tasks for the project, categor
     - Checking adherence to project standards
     - Generating AI code quality reports
 
+## Recurring Tasks
+- [ ] **Dependency Updates**: Regularly update dependencies to keep up with security patches and performance improvements.
+- [ ] **Security Audits**: Conduct periodic security audits to identify and address new vulnerabilities.
+- [ ] **Performance Monitoring**: Continuously monitor performance metrics and optimize as needed.
+- [ ] **Accessibility Reviews**: Regularly review and improve accessibility compliance as new features are added.
+
 ---
 
 ## ✅ Done
@@ -77,3 +79,22 @@ This document outlines the prioritized backlog of tasks for the project, categor
 - [x] 🟥 Critical **External Links**: All external links sanitized with `rel="noopener noreferrer"` in `sanitizeHtml`.
 - [x] 🟥 Critical **Sensitive Data Handling**: sessionStorage cleared on tab hide and tab close. No localStorage or logout logic found. All sensitive session data now cleaned up on tab close/hide.
 - [x] 🟥 Critical **HTTPS Enforcement**: Enforced in `SecurityProvider.tsx` for production custom domains.
+- [x] 🟧 High **CORS Policy**:  
+    - CORS is configured in `vite-security.config.ts`:
+        - **Development:** `origin: true` (all origins allowed), `credentials: true`
+        - **Production:** `origin: ['https://cyberdrew.dev']`, `credentials: true`
+    - **Action:** Periodically review allowed origins and credentials policy.  
+    - **Note:** With `credentials: true`, never use `origin: '*'` in production. Only allow trusted origins.
+- [x] 🟧 High **Security Monitoring:**  
+    - Runtime monitoring is implemented in `SecurityProvider.tsx`:
+        - Logs security-related errors (e.g., SecurityError events)
+        - Clears sensitive session data on tab hide/close
+    - No further action required at this time.
+- [x] 🟨 Medium **Session/Local Storage Review:**  
+    - Only `sessionStorage` is used in `SecurityProvider.tsx` for temporary data, and is cleared on tab hide/close.
+    - No `localStorage` usage found.
+    - No sensitive data is persisted longer than necessary.
+- [x] 🟨 Medium **Admin Panel Security:**  
+    - No admin panel implemented yet. Security requirements documented for future implementation.
+- [x] 🟨 Medium **API Security:**  
+    - No backend APIs implemented yet. Security requirements documented for future implementation.

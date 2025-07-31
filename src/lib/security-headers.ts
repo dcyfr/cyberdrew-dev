@@ -48,6 +48,22 @@ export const SECURITY_HEADERS = {
  * Security meta tags for HTML head
  */
 export const SECURITY_META_TAGS = [
+  // Content Security Policy (CSP) meta tag for XSS mitigation
+  { 'http-equiv': 'Content-Security-Policy', content: [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https:",
+    "media-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    "upgrade-insecure-requests"
+  ].join('; ') },
+
   // Prevent automatic phone number detection
   { name: 'format-detection', content: 'telephone=no' },
   
