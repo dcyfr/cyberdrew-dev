@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { SecurityProvider } from "@/components/SecurityProvider";
 import { SkipLink } from "@/components/SkipLink";
-import { LazyPage, Home, Blog, BlogPost, Resume, NotFound } from "@/components/LazyRoutes";
+import { LazyPage, Home, Blog, BlogPost, Resume, About, NotFound } from "@/components/LazyRoutes";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -33,6 +33,7 @@ const App = () => (
               <Route path="/blog" element={<LazyPage component={Blog} />} />
               <Route path="/blog/:slug" element={<LazyPage component={BlogPost} />} />
               <Route path="/resume" element={<LazyPage component={Resume} />} />
+              <Route path="/about" element={<LazyPage component={About} />} />
               <Route path="/notfound" element={<LazyPage component={NotFound} />} />
               <Route path="*" element={<LazyPage component={NotFound} />} />
             </Routes>

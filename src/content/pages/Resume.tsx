@@ -3,7 +3,14 @@ import { SEOHead } from "@/components/SEOHead";
 import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { PageTransition } from "@/components/PageTransition";
 import { PageLayout } from "@/components/PageLayout";
-import { Section, SkillCategory, CertificationGroup, ExperienceItem } from "@/components/ContentBlocks";
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { 
   certifications, 
   competencies, 
@@ -20,6 +27,61 @@ const Resume: React.FC = React.memo(() => {
     }
   }, []);
 
+  const ResumeSection: React.FC<{ 
+    title: string, 
+    count?: number 
+  }> = ({ title, count }) => (
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex items-center justify-between border-b pb-2">
+        <h2 className="text-2xl font-bold text-primary">{title}</h2>
+        {count !== undefined && (
+          <Badge variant="secondary" className="ml-4">{count}</Badge>
+        )}
+      </div>
+    </div>
+  );
+
+  const ExperienceCard: React.FC<{ 
+    title: string, 
+    company: string, 
+    period: string, 
+    achievements: string[] 
+  }> = ({ title, company, period, achievements }) => (
+    <Card className="hover:bg-accent/30 transition-colors">
+      <CardHeader>
+        <div className="flex flex-col">
+          <Badge variant="outline" className="mb-4 mr-auto">{period}</Badge>
+          <CardTitle className="flex items-center justify-between gap-2">
+            <span>{title}</span>
+          </CardTitle>
+          <CardDescription>{company}</CardDescription>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <ul className="list-disc list-inside space-y-1 text-sm">
+          {achievements.map((achievement, index) => (
+            <li key={index}>{achievement}</li>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
+  );
+
+  const SkillCategory: React.FC<{ category: string, skills: string[] }> = ({ category, skills }) => (
+    <Card>
+      <CardHeader>
+        <CardTitle>{category}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-wrap gap-2">
+          {skills.map((skill, index) => (
+            <Badge key={index} variant="outline">{skill}</Badge>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <>
       <SEOHead
@@ -29,97 +91,82 @@ const Resume: React.FC = React.memo(() => {
       />
       <PageLayout>
         <PageTransition>
-          <div className="space-y-4 mb-8 sm:mb-12" aria-labelledby="resume-title">
+          <div className="space-y-4 mb-8 sm:mb-12">
             <BlogBreadcrumb currentPage="Resume" />
-            <h1 
-              id="resume-title" 
-              className="vercel-heading-1"
-              aria-label="Drew - Cybersecurity Professional"
-            >
-              Drew
-            </h1>
-            <p 
-              className="vercel-text font-medium" 
-              aria-label="Professional Title"
-            >
+            <h1 className="text-4xl font-bold text-primary">Drew</h1>
+            <p className="text-xl font-medium text-muted-foreground">
               Security Architect
             </p>
-            <p 
-              className="vercel-text-muted max-w-2xl" 
-              aria-describedby="resume-summary"
-            >
+            <p className="text-muted-foreground max-w-2xl">
               Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
             </p>
           </div>
 
           <div className="space-y-8 sm:space-y-12">
-            <Section 
-              title="Education" 
-              aria-label="Educational Background"
-            >
-              <div className="space-y-4 sm:space-y-8">
+            <div>
+              <ResumeSection title="Education" />
+              <div className="space-y-4 mt-4">
                 {education.map((edu, index) => (
-                  <ExperienceItem
+                  <ExperienceCard
                     key={`education-${index}`}
                     title={edu.degree}
                     company={edu.school}
                     period={edu.period}
                     achievements={edu.details || []}
-                    aria-label={`Education Entry ${index + 1}`}
                   />
                 ))}
               </div>
-            </Section>
+            </div>
 
-            <Section 
-              title="Experience" 
-              aria-label="Professional Work History"
-            >
-              <div className="space-y-4 sm:space-y-8">
+            <div>
+              <ResumeSection title="Experience" />
+              <div className="space-y-4 mt-4">
                 {experiences.map((exp, index) => (
-                  <ExperienceItem
+                  <ExperienceCard
                     key={`experience-${index}`}
                     title={exp.title}
                     company={exp.company}
                     period={exp.period}
                     achievements={exp.achievements}
-                    aria-label={`Work Experience Entry ${index + 1}`}
                   />
                 ))}
               </div>
-            </Section>
+            </div>
 
-            <Section 
-              title="Certifications" 
-              aria-label="Professional Certifications"
-            >
-              <div className="space-y-4 sm:space-y-8">
+            <div>
+              <ResumeSection 
+                title="Certifications"
+              />
+              <div className="space-y-4 mt-4">
                 {certifications.map((org, index) => (
-                  <CertificationGroup
-                    key={`certification-${index}`}
-                    organization={org.organization}
-                    certs={org.certs}
-                    aria-label={`${org.organization} Certifications`}
-                  />
+                  <Card key={`certification-${index}`}>
+                    <CardHeader>
+                      <CardTitle>{org.organization}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap gap-2">
+                        {org.certs.map((cert, certIndex) => (
+                          <Badge key={certIndex} variant="secondary">{cert}</Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
-            </Section>
+            </div>
 
-            <Section 
-              title="Core Competencies" 
-              aria-label="Professional Skills and Competencies"
-            >
-              <div className="space-y-4 sm:space-y-8">
+            <div>
+              <ResumeSection title="Core Competencies" />
+              <div className="space-y-4 mt-4">
                 {competencies.map((comp, index) => (
                   <SkillCategory
                     key={`competency-${index}`}
                     category={comp.category}
                     skills={comp.skills}
-                    aria-label={`${comp.category} Skills`}
                   />
                 ))}
               </div>
-            </Section>
+            </div>
           </div>
         </PageTransition>
       </PageLayout>

@@ -6,6 +6,7 @@ const Home = lazy(() => import('../content/pages/Home'));
 const Blog = lazy(() => import('../content/pages/Blog'));
 const BlogPost = lazy(() => import('../content/pages/BlogPost'));
 const Resume = lazy(() => import('../content/pages/Resume'));
+const About = lazy(() => import('../content/pages/About'));
 const NotFound = lazy(() => import('../content/pages/NotFound'));
 
 interface LazyPageProps {
@@ -22,4 +23,4 @@ export const LazyPage: React.FC<LazyPageProps> = ({ component: Component }) => (
   </Suspense>
 );
 
-export { Home, Blog, BlogPost, Resume, NotFound };
+export { Home, Blog, BlogPost, Resume, About, NotFound };

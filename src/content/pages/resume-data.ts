@@ -98,7 +98,13 @@ export const education: z.infer<typeof EducationSchema>[] = [
   {
     degree: "M.S. Cybersecurity Engineering",
     school: "SANS Technology Institute",
-    period: "2024 - Present"
+    period: "2024 - Present",
+    details: [
+      "Defensible Security Architecture and Engineering",
+      "IT Security Planning Policy & Leadership",
+      "Hacking Techniques and Incident Response",
+      "Security Essentials",
+    ]
   },
   {
     degree: "B.A.S. Cybersecurity",
