@@ -27,14 +27,20 @@ export function sanitizeHtml(html: string): string {
   // Sanitize the HTML
   const sanitized = DOMPurify.sanitize(html, config);
   
-  // Add security attributes to external links
+  // Add security attributes to external links and ensure they open in new tabs
   return sanitized.replace(
-    /<a\s+([^>]*href=["'][^"']*["'][^>]*)>/gi,
+    /<a\s+([^>]*href=["']https?:\/\/[^"']*["'][^>]*)>/gi,
     (match, attrs) => {
-      if (attrs.includes('http') && !attrs.includes('rel=')) {
-        return `<a ${attrs} rel="noopener noreferrer">`;
+      let newAttrs = attrs;
+      // Ensure rel attribute
+      if (!/rel\s*=/.test(newAttrs)) {
+        newAttrs += ' rel="noopener noreferrer"';
       }
-      return match;
+      // Ensure target attribute
+      if (!/target\s*=/.test(newAttrs)) {
+        newAttrs += ' target="_blank"';
+      }
+      return `<a ${newAttrs}>`;
     }
   );
 }

@@ -1,10 +1,10 @@
 # Project TODO: Prioritized Backlog
 
+This document outlines the prioritized backlog of tasks for the project, categorized by urgency and importance. Each task is marked with its current status and any relevant actions required.
+
 ## 🟥 Critical
-- [x] **HTTPS Enforcement**: Enforced in `SecurityProvider.tsx` for production custom domains.
-- [ ] **Dependency Audit**: Regularly run `npm audit` and update dependencies for vulnerabilities.
-- [x] **External Links**: All external links sanitized with `rel="noopener noreferrer"` in `sanitizeHtml`.
-- [~] **Sensitive Data Handling**: Partial—sessionStorage cleared on tab hide. **Action:** Audit all session/localStorage usage for sensitive data and ensure full cleanup on logout/tab close.
+- [~] **Dependency Audit**: Non-breaking vulnerabilities fixed as of July 2025. Remaining moderate/low issues require breaking changes or have no fix available. Documented for future review.
+
 
 ## 🟧 High
 - [ ] **Accessibility**: Add ARIA labels, keyboard navigation, and semantic HTML for all interactive elements.
@@ -68,32 +68,12 @@
     - Checking adherence to project standards
     - Generating AI code quality reports
 
-## 📝 2025 Content Strategy (Low Priority)
-- [ ] May: Incident Response & Disaster Recovery
-- [ ] June: Cloud Security (SaaS, IaaS, shared responsibility)
-- [ ] July: Regulatory Compliance (GDPR, HIPAA, PCI DSS)
-- [ ] August: Security Automation & AI in Cybersecurity
-- [ ] September: Phishing & Social Engineering Defense
-- [ ] October: Security Awareness Month (culture, training, leadership)
-- [ ] November: Supply Chain & Third-Party Risk
-- [ ] December: Year-in-Review & 2026 Predictions
-- [ ] Publish how-to guides and checklists
-- [ ] Create case studies and incident writeups
-- [ ] Conduct interviews with security professionals
-- [ ] Write tool reviews and walkthroughs
-- [ ] Design infographics and explainer visuals
-- [ ] Invite guest posts or interviews
-- [ ] Run monthly polls or Q&A sessions
-- [ ] Share downloadable resources (templates, checklists)
-- [ ] Track topic engagement (views, shares, comments)
-- [ ] Monitor growth in newsletter/blog subscribers
-- [ ] Collect feedback from polls or Q&A
-- [ ] Monitor SEO ranking for targeted keywords
-- [ ] Adjust topics based on industry news, major breaches, or reader feedback
-
 ---
 
 ## ✅ Done
-- [x] **Security Headers**: All recommended headers enforced in `vercel.json` and `security-headers.ts`.
-- [x] **RSS Feed**: RSS feed is up-to-date and discoverable.
-- [x] **Dark/Light Mode**: Theme support and user preference persistence implemented.
+- [x] 🟥 Critical **Security Headers**: All recommended headers enforced in `vercel.json` and `security-headers.ts`.
+- [x] 🟩 Low / Future **RSS Feed**: RSS feed is up-to-date and discoverable.
+- [x] 🟧 High **Dark/Light Mode**: Theme support and user preference persistence implemented.
+- [x] 🟥 Critical **External Links**: All external links sanitized with `rel="noopener noreferrer"` in `sanitizeHtml`.
+- [x] 🟥 Critical **Sensitive Data Handling**: sessionStorage cleared on tab hide and tab close. No localStorage or logout logic found. All sensitive session data now cleaned up on tab close/hide.
+- [x] 🟥 Critical **HTTPS Enforcement**: Enforced in `SecurityProvider.tsx` for production custom domains.
