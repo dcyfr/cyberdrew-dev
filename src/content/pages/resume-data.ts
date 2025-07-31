@@ -1,4 +1,31 @@
-export const certifications = [
+import { z } from 'zod';
+
+// Zod schemas for type validation and runtime checking
+export const CertificationSchema = z.object({
+  organization: z.string(),
+  certs: z.array(z.string())
+});
+
+export const CompetencySchema = z.object({
+  category: z.string(),
+  skills: z.array(z.string())
+});
+
+export const EducationSchema = z.object({
+  degree: z.string(),
+  school: z.string(),
+  period: z.string(),
+  details: z.array(z.string()).optional()
+});
+
+export const ExperienceSchema = z.object({
+  title: z.string(),
+  company: z.string(),
+  period: z.string(),
+  achievements: z.array(z.string())
+});
+
+export const certifications: z.infer<typeof CertificationSchema>[] = [
   {
     organization: "SANS Institute",
     certs: [
@@ -31,7 +58,7 @@ export const certifications = [
   }
 ];
 
-export const competencies = [
+export const competencies: z.infer<typeof CompetencySchema>[] = [
   {
     category: "Security Architecture",
     skills: [
@@ -67,7 +94,7 @@ export const competencies = [
   }
 ];
 
-export const education = [
+export const education: z.infer<typeof EducationSchema>[] = [
   {
     degree: "M.S. Cybersecurity Engineering",
     school: "SANS Technology Institute",
@@ -85,7 +112,7 @@ export const education = [
   }
 ];
 
-export const experiences = [
+export const experiences: z.infer<typeof ExperienceSchema>[] = [
   {
     title: "Principal Cybersecurity Engineer",
     company: "Monks (Formerly Media.Monks)",
@@ -131,3 +158,20 @@ export const experiences = [
     ]
   }
 ];
+
+// Validation function to ensure data integrity
+export function validateResumeData() {
+  try {
+    certifications.forEach(cert => CertificationSchema.parse(cert));
+    competencies.forEach(comp => CompetencySchema.parse(comp));
+    education.forEach(edu => EducationSchema.parse(edu));
+    experiences.forEach(exp => ExperienceSchema.parse(exp));
+    return true;
+  } catch (error) {
+    console.error('Resume data validation failed:', error);
+    return false;
+  }
+}
+
+// Validate data on import
+validateResumeData();
