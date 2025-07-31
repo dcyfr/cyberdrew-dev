@@ -41,11 +41,20 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) 
     }
 
     // Add subtle security monitoring (non-intrusive)
+    const clearSensitiveSessionData = () => {
+      sessionStorage.removeItem('temp-data');
+    };
+
     const handleVisibilityChange = () => {
       if (document.hidden) {
         // Clear sensitive data when tab becomes hidden (optional)
-        sessionStorage.removeItem('temp-data');
+        clearSensitiveSessionData();
       }
+    };
+
+    const handleBeforeUnload = () => {
+      // Clear sensitive data when tab or window is closed
+      clearSensitiveSessionData();
     };
 
     // Monitor for potential security issues
@@ -58,11 +67,13 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) 
 
     // Add non-intrusive event listeners
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('error', handleError);
 
     // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('error', handleError);
     };
   }, []);
