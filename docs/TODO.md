@@ -1,22 +1,26 @@
 # Project TODO: Prioritized Backlog
 
 ## 🟥 Critical
-- [ ] **HTTPS Enforcement**: Redirect all production traffic to HTTPS (`SecurityProvider.tsx`).
+- [x] **HTTPS Enforcement**: Enforced in `SecurityProvider.tsx` for production custom domains.
 - [ ] **Dependency Audit**: Regularly run `npm audit` and update dependencies for vulnerabilities.
-- [ ] **External Links**: Ensure all external links use `rel="noopener noreferrer"` and validate URLs.
-- [ ] **Sensitive Data Handling**: Review session/local storage usage and clear sensitive data on tab hide/close.
+- [x] **External Links**: All external links sanitized with `rel="noopener noreferrer"` in `sanitizeHtml`.
+- [~] **Sensitive Data Handling**: Partial—sessionStorage cleared on tab hide. **Action:** Audit all session/localStorage usage for sensitive data and ensure full cleanup on logout/tab close.
 
 ## 🟧 High
 - [ ] **Accessibility**: Add ARIA labels, keyboard navigation, and semantic HTML for all interactive elements.
 - [ ] **Testing**: Add or expand unit/integration tests for critical components and pages.
 - [ ] **Performance**: Monitor Core Web Vitals (Lighthouse, Vercel Analytics). Optimize images, fonts, and static assets.
-- [ ] **CORS Policy**: Restrict CORS origins in `vite-security.config.ts` for production.
+- [ ] **CORS Policy**: CORS restricted in `vite-security.config.ts`. **Action:** Periodically review allowed origins and credentials policy.
+- [ ] **Content Security Policy (CSP):** **Action:** Implement a strict CSP via meta tag or HTTP header to mitigate XSS (add to `SecurityProvider.tsx` and/or server config).
+- [ ] **Security Monitoring:** **Action:** Expand runtime monitoring to detect suspicious activity (e.g., repeated errors, tampering).
 
 ## 🟨 Medium
 - [ ] **Bundle Size**: Keep all chunks < 300kB. Review `BUNDLE_OPTIMIZATION.md` for improvements.
 - [ ] **Component Reuse**: Audit for duplicate UI logic/components. Modularize as needed (`REFACTORING_SUMMARY.md`).
 - [ ] **Analytics**: Integrate privacy-respecting analytics (e.g., Plausible, Vercel Analytics).
-- [ ] **Content Security Policy (CSP)**: Consider a strict CSP to mitigate XSS risks.
+- [ ] **Session/Local Storage Review:** **Action:** Document all uses of browser storage, ensure no sensitive data is persisted longer than necessary, and encrypt if possible.
+- [ ] **Admin Panel Security:** If/when implemented, enforce RBAC, audit logging, and strong authentication.
+- [ ] **API Security:** If backend APIs are added, implement rate limiting, input validation, and monitoring (reference `src/lib/rate-limiter.ts`).
 
 ## 🟩 Low / Future
 - [ ] **Search Improvements**: Add fuzzy matching, tag filtering, and suggestions to blog search.

@@ -1,0 +1,53 @@
+# Copilot Configuration for Cyberdrew Dev
+
+context:
+  description: |
+    Cyberdrew Dev is a modern, accessible, and secure blog and UI component platform built with React, TypeScript, Vite, Tailwind CSS, and shadcn-ui.
+    The codebase emphasizes strict TypeScript, accessibility (WCAG), security, performance, and maintainability.
+    Key features include a Markdown-powered blog, 40+ reusable UI components, custom hooks, SEO, and Vercel deployment.
+    All code must follow the standards in .clinerules/.
+
+training_guidelines:
+  - Use strict TypeScript typing; never use `any`.
+  - Prefer functional React components with hooks.
+  - Ensure all UI components are accessible and follow WCAG guidelines.
+  - Use React.memo, useCallback, and useMemo for performance where appropriate.
+  - Organize code by feature: UI components in `src/components/ui/`, hooks in `src/hooks/`, utilities in `src/lib/`, content in `src/content/`.
+  - Implement proper error handling and input validation.
+  - Use ESLint and Prettier for linting and formatting.
+  - Write unit and integration tests for all critical logic and components.
+  - Document complex logic with JSDoc comments.
+  - Never commit secrets or sensitive data to version control.
+  - Follow git best practices: descriptive commits, feature branches, squash merges, and reference issues.
+  - Update documentation alongside code changes.
+
+examples:
+  - |
+    // Accessible button component example
+    import { ButtonHTMLAttributes } from "react";
+
+    interface AccessibleButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+      label: string;
+    }
+
+    export function AccessibleButton({ label, ...props }: AccessibleButtonProps) {
+      return (
+        <button {...props} aria-label={label}>
+          {label}
+        </button>
+      );
+    }
+  - |
+    // Custom React hook example
+    import { useState, useEffect } from "react";
+
+    export function useIsMobile(): boolean {
+      const [isMobile, setIsMobile] = useState(false);
+      useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+      }, []);
+      return isMobile;
+    }

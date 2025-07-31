@@ -1,73 +1,86 @@
-# Welcome to your Lovable project
+# cyberdrew.dev
 
-## Project info
+A modern, accessible, and secure blog and UI component platform built with React, TypeScript, Vite, Tailwind CSS, and shadcn-ui.
 
-**URL**: https://lovable.dev/projects/4abe5c9d-d3dd-4483-9aec-c596ffb5a201
+## Features
 
-## How can I edit this code?
+- **Blog Platform**: Write, organize, and display blog posts with Markdown support and advanced content blocks.
+- **UI Component Library**: 40+ reusable, accessible, and themeable UI components (see `src/components/ui/`).
+- **Performance Optimized**: Fast load times, code splitting, lazy loading, and bundle optimizations.
+- **Security First**: Strong security headers, rate limiting, and input validation (see `src/lib/security.ts`).
+- **Accessibility**: WCAG-compliant components, semantic HTML, keyboard navigation, and ARIA support.
+- **Custom Hooks**: Utilities for mobile detection, toasts, and more (`src/hooks/`).
+- **Theming**: Light/dark mode toggle and theme provider.
+- **SEO Ready**: SEO meta tags and Open Graph support.
+- **Testing**: Unit and integration tests for critical logic and components.
+- **Developer Experience**: TypeScript strictness, ESLint, Prettier, and fast refresh.
+- **Deployment Ready**: Vercel configuration and easy custom domain setup.
 
-There are several ways of editing your application.
+## Getting Started
 
-**Use Lovable**
+### Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4abe5c9d-d3dd-4483-9aec-c596ffb5a201) and start prompting.
+- Node.js (v18+ recommended)
+- npm
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/dcyfr/cyberdrew-dev.git
+cd cyberdrew-dev
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Development
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```sh
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open [http://localhost:5173](http://localhost:5173) to view the app.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Build for Production
 
-**Use GitHub Codespaces**
+```sh
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Linting & Formatting
 
-## What technologies are used for this project?
+```sh
+npm run lint
+```
 
-This project is built with:
+## Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- `src/components/` — React components (UI, layout, blog, etc.)
+- `src/content/` — Blog posts and content pages
+- `src/hooks/` — Custom React hooks
+- `src/lib/` — Utilities, security, performance, and constants
+- `public/` — Static assets
+- `docs/` — Documentation and guides
 
-## How can I deploy this project?
+## Accessibility
 
-Simply open [Lovable](https://lovable.dev/projects/4abe5c9d-d3dd-4483-9aec-c596ffb5a201) and click on Share -> Publish.
+- All UI components follow WCAG guidelines
+- Semantic HTML and ARIA attributes
+- Keyboard navigation support
+- Color contrast and screen reader tested
 
-## Can I connect a custom domain to my Lovable project?
+## Security
 
-Yes, you can!
+- Input validation and sanitization
+- Secure headers and rate limiting
+- No secrets or sensitive data in client code
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Testing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Unit tests for core logic and components
+- Integration tests for API and flows
+- See `.clinerules/04-testing-documentation.md` for standards
+
+## Deployment
+
+- Deploy to [Vercel](https://vercel.com/) or any static hosting provider
+- Custom domain support via Vercel or your host
+

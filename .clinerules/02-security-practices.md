@@ -5,14 +5,15 @@
 - Sanitize and validate all user inputs before processing
 - Use TypeScript's type system to enforce input constraints
 - Implement proper error boundaries to catch and handle errors gracefully
-- Never expose sensitive information in client-side code
+- Never expose sensitive information or secrets in client-side code
 
-## Environment and Configuration
+## Security Practices
 
+- Enforce secure HTTP headers and rate limiting (see `src/lib/security.ts`)
 - Use environment variables for all configuration values
 - Never commit secrets, API keys, or sensitive data to version control
-- Implement proper authentication and authorization patterns
-- Follow the existing security patterns in `/src/lib/security.ts`
+- Implement authentication and authorization patterns as needed
+- All code must be secure by default and follow modern web security best practices
 
 ## Error Handling
 
