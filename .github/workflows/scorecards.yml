@@ -16,6 +16,8 @@ permissions:
   id-token: write
   security-events: write
   pull-requests: read
+  checks: read
+  issues: read
 
 jobs:
   analysis:
