@@ -47,11 +47,10 @@ export const SEOHead = ({
       document.head.appendChild(newMeta);
     }
 
-    // Apply security meta tags
-    SECURITY_META_TAGS.forEach(tag => {
+    // Apply safe security meta tags (exclude CSP meta to avoid conflicts)
+    SECURITY_META_TAGS.filter(t => t['http-equiv'] !== 'Content-Security-Policy').forEach(tag => {
       const selector = tag.name ? `meta[name="${tag.name}"]` : `meta[http-equiv="${tag['http-equiv']}"]`;
       const existingTag = document.querySelector(selector);
-      
       if (!existingTag) {
         const metaTag = document.createElement('meta');
         Object.entries(tag).forEach(([key, value]) => {

@@ -6,8 +6,10 @@ export const SECURITY_HEADERS = {
   // Content Security Policy - prevents XSS and other injection attacks
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Allow inline scripts for React
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // Allow inline styles and Google Fonts
+    // Disallow eval and inline scripts in production
+    "script-src 'self'",
+    // Allow inline styles for Tailwind's runtime classes and Google Fonts
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: https: blob:",
     "connect-src 'self' https:",
@@ -27,6 +29,14 @@ export const SECURITY_HEADERS = {
   
   // Enable XSS protection
   'X-XSS-Protection': '1; mode=block',
+  
+  // Opt into cross-origin isolation benefits for security
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  // Limit how other sites can use your resources
+  'Cross-Origin-Resource-Policy': 'same-origin',
+  
+  // Enforce HTTPS for a year, including subdomains
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
   
   // Referrer policy for privacy
   'Referrer-Policy': 'strict-origin-when-cross-origin',
@@ -48,22 +58,6 @@ export const SECURITY_HEADERS = {
  * Security meta tags for HTML head
  */
 export const SECURITY_META_TAGS = [
-  // Content Security Policy (CSP) meta tag for XSS mitigation
-  { 'http-equiv': 'Content-Security-Policy', content: [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com data:",
-    "img-src 'self' data: https: blob:",
-    "connect-src 'self' https:",
-    "media-src 'self'",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
-    "frame-ancestors 'none'",
-    "upgrade-insecure-requests"
-  ].join('; ') },
-
   // Prevent automatic phone number detection
   { name: 'format-detection', content: 'telephone=no' },
   
@@ -95,7 +89,7 @@ export function getSecurityHeadersConfig() {
 export function isSecureUrl(url: string): boolean {
   try {
     const parsedUrl = new URL(url);
-    return ['https:', 'http:', 'mailto:', 'tel:'].includes(parsedUrl.protocol);
+  return ['https:', 'mailto:', 'tel:'].includes(parsedUrl.protocol);
   } catch {
     return false;
   }

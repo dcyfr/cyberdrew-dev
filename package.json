@@ -8,6 +8,8 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "audit": "npm audit --audit-level=high",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -83,8 +85,10 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.57.1",
+    "eslint-plugin-no-unsanitized": "^4.1.2",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
+    "eslint-plugin-security": "^3.0.1",
     "globals": "^15.9.0",
     "lovable-tagger": "^1.1.7",
     "postcss": "^8.4.47",

@@ -2,7 +2,9 @@ import { getAllBlogPosts } from "@/lib/blog";
 
 export function generateRSSFeed(): string {
   const posts = getAllBlogPosts();
-  const siteUrl = "https://drews-lab.lovable.app"; // Update with your actual domain
+  // Prefer production canonical domain, fallback to current origin in browser, or localhost in dev/build
+  const defaultProd = 'https://cyberdrew.dev';
+  const siteUrl = (typeof window !== 'undefined' && window.location?.origin) || defaultProd;
   const siteTitle = "Cyber Drew's Lab";
   const siteDescription = "Cybersecurity insights and technical expertise";
   

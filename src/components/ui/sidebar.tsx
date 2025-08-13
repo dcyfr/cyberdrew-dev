@@ -33,7 +33,8 @@ const SidebarProvider = React.forwardRef<
   React.ComponentProps<"div"> & {
     defaultOpen?: boolean
     open?: boolean
-    onOpenChange?: (open: boolean) => void
+  // eslint-disable-next-line no-unused-vars
+  onOpenChange?: (value: boolean) => void
   }
 >(
   (
@@ -56,16 +57,17 @@ const SidebarProvider = React.forwardRef<
     const [_open, _setOpen] = React.useState(defaultOpen)
     const open = openProp ?? _open
     const setOpen = React.useCallback(
-      (value: boolean | ((value: boolean) => boolean)) => {
-        const openState = typeof value === "function" ? value(open) : value
+      (next: any) => {
+        const openState = typeof next === "function" ? next(open) : (next as boolean)
         if (setOpenProp) {
           setOpenProp(openState)
         } else {
           _setOpen(openState)
         }
 
-        // This sets the cookie to keep the sidebar state.
-        document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+        // This sets the cookie to keep the sidebar state with secure attributes.
+        const secureFlag = typeof window !== "undefined" && window.location.protocol === "https:" ? "; Secure" : ""
+        document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; Path=/; Max-Age=${SIDEBAR_COOKIE_MAX_AGE}; SameSite=Lax${secureFlag}`
       },
       [setOpenProp, open]
     )

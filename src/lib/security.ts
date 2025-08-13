@@ -18,7 +18,8 @@ export function sanitizeHtml(html: string): string {
       'href', 'title', 'alt', 'src', 'width', 'height',
       'class', 'id', 'target', 'rel'
     ],
-    ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+. -]+(?:[^a-z+.\-:]|$))/i,
+  // Allow only https, mailto, tel, same-origin relative paths (not protocol-relative), and hash anchors
+  ALLOWED_URI_REGEXP: /^(https?:|mailto:|tel:|\/(?!\/)|#)/i,
     ADD_ATTR: ['target'],
     FORBID_TAGS: ['script', 'object', 'embed', 'iframe', 'form', 'input', 'textarea', 'button'],
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit']
@@ -34,7 +35,7 @@ export function sanitizeHtml(html: string): string {
       let newAttrs = attrs;
       // Ensure rel attribute
       if (!/rel\s*=/.test(newAttrs)) {
-        newAttrs += ' rel="noopener noreferrer"';
+        newAttrs += ' rel="noopener noreferrer nofollow"';
       }
       // Ensure target attribute
       if (!/target\s*=/.test(newAttrs)) {

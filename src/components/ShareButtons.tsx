@@ -7,7 +7,6 @@ import { downloadRSSFeed } from "@/lib/rss";
 interface ShareButtonsProps {
   title: string;
   url?: string;
-  excerpt?: string;
   showRSS?: boolean;
 }
 
@@ -15,7 +14,6 @@ interface ShareButtonsProps {
 export const ShareButtons = ({ 
   title, 
   url = window.location.href, 
-  excerpt = "",
   showRSS = false 
 }: ShareButtonsProps) => {
   const [showButtons, setShowButtons] = useState(false);
@@ -56,13 +54,13 @@ export const ShareButtons = ({
 
   const shareToX = () => {
     const text = `${title} ${fullUrl}`;
-    window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+    window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
     setShowButtons(false);
   };
 
   const shareToLinkedIn = () => {
     const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(fullUrl)}`;
-    window.open(linkedInUrl, '_blank');
+    window.open(linkedInUrl, '_blank', 'noopener,noreferrer');
     setShowButtons(false);
   };
 
