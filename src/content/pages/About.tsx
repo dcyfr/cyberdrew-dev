@@ -30,8 +30,7 @@ const About: FC = () => {
     "AI & Machine Learning",
     "Cloud Security",
     "Software Development",
-    "Threat Modeling",
-    "Hiking & Outdoor Adventures"
+    "Threat Modeling"
   ];
 
   return (
