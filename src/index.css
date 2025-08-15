@@ -190,6 +190,29 @@ All colors MUST be HSL.
   @apply text-4xl font-semibold text-foreground leading-[1.1] tracking-tight;
 }
 
+@layer utilities {
+  /* Motion-safe background panning and rotation for the blueprint grid */
+  @media (prefers-reduced-motion: no-preference) {
+    .bg-pan-slow {
+      animation: bg-pan 28s linear infinite;
+    }
+    .bg-rotate-slower {
+      animation: bg-rotate 120s linear infinite;
+    }
+  }
+
+  @keyframes bg-pan {
+    0% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(-40px, -24px, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+  }
+
+  @keyframes bg-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
 .blog-content h2 {
   @apply text-3xl font-semibold text-foreground mt-8 mb-4 leading-[1.2] tracking-tight;
 }

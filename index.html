@@ -64,6 +64,20 @@
     <meta name="theme-color" content="#6366f1" />
   <!-- format-detection already set above -->
     <link rel="canonical" href="https://cyberdrew.dev" />
+
+  <!-- Favicon: theme-aware PNGs (swap based on system until app mounts) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/light/favicon-32x32.png?v=20250814" media="(prefers-color-scheme: light)" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/light/favicon-16x16.png?v=20250814" media="(prefers-color-scheme: light)" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/light/apple-touch-icon.png?v=20250814" media="(prefers-color-scheme: light)" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/dark/favicon-32x32.png?v=20250814" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/dark/favicon-16x16.png?v=20250814" media="(prefers-color-scheme: dark)" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/dark/apple-touch-icon.png?v=20250814" media="(prefers-color-scheme: dark)" />
+
+  <!-- Fallback ICO (placed last so browsers prefer PNGs above); versioned to bust caches -->
+  <link rel="icon" href="/favicon.ico?v=20250814" sizes="any" />
+
+  <!-- Manifest will be set dynamically at runtime by FaviconThemeSwitcher -->
   </head>
 
   <body>

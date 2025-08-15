@@ -4,7 +4,7 @@ title: "Markdown Demo"
 slug: "markdown-demo"
 excerpt: "A demonstration of supported markdown and formatting features such as code blocks, lists, etc."
 tags: ["markdown", "guides", "reference"]
-featureImage: "/dark.webp"
+featureImage: "/placeholder_dark.webp"
 [//]: # (draft: "true")
 ---
 

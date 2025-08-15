@@ -74,14 +74,6 @@ const Blog = () => {
           />
           <SidebarInset>
             <PageLayout maxWidth="4xl">
-              {/* Mobile: sidebar trigger + breadcrumbs in one line */}
-              <div className="md:hidden mb-4 flex items-center gap-2">
-                <SidebarTrigger aria-label="Toggle sidebar" className="h-6 w-6 p-0 shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <BlogBreadcrumb currentPage="Blog" className="mb-0 truncate h-6 flex items-center" />
-                </div>
-              </div>
-
               {/* Page Header */}
               <FadeSlideIn className="mb-4 sm:mb-8" intensity={2} durationMs={350}>
                 <div className="mb-4">
@@ -115,6 +107,14 @@ const Blog = () => {
                 </div>
               </FadeSlideIn>
 
+              {/* Mobile: sidebar trigger + breadcrumbs in one line */}
+              <div className="md:hidden mb-4 flex items-center gap-2">
+                <SidebarTrigger aria-label="Toggle sidebar" className="h-6 w-6 p-0 shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <BlogBreadcrumb currentPage="Blog" className="mb-0 truncate h-6 flex items-center" />
+                </div>
+              </div>
+
               {/* Blog Posts */}
               <div className="space-y-8 sm:space-y-8 mb-8">
                 {isLoading ? (
@@ -141,7 +141,7 @@ const Blog = () => {
                             <div className="w-full sm:w-1/3 lg:w-1/4 mb-6 sm:mb-0 mr-0 sm:mr-6">
                               <AspectRatio ratio={16 / 9}>
                                 <img
-                                  src={post.featureImage || (theme === "dark" ? "/dark.webp" : "/light.webp")}
+                                  src={post.featureImage || (theme === "dark" ? "/placeholder_dark.webp" : "/placeholder_light.webp")}
                                   alt={post.title}
                                   className="w-full h-full object-cover rounded-lg"
                                 />

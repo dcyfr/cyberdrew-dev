@@ -24,6 +24,7 @@ import {
 import DisplayPicture from "@/assets/logo.webp";
 import { useNavigate } from 'react-router-dom';
 import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
+import { ArchitecturalBackground } from "@/components/ArchitecturalBackground";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -103,8 +104,9 @@ const Home = () => {
         keywords="cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security, security consultant"
       />
       <PageLayout maxWidth="2xl">
+        <ArchitecturalBackground />
         <PageTransition animated={false}>
-          <div className="mt-20 flex flex-col items-center">
+          <div className="relative z-10 mt-20 flex flex-col items-center">
             {/* Display Picture */}
             <FadeSlideIn className="transition-transform hover:scale-110 hover:rotate-[3deg]" durationMs={450} delayMs={80}>
               <Avatar className="w-32 h-32 mb-6 border-2 border-border">
@@ -115,8 +117,8 @@ const Home = () => {
             
             {/* Profile Name and Title */}
             <FadeSlideIn intensity={2} durationMs={350} delayMs={120}>
-              <h1 className="text-4xl font-bold text-primary mb-2 text-center">
-                It's Drew &#10022;
+              <h1 className="text-4xl font-bold text-primary mb-2 text-center tracking-tight">
+                It's Drew <span className="font-sans ml-2">&#10022;</span> 
               </h1>
               <p className="text-muted-foreground max-w-md mx-auto text-center">
                 Cyber Architect, Developer, and Researcher
@@ -128,7 +130,7 @@ const Home = () => {
               {connectCards.map((card, idx) => (
                 <FadeSlideIn key={card.title} delayMs={200 + idx * 80} durationMs={280}>
                   <Card 
-                    className="hover:bg-accent/50 hover:scale-105 transition-all duration-200 ease-in-out cursor-pointer" 
+                    className="hover:scale-105 transition-all duration-200 ease-in-out cursor-pointer" 
                     onClick={() => handleCardClick(card.link, card.internal)}
                   >
                     <CardHeader className="flex flex-row items-center space-x-4 pb-2">

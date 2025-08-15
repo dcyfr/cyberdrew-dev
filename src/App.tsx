@@ -9,6 +9,7 @@ import { SecurityProvider } from "@/components/SecurityProvider";
 import { SkipLink } from "@/components/SkipLink";
 import { LazyPage, Home, Blog, BlogPost, Resume, About, NotFound } from "@/components/LazyRoutes";
 import { DeferredAnalytics } from "@/components/DeferredAnalytics";
+import FaviconThemeSwitcher from "@/components/FaviconThemeSwitcher";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
               <Route path="*" element={<LazyPage component={NotFound} />} />
             </Routes>
           </BrowserRouter>
+          <FaviconThemeSwitcher />
         </TooltipProvider>
   <DeferredAnalytics />
       </ThemeProvider>
