@@ -24,7 +24,7 @@ import {
 import DisplayPicture from "@/assets/logo.webp";
 import { useNavigate } from 'react-router-dom';
 import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
-import { ArchitecturalBackground } from "@/components/ArchitecturalBackground";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -104,7 +104,7 @@ const Home = () => {
         keywords="cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security, security consultant"
       />
       <PageLayout maxWidth="2xl">
-        <ArchitecturalBackground />
+        <AnimatedBackground />
         <PageTransition animated={false}>
           <div className="relative z-10 mt-20 flex flex-col items-center">
             {/* Display Picture */}
