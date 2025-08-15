@@ -18,6 +18,18 @@ export const SecureLink: React.FC<SecureLinkProps> = ({
 }) => {
   // Validate URL and get secure attributes
   if (!isSecureUrl(href)) {
+    // Non-secure or invalid URL: render non-interactive content or a button if onClick provided
+    if (onClick) {
+      return (
+        <button
+          type="button"
+          className={className}
+          onClick={onClick}
+        >
+          {children}
+        </button>
+      );
+    }
     return <span className={className}>{children}</span>;
   }
 
@@ -28,6 +40,14 @@ export const SecureLink: React.FC<SecureLinkProps> = ({
       {...linkAttributes}
       className={className}
       onClick={onClick}
+      role="link"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          onClick();
+        }
+      }}
     >
       {children}
     </a>

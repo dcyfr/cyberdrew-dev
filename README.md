@@ -12,7 +12,7 @@ A modern, accessible, and secure blog and UI component platform built with React
 - **Custom Hooks**: Utilities for mobile detection, toasts, and more (`src/hooks/`).
 - **Theming**: Light/dark mode toggle and theme provider.
 - **SEO Ready**: SEO meta tags and Open Graph support.
-- **Testing**: Unit and integration tests for critical logic and components.
+- **Bundle Budgets**: CI guardrails enforce chunk size budgets.
 - **Developer Experience**: TypeScript strictness, ESLint, Prettier, and fast refresh.
 - **Deployment Ready**: Vercel configuration and easy custom domain setup.
 
@@ -38,6 +38,13 @@ npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) to view the app.
+
+Useful scripts:
+
+- Guard (typecheck + lint + build): `npm run guard`
+- Analyze (assets, deps, dead exports): `npm run analyze`
+
+See full docs in `docs/index.md`.
 
 ### Build for Production
 
@@ -73,11 +80,10 @@ npm run lint
 - Secure headers and rate limiting
 - No secrets or sensitive data in client code
 
-## Testing
+## Tooling & Budgets
 
-- Unit tests for core logic and components
-- Integration tests for API and flows
-- See `.clinerules/04-testing-documentation.md` for standards
+- ESLint, TypeScript strict, and bundle analyzer. Budgets enforced by `scripts/ci-bundle-budget.mjs`.
+- Analyze helpers: `npm run analyze` (assets, deps, dead exports).
 
 ## Deployment
 

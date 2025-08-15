@@ -8,8 +8,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { SecurityProvider } from "@/components/SecurityProvider";
 import { SkipLink } from "@/components/SkipLink";
 import { LazyPage, Home, Blog, BlogPost, Resume, About, NotFound } from "@/components/LazyRoutes";
-import { SpeedInsights } from "@vercel/speed-insights/react";
-import { Analytics } from "@vercel/analytics/react";
+import { DeferredAnalytics } from "@/components/DeferredAnalytics";
 
 const queryClient = new QueryClient();
 
@@ -39,8 +38,7 @@ const App = () => (
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
-        <SpeedInsights />
-        <Analytics />
+  <DeferredAnalytics />
       </ThemeProvider>
     </QueryClientProvider>
     </ErrorBoundary>

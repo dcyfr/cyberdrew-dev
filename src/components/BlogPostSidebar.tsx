@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { ShareButtons } from "@/components/ShareButtons";
 import { getAllBlogPosts } from "@/lib/blog";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FileText, Tags, Users, ArrowUpRight } from "lucide-react";
 import { BlogPost } from "@/lib/blog";
 
@@ -59,8 +59,7 @@ export function BlogPostSidebar({ currentPost }: BlogPostSidebarProps) {
             Share this post
           </div>
           <ShareButtons 
-            title={currentPost.title} 
-            excerpt={currentPost.excerpt}
+            title={currentPost.title}
           />
         </div>
 
@@ -73,10 +72,10 @@ export function BlogPostSidebar({ currentPost }: BlogPostSidebarProps) {
             </div>
             <div className="space-y-4">
               {relatedPosts.map((post, index) => (
-                <div
+                <Link
                   key={index}
-                  onClick={() => handlePostClick(post.slug)}
-                  className="p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors border border-border/50"
+                  to={`/blog/${post.slug}`}
+                  className="block p-3 rounded-lg hover:bg-accent/50 transition-colors border border-border/50 focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   <div className="font-medium text-sm line-clamp-2 text-left mb-2">
                     {post.title}
@@ -95,7 +94,7 @@ export function BlogPostSidebar({ currentPost }: BlogPostSidebarProps) {
                       </Badge>
                     ))}
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -109,10 +108,10 @@ export function BlogPostSidebar({ currentPost }: BlogPostSidebarProps) {
           </div>
           <div className="space-y-3">
             {recentPosts.map((post, index) => (
-              <div
+              <Link
                 key={index}
-                onClick={() => handlePostClick(post.slug)}
-                className="p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                to={`/blog/${post.slug}`}
+                className="block p-3 rounded-lg hover:bg-accent/50 transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 <div className="font-medium text-sm line-clamp-2 text-left mb-1">
                   {post.title}
@@ -120,7 +119,7 @@ export function BlogPostSidebar({ currentPost }: BlogPostSidebarProps) {
                 <div className="text-xs text-muted-foreground">
                   {post.date}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

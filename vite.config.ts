@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // Production optimization configuration
 export default defineConfig(({ mode }) => ({
@@ -43,9 +44,25 @@ export default defineConfig(({ mode }) => ({
     },
     // Asset optimization
     assetsInlineLimit: 4096, // 4KB
-    chunkSizeWarningLimit: 300, // 300KB warning limit
+  chunkSizeWarningLimit: 450, // match CI vendor budget to avoid noisy warnings
     rollupOptions: {
-      // Removed manualChunks for debugging
+      output: {
+    manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@radix-ui')) return 'radix';
+            if (id.includes('react-router')) return 'router';
+            if (id.includes('framer-motion')) return 'motion';
+      if (id.includes('markdown-it')) return 'markdown';
+      if (id.includes('highlight.js')) return 'highlight';
+      if (id.includes('@tanstack/react-query')) return 'query';
+      if (id.includes('lucide-react')) return 'icons';
+            return 'vendor';
+          }
+        },
+      },
+      plugins: [
+        process.env.ANALYZE ? visualizer({ filename: 'dist/stats.html', open: false, gzipSize: true, brotliSize: true }) : undefined,
+      ].filter(Boolean)
     },
   },
   

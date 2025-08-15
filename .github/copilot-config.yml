@@ -15,7 +15,7 @@ training_guidelines:
   - Organize code by feature: UI components in `src/components/ui/`, hooks in `src/hooks/`, utilities in `src/lib/`, content in `src/content/`.
   - Implement proper error handling and input validation.
   - Use ESLint and Prettier for linting and formatting.
-  - Write unit and integration tests for all critical logic and components.
+  - Keep bundle sizes within CI budgets; prefer code-splitting and lazy-loading for heavy UI.
   - Document complex logic with JSDoc comments.
   - Never commit secrets or sensitive data to version control.
   - Follow git best practices: descriptive commits, feature branches, squash merges, and reference issues.

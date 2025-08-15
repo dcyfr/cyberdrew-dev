@@ -108,15 +108,16 @@ export const EnhancedSearch = ({
         {showSuggestions && suggestions.length > 0 && (
           <div className="absolute top-full left-0 right-0 bg-background border border-border rounded-md mt-1 shadow-md z-50 animate-fade-in">
             {suggestions.map((suggestion, index) => (
-              <div
+              <button
+                type="button"
                 key={index}
-                className="px-3 py-2 hover:bg-accent cursor-pointer transition-colors text-sm border-b border-border last:border-b-0 first:rounded-t-md last:rounded-b-md"
+                className="w-full text-left px-3 py-2 hover:bg-accent transition-colors text-sm border-b border-border last:border-b-0 first:rounded-t-md last:rounded-b-md focus:outline-none focus:ring-2 focus:ring-ring"
                 onClick={() => handleSuggestionClick(suggestion)}
               >
                 <span className={suggestion.type === 'tag' ? 'text-muted-foreground' : 'text-foreground'}>
                   {suggestion.text}
                 </span>
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -124,22 +125,21 @@ export const EnhancedSearch = ({
 
       {/* Tag Filter */}
       <div className="flex flex-wrap gap-2">
-        <Badge 
-          variant={selectedTag === "" ? "default" : "outline"}
-          className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all duration-200 text-xs font-medium"
-          onClick={() => onTagChange("")}
+        <button type="button" onClick={() => onTagChange("")}
+          className="inline-flex items-center rounded-md border px-2 py-1 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          aria-pressed={selectedTag === ""}
         >
           All ({allPosts.length})
-        </Badge>
+        </button>
         {allTags.map((tag) => (
-          <Badge
+          <button type="button"
             key={tag}
-            variant={selectedTag === tag ? "default" : "outline"}
-            className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all duration-200 text-xs font-medium"
             onClick={() => onTagChange(selectedTag === tag ? "" : tag)}
+            className="inline-flex items-center rounded-md border px-2 py-1 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            aria-pressed={selectedTag === tag}
           >
             {tag} ({tagCounts[tag]})
-          </Badge>
+          </button>
         ))}
       </div>
     </div>

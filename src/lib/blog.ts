@@ -89,32 +89,7 @@ function parseFrontmatter(content: string): { frontmatter: Frontmatter; markdown
 // --- MARKDOWN RENDERING WITH MARKDOWN-IT ---
 import { formatDate } from "./utils";
 import { sanitizeHtml } from "./security";
-import MarkdownIt from "markdown-it";
-import hljs from "highlight.js";
-import "highlight.js/styles/devibeans.min.css";
-
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true,
-  highlight: function (str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return '<pre class="hljs"><code>' +
-          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
-          '</code></pre>';
-      } catch (error) {
-        console.error("Error highlighting code:", error);
-      }
-    }
-    return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
-  }
-});
-
-function markdownToHtml(markdown: string): string {
-  return md.render(markdown);
-}
+import { renderMarkdownToHtml } from "./blog-render";
 
 // Get blog post by slug
 export function getBlogPost(slug: string): BlogPost | null {
@@ -122,7 +97,7 @@ export function getBlogPost(slug: string): BlogPost | null {
   if (!markdownContent) return null;
 
   const { frontmatter, markdown } = parseFrontmatter(markdownContent);
-  const content = sanitizeHtml(markdownToHtml(markdown));
+  const content = sanitizeHtml(renderMarkdownToHtml(markdown));
   const readTime = calculateReadingTime(markdown);
 
   return {

@@ -1,7 +1,6 @@
 import { SEOHead } from "@/components/SEOHead";
 import { PageTransition } from "@/components/PageTransition";
-import { motion } from "framer-motion";
-import { itemVariants } from "@/lib/animations";
+// Removed framer-motion; using CSS-based transitions
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -11,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { AppHeader } from "@/components/AppHeader";
 import { Search, FileText, Tag } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
 import { useTheme } from "next-themes";
 
 const Blog = () => {
@@ -91,10 +91,11 @@ const Blog = () => {
                 </div>
                 <div className="space-y-3">
                   {allPosts.slice(0, 5).map((post, index) => (
-                    <div
+                    <a
                       key={index}
-                      onClick={() => handlePostClick(post.slug)}
-                      className="p-3 rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                      href={`/blog/${post.slug}`}
+                      onClick={(e) => { e.preventDefault(); handlePostClick(post.slug); }}
+                      className="block p-3 rounded-lg hover:bg-accent/50 transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
                     >
                       <div className="font-medium text-sm line-clamp-2 text-left mb-1">
                         {post.title}
@@ -102,7 +103,7 @@ const Blog = () => {
                       <div className="text-xs text-muted-foreground">
                         {post.date}
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -133,7 +134,7 @@ const Blog = () => {
           <main className="flex-1 min-h-screen pt-24">
             <div className="container mx-auto max-w-4xl">              
               {/* Page Header */}
-              <div className="mb-4 sm:mb-8">
+              <FadeSlideIn className="mb-4 sm:mb-8" intensity={2}>
                 {/* Page Title */}
                 <div className="mb-4">
                   <h1 className="vercel-heading-1">Blog</h1>
@@ -163,7 +164,7 @@ const Blog = () => {
                     ))}
                   </div>
                 </div>
-              </div>
+              </FadeSlideIn>
               
               {/* Blog Posts */}
               <div className="space-y-8 sm:space-y-8 mb-8">
@@ -177,13 +178,14 @@ const Blog = () => {
                   </div>
                 ) : (
                   filteredPosts.map((post, index) => (
-                    <motion.div
+                    <FadeSlideIn
                       key={index}
-                      className="p-4 sm:p-6 rounded-lg hover:bg-accent/50 cursor-pointer transition-all modern-card group"
-                      onClick={() => handlePostClick(post.slug)}
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="visible"
+                      delayMs={100 + index * 75}
+                    >
+                    <a
+                      href={`/blog/${post.slug}`}
+                      className="block p-4 sm:p-6 rounded-lg hover:bg-accent/50 transition-all modern-card group focus:outline-none focus:ring-2 focus:ring-ring"
+                      onClick={(e) => { e.preventDefault(); handlePostClick(post.slug); }}
                     >
                       <div className="flex flex-col sm:flex-row">
                         {post.featureImage && (
@@ -234,7 +236,8 @@ const Blog = () => {
                         </div>
                         </div>
                       </div>
-                    </motion.div>
+                    </a>
+                    </FadeSlideIn>
                   ))
                 )}
               </div>

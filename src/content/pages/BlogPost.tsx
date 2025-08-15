@@ -14,8 +14,8 @@ import { BlogPostSidebar } from "@/components/BlogPostSidebar";
 import { sanitizeHtml } from "@/lib/security";
 import { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { motion } from "framer-motion";
-import { itemVariants } from "@/lib/animations";
+import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
+// CSS-based animations via tailwindcss-animate
 
 const BlogPost = () => {
   const navigate = useNavigate();
@@ -80,12 +80,8 @@ const BlogPost = () => {
             <main className="flex-1">
               <div className="container mx-auto max-w-4xl">
                 {/* Post Content */}
-                <motion.article
-                  className="max-w-none mb-8"
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
+                <FadeSlideIn className="max-w-none mb-8" intensity={1}>
+                <article>
                     {/* Feature Image */}
                     {post.featureImage && (
                       <div className="mb-4">
@@ -122,11 +118,12 @@ const BlogPost = () => {
                     />
                   {/* Share Buttons */}
                   <div className="mt-8">
-                    <ShareButtons title={post.title} url={`/blog/${post.slug}`} excerpt={post.excerpt} />
+                    <ShareButtons title={post.title} url={`/blog/${post.slug}`} />
                   </div>
                   {/* Related Posts */}
                   <RelatedPosts currentPost={post} />
-                </motion.article>
+                </article>
+                </FadeSlideIn>
               </div>
             </main>
           </div>
