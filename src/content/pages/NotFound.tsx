@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { PageTransition } from "@/components/PageTransition";
+import { PageLayout } from "@/components/PageLayout";
 import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
 // Use CSS-based animations instead of framer-motion to reduce initial bundle cost
 
@@ -24,9 +25,9 @@ const NotFound = () => {
         title="Page Not Found"
         description="The page you're looking for doesn't exist or has been moved."
       />
-      <PageTransition>
-        <div className="min-h-screen pt-24">
-          <div className="container mx-auto max-w-4xl px-4 py-24">
+      <PageLayout>
+        <PageTransition>
+          <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-24">
             <FadeSlideIn className="text-center mb-12" intensity={2}>
               {/* Main Heading and Description */}
               <div className="mb-6">
@@ -37,16 +38,16 @@ const NotFound = () => {
               </div>
               {/* Navigation Buttons */}
               <div className="flex gap-4 justify-center">
-                <Button 
-                  variant="default" 
+                <Button
+                  variant="default"
                   onClick={() => navigate("/")}
                   className="hover:scale-105 transition-transform duration-200"
                 >
-                <Home className="w-4 h-4 mr-2" />
+                  <Home className="w-4 h-4 mr-2" />
                   Go Home
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => navigate(-1)}
                   className="hover:scale-105 transition-transform duration-200"
                 >
@@ -55,8 +56,8 @@ const NotFound = () => {
               </div>
             </FadeSlideIn>
           </div>
-        </div>
-      </PageTransition>
+        </PageTransition>
+      </PageLayout>
     </>
   );
 };

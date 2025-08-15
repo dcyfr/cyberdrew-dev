@@ -9,7 +9,8 @@ import { BackToTop } from "@/components/BackToTop";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import { ShareButtons } from "@/components/ShareButtons";
 import { PageTransition } from "@/components/PageTransition";
-import { AppHeader } from "@/components/AppHeader";
+import { PageLayout } from "@/components/PageLayout";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { BlogPostSidebar } from "@/components/BlogPostSidebar";
 import { sanitizeHtml } from "@/lib/security";
 import { useState, useEffect } from "react";
@@ -44,14 +45,11 @@ const BlogPost = () => {
           title="Loading..."
           description="Loading post content..."
         />
-        <PageTransition>
-          <AppHeader showHomeButton={true} />
-          <div className="min-h-screen pt-24">
-            <div className="container mx-auto max-w-4xl">
-              <BlogPostSkeleton />
-            </div>
-          </div>
-        </PageTransition>
+        <PageLayout>
+          <PageTransition>
+            <BlogPostSkeleton />
+          </PageTransition>
+        </PageLayout>
       </>
     );
   }
@@ -69,27 +67,26 @@ const BlogPost = () => {
       />
       <ReadingProgress />
       <BackToTop />
-      <PageTransition>
-        <AppHeader showHomeButton={true} />
-        <div className="min-h-screen pt-24">
+      <PageLayout maxWidth="full">
+        <PageTransition>
+          {/* Optional: wire into sidebar system like Blog page in future */}
           <div className="flex w-full">
             {/* Sidebar on the left */}
             <BlogPostSidebar currentPost={post} />
-
             {/* Main content */}
             <main className="flex-1">
-              <div className="container mx-auto max-w-4xl">
+              <div className="container mx-auto max-w-4xl px-4 sm:px-6">
                 {/* Post Content */}
                 <FadeSlideIn className="max-w-none mb-8" intensity={1}>
-                <article>
+                  <article>
                     {/* Feature Image */}
                     {post.featureImage && (
                       <div className="mb-4">
-                        <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
-                          <img 
-                            src={post.featureImage} 
-                            alt={post.title} 
-                            className="w-full h-full object-cover rounded-lg" 
+                        <AspectRatio ratio={16 / 9} className="rounded-lg overflow-hidden">
+                          <img
+                            src={post.featureImage}
+                            alt={post.title}
+                            className="w-full h-full object-cover rounded-lg"
                           />
                         </AspectRatio>
                       </div>
@@ -99,11 +96,12 @@ const BlogPost = () => {
                       <BlogBreadcrumb currentPage={post.title} />
                       <h1 className="vercel-heading-1 mt-4 flex items-center gap-2">
                         {post.title}
-                        {(post.draft && (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development")) && (
-                          <Badge variant="destructive" className="ml-2 text-xs font-semibold uppercase tracking-wide">
-                            Draft
-                          </Badge>
-                        )}
+                        {post.draft &&
+                          (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development") && (
+                            <Badge variant="destructive" className="ml-2 text-xs font-semibold uppercase tracking-wide">
+                              Draft
+                            </Badge>
+                          )}
                       </h1>
                       <div className="flex items-center gap-2 vercel-text-muted mb-8">
                         <time dateTime={post.date}>{post.date}</time>
@@ -112,23 +110,23 @@ const BlogPost = () => {
                       </div>
                     </header>
                     {/* Blog Post Content */}
-                    <div 
+                    <div
                       className="blog-content prose prose-lg max-w-none"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
                     />
-                  {/* Share Buttons */}
-                  <div className="mt-8">
-                    <ShareButtons title={post.title} url={`/blog/${post.slug}`} />
-                  </div>
-                  {/* Related Posts */}
-                  <RelatedPosts currentPost={post} />
-                </article>
+                    {/* Share Buttons */}
+                    <div className="mt-8">
+                      <ShareButtons title={post.title} url={`/blog/${post.slug}`} />
+                    </div>
+                    {/* Related Posts */}
+                    <RelatedPosts currentPost={post} />
+                  </article>
                 </FadeSlideIn>
               </div>
             </main>
           </div>
-        </div>
-      </PageTransition>
+        </PageTransition>
+      </PageLayout>
     </>
   );
 };

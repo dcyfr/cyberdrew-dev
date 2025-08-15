@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Calendar, Tag, FileText } from "lucide-react";
+import { Search, Tag, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,8 +11,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
+import { useSidebar } from "@/lib/sidebar-context";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 import { useNavigate } from "react-router-dom";
 

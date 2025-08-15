@@ -50,10 +50,10 @@ export const certifications: z.infer<typeof CertificationSchema>[] = [
   {
     organization: "Mile2",
     certs: [
-      "Certified Information Security Officer (CISSO)",
-      "Certified Penetration Testing Engineer (CPTE)",
-      "Certified Digital Forensics Examiner (CDFE)",
-      "Certified Disaster Recovery Expert (CDRE)"
+      "Information Security Officer (CISSO)",
+      "Penetration Testing Engineer (CPTE)",
+      "Digital Forensics Examiner (CDFE)",
+      "Disaster Recovery Expert (CDRE)"
     ]
   }
 ];

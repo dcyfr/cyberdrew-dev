@@ -32,7 +32,7 @@ const Resume: React.FC = React.memo(() => {
     count?: number 
   }> = ({ title, count }) => (
     <div className="space-y-4 sm:space-y-6">
-      <div className="flex items-center justify-between border-b pb-2">
+      <div className="flex items-center justify-between pb-2">
         <h2 className="text-2xl font-bold text-primary">{title}</h2>
         {count !== undefined && (
           <Badge variant="secondary" className="ml-4">{count}</Badge>
@@ -91,31 +91,27 @@ const Resume: React.FC = React.memo(() => {
       />
       <PageLayout>
         <PageTransition>
-          <div className="space-y-4 mb-8 sm:mb-12">
+          {/* Page Header */}
+          <div className="container space-y-4 mb-8 sm:mb-12">
             <BlogBreadcrumb currentPage="Resume" />
-            <h1 className="text-4xl font-bold text-primary">Drew</h1>
-            <p className="text-xl font-medium text-muted-foreground">
-              Security Architect
-            </p>
-            <p className="text-muted-foreground max-w-2xl">
+            <h1 className="vercel-heading-1">Resume</h1>
+            <p className="vercel-text-muted text-lg">
               Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
             </p>
           </div>
-
-          <div className="space-y-8 sm:space-y-12">
-            <div>
-              <ResumeSection title="Education" />
-              <div className="space-y-4 mt-4">
-                {education.map((edu, index) => (
-                  <ExperienceCard
-                    key={`education-${index}`}
-                    title={edu.degree}
-                    company={edu.school}
-                    period={edu.period}
-                    achievements={edu.details || []}
-                  />
-                ))}
-              </div>
+          {/* Page Content */}
+          <div className="container space-y-4 mb-8 sm:mb-12">
+            <ResumeSection title="Education" />
+            <div className="space-y-4 mt-4">
+              {education.map((edu, index) => (
+                <ExperienceCard
+                  key={`education-${index}`}
+                  title={edu.degree}
+                  company={edu.school}
+                  period={edu.period}
+                  achievements={edu.details || []}
+                />
+              ))}
             </div>
 
             <div>
@@ -134,7 +130,7 @@ const Resume: React.FC = React.memo(() => {
             </div>
 
             <div>
-              <ResumeSection 
+              <ResumeSection
                 title="Certifications"
               />
               <div className="space-y-4 mt-4">
