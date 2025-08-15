@@ -67,18 +67,21 @@ const BlogPost = () => {
       />
       <ReadingProgress />
       <BackToTop />
-      <PageLayout maxWidth="full">
-        <PageTransition>
-          {/* Optional: wire into sidebar system like Blog page in future */}
-          <div className="flex w-full">
-            {/* Sidebar on the left */}
-            <BlogPostSidebar currentPost={post} />
-            {/* Main content */}
-            <main className="flex-1">
-              <div className="container mx-auto max-w-4xl px-4 sm:px-6">
-                {/* Post Content */}
-                <FadeSlideIn className="max-w-none mb-8" intensity={1}>
-                  <article>
+  <PageTransition animated={false}>
+        <SidebarProvider>
+          <BlogPostSidebar currentPost={post} />
+          <SidebarInset>
+            <PageLayout maxWidth="4xl">
+              {/* Mobile: sidebar trigger + breadcrumbs in one line */}
+              <div className="md:hidden mb-4 flex items-center gap-2">
+                <SidebarTrigger aria-label="Toggle sidebar" className="h-6 w-6 p-0 shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <BlogBreadcrumb currentPage={post.title} className="truncate h-6 flex items-center" />
+                </div>
+              </div>
+              {/* Post Content */}
+              <FadeSlideIn className="max-w-none mb-8" intensity={1}>
+                <article>
                     {/* Feature Image */}
                     {post.featureImage && (
                       <div className="mb-4">
@@ -93,8 +96,7 @@ const BlogPost = () => {
                     )}
                     {/* Post Header */}
                     <header className="mb-8 sm:mb-16">
-                      <BlogBreadcrumb currentPage={post.title} />
-                      <h1 className="vercel-heading-1 mt-4 flex items-center gap-2">
+                      <h1 className="theme-heading-1 mt-4 flex items-center gap-2">
                         {post.title}
                         {post.draft &&
                           (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development") && (
@@ -103,7 +105,7 @@ const BlogPost = () => {
                             </Badge>
                           )}
                       </h1>
-                      <div className="flex items-center gap-2 vercel-text-muted mb-8">
+                      <div className="flex items-center gap-2 theme-text-muted mb-8">
                         <time dateTime={post.date}>{post.date}</time>
                         <span aria-hidden="true">•</span>
                         <span>{post.readTime}</span>
@@ -120,13 +122,12 @@ const BlogPost = () => {
                     </div>
                     {/* Related Posts */}
                     <RelatedPosts currentPost={post} />
-                  </article>
-                </FadeSlideIn>
-              </div>
-            </main>
-          </div>
-        </PageTransition>
-      </PageLayout>
+                </article>
+              </FadeSlideIn>
+            </PageLayout>
+          </SidebarInset>
+        </SidebarProvider>
+      </PageTransition>
     </>
   );
 };

@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { SEOHead } from "@/components/SEOHead";
-import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
 import { PageTransition } from "@/components/PageTransition";
 import { PageLayout } from "@/components/PageLayout";
+import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
 import { 
   Card, 
   CardContent, 
@@ -21,7 +21,7 @@ import {
 
 const Resume: React.FC = React.memo(() => {
   // Validate resume data on component mount
-  useMemo(() => {
+  useEffect(() => {
     if (!validateResumeData()) {
       console.warn('Resume data validation failed. Some content may be incorrect.');
     }
@@ -90,76 +90,88 @@ const Resume: React.FC = React.memo(() => {
         keywords="cybersecurity, resume, security architect, zero trust, threat modeling, incident response, SIEM, SOAR, cloud security, professional experience"
       />
       <PageLayout>
-        <PageTransition>
+        <PageTransition animated={false}>
           {/* Page Header */}
-          <div className="container space-y-4 mb-8 sm:mb-12">
-            <BlogBreadcrumb currentPage="Resume" />
-            <h1 className="vercel-heading-1">Resume</h1>
-            <p className="vercel-text-muted text-lg">
-              Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
-            </p>
-          </div>
+          <FadeSlideIn intensity={2} durationMs={360}>
+            <div className="space-y-4 mb-8 sm:mb-12">
+              <h1 className="theme-heading-1">Resume</h1>
+              <p className="theme-text-muted text-lg">
+                Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
+              </p>
+            </div>
+          </FadeSlideIn>
           {/* Page Content */}
-          <div className="container space-y-4 mb-8 sm:mb-12">
-            <ResumeSection title="Education" />
+          <div className="space-y-4 mb-8 sm:mb-12">
+            <FadeSlideIn delayMs={80}>
+              <ResumeSection title="Education" />
+            </FadeSlideIn>
             <div className="space-y-4 mt-4">
               {education.map((edu, index) => (
-                <ExperienceCard
-                  key={`education-${index}`}
-                  title={edu.degree}
-                  company={edu.school}
-                  period={edu.period}
-                  achievements={edu.details || []}
-                />
+                <FadeSlideIn key={`${edu.school}-${edu.degree}-${edu.period}`} delayMs={140 + index * 90} durationMs={300}>
+                  <ExperienceCard
+                    title={edu.degree}
+                    company={edu.school}
+                    period={edu.period}
+                    achievements={edu.details || []}
+                  />
+                </FadeSlideIn>
               ))}
             </div>
 
             <div>
-              <ResumeSection title="Experience" />
+              <FadeSlideIn delayMs={80}>
+                <ResumeSection title="Experience" />
+              </FadeSlideIn>
               <div className="space-y-4 mt-4">
                 {experiences.map((exp, index) => (
-                  <ExperienceCard
-                    key={`experience-${index}`}
-                    title={exp.title}
-                    company={exp.company}
-                    period={exp.period}
-                    achievements={exp.achievements}
-                  />
+                  <FadeSlideIn key={`${exp.company}-${exp.title}-${exp.period}`} delayMs={140 + index * 90} durationMs={300}>
+                    <ExperienceCard
+                      title={exp.title}
+                      company={exp.company}
+                      period={exp.period}
+                      achievements={exp.achievements}
+                    />
+                  </FadeSlideIn>
                 ))}
               </div>
             </div>
 
             <div>
-              <ResumeSection
-                title="Certifications"
-              />
+              <FadeSlideIn delayMs={80}>
+                <ResumeSection title="Certifications" />
+              </FadeSlideIn>
               <div className="space-y-4 mt-4">
                 {certifications.map((org, index) => (
-                  <Card key={`certification-${index}`}>
-                    <CardHeader>
-                      <CardTitle>{org.organization}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-wrap gap-2">
-                        {org.certs.map((cert, certIndex) => (
-                          <Badge key={certIndex} variant="secondary">{cert}</Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <FadeSlideIn key={`${org.organization}-${index}`} delayMs={140 + index * 90} durationMs={280}>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>{org.organization}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-wrap gap-2">
+                          {org.certs.map((cert) => (
+                            <Badge key={`${org.organization}-${cert}`} variant="secondary">{cert}</Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </FadeSlideIn>
                 ))}
               </div>
             </div>
 
             <div>
-              <ResumeSection title="Core Competencies" />
+              <FadeSlideIn delayMs={80}>
+                <ResumeSection title="Core Competencies" />
+              </FadeSlideIn>
               <div className="space-y-4 mt-4">
                 {competencies.map((comp, index) => (
-                  <SkillCategory
-                    key={`competency-${index}`}
-                    category={comp.category}
-                    skills={comp.skills}
-                  />
+                  <FadeSlideIn key={`${comp.category}-${index}`} delayMs={140 + index * 90} durationMs={280}>
+                    <SkillCategory
+                      category={comp.category}
+                      skills={comp.skills}
+                    />
+                  </FadeSlideIn>
                 ))}
               </div>
             </div>

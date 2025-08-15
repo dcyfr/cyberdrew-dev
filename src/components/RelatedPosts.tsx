@@ -28,8 +28,8 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
     return (
       <section className="mt-20 pt-8 border-t border-border">
         <div className="text-center py-12">
-          <h2 className="vercel-heading-2 mb-4">Explore More Posts</h2>
-          <p className="vercel-text-muted mb-6 max-w-md mx-auto">
+          <h2 className="theme-heading-2 mb-4">Explore More Posts</h2>
+          <p className="theme-text-muted mb-6 max-w-md mx-auto">
             No directly related posts found, but there's plenty more to discover in our blog.
           </p>
           <Button onClick={handleViewAllPosts} className="group">
@@ -45,8 +45,8 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
     <section className="mt-24 pt-12 border-t border-border">
       <div className="flex items-center justify-between mb-12">
         <div className="space-y-3">
-          <h2 className="vercel-heading-2 mb-0">Related Posts</h2>
-          <p className="vercel-text-muted">
+          <h2 className="theme-heading-2 mb-0">Related Posts</h2>
+          <p className="theme-text-muted">
             Continue reading about {currentPost.tags.slice(0, 2).join(' and ')}
           </p>
         </div>

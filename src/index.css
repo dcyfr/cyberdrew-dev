@@ -11,6 +11,15 @@ All colors MUST be HSL.
     font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
   }
 
+  /* Prevent layout/transition jank during initial load */
+  html.preload *, html.preload *::before, html.preload *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Pre-reserve sidebar gap for blog routes to prevent nav width shift */
+  /* No longer needed since PageLayout renders within SidebarInset; reserved via spacer */
+
   :root {
     /* Geist-inspired color system */
     --background: 0 0% 100%;
@@ -131,6 +140,10 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+  /* Ensure sidebar inset area maintains space to prevent vertical shift */
+  [data-sidebar="sidebar"], .group\/sidebar-wrapper, .peer[data-variant], .peer[data-state] {
+    will-change: auto;
+  }
   
   /* Enhanced animations and transitions */
   .hover-scale {
@@ -245,27 +258,27 @@ All colors MUST be HSL.
 }
 
 /* headings with better spacing */
-.vercel-heading {
+.theme-heading {
   @apply font-semibold tracking-tight text-foreground;
 }
 
-.vercel-heading-1 {
-  @apply vercel-heading text-5xl leading-[1.1] mb-8;
+.theme-heading-1 {
+  @apply theme-heading text-5xl leading-[1.1] mb-8;
 }
 
-.vercel-heading-2 {
-  @apply vercel-heading text-4xl leading-[1.1] mb-6;
+.theme-heading-2 {
+  @apply theme-heading text-4xl leading-[1.1] mb-6;
 }
 
-.vercel-heading-3 {
-  @apply vercel-heading text-3xl leading-[1.2] mb-4;
+.theme-heading-3 {
+  @apply theme-heading text-3xl leading-[1.2] mb-4;
 }
 
-.vercel-text {
+.theme-text {
   @apply text-[15px] leading-[1.7] text-foreground;
 }
 
-.vercel-text-muted {
+.theme-text-muted {
   @apply text-[14px] leading-[1.6] text-muted-foreground;
 }
 

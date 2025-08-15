@@ -50,11 +50,32 @@ const SidebarProvider = React.forwardRef<
     ref
   ) => {
     const isMobile = useIsMobile()
-    const [openMobile, setOpenMobile] = React.useState(false)
+  const [openMobile, setOpenMobile] = React.useState(false)
 
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
-    const [_open, _setOpen] = React.useState(defaultOpen)
+    // Initialize from cookie before first paint to avoid layout shift on mount
+    const initialOpen = React.useMemo(() => {
+      try {
+        if (typeof document !== "undefined") {
+          const cookie = document.cookie
+            .split(";")
+            .map((c) => c.trim())
+            .find((c) => c.startsWith(`${SIDEBAR_COOKIE_NAME}=`))
+          if (cookie) {
+            const value = cookie.split("=")[1]
+            if (value === "true" || value === "false") {
+              return value === "true"
+            }
+          }
+        }
+      } catch (_) {
+        // no-op, fall back to default
+      }
+      return defaultOpen
+    }, [defaultOpen])
+
+    const [_open, _setOpen] = React.useState(initialOpen)
     const open = openProp ?? _open
     const setOpen = React.useCallback(
       (next: any) => {
@@ -175,7 +196,7 @@ const Sidebar = React.forwardRef<
       )
     }
 
-    if (isMobile) {
+  if (isMobile || typeof window !== 'undefined' && window.innerWidth < 1024) {
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
@@ -198,16 +219,16 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="group peer hidden md:block text-sidebar-foreground"
+        className="group peer hidden lg:block text-sidebar-foreground"
         data-state={state}
         data-collapsible={state === "collapsed" ? collapsible : ""}
         data-variant={variant}
         data-side={side}
       >
         {/* This is what handles the sidebar gap on desktop */}
-        <div
+    <div
           className={cn(
-            "duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
+      "duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear hidden lg:block",
             "group-data-[collapsible=offcanvas]:w-0",
             "group-data-[side=right]:rotate-180",
             variant === "floating" || variant === "inset"
@@ -215,7 +236,7 @@ const Sidebar = React.forwardRef<
               : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
           )}
         />
-        <div
+  <div
           className={cn(
             "duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
             side === "left"
@@ -261,7 +282,7 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-      <PanelLeft />
+      <PanelLeft className="h-4 w-4" />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

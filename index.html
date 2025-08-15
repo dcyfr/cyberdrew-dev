@@ -14,7 +14,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Geist font from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=optional" rel="stylesheet">
+    <script>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('preload');
+        try {
+          var path = location.pathname;
+          var isBlog = path === '/blog' || path.indexOf('/blog/') === 0;
+          var isDesktop = window.matchMedia('(min-width: 768px)').matches;
+          if (isBlog && isDesktop) {
+            // Read sidebar cookie; default open (true)
+            var cookie = document.cookie.split(';').map(function(c){return c.trim();}).find(function(c){return c.indexOf('sidebar:state=') === 0;});
+            var isOpen = true;
+            if (cookie) {
+              var val = cookie.split('=')[1];
+              if (val === 'false') isOpen = false;
+              if (val === 'true') isOpen = true;
+            }
+            var reserveWidth = isOpen ? '16rem' : '3rem';
+            d.style.setProperty('--pre-reserve-sidebar', reserveWidth);
+            d.classList.add('reserve-sidebar');
+          }
+        } catch (_) { /* noop */ }
+      })();
+    </script>
     
     <title>Cyber Drew's Lab</title>
     <meta name="description" content="Cybersecurity expert specializing in security architecture, threat analysis, and secure development practices." />

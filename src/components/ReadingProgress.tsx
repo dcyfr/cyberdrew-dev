@@ -18,15 +18,10 @@ export const ReadingProgress = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[9999] h-1 bg-muted pointer-events-none">
+    <div className="fixed top-0 left-0 right-0 z-[9999] pointer-events-none" aria-hidden>
       <div
-        className="h-full bg-primary transition-all duration-150 ease-out"
-        style={{ width: `${progress}%` }}
-        role="progressbar"
-        aria-valuenow={Math.round(progress)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label="Reading progress"
+        className="h-1 bg-primary will-change-transform"
+        style={{ transform: `scaleX(${Math.max(0, progress) / 100})`, transformOrigin: "0 0" }}
       />
     </div>
   );

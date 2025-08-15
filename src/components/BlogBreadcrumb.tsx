@@ -12,13 +12,14 @@ import { useNavigate } from "react-router-dom";
 interface BlogBreadcrumbProps {
   postTitle?: string;
   currentPage?: string;
+  className?: string;
 }
 
 export const BlogBreadcrumb = ({ postTitle, currentPage, className }: BlogBreadcrumbProps) => {
   const navigate = useNavigate();
 
   return (
-    <Breadcrumb className={`mb-6 ${className}`}>
+    <Breadcrumb className={`${className}`}>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink 

@@ -16,3 +16,11 @@ root.render(
     <App />
   </StrictMode>
 );
+
+// Re-enable transitions after React has mounted and layout settled
+requestAnimationFrame(() => {
+  setTimeout(() => {
+    const d = document.documentElement;
+    d.classList.remove('preload');
+  }, 0);
+});

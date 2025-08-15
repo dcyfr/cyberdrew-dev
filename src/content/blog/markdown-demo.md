@@ -3,7 +3,7 @@ date: "January 1, 2020"
 title: "Markdown Demo"
 slug: "markdown-demo"
 excerpt: "A demonstration of supported markdown and formatting features such as code blocks, lists, etc."
-tags: ["markdown", "guides", "reference", "DCYFR"]
+tags: ["markdown", "guides", "reference"]
 featureImage: "/dark.webp"
 [//]: # (draft: "true")
 ---

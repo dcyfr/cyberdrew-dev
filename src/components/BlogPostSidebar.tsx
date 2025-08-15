@@ -1,9 +1,19 @@
 import { Badge } from "@/components/ui/badge";
 import { ShareButtons } from "@/components/ShareButtons";
-import { getAllBlogPosts } from "@/lib/blog";
+import { getAllBlogPosts, BlogPost } from "@/lib/blog";
 import { Link, useNavigate } from "react-router-dom";
 import { FileText, Tags, Users, ArrowUpRight } from "lucide-react";
-import { BlogPost } from "@/lib/blog";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { useSidebar } from "@/lib/sidebar-context";
 
 interface BlogPostSidebarProps {
   currentPost: BlogPost;
@@ -11,19 +21,22 @@ interface BlogPostSidebarProps {
 
 export function BlogPostSidebar({ currentPost }: BlogPostSidebarProps) {
   const navigate = useNavigate();
+  const { state, toggleSidebar } = useSidebar();
+  const isCollapsed = state === "collapsed";
   const allPosts = getAllBlogPosts();
-  
-  // Get related posts (same tags, excluding current post)
+
+  // Related posts (same tags, excluding current)
   const relatedPosts = allPosts
-    .filter(post => 
-      post.slug !== currentPost.slug && 
-      post.tags.some(tag => currentPost.tags.includes(tag))
+    .filter(
+      (post) =>
+        post.slug !== currentPost.slug &&
+        post.tags.some((tag) => currentPost.tags.includes(tag))
     )
     .slice(0, 4);
 
-  // Get recent posts (excluding current post)
+  // Recent posts (excluding current)
   const recentPosts = allPosts
-    .filter(post => post.slug !== currentPost.slug)
+    .filter((post) => post.slug !== currentPost.slug)
     .slice(0, 5);
 
   const handlePostClick = (slug: string) => {
@@ -31,99 +44,135 @@ export function BlogPostSidebar({ currentPost }: BlogPostSidebarProps) {
   };
 
   return (
-    <aside className="hidden lg:block w-80 border-r border-border bg-card">
-      <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto px-6 py-8">
+    <Sidebar className={isCollapsed ? "w-14 hidden lg:flex" : "w-80 hidden lg:flex"} collapsible="icon">
+      <SidebarContent className="px-4 py-6">
         {/* Tags Section */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm font-medium mb-4">
+        <SidebarGroup className="mb-8">
+          <SidebarGroupLabel className="flex items-center gap-2 text-sm font-medium mb-3">
             <Tags className="w-4 h-4" />
-            Tags
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {currentPost.tags.map((tag) => (
-              <Badge 
-                key={tag} 
-                variant="secondary" 
-                className="text-xs px-3 py-1 font-medium rounded-full"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        </div>
+            {!isCollapsed && "Tags"}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            {!isCollapsed ? (
+              <div className="flex flex-wrap gap-2">
+                {currentPost.tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="text-xs px-3 py-1 font-medium rounded-full"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="justify-center" onClick={toggleSidebar} aria-label="Tags">
+                    <Tags className="w-4 h-4" />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            )}
+          </SidebarGroupContent>
+        </SidebarGroup>
 
         {/* Share Section */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm font-medium mb-4">
+        <SidebarGroup className="mb-8">
+          <SidebarGroupLabel className="flex items-center gap-2 text-sm font-medium mb-3">
             <Users className="w-4 h-4" />
-            Share this post
-          </div>
-          <ShareButtons 
-            title={currentPost.title}
-          />
-        </div>
+            {!isCollapsed && "Share this post"}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            {!isCollapsed ? (
+              <ShareButtons title={currentPost.title} />
+            ) : (
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="justify-center" aria-label="Share">
+                    <Users className="w-4 h-4" />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            )}
+          </SidebarGroupContent>
+        </SidebarGroup>
 
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
-          <div className="mb-8">
-            <div className="flex items-center gap-2 text-sm font-medium mb-4">
+          <SidebarGroup className="mb-8">
+            <SidebarGroupLabel className="flex items-center gap-2 text-sm font-medium mb-3">
               <ArrowUpRight className="w-4 h-4" />
-              Related Posts
-            </div>
-            <div className="space-y-4">
-              {relatedPosts.map((post, index) => (
-                <Link
-                  key={index}
-                  to={`/blog/${post.slug}`}
-                  className="block p-3 rounded-lg hover:bg-accent/50 transition-colors border border-border/50 focus:outline-none focus:ring-2 focus:ring-ring"
-                >
-                  <div className="font-medium text-sm line-clamp-2 text-left mb-2">
-                    {post.title}
-                  </div>
-                  <div className="text-xs text-muted-foreground mb-2">
-                    {post.date} • {post.readTime}
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    {post.tags.slice(0, 2).map((tag) => (
-                      <Badge 
-                        key={tag} 
-                        variant="outline" 
-                        className="text-xs px-2 py-0.5"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+              {!isCollapsed && "Related Posts"}
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {relatedPosts.map((post, index) => (
+                  <SidebarMenuItem key={index}>
+                    <SidebarMenuButton
+                      onClick={() => handlePostClick(post.slug)}
+                      className="flex flex-col items-start p-3 h-auto hover:bg-accent/50 cursor-pointer"
+                    >
+                      {!isCollapsed ? (
+                        <>
+                          <span className="font-medium text-sm line-clamp-2 text-left">
+                            {post.title}
+                          </span>
+                          <span className="text-xs text-muted-foreground mt-1">
+                            {post.date} • {post.readTime}
+                          </span>
+                          <span className="flex gap-1 mt-1">
+                            {post.tags.slice(0, 2).map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-[10px] px-1.5 py-0">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </span>
+                        </>
+                      ) : (
+                        <ArrowUpRight className="w-4 h-4" />
+                      )}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         )}
 
         {/* Recent Posts */}
-        <div>
-          <div className="flex items-center gap-2 text-sm font-medium mb-4">
+        <SidebarGroup>
+          <SidebarGroupLabel className="flex items-center gap-2 text-sm font-medium mb-3">
             <FileText className="w-4 h-4" />
-            Recent Posts
-          </div>
-          <div className="space-y-3">
-            {recentPosts.map((post, index) => (
-              <Link
-                key={index}
-                to={`/blog/${post.slug}`}
-                className="block p-3 rounded-lg hover:bg-accent/50 transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
-              >
-                <div className="font-medium text-sm line-clamp-2 text-left mb-1">
-                  {post.title}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {post.date}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    </aside>
+            {!isCollapsed && "Recent Posts"}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {recentPosts.map((post, index) => (
+                <SidebarMenuItem key={index}>
+                  <SidebarMenuButton
+                    onClick={() => handlePostClick(post.slug)}
+                    className="flex flex-col items-start p-3 h-auto hover:bg-accent/50 cursor-pointer"
+                  >
+                    {!isCollapsed ? (
+                      <>
+                        <span className="font-medium text-sm line-clamp-2 text-left">
+                          {post.title}
+                        </span>
+                        <span className="text-xs text-muted-foreground mt-1">
+                          {post.date}
+                        </span>
+                      </>
+                    ) : (
+                      <FileText className="w-4 h-4" />
+                    )}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 }

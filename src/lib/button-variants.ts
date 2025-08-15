@@ -10,11 +10,7 @@ export const buttonVariants = cva(
         outline: "border border-border bg-background hover:bg-accent hover:text-accent-foreground hover:border-border",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        // Variants
-        vercel: "bg-background border border-border text-foreground hover:border-foreground hover:shadow-sm",
-        "vercel-ghost": "text-muted-foreground hover:text-foreground hover:bg-accent/50",
-        "vercel-primary": "bg-foreground text-background hover:bg-foreground/90 shadow-sm",
+        link: "text-primary underline-offset-4 hover:underline"
       },
       size: {
         default: "h-9 px-4 py-2",

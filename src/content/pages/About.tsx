@@ -11,7 +11,7 @@ import {
   TooltipTrigger 
 } from "@/components/ui/tooltip";
 import { Link } from "react-router-dom";
-import { BlogBreadcrumb } from "@/components/BlogBreadcrumb";
+import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
 
 /**
  * About page for CyberDrew.
@@ -39,45 +39,48 @@ const About: FC = () => {
     <>
       <SEOHead title="About" description="Learn more about this website and its creator." />
       <PageLayout>
-        <PageTransition>
+        <PageTransition animated={false}>
           {/* Page Header */}
-          <div className="container space-y-4 mb-8 sm:mb-12">
-            <BlogBreadcrumb currentPage="About" />
-            <h1 className="vercel-heading-1">About</h1>
-            <p className="vercel-text-muted text-lg">
-              As a <Link to="/resume" className="text-primary font-semibold">Security Architect</Link>, I specialize in designing robust, cybersecurity frameworks that protect digital ecosystems. My passion lies in developing innovative solutions that anticipate and mitigate emerging cyber threats through strategic architectural design.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {interests.map((interest) => (
-                <Badge key={interest} variant="outline">{interest}</Badge>
-              ))}
+          <FadeSlideIn intensity={2} durationMs={360}>
+            <div className="space-y-4 mb-8 sm:mb-12">
+              <h1 className="theme-heading-1">About</h1>
+              <p className="theme-text-muted text-lg">
+                As a <Link to="/resume" className="text-primary font-semibold">Security Architect</Link>, I specialize in designing robust, cybersecurity frameworks that protect digital ecosystems. My passion lies in developing innovative solutions that anticipate and mitigate emerging cyber threats through strategic architectural design.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {interests.map((interest) => (
+                  <Badge key={interest} variant="outline">{interest}</Badge>
+                ))}
+              </div>
             </div>
-          </div>
-          
+          </FadeSlideIn>
+
           {/* Page Content */}
-          <div className="container space-y-4 mb-8 sm:mb-12">
-            <h2 className="vercel-heading-2">Technologies</h2>
-            <div className="flex flex-wrap gap-2">
-              {technologies.map((tech) => (
-                <TooltipProvider key={tech.name}>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Badge
-                        variant="outline"
-                        className="cursor-pointer hover:bg-accent"
-                        onClick={() => window.open(tech.link, '_blank', 'noopener,noreferrer')}
-                      >
-                        {tech.name}
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      Visit {tech.name} website
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ))}
+          <FadeSlideIn delayMs={120}>
+            <div className="space-y-4 mb-8 sm:mb-12">
+              <h2 className="theme-heading-2">Technologies</h2>
+              <div className="flex flex-wrap gap-2">
+                {technologies.map((tech, index) => (
+                  <TooltipProvider key={tech.name}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Badge
+                          variant="outline"
+                          className="cursor-pointer hover:bg-accent"
+                          onClick={() => window.open(tech.link, '_blank', 'noopener,noreferrer')}
+                        >
+                          {tech.name}
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Visit {tech.name} website
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ))}
+              </div>
             </div>
-          </div>
+          </FadeSlideIn>
         </PageTransition>
       </PageLayout>
     </>

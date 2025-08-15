@@ -26,13 +26,13 @@ const NotFound = () => {
         description="The page you're looking for doesn't exist or has been moved."
       />
       <PageLayout>
-        <PageTransition>
-          <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-24">
-            <FadeSlideIn className="text-center mb-12" intensity={2}>
+        <PageTransition animated={false}>
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:py-24">
+            <FadeSlideIn className="text-center mb-12" intensity={2} durationMs={360}>
               {/* Main Heading and Description */}
               <div className="mb-6">
-                <h1 className="vercel-heading-1 mb-4">Page Not Found</h1>
-                <p className="vercel-text-muted mb-8 max-w-md mx-auto">
+                <h1 className="theme-heading-1 mb-4">Page Not Found</h1>
+                <p className="theme-text-muted mb-8 max-w-md mx-auto">
                   Oops! The page you're looking for doesn't exist or has been moved.
                 </p>
               </div>

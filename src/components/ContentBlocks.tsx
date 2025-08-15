@@ -34,9 +34,9 @@ export const Section: React.FC<SectionProps> = ({
   titleLevel = 'h2'
 }) => {
   const TitleComponent = titleLevel;
-  const titleClass = titleLevel === 'h1' ? 'vercel-heading-1' : 
-                    titleLevel === 'h2' ? 'vercel-heading-2' : 
-                    titleLevel === 'h3' ? 'vercel-heading-3' : 'vercel-text-lg font-semibold';
+  const titleClass = titleLevel === 'h1' ? 'theme-heading-1' : 
+                    titleLevel === 'h2' ? 'theme-heading-2' : 
+                    titleLevel === 'h3' ? 'theme-heading-3' : 'theme-text-lg font-semibold';
   
   return (
     <section className={`mb-12 ${className}`}>
@@ -50,7 +50,7 @@ export const Section: React.FC<SectionProps> = ({
 
 export const SkillCategory: React.FC<SkillCategoryProps> = ({ category, skills }) => (
   <div className="mb-6">
-    <h4 className="vercel-text font-semibold mb-3">{category}</h4>
+    <h4 className="theme-text font-semibold mb-3">{category}</h4>
     <div className="flex flex-wrap gap-2">
       {skills.map((skill, index) => (
         <Badge 
@@ -67,7 +67,7 @@ export const SkillCategory: React.FC<SkillCategoryProps> = ({ category, skills }
 
 export const CertificationGroup: React.FC<CertificationGroupProps> = ({ organization, certs }) => (
   <div className="mb-6">
-    <h4 className="vercel-text font-semibold mb-3">{organization}</h4>
+    <h4 className="theme-text font-semibold mb-3">{organization}</h4>
     <div className="flex flex-wrap gap-2">
       {certs.map((cert, index) => (
         <Badge 
@@ -93,16 +93,16 @@ export const ExperienceItem: React.FC<ExperienceItemProps> = ({
   <div className="mb-8 last:mb-0">
     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
       <div>
-        <h4 className="vercel-text font-semibold">{title}</h4>
-        {company && <p className="vercel-text-muted">{company}{location && ` • ${location}`}</p>}
+        <h4 className="theme-text font-semibold">{title}</h4>
+        {company && <p className="theme-text-muted">{company}{location && ` • ${location}`}</p>}
       </div>
-      <p className="vercel-text-muted text-sm mt-1 sm:mt-0 flex-shrink-0">{period}</p>
+      <p className="theme-text-muted text-sm mt-1 sm:mt-0 flex-shrink-0">{period}</p>
     </div>
     {description && (
-      <p className="vercel-text-muted mb-3 leading-relaxed">{description}</p>
+      <p className="theme-text-muted mb-3 leading-relaxed">{description}</p>
     )}
     {achievements.length > 0 && (
-      <ul className="list-disc list-inside space-y-1 vercel-text-muted text-sm">
+      <ul className="list-disc list-inside space-y-1 theme-text-muted text-sm">
         {achievements.map((achievement, index) => (
           <li key={index}>{achievement}</li>
         ))}

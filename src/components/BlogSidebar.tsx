@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Search, Tag, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -11,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarInput,
 } from "@/components/ui/sidebar";
 import { useSidebar } from "@/lib/sidebar-context";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
@@ -29,7 +29,7 @@ export function BlogSidebar({
   selectedTag, 
   onTagChange 
 }: BlogSidebarProps) {
-  const { state } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
   const navigate = useNavigate();
   
   const allPosts = getAllBlogPosts();
@@ -56,7 +56,7 @@ export function BlogSidebar({
               Search
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              <Input
+              <SidebarInput
                 type="text"
                 placeholder="Search posts..."
                 value={searchQuery}
@@ -104,7 +104,7 @@ export function BlogSidebar({
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center gap-2 text-sm font-medium mb-3">
             <Tag className="w-4 h-4" />
-            {!isCollapsed && "Categories"}
+            {!isCollapsed && "Tags"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             {!isCollapsed ? (
@@ -122,16 +122,15 @@ export function BlogSidebar({
               </div>
             ) : (
               <SidebarMenu>
-                {allTags.slice(0, 3).map((tag, index) => (
-                  <SidebarMenuItem key={index}>
-                    <SidebarMenuButton
-                      onClick={() => handleTagClick(tag)}
-                      className={selectedTag === tag ? "bg-accent" : ""}
-                    >
-                      <Tag className="w-4 h-4" />
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    onClick={toggleSidebar}
+                    className="justify-center"
+                    aria-label="Tags"
+                  >
+                    <Tag className="w-4 h-4" />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               </SidebarMenu>
             )}
           </SidebarGroupContent>

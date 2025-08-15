@@ -102,11 +102,11 @@ const Home = () => {
         description="Cybersecurity expert specializing in security architecture, threat analysis, and secure development practices."
         keywords="cybersecurity, security architecture, threat analysis, zero trust, MFA, enterprise security, security consultant"
       />
-      <PageLayout showBackButton={false} maxWidth="2xl">
-        <PageTransition>
-          <div className="flex flex-col items-center">
+      <PageLayout maxWidth="2xl">
+        <PageTransition animated={false}>
+          <div className="mt-20 flex flex-col items-center">
             {/* Display Picture */}
-            <FadeSlideIn className="will-change-transform transition-transform hover:scale-110 hover:rotate-[3deg]" durationMs={500} delayMs={200}>
+            <FadeSlideIn className="transition-transform hover:scale-110 hover:rotate-[3deg]" durationMs={450} delayMs={80}>
               <Avatar className="w-32 h-32 mb-6 border-2 border-border">
                 <AvatarImage src={DisplayPicture} alt="Drew's Display Picture" />
                 <AvatarFallback>D</AvatarFallback>
@@ -114,7 +114,7 @@ const Home = () => {
             </FadeSlideIn>
             
             {/* Profile Name and Title */}
-            <FadeSlideIn intensity={2} durationMs={400}>
+            <FadeSlideIn intensity={2} durationMs={350} delayMs={120}>
               <h1 className="text-4xl font-bold text-primary mb-2 text-center">
                 It's Drew &#10022;
               </h1>
@@ -126,7 +126,7 @@ const Home = () => {
             {/* Links Section */}
     <div className="w-full max-w-md space-y-4 mt-8">
               {connectCards.map((card, idx) => (
-                <FadeSlideIn key={card.title} delayMs={150 + idx * 100}>
+                <FadeSlideIn key={card.title} delayMs={200 + idx * 80} durationMs={280}>
                   <Card 
                     className="hover:bg-accent/50 hover:scale-105 transition-all duration-200 ease-in-out cursor-pointer" 
                     onClick={() => handleCardClick(card.link, card.internal)}

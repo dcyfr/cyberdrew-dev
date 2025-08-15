@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Home } from 'lucide-react';
+import { Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PageLayoutProps {
@@ -27,8 +27,7 @@ const maxWidthClasses = {
 
 export const PageLayout: React.FC<PageLayoutProps> = ({
   children,
-  showBackButton = true,
-  showHomeButton = false,
+  showHomeButton = true,
   showThemeToggle = true,
   className,
   maxWidth = '4xl'
@@ -42,29 +41,17 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
     <main id="main-content" className={cn("min-h-screen", className)}>
       <div className={cn("container mx-auto px-4 sm:px-6 py-8 sm:py-16", maxWidthClasses[maxWidth])}>
         {/* Navigation Header */}
-        {(showBackButton || showHomeButton || showThemeToggle) && !isHomePage && (
+        {(showHomeButton || showThemeToggle) && !isHomePage && (
           <div className="flex justify-between items-start mb-8">
             <div className="flex gap-2">
-              {showBackButton && (
-                <Button 
-                  variant="vercel-ghost" 
-                  onClick={() => navigate(-1)}
-                  className="text-sm"
-                  aria-label="Go back to previous page"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  Back
-                </Button>
-              )}
               {showHomeButton && (
                 <Button 
-                  variant="vercel-ghost" 
+                  variant="outline" 
                   onClick={() => navigate('/')}
                   className="text-sm"
-                  aria-label="Go to home page"
+                  aria-label="Go home"
                 >
                   <Home className="w-4 h-4 mr-1" />
-                  Home
                 </Button>
               )}
             </div>

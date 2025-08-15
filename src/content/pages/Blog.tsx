@@ -64,141 +64,141 @@ const Blog = () => {
         description="Insights on architecture, cybersecurity, and secure development practices."
         keywords="cybersecurity blog, security architecture, threat analysis, zero trust, MFA, enterprise security"
       />
-      <PageLayout maxWidth="full">
-        <PageTransition>
-          {/* Responsive sidebar layout consistent with site components */}
-          <SidebarProvider>
-            <BlogSidebar
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              selectedTag={selectedTag}
-              onTagChange={setSelectedTag}
-            />
-            <SidebarInset>
-              <div className="container mx-auto max-w-4xl px-4 sm:px-6 py-2 sm:py-4">
-                {/* Mobile header row with sidebar trigger */}
-                <div className="flex items-center justify-between md:hidden mb-2">
-                  <SidebarTrigger aria-label="Toggle sidebar" />
-                </div>
-
-                {/* Page Header */}
-                <FadeSlideIn className="mb-4 sm:mb-8" intensity={2}>
-                  <BlogBreadcrumb currentPage="Blog" />
-                  <div className="mb-4">
-                    <h1 className="vercel-heading-1">Blog</h1>
-                    <p className="vercel-text-muted text-lg">
-                      Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
-                    </p>
-                  </div>
-                  {/* Mobile search and filters */}
-                  <div className="lg:hidden mb-8 space-y-4">
-                    <Input
-                      type="text"
-                      placeholder="Search posts..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full"
-                    />
-                    <div className="flex flex-wrap gap-2">
-                      {allTags.map((tag, index) => (
-                        <Badge
-                          key={index}
-                          variant={selectedTag === tag ? "default" : "outline"}
-                          className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
-                          onClick={() => handleTagClick(tag)}
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </FadeSlideIn>
-
-                {/* Blog Posts */}
-                <div className="space-y-8 sm:space-y-8 mb-8">
-                  {isLoading ? (
-                    <BlogListSkeleton />
-                  ) : filteredPosts.length === 0 ? (
-                    <div className="text-center py-8">
-                      <p className="vercel-text-muted text-lg">
-                        No posts found matching your criteria. Try adjusting your search or filters.
-                      </p>
-                    </div>
-                  ) : (
-                    filteredPosts.map((post, index) => (
-                      <FadeSlideIn key={index} delayMs={100 + index * 75}>
-                        <a
-                          href={`/blog/${post.slug}`}
-                          className="block p-4 sm:p-6 rounded-lg hover:bg-accent/50 transition-all modern-card group focus:outline-none focus:ring-2 focus:ring-ring"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handlePostClick(post.slug);
-                          }}
-                        >
-                          <div className="flex flex-col sm:flex-row">
-                            {post.featureImage && (
-                              <div className="w-full sm:w-1/3 lg:w-1/4 mb-6 sm:mb-0 mr-0 sm:mr-6">
-                                <AspectRatio ratio={16 / 9}>
-                                  <img
-                                    src={post.featureImage || (theme === "dark" ? "/dark.webp" : "/light.webp")}
-                                    alt={post.title}
-                                    className="w-full h-full object-cover rounded-lg"
-                                  />
-                                </AspectRatio>
-                              </div>
-                            )}
-                            <div className="flex-1 sm:w-2/3 lg:w-3/4 space-y-2">
-                              <h2 className="vercel-heading-2 flex items-center gap-2">
-                                {post.title}
-                                {post.draft &&
-                                  (import.meta.env?.MODE === "development" ||
-                                    process.env.NODE_ENV === "development") && (
-                                    <Badge
-                                      variant="destructive"
-                                      className="ml-2 text-xs font-semibold uppercase tracking-wide"
-                                    >
-                                      Draft
-                                    </Badge>
-                                  )}
-                              </h2>
-
-                              <div className="vercel-text-muted text-sm flex items-center gap-1">
-                                <span>{post.date}</span>
-                                <span>&bull;</span>
-                                <span>{post.readTime}</span>
-                              </div>
-
-                              <p className="vercel-text-muted text-sm my-2 line-clamp-3">
-                                {post.excerpt}
-                              </p>
-
-                              <div className="flex flex-wrap gap-2 pt-1">
-                                {post.tags.map((tag, tagIndex) => (
-                                  <Badge
-                                    key={tagIndex}
-                                    variant="outline"
-                                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleTagClick(tag);
-                                    }}
-                                  >
-                                    {tag}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </a>
-                      </FadeSlideIn>
-                    ))
-                  )}
+  <PageTransition animated={false}>
+        <SidebarProvider>
+          <BlogSidebar
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            selectedTag={selectedTag}
+            onTagChange={setSelectedTag}
+          />
+          <SidebarInset>
+            <PageLayout maxWidth="4xl">
+              {/* Mobile: sidebar trigger + breadcrumbs in one line */}
+              <div className="md:hidden mb-4 flex items-center gap-2">
+                <SidebarTrigger aria-label="Toggle sidebar" className="h-6 w-6 p-0 shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <BlogBreadcrumb currentPage="Blog" className="mb-0 truncate h-6 flex items-center" />
                 </div>
               </div>
-            </SidebarInset>
-          </SidebarProvider>
-        </PageTransition>
-      </PageLayout>
+
+              {/* Page Header */}
+              <FadeSlideIn className="mb-4 sm:mb-8" intensity={2} durationMs={350}>
+                <div className="mb-4">
+                  <h1 className="theme-heading-1">Blog</h1>
+                  <p className="theme-text-muted text-lg">
+                    Insights on architecture, cybersecurity, and secure development practices. Explore articles on zero trust, threat analysis, and enterprise security solutions.
+                  </p>
+                </div>
+
+                {/* Mobile search and filters */}
+                <div className="lg:hidden mb-8 space-y-4">
+                  <Input
+                    type="text"
+                    placeholder="Search posts..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full"
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    {allTags.map((tag, index) => (
+                      <Badge
+                        key={index}
+                        variant={selectedTag === tag ? "default" : "outline"}
+                        className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
+                        onClick={() => handleTagClick(tag)}
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </FadeSlideIn>
+
+              {/* Blog Posts */}
+              <div className="space-y-8 sm:space-y-8 mb-8">
+                {isLoading ? (
+                  <BlogListSkeleton />
+                ) : filteredPosts.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="theme-text-muted text-lg">
+                      No posts found matching your criteria. Try adjusting your search or filters.
+                    </p>
+                  </div>
+                ) : (
+                  filteredPosts.map((post, index) => (
+                    <FadeSlideIn key={`${post.slug}-${post.date}`} delayMs={120 + index * 80} durationMs={280}>
+                      <a
+                        href={`/blog/${post.slug}`}
+                        className="block p-4 sm:p-6 rounded-lg hover:bg-accent/50 transition-all modern-card group focus:outline-none focus:ring-2 focus:ring-ring"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handlePostClick(post.slug);
+                        }}
+                      >
+                        <div className="flex flex-col sm:flex-row">
+                          {post.featureImage && (
+                            <div className="w-full sm:w-1/3 lg:w-1/4 mb-6 sm:mb-0 mr-0 sm:mr-6">
+                              <AspectRatio ratio={16 / 9}>
+                                <img
+                                  src={post.featureImage || (theme === "dark" ? "/dark.webp" : "/light.webp")}
+                                  alt={post.title}
+                                  className="w-full h-full object-cover rounded-lg"
+                                />
+                              </AspectRatio>
+                            </div>
+                          )}
+                          <div className="flex-1 sm:w-2/3 lg:w-3/4 space-y-2">
+                            <h2 className="theme-heading-2 flex items-center gap-2">
+                              {post.title}
+                              {post.draft &&
+                                (import.meta.env?.MODE === "development" ||
+                                  process.env.NODE_ENV === "development") && (
+                                  <Badge
+                                    variant="destructive"
+                                    className="ml-2 text-xs font-semibold uppercase tracking-wide"
+                                  >
+                                    Draft
+                                  </Badge>
+                                )}
+                            </h2>
+
+                            <div className="theme-text-muted text-sm flex items-center gap-1">
+                              <span>{post.date}</span>
+                              <span>&bull;</span>
+                              <span>{post.readTime}</span>
+                            </div>
+
+                            <p className="theme-text-muted text-sm my-2 line-clamp-3">
+                              {post.excerpt}
+                            </p>
+
+                            <div className="flex flex-wrap gap-2 pt-1">
+                              {post.tags.map((tag, tagIndex) => (
+                                <Badge
+                                  key={tagIndex}
+                                  variant="outline"
+                                  className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleTagClick(tag);
+                                  }}
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </FadeSlideIn>
+                  ))
+                )}
+              </div>
+            </PageLayout>
+          </SidebarInset>
+        </SidebarProvider>
+      </PageTransition>
     </>
   );
 };
