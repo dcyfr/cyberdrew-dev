@@ -113,7 +113,7 @@ const BlogPost = () => {
                     </header>
                     {/* Blog Post Content */}
                     <div
-                      className="blog-content prose prose-lg max-w-none"
+                      className="blog-content max-w-none"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
                     />
                     {/* Share Buttons */}
