@@ -44,7 +44,7 @@ const About: FC = () => {
           <FadeSlideIn intensity={2} durationMs={360}>
             <div className="space-y-4 mb-8 sm:mb-12">
               <h1 className="theme-heading-1">About</h1>
-              <p className="theme-text-muted text-lg">
+              <p className="theme-text max-w-prose">
                 As a <Link to="/resume" className="text-primary font-semibold">Security Architect</Link>, I specialize in designing robust, cybersecurity frameworks that protect digital ecosystems. My passion lies in developing innovative solutions that anticipate and mitigate emerging cyber threats through strategic architectural design.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -58,7 +58,7 @@ const About: FC = () => {
           {/* Page Content */}
           <FadeSlideIn delayMs={120}>
             <div className="space-y-4 mb-8 sm:mb-12">
-              <h2 className="theme-heading-2">Technologies</h2>
+              <h2 className="theme-heading-2">This site</h2>
               <div className="flex flex-wrap gap-2">
                 {technologies.map((tech, index) => (
                   <TooltipProvider key={tech.name}>
@@ -66,7 +66,7 @@ const About: FC = () => {
                       <TooltipTrigger>
                         <Badge
                           variant="outline"
-                          className="cursor-pointer hover:bg-accent"
+                          className="cursor-pointer hover:bg-accent/60"
                           onClick={() => window.open(tech.link, '_blank', 'noopener,noreferrer')}
                         >
                           {tech.name}

@@ -31,9 +31,9 @@ const Resume: React.FC = React.memo(() => {
     title: string, 
     count?: number 
   }> = ({ title, count }) => (
-    <div className="space-y-4 sm:space-y-6">
-      <div className="flex items-center justify-between pb-2">
-        <h2 className="text-2xl font-bold text-primary">{title}</h2>
+    <div className="space-y-3 sm:space-y-4">
+      <div className="flex items-center justify-between pb-1">
+        <h2 className="theme-heading-2">{title}</h2>
         {count !== undefined && (
           <Badge variant="secondary" className="ml-4">{count}</Badge>
         )}
@@ -52,13 +52,13 @@ const Resume: React.FC = React.memo(() => {
         <div className="flex flex-col">
           <Badge variant="outline" className="mb-4 mr-auto">{period}</Badge>
           <CardTitle className="flex items-center justify-between gap-2 transition-colors group-hover:text-primary">
-            <span>{title}</span>
+            <span className="theme-text-lg font-semibold">{title}</span>
           </CardTitle>
-          <CardDescription>{company}</CardDescription>
+          <CardDescription className="theme-text-muted">{company}</CardDescription>
         </div>
       </CardHeader>
       <CardContent>
-        <ul className="list-disc list-inside space-y-1 text-sm">
+        <ul className="list-disc list-inside space-y-1 theme-text-muted text-sm">
           {achievements.map((achievement, index) => (
             <li key={index}>{achievement}</li>
           ))}
@@ -89,13 +89,13 @@ const Resume: React.FC = React.memo(() => {
         description="Comprehensive resume of Drew, a cybersecurity professional specializing in security architecture, incident response, and enterprise security solutions."
         keywords="cybersecurity, resume, security architect, zero trust, threat modeling, incident response, SIEM, SOAR, cloud security, professional experience"
       />
-      <PageLayout>
+  <PageLayout>
         <PageTransition animated={false}>
           {/* Page Header */}
           <FadeSlideIn intensity={2} durationMs={360}>
             <div className="space-y-4 mb-8 sm:mb-12">
               <h1 className="theme-heading-1">Resume</h1>
-              <p className="theme-text-muted text-lg">
+      <p className="theme-text max-w-prose">
                 Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
               </p>
             </div>

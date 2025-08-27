@@ -179,7 +179,17 @@ const Sidebar = React.forwardRef<
     },
     ref
   ) => {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+    const { isMobile, state, openMobile, setOpenMobile, open, setOpen } = useSidebar()
+
+    // Ensure mobile sheet closes when switching to desktop and restore desktop sidebar state
+    React.useEffect(() => {
+      if (!isMobile) {
+        // Close any lingering mobile sheet
+        if (openMobile) setOpenMobile(false)
+        // Ensure desktop honors saved open state (no-op if already correct)
+        setOpen(open)
+      }
+  }, [isMobile, openMobile, setOpenMobile, open, setOpen])
 
     if (collapsible === "none") {
       return (
@@ -196,7 +206,7 @@ const Sidebar = React.forwardRef<
       )
     }
 
-  if (isMobile || typeof window !== 'undefined' && window.innerWidth < 1024) {
+  if (isMobile) {
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent

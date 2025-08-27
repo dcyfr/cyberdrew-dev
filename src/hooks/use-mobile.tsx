@@ -1,6 +1,7 @@
 import * as React from "react"
 
-const MOBILE_BREAKPOINT = 768
+// Keep this in sync with Tailwind's `lg` breakpoint (1024px)
+const MOBILE_BREAKPOINT = 1024
 
 export function useIsMobile() {
   const getIsMobile = () =>

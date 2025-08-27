@@ -29,9 +29,6 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
       <section className="mt-20 pt-8 border-t border-border">
         <div className="text-center py-12">
           <h2 className="theme-heading-2 mb-4">Explore More Posts</h2>
-          <p className="theme-text-muted mb-6 max-w-md mx-auto">
-            No directly related posts found, but there's plenty more to discover in our blog.
-          </p>
           <Button onClick={handleViewAllPosts} className="group">
             View All Posts
             <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
@@ -61,11 +58,11 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
         </Button>
       </div>
 
-      <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+  <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 items-stretch">
         {relatedPosts.map((post) => (
           <Card 
             key={post.slug} 
-            className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 border-border/50 hover:border-primary/20 bg-card/80 backdrop-blur-sm hover:-translate-y-1 relative overflow-hidden"
+    className="group h-full flex flex-col cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 border-border/50 hover:border-primary/20 bg-card/80 backdrop-blur-sm hover:-translate-y-1 relative overflow-hidden"
             onClick={() => handlePostClick(post.slug)}
           >
             {/* Relevance indicator */}
@@ -96,7 +93,7 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
               </div>
             </CardHeader>
 
-            <CardContent className="pt-0 space-y-5">
+            <CardContent className="pt-0 space-y-5 mt-auto">
               <p className="text-muted-foreground leading-relaxed line-clamp-3">
                 {post.excerpt}
               </p>

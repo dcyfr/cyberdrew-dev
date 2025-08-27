@@ -1,6 +1,6 @@
 // CSS-based animations via tailwindcss-animate; remove framer-motion for faster first load
 import { PageTransition } from '@/components/PageTransition';
-import { FileBadge, FileText, Github, LibraryBig, Linkedin, Rss, HeartHandshake } from "lucide-react";
+import { FileBadge, FileText, Github, LibraryBig, Linkedin, Rss, HeartHandshake, Mail } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { PageLayout } from "@/components/PageLayout";
 import { 
@@ -15,19 +15,12 @@ import {
   AvatarFallback, 
   AvatarImage 
 } from "@/components/ui/avatar";
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
-} from "@/components/ui/tooltip";
 import DisplayPicture from "@/assets/logo.webp";
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const Home = () => {
-  const navigate = useNavigate();
 
   const connectCards = [
     {
@@ -71,30 +64,10 @@ const Home = () => {
       link: "https://github.com/sponsors/dcyfr",
       internal: false,
       icon: HeartHandshake
-    },
-    {
-      title: "GitHub",
-      description: "Explore my projects and contributions",
-      link: "https://github.com/dcyfr",
-      internal: false,
-      icon: Github
-    },
-    {
-      title: "LinkedIn",
-      description: "Connect with me on LinkedIn",
-      link: "https://www.linkedin.com/in/dcyfr",
-      internal: false,
-      icon: Linkedin
     }
   ];
 
-  const handleCardClick = (link: string, internal: boolean) => {
-    if (internal) {
-      navigate(link);
-    } else {
-      window.open(link, '_blank', 'noopener,noreferrer');
-    }
-  };
+  // no-op: using semantic Link/anchor wrappers for accessibility instead of onClick
 
   return (
     <>
@@ -106,46 +79,55 @@ const Home = () => {
       <PageLayout maxWidth="2xl">
         <AnimatedBackground />
         <PageTransition animated={false}>
-          <div className="relative z-10 mt-20 flex flex-col items-center">
+          <div className="relative z-10 mt-14 sm:mt-16 lg:mt-20 flex flex-col items-center">
             {/* Display Picture */}
-            <FadeSlideIn className="transition-transform hover:scale-110 hover:rotate-[3deg]" durationMs={450} delayMs={80}>
-              <Avatar className="w-32 h-32 mb-6 border-2 border-border">
-                <AvatarImage src={DisplayPicture} alt="Drew's Display Picture" />
+            <FadeSlideIn className="transition-transform hover:scale-105 motion-reduce:transform-none" durationMs={450} delayMs={80}>
+              <Avatar className="w-32 h-32 mb-6 rounded-full ring-2 ring-border ring-offset-2 ring-offset-background shadow-sm">
+                <AvatarImage src={DisplayPicture} alt="Drew's display picture" loading="eager" decoding="async" />
                 <AvatarFallback>D</AvatarFallback>
               </Avatar>
             </FadeSlideIn>
-            
+
             {/* Profile Name and Title */}
             <FadeSlideIn intensity={2} durationMs={350} delayMs={120}>
-              <h1 className="text-4xl font-bold text-primary mb-2 text-center tracking-tight">
-                It's Drew <span className="font-sans ml-2">&#10022;</span> 
+              <h1 className="theme-heading-1 text-center text-primary">
+                It's Drew <span aria-hidden="true" className="font-sans not-italic ml-2">&#10022;</span>
               </h1>
-              <p className="text-muted-foreground max-w-md mx-auto text-center">
-                Cyber Architect, Developer, and Researcher
-              </p>
             </FadeSlideIn>
 
             {/* Links Section */}
-    <div className="w-full max-w-md space-y-4 mt-8">
-              {connectCards.map((card, idx) => (
-                <FadeSlideIn key={card.title} delayMs={200 + idx * 80} durationMs={280}>
-                  <Card 
-                    className="card-interactive cursor-pointer group" 
-                    onClick={() => handleCardClick(card.link, card.internal)}
-                  >
-                    <CardHeader className="flex flex-row items-center space-x-4 pb-2">
-                      <card.icon className="w-6 h-6 text-primary" />
-                      <CardTitle className="transition-colors group-hover:text-primary">{card.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="mb-2">
-                        {card.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                </FadeSlideIn>
-              ))}
-            </div>
+            <nav aria-label="Primary links" className="w-full mt-8">
+              <div className="mx-auto w-full max-w-2xl grid grid-cols-1 gap-4 sm:grid-cols-2 items-stretch">
+                {connectCards.map((card, idx) => {
+                  const Icon = card.icon;
+                  const content = (
+                    <Card className="card-interactive group h-full flex flex-col">
+                      <CardHeader className="flex flex-row items-center space-x-4 pb-2">
+                        <Icon aria-hidden className="w-6 h-6 text-primary" />
+                        <CardTitle className="transition-colors group-hover:text-primary font-semibold">{card.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription className="mb-2">{card.description}</CardDescription>
+                      </CardContent>
+                    </Card>
+                  );
+
+                  return (
+                    <FadeSlideIn key={card.title} delayMs={200 + idx * 80} durationMs={280} className="h-full">
+                      {card.internal ? (
+                        <Link to={card.link} aria-label={card.title} className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg">
+                          {content}
+                        </Link>
+                      ) : (
+                        <a href={card.link} aria-label={card.title} target="_blank" rel="noopener noreferrer" className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg">
+                          {content}
+                        </a>
+                      )}
+                    </FadeSlideIn>
+                  );
+                })}
+              </div>
+            </nav>
           </div>
         </PageTransition>
       </PageLayout>

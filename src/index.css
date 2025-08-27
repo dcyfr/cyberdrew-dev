@@ -11,6 +11,33 @@ All colors MUST be HSL.
     font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
   }
 
+  /* Mobile-first, fluid type scale using clamp() */
+  :root {
+    /* Base font sizes scale with viewport; cap for readability */
+    --font-size-xs: clamp(0.81rem, 0.77rem + 0.2vw, 0.9rem);
+    --font-size-sm: clamp(0.9rem, 0.86rem + 0.25vw, 1rem);
+    --font-size-base: clamp(1rem, 0.95rem + 0.35vw, 1.125rem); /* ~16px -> 18px */
+    --font-size-lg: clamp(1.125rem, 1.05rem + 0.6vw, 1.375rem);
+    --font-size-xl: clamp(1.25rem, 1.1rem + 0.9vw, 1.625rem);
+    --font-size-2xl: clamp(1.5rem, 1.3rem + 1.4vw, 2.125rem);
+    --font-size-3xl: clamp(1.75rem, 1.45rem + 2vw, 2.5rem);
+    --font-size-4xl: clamp(2rem, 1.6rem + 2.6vw, 3rem);
+    --font-size-5xl: clamp(2.5rem, 2rem + 3.3vw, 3.75rem);
+
+    /* Leading tuned for comfortable reading */
+    --leading-tight: 1.15;
+    --leading-snug: 1.25;
+    --leading-normal: 1.6;
+    --leading-relaxed: 1.75;
+
+    /* Tracking */
+    --tracking-tight: -0.01em;
+    --tracking-head: -0.015em;
+
+  /* Accent font family now uses Geist Mono */
+  --font-accent: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
   /* Prevent layout/transition jank during initial load */
   html.preload *, html.preload *::before, html.preload *::after {
     transition: none !important;
@@ -138,7 +165,11 @@ All colors MUST be HSL.
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+  @apply bg-background text-foreground;
+  font-size: var(--font-size-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   }
   /* Ensure sidebar inset area maintains space to prevent vertical shift */
   [data-sidebar="sidebar"], .group\/sidebar-wrapper, .peer[data-variant], .peer[data-state] {
@@ -198,8 +229,17 @@ All colors MUST be HSL.
       active:scale-[0.99];
   }
 
+/* Typography defaults */
+h1, h2, h3, h4, .theme-heading, .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4 {
+  letter-spacing: var(--tracking-head);
+}
+
 .blog-content h1 {
-  @apply text-4xl font-semibold text-foreground leading-[1.1] tracking-tight;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  font-size: var(--font-size-4xl);
+  font-optical-sizing: auto;
 }
 
 @layer utilities {
@@ -226,23 +266,47 @@ All colors MUST be HSL.
 }
 
 .blog-content h2 {
-  @apply text-3xl font-semibold text-foreground mt-8 mb-4 leading-[1.2] tracking-tight;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: var(--leading-snug);
+  font-size: var(--font-size-2xl);
+  font-optical-sizing: auto;
 }
 
 .blog-content h3 {
-  @apply text-2xl font-medium text-foreground mt-6 mb-2 leading-[1.3] tracking-tight;
+  font-family: var(--font-accent);
+  font-weight: 500;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+  font-size: var(--font-size-xl);
+  font-optical-sizing: auto;
 }
 
 .blog-content h4 {
-  @apply text-xl font-medium text-foreground mt-4 mb-2 leading-[1.4];
+  font-family: var(--font-accent);
+  font-weight: 500;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
+  font-size: var(--font-size-lg);
+  font-optical-sizing: auto;
 }
 
 .blog-content p {
-  @apply text-foreground leading-[1.7] mt-4 mb-4 text-[15px];
+  color: hsl(var(--foreground));
+  line-height: var(--leading-relaxed);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: var(--font-size-base);
 }
 
 .blog-content ul, .blog-content ol {
-  @apply text-foreground leading-[1.7] text-sm;
+  color: hsl(var(--foreground));
+  line-height: var(--leading-relaxed);
+  font-size: var(--font-size-sm);
 }
 
 .blog-content ul {
@@ -259,7 +323,9 @@ All colors MUST be HSL.
 
 /* Custom styling for converted markdown list items */
 .blog-list-item {
-  @apply text-[15px] leading-[1.7] text-foreground;
+  font-size: var(--font-size-base);
+  line-height: var(--leading-relaxed);
+  color: hsl(var(--foreground));
 }
 
 .blog-content strong {
@@ -271,19 +337,42 @@ All colors MUST be HSL.
 }
 
 .blog-content blockquote {
-  @apply border-l-2 border-border pl-6 italic text-muted-foreground my-8 bg-muted/30 py-4 rounded-r-lg;
+  border-left-width: 2px;
+  border-left-color: hsl(var(--border));
+  padding-left: 1.5rem;
+  font-style: italic;
+  color: hsl(var(--muted-foreground));
+  margin: 2rem 0;
+  background-color: hsl(var(--muted) / 0.3);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  /* use default text font for blockquotes; keep italic emphasis */
 }
 
 .blog-content code {
-  @apply bg-muted px-2 py-1 rounded-md text-sm font-mono text-foreground;
+  @apply rounded-md font-mono;
+  background-color: hsl(var(--muted));
+  padding: 0.125rem 0.375rem;
+  font-size: var(--font-size-xs);
+  color: hsl(var(--foreground));
 }
 
 .blog-content pre {
-  @apply bg-muted border border-border p-4 rounded-lg overflow-x-auto my-8 text-sm;
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 2rem 0;
+  font-size: var(--font-size-sm);
 }
 
 .blog-content pre code {
-  @apply bg-transparent p-0 text-sm;
+  background-color: transparent;
+  padding: 0;
+  font-size: var(--font-size-sm);
   white-space: pre-wrap; /* Ensures long lines wrap */
   word-wrap: break-word; /* Breaks words if necessary to prevent overflow */
 }
@@ -298,28 +387,74 @@ All colors MUST be HSL.
 }
 
 .theme-heading-1 {
-  @apply theme-heading text-5xl leading-[1.1] mb-8;
+  @apply theme-heading;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  margin-bottom: 2rem;
+  font-size: var(--font-size-4xl);
+  font-optical-sizing: auto;
 }
 
 .theme-heading-2 {
-  @apply theme-heading text-4xl leading-[1.1] mb-6;
+  @apply theme-heading;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  margin-bottom: 1.5rem;
+  font-size: var(--font-size-2xl);
+  font-optical-sizing: auto;
 }
 
 .theme-heading-3 {
-  @apply theme-heading text-3xl leading-[1.2] mb-4;
+  @apply theme-heading;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  line-height: var(--leading-snug);
+  margin-bottom: 1rem;
+  font-size: var(--font-size-xl);
+  font-optical-sizing: auto;
 }
 
 .theme-text {
-  @apply text-[15px] leading-[1.7] text-foreground;
+  font-size: var(--font-size-base);
+  line-height: var(--leading-relaxed);
+  color: hsl(var(--foreground));
 }
 
 .theme-text-muted {
-  @apply text-[14px] leading-[1.6] text-muted-foreground;
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Improve anchor tap targets on mobile */
+.blog-content a, a {
+  text-underline-offset: 3px;
+}
+
+/* Container measure for better readability on wide screens */
+.prose, .content-container {
+  max-width: 72ch; /* comfortable measure */
+}
+
+.theme-text-lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-relaxed);
+  color: hsl(var(--foreground));
+}
+
+/* Increase heading sizes at larger screens for better hierarchy */
+@media (min-width: 1024px) {
+  .blog-content h1 { font-size: var(--font-size-4xl); }
+  .blog-content h2 { font-size: var(--font-size-2xl); }
+  .blog-content h3 { font-size: var(--font-size-xl); }
 }
 
 /* Utility classes */
 .line-clamp-2 {
   display: -webkit-box;
+  line-clamp: 2; /* standard property */
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -327,6 +462,7 @@ All colors MUST be HSL.
 
 .line-clamp-3 {
   display: -webkit-box;
+  line-clamp: 3; /* standard property */
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
