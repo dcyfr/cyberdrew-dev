@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "packageManager": "npm@11.5.1",
+  "overrides": {
+    "@babel/parser": "7.28.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
