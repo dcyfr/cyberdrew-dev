@@ -32,7 +32,7 @@ const Home = () => {
     },
     {
       title: "Blog",
-      description: "Insights on cybersecurity, tech, and more",
+      description: "Insights on cybersecurity and technology",
       link: "/blog",
       internal: true,
       icon: Rss
