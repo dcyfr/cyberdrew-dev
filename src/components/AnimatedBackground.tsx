@@ -11,13 +11,20 @@ export const AnimatedBackground: React.FC = () => {
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
       <svg
-        className="absolute inset-0 h-full w-full text-gray-300/25 dark:text-gray-500/25"
+        className="absolute inset-0 h-full w-full text-gray-300/25 dark:text-gray-700/25"
         viewBox="0 0 1920 1080"
         preserveAspectRatio="xMidYMid slice"
         role="img"
         aria-label=""
       >
         <defs>
+          {/* subtle background gradient */}
+          <linearGradient id="bg-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            {/* Light/Dark swap automatically via CSS variables defined in index.css */}
+            <stop offset="0%" stopColor="hsl(var(--background))" />
+            <stop offset="100%" stopColor="hsl(var(--muted))" />
+          </linearGradient>
+
           {/* Smaller grid overlay */}
           <pattern id="grid-small" width="80" height="80" patternUnits="userSpaceOnUse">
             <rect width="80" height="80" fill="url(#grid-small)" />
@@ -30,7 +37,7 @@ export const AnimatedBackground: React.FC = () => {
             <path d="M 160 0 L 0 0 0 160" fill="none" stroke="currentColor" strokeWidth="1" />
           </pattern>
 
-          {/* Vignette mask to softly fade edges */}
+          {/* Vignette mask */}
           <radialGradient id="vignette-grad" cx="50%" cy="35%" r="75%">
             <stop offset="0%" stopColor="white" stopOpacity="1" />
             <stop offset="65%" stopColor="white" stopOpacity="1" />
@@ -41,10 +48,13 @@ export const AnimatedBackground: React.FC = () => {
           </mask>
         </defs>
 
+        {/* Background gradient layer */}
+        <rect width="100%" height="100%" fill="url(#bg-grad)" />
+
         {/* Grid layers */}
         <g mask="url(#vignette-mask)">
-          <rect width="100%" height="100%" fill="url(#grid-large)" className="" />
-          <rect width="100%" height="100%" fill="url(#grid-small)" className="" />
+          <rect width="100%" height="100%" fill="url(#grid-small)" />
+          <rect width="100%" height="100%" fill="url(#grid-large)" />
         </g>
       </svg>
     </div>

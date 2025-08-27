@@ -130,12 +130,12 @@ const Home = () => {
               {connectCards.map((card, idx) => (
                 <FadeSlideIn key={card.title} delayMs={200 + idx * 80} durationMs={280}>
                   <Card 
-                    className="hover:scale-105 transition-all duration-200 ease-in-out cursor-pointer" 
+                    className="card-interactive cursor-pointer group" 
                     onClick={() => handleCardClick(card.link, card.internal)}
                   >
                     <CardHeader className="flex flex-row items-center space-x-4 pb-2">
                       <card.icon className="w-6 h-6 text-primary" />
-                      <CardTitle>{card.title}</CardTitle>
+                      <CardTitle className="transition-colors group-hover:text-primary">{card.title}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <CardDescription className="mb-2">

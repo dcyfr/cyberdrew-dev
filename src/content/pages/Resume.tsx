@@ -47,11 +47,11 @@ const Resume: React.FC = React.memo(() => {
     period: string, 
     achievements: string[] 
   }> = ({ title, company, period, achievements }) => (
-    <Card className="hover:bg-accent/30 transition-colors">
+    <Card className="card-interactive">
       <CardHeader>
         <div className="flex flex-col">
           <Badge variant="outline" className="mb-4 mr-auto">{period}</Badge>
-          <CardTitle className="flex items-center justify-between gap-2">
+          <CardTitle className="flex items-center justify-between gap-2 transition-colors group-hover:text-primary">
             <span>{title}</span>
           </CardTitle>
           <CardDescription>{company}</CardDescription>
@@ -68,7 +68,7 @@ const Resume: React.FC = React.memo(() => {
   );
 
   const SkillCategory: React.FC<{ category: string, skills: string[] }> = ({ category, skills }) => (
-    <Card>
+    <Card className="card-interactive">
       <CardHeader>
         <CardTitle>{category}</CardTitle>
       </CardHeader>

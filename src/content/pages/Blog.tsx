@@ -130,7 +130,7 @@ const Blog = () => {
                     <FadeSlideIn key={`${post.slug}-${post.date}`} delayMs={120 + index * 80} durationMs={280}>
                       <a
                         href={`/blog/${post.slug}`}
-                        className="block p-4 sm:p-6 rounded-lg hover:bg-accent/50 transition-all modern-card group focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="block p-4 sm:p-6 rounded-lg modern-card card-interactive group"
                         onClick={(e) => {
                           e.preventDefault();
                           handlePostClick(post.slug);
@@ -149,7 +149,7 @@ const Blog = () => {
                             </div>
                           )}
                           <div className="flex-1 sm:w-2/3 lg:w-3/4 space-y-2">
-                            <h2 className="theme-heading-2 flex items-center gap-2">
+                            <h2 className="theme-heading-2 flex items-center gap-2 transition-colors group-hover:text-primary">
                               {post.title}
                               {post.draft &&
                                 (import.meta.env?.MODE === "development" ||

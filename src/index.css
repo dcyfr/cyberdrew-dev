@@ -172,18 +172,30 @@ All colors MUST be HSL.
 
   /* Card components */
   .modern-card {
-    @apply cursor-pointer rounded-lg border border-border bg-card p-6 
-           transition-all duration-200 hover:shadow-md;
+  @apply rounded-lg border border-border bg-card p-6 text-card-foreground shadow-sm
+       transition-all duration-200 ease-out
+       hover:shadow-md hover:-translate-y-0.5 hover:bg-card;
   }
 
   .modern-card-sm {
-    @apply cursor-pointer rounded-lg border border-border bg-card p-4 
-           transition-all duration-200 hover:shadow-sm;
+  @apply rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm
+       transition-all duration-200 ease-out
+       hover:shadow-md hover:-translate-y-0.5 hover:bg-card;
   }
 
   .modern-card-lg {
-    @apply cursor-pointer rounded-lg border border-border bg-card p-8 
-           transition-all duration-200 hover:shadow-lg;
+  @apply rounded-lg border border-border bg-card p-8 text-card-foreground shadow-sm
+       transition-all duration-200 ease-out
+       hover:shadow-md hover:-translate-y-0.5 hover:bg-card;
+  }
+
+  /* Unified interactive card style (apply to Card or any clickable container) */
+  .card-interactive {
+  @apply rounded-lg border border-border bg-card text-card-foreground shadow-sm
+       transition-all duration-200 ease-out
+       hover:shadow-md hover:-translate-y-0.5 hover:bg-card
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+      active:scale-[0.99];
   }
 
 .blog-content h1 {

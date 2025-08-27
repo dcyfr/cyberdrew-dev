@@ -31,7 +31,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   
   return (
     <div 
-      className={`modern-card group cursor-pointer ${className}`}
+  className={`modern-card card-interactive group cursor-pointer ${className}`}
       onClick={handleClick}
       role="button"
       tabIndex={0}
