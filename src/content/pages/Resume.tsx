@@ -102,7 +102,7 @@ const Resume: React.FC = React.memo(() => {
           </FadeSlideIn>
           {/* Page Content */}
           <div className="space-y-4 mb-8 sm:mb-12">
-            <FadeSlideIn delayMs={80}>
+            <FadeSlideIn className="mt-8" delayMs={80}>
               <ResumeSection title="Education" />
             </FadeSlideIn>
             <div className="space-y-4 mt-4">
@@ -119,7 +119,7 @@ const Resume: React.FC = React.memo(() => {
             </div>
 
             <div>
-              <FadeSlideIn delayMs={80}>
+              <FadeSlideIn className="mt-8" delayMs={80}>
                 <ResumeSection title="Experience" />
               </FadeSlideIn>
               <div className="space-y-4 mt-4">
@@ -137,7 +137,7 @@ const Resume: React.FC = React.memo(() => {
             </div>
 
             <div>
-              <FadeSlideIn delayMs={80}>
+              <FadeSlideIn className="mt-8" delayMs={80}>
                 <ResumeSection title="Certifications" />
               </FadeSlideIn>
               <div className="space-y-4 mt-4">
@@ -161,7 +161,7 @@ const Resume: React.FC = React.memo(() => {
             </div>
 
             <div>
-              <FadeSlideIn delayMs={80}>
+              <FadeSlideIn className="mt-8" delayMs={80}>
                 <ResumeSection title="Core Competencies" />
               </FadeSlideIn>
               <div className="space-y-4 mt-4">

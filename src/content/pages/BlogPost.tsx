@@ -96,7 +96,7 @@ const BlogPost = () => {
                     )}
                     {/* Post Header */}
                     <header className="mb-8 sm:mb-16">
-                      <h1 className="theme-heading-2 mt-4 flex items-center gap-2">
+                      <h1 className="theme-heading-1 mt-4 flex items-center gap-2">
                         {post.title}
                         {post.draft &&
                           (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development") && (

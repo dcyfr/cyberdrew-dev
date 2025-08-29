@@ -149,7 +149,7 @@ const Blog = () => {
                             </div>
                           )}
                           <div className="flex-1 sm:w-2/3 lg:w-3/4 space-y-2">
-                            <h2 className="theme-heading-3 flex items-center gap-2 transition-colors group-hover:text-primary">
+                            <h2 className="theme-heading-2 flex items-center gap-2 transition-colors group-hover:text-primary">
                               {post.title}
                               {post.draft &&
                                 (import.meta.env?.MODE === "development" ||

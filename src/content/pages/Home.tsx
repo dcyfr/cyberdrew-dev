@@ -1,6 +1,6 @@
 // CSS-based animations via tailwindcss-animate; remove framer-motion for faster first load
 import { PageTransition } from '@/components/PageTransition';
-import { FileBadge, FileText, Github, LibraryBig, Linkedin, Rss, HeartHandshake, Mail } from "lucide-react";
+import { FileBadge, FileText, Github, LibraryBig, Linkedin, Rss, HeartHandshake, Mail, TwitterIcon, Twitter } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { PageLayout } from "@/components/PageLayout";
 import { 
@@ -32,7 +32,7 @@ const Home = () => {
     },
     {
       title: "Blog",
-      description: "Insights on cybersecurity and technology",
+      description: "Insights on security and technology",
       link: "/blog",
       internal: true,
       icon: Rss
@@ -81,8 +81,8 @@ const Home = () => {
         <PageTransition animated={false}>
           <div className="relative z-10 mt-14 sm:mt-16 lg:mt-20 flex flex-col items-center">
             {/* Display Picture */}
-            <FadeSlideIn className="transition-transform hover:scale-105 motion-reduce:transform-none" durationMs={450} delayMs={80}>
-              <Avatar className="w-32 h-32 mb-6 rounded-full ring-2 ring-border ring-offset-2 ring-offset-background shadow-sm">
+            <FadeSlideIn className="transition-transform motion-reduce:transform-none" durationMs={450} delayMs={80}>
+              <Avatar className="transition-transform motion-reduce:transform-none hover:scale-105 w-32 h-32 mb-6 rounded-full ring-2 ring-border ring-offset-2 ring-offset-background shadow-sm">
                 <AvatarImage src={DisplayPicture} alt="Drew's display picture" loading="eager" decoding="async" />
                 <AvatarFallback>D</AvatarFallback>
               </Avatar>
@@ -91,8 +91,17 @@ const Home = () => {
             {/* Profile Name and Title */}
             <FadeSlideIn intensity={2} durationMs={350} delayMs={120}>
               <h1 className="theme-heading-1 text-center text-primary">
-                It's Drew <span aria-hidden="true" className="font-sans not-italic ml-2">&#10022;</span>
+                It's Drew <span aria-hidden="true" className="ml-2">&#10022;</span>
               </h1>
+              {/* social icons */}
+              <div className="flex justify-center space-x-4">
+                <a href="https://github.com/dcyfr" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  <Github className="w-6 h-6" />
+                </a>
+                <a href="https://www.linkedin.com/in/dcyfr" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  <Linkedin className="w-6 h-6" />
+                </a>
+              </div>
             </FadeSlideIn>
 
             {/* Links Section */}
