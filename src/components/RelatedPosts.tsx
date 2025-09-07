@@ -28,7 +28,7 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
     return (
       <section className="mt-20 pt-8 border-t border-border">
         <div className="text-center py-12">
-          <h2 className="theme-heading-2 mb-4">Explore More Posts</h2>
+          <h2 className="text-3xl font-semibold font-sans tracking-tight mb-4">Explore More Posts</h2>
           <Button onClick={handleViewAllPosts} className="group">
             View All Posts
             <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
@@ -42,8 +42,8 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
     <section className="mt-24 pt-12 border-t border-border">
       <div className="flex items-center justify-between mb-12">
         <div className="space-y-3">
-          <h2 className="theme-heading-2 mb-0">Related Posts</h2>
-          <p className="theme-text-muted">
+          <h2 className="text-3xl font-semibold font-sans tracking-tight mb-0">Related Posts</h2>
+          <p className="text-sm text-muted-foreground">
             Continue reading about {currentPost.tags.slice(0, 2).join(' and ')}
           </p>
         </div>

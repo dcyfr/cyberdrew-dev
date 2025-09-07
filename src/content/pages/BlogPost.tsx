@@ -45,7 +45,7 @@ const BlogPost = () => {
           title="Loading..."
           description="Loading post content..."
         />
-        <PageLayout>
+        <PageLayout maxWidth="2xl">
           <PageTransition>
             <BlogPostSkeleton />
           </PageTransition>
@@ -71,7 +71,7 @@ const BlogPost = () => {
         <SidebarProvider>
           <BlogPostSidebar currentPost={post} />
           <SidebarInset>
-            <PageLayout maxWidth="4xl">
+            <PageLayout maxWidth="2xl">
               {/* Mobile: sidebar trigger + breadcrumbs in one line */}
               <div className="md:hidden mb-4 flex items-center gap-2">
                 <SidebarTrigger aria-label="Toggle sidebar" className="h-6 w-6 p-0 shrink-0" />
@@ -96,7 +96,7 @@ const BlogPost = () => {
                     )}
                     {/* Post Header */}
                     <header className="mb-8 sm:mb-16">
-                      <h1 className="theme-heading-1 mt-4 flex items-center gap-2">
+                      <h1 className="text-4xl font-bold font-sans tracking-tight mt-4 flex items-center gap-2">
                         {post.title}
                         {post.draft &&
                           (import.meta.env?.MODE === "development" || process.env.NODE_ENV === "development") && (
@@ -105,7 +105,7 @@ const BlogPost = () => {
                             </Badge>
                           )}
                       </h1>
-                      <div className="flex items-center gap-2 theme-text-muted mb-8">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
                         <time dateTime={post.date}>{post.date}</time>
                         <span aria-hidden="true">•</span>
                         <span>{post.readTime}</span>
@@ -113,7 +113,7 @@ const BlogPost = () => {
                     </header>
                     {/* Blog Post Content */}
                     <div
-                      className="blog-content max-w-none"
+                      className="prose-content max-w-none"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
                     />
                     {/* Share Buttons */}

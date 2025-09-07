@@ -2,40 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Simplified design system using standard shadcn/ui and Tailwind CSS */
 
 @layer base {
   html {
-    font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
-  }
-
-  /* Mobile-first, fluid type scale using clamp() */
-  :root {
-    /* Base font sizes scale with viewport; cap for readability */
-    --font-size-xs: clamp(0.81rem, 0.77rem + 0.2vw, 0.9rem);
-    --font-size-sm: clamp(0.9rem, 0.86rem + 0.25vw, 1rem);
-    --font-size-base: clamp(1rem, 0.95rem + 0.35vw, 1.125rem); /* ~16px -> 18px */
-    --font-size-lg: clamp(1.125rem, 1.05rem + 0.6vw, 1.375rem);
-    --font-size-xl: clamp(1.25rem, 1.1rem + 0.9vw, 1.625rem);
-    --font-size-2xl: clamp(1.5rem, 1.3rem + 1.4vw, 2.125rem);
-    --font-size-3xl: clamp(1.75rem, 1.45rem + 2vw, 2.5rem);
-    --font-size-4xl: clamp(2rem, 1.6rem + 2.6vw, 3rem);
-    --font-size-5xl: clamp(2.5rem, 2rem + 3.3vw, 3.75rem);
-
-    /* Leading tuned for comfortable reading */
-    --leading-tight: 1;
-    --leading-snug: 1.25;
-    --leading-normal: 1.5;
-    --leading-relaxed: 1.75;
-
-    /* Tracking */
-    --tracking-tight: -0.01em;
-    --tracking-head: -0.015em;
-
-  /* Accent font family now uses Geist Mono 
-  --font-accent: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;*/
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  /* Help browsers style native controls appropriately */
+  color-scheme: light;
   }
 
   /* Prevent layout/transition jank during initial load */
@@ -43,9 +16,6 @@ All colors MUST be HSL.
     transition: none !important;
     animation: none !important;
   }
-
-  /* Pre-reserve sidebar gap for blog routes to prevent nav width shift */
-  /* No longer needed since PageLayout renders within SidebarInset; reserved via spacer */
 
   :root {
     /* Geist-inspired color system */
@@ -102,6 +72,9 @@ All colors MUST be HSL.
     --shadow-md: 0 4px 6px hsl(0 0% 0% / 0.07), 0 2px 4px hsl(0 0% 0% / 0.06);
     --shadow-lg: 0 10px 15px hsl(0 0% 0% / 0.1), 0 4px 6px hsl(0 0% 0% / 0.05);
     --shadow-xl: 0 20px 25px hsl(0 0% 0% / 0.1), 0 10px 10px hsl(0 0% 0% / 0.04);
+
+  /* Let native form controls pick up theme color (2025 trend: use system affordances) */
+  accent-color: hsl(var(--primary));
   }
 
   .dark {
@@ -156,7 +129,11 @@ All colors MUST be HSL.
     --shadow: 0 1px 3px hsl(0 0% 0% / 0.4), 0 1px 2px hsl(0 0% 0% / 0.3);
     --shadow-md: 0 4px 6px hsl(0 0% 0% / 0.5), 0 2px 4px hsl(0 0% 0% / 0.4);
     --shadow-lg: 0 10px 15px hsl(0 0% 0% / 0.6), 0 4px 6px hsl(0 0% 0% / 0.5);
-    --shadow-xl: 0 20px 25px hsl(0 0% 0% / 0.7), 0 10px 10px hsl(0 0% 0% / 0.6);
+  --shadow-xl: 0 20px 25px hsl(0 0% 0% / 0.7), 0 10px 10px hsl(0 0% 0% / 0.6);
+
+  /* Align native controls and scrollbars with dark mode */
+  color-scheme: dark;
+  accent-color: hsl(var(--primary));
   }
 }
 
@@ -165,306 +142,134 @@ All colors MUST be HSL.
     @apply border-border;
   }
   body {
-  @apply bg-background text-foreground;
-  font-size: var(--font-size-base);
-  line-height: var(--leading-normal);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+    @apply bg-background text-foreground font-sans text-base leading-normal;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
+  /* Default smooth scrolling; will be disabled when reduced motion is set */
+  html { scroll-behavior: smooth; }
+  
+  /* Respect prefers-reduced-motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  /* Modern text wrapping for nicer rags */
+  @supports (text-wrap: balance) {
+    h1, h2, h3 { text-wrap: balance; }
+  }
+  @supports (text-wrap: pretty) {
+    p { text-wrap: pretty; }
+  }
+  
+  /* Consistent, accessible focus rings */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex="0"]:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+  
+  /* Subtle, motion-safe link animation */
+  a {
+    transition: color .15s ease, text-decoration-color .15s ease, transform .15s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    a:hover { transform: translateY(-1px); }
+  }
+
+  /* Progressive View Transitions hook (scoped) */
+  .vt-container { view-transition-name: root; }
+  
+  /* When users request higher contrast, further emphasize outlines */
+  @media (prefers-contrast: more) {
+    a:focus-visible,
+    button:focus-visible,
+    [role="button"]:focus-visible,
+    [tabindex="0"]:focus-visible {
+      outline-width: 3px;
+      outline-offset: 3px;
+    }
+  /* Strengthen chip and link colors under higher contrast */
+  .prose-content a { text-decoration-thickness: 2px; }
+  .badge, .prose .badge, [data-variant="chip"] { border-color: hsl(var(--foreground)) !important; }
+  }
+  
   /* Ensure sidebar inset area maintains space to prevent vertical shift */
   [data-sidebar="sidebar"], .group\/sidebar-wrapper, .peer[data-variant], .peer[data-state] {
     will-change: auto;
   }
-  
-  /* Enhanced animations and transitions */
-  .hover-scale {
-    @apply transition-transform duration-200 hover:scale-105;
+}
+
+/* Blog content styling using standard Tailwind Typography */
+@layer components {
+  .prose-content {
+    @apply prose prose-gray dark:prose-invert max-w-none font-sans;
   }
   
-  .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+  .prose-content h1 {
+    @apply text-4xl font-bold font-sans tracking-tight;
   }
   
-  .hover-glow {
-    @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/25;
+  .prose-content h2 {
+    @apply text-3xl font-semibold font-sans tracking-tight mt-8 mb-4;
   }
   
-  .story-link {
-    @apply relative inline-block;
+  .prose-content h3 {
+    @apply text-2xl font-medium font-sans tracking-tight mt-6 mb-3;
   }
   
-  .story-link::after {
-    @apply content-[''] absolute w-full scale-x-0 h-0.5 bottom-0 left-0 bg-primary origin-bottom-right transition-transform duration-300;
+  .prose-content h4 {
+    @apply text-xl font-medium font-sans tracking-tight mt-5 mb-2;
   }
   
-  .story-link:hover::after {
-    @apply scale-x-100 origin-bottom-left;
+  .prose-content p {
+    @apply text-foreground leading-relaxed my-4 font-sans;
   }
-
-  /* Card components */
-  .modern-card {
-  @apply rounded-lg border border-border bg-card p-6 text-card-foreground shadow-sm
-       transition-all duration-200 ease-out
-       hover:shadow-md hover:-translate-y-0.5 hover:bg-card;
+  
+  .prose-content ul {
+    @apply list-disc ml-6 space-y-1 font-sans;
   }
-
-  .modern-card-sm {
-  @apply rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm
-       transition-all duration-200 ease-out
-       hover:shadow-md hover:-translate-y-0.5 hover:bg-card;
+  
+  .prose-content ol {
+    @apply list-decimal ml-6 space-y-1 font-sans;
   }
-
-  .modern-card-lg {
-  @apply rounded-lg border border-border bg-card p-8 text-card-foreground shadow-sm
-       transition-all duration-200 ease-out
-       hover:shadow-md hover:-translate-y-0.5 hover:bg-card;
+  
+  .prose-content li {
+    @apply leading-relaxed pl-2 font-sans;
   }
-
-  /* Unified interactive card style (apply to Card or any clickable container) */
-  .card-interactive {
-  @apply rounded-lg border border-border bg-card text-card-foreground shadow-sm
-       transition-all duration-200 ease-out
-       hover:shadow-md hover:-translate-y-0.5 hover:bg-card
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
-      active:scale-[0.99];
+  
+  .prose-content strong {
+    @apply font-semibold font-sans;
   }
-
-/* Typography defaults */
-h1, h2, h3, h4, .theme-heading, .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4 {
-  letter-spacing: var(--tracking-head);
-}
-
-.blog-content h1 {
-  font-family: var(--font-accent);
-  font-weight: 600;
-  line-height: var(--leading-tight);
-  font-size: var(--font-size-4xl);
-  font-optical-sizing: auto;
-}
-
-@layer utilities {
-  /* Motion-safe background panning and rotation for the blueprint grid */
-  @media (prefers-reduced-motion: no-preference) {
-    .bg-pan-slow {
-      animation: bg-pan 28s linear infinite;
-    }
-    .bg-rotate-slower {
-      animation: bg-rotate 120s linear infinite;
-    }
+  
+  .prose-content a {
+    @apply text-foreground underline underline-offset-2 decoration-border hover:decoration-foreground transition-colors font-sans;
   }
-
-  @keyframes bg-pan {
-    0% { transform: translate3d(0, 0, 0); }
-    50% { transform: translate3d(-40px, -24px, 0); }
-    100% { transform: translate3d(0, 0, 0); }
+  
+  .prose-content blockquote {
+    @apply border-l-2 border-border pl-6 italic text-muted-foreground my-8 bg-muted/30 py-4 rounded-r-lg font-sans;
   }
-
-  @keyframes bg-rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  
+  .prose-content code {
+    @apply rounded-md font-mono bg-muted px-1.5 py-0.5 text-xs text-foreground;
   }
-}
-
-.blog-content h2 {
-  font-family: var(--font-accent);
-  font-weight: 600;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  line-height: var(--leading-snug);
-  font-size: var(--font-size-3xl);
-  font-optical-sizing: auto;
-}
-
-.blog-content h3 {
-  font-family: var(--font-accent);
-  font-weight: 500;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.3;
-  font-size: var(--font-size-2xl);
-  font-optical-sizing: auto;
-}
-
-.blog-content h4 {
-  font-family: var(--font-accent);
-  font-weight: 500;
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.35;
-  font-size: var(--font-size-xl);
-  font-optical-sizing: auto;
-}
-
-.blog-content p {
-  color: hsl(var(--foreground));
-  line-height: var(--leading-relaxed);
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-size: var(--font-size-base);
-}
-
-.blog-content ul, .blog-content ol {
-  color: hsl(var(--foreground));
-  line-height: var(--leading-relaxed);
-  font-size: var(--font-size-sm);
-}
-
-.blog-content ul {
-  @apply list-disc ml-6;
-}
-
-.blog-content ol {
-  @apply list-decimal ml-6;
-}
-
-.blog-content li {
-  @apply leading-[1.7] pl-2;
-}
-
-/* Custom styling for converted markdown list items */
-.blog-list-item {
-  font-size: var(--font-size-base);
-  line-height: var(--leading-relaxed);
-  color: hsl(var(--foreground));
-}
-
-.blog-content strong {
-  @apply font-semibold;
-}
-
-.blog-content a {
-  @apply text-foreground underline underline-offset-[3px] decoration-border hover:decoration-foreground transition-colors;
-}
-
-.blog-content blockquote {
-  border-left-width: 2px;
-  border-left-color: hsl(var(--border));
-  padding-left: 1.5rem;
-  font-style: italic;
-  color: hsl(var(--muted-foreground));
-  margin: 2rem 0;
-  background-color: hsl(var(--muted) / 0.3);
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
-  /* use default text font for blockquotes; keep italic emphasis */
-}
-
-.blog-content code {
-  @apply rounded-md font-mono;
-  background-color: hsl(var(--muted));
-  padding: 0.125rem 0.375rem;
-  font-size: var(--font-size-xs);
-  color: hsl(var(--foreground));
-}
-
-.blog-content pre {
-  background-color: hsl(var(--muted));
-  border: 1px solid hsl(var(--border));
-  padding: 1rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  margin: 2rem 0;
-  font-size: var(--font-size-sm);
-}
-
-.blog-content pre code {
-  background-color: transparent;
-  padding: 0;
-  font-size: var(--font-size-sm);
-  white-space: pre-wrap; /* Ensures long lines wrap */
-  word-wrap: break-word; /* Breaks words if necessary to prevent overflow */
-}
-
-.blog-content hr {
-  @apply border-border my-12 border-t;
-}
-
-/* headings with better spacing */
-.theme-heading {
-  @apply font-semibold tracking-tight text-foreground;
-}
-
-.theme-heading-1 {
-  @apply theme-heading;
-  font-family: var(--font-accent);
-  font-weight: 600;
-  line-height: var(--leading-tight);
-  margin-bottom: 2rem;
-  font-size: var(--font-size-4xl);
-  font-optical-sizing: auto;
-}
-
-.theme-heading-2 {
-  @apply theme-heading;
-  font-family: var(--font-accent);
-  font-weight: 600;
-  line-height: var(--leading-tight);
-  margin-bottom: 1.5rem;
-  font-size: var(--font-size-2xl);
-  font-optical-sizing: auto;
-}
-
-.theme-heading-3 {
-  @apply theme-heading;
-  font-family: var(--font-accent);
-  font-weight: 600;
-  line-height: var(--leading-snug);
-  margin-bottom: 1rem;
-  font-size: var(--font-size-xl);
-  font-optical-sizing: auto;
-}
-
-.theme-text {
-  font-size: var(--font-size-base);
-  line-height: var(--leading-relaxed);
-  color: hsl(var(--foreground));
-}
-
-.theme-text-muted {
-  font-size: var(--font-size-sm);
-  line-height: 1.6;
-  color: hsl(var(--muted-foreground));
-}
-
-/* Improve anchor tap targets on mobile */
-.blog-content a, a {
-  text-underline-offset: 3px;
-}
-
-/* Container measure for better readability on wide screens */
-.prose, .content-container {
-  max-width: 72ch; /* comfortable measure */
-}
-
-.theme-text-lg {
-  font-size: var(--font-size-lg);
-  line-height: var(--leading-relaxed);
-  color: hsl(var(--foreground));
-}
-
-/* Increase heading sizes at larger screens for better hierarchy */
-@media (min-width: 1024px) {
-  .blog-content h1 { font-size: var(--font-size-4xl); }
-  .blog-content h2 { font-size: var(--font-size-2xl); }
-  .blog-content h3 { font-size: var(--font-size-xl); }
-}
-
-/* Utility classes */
-.line-clamp-2 {
-  display: -webkit-box;
-  line-clamp: 2; /* standard property */
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  line-clamp: 3; /* standard property */
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+  
+  .prose-content pre {
+    @apply bg-muted border border-border p-4 rounded-lg overflow-x-auto my-8 text-sm font-mono;
+  }
+  
+  .prose-content pre code {
+    @apply bg-transparent p-0 text-sm font-mono;
+  }
+  
+  .prose-content hr {
+    @apply border-border my-12 border-t;
+  }
 }

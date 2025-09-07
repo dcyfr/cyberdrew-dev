@@ -10,7 +10,7 @@ interface PageTransitionProps {
 }
 
 export const PageTransition = ({ children, className = "", animated = true }: PageTransitionProps) => (
-  <div className={animated ? `animate-in fade-in-50 slide-in-from-bottom-2 duration-300 ${className}` : className}>
+  <div className={animated ? `motion-safe:animate-in motion-safe:fade-in-50 motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 ${className}` : className}>
     {children}
   </div>
 );

@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
 
 /**
- * About page for CyberDrew.
+ * About page for Drew.
  * Provides information about the site and its creator.
  */
 const About: FC = () => {
@@ -31,20 +31,19 @@ const About: FC = () => {
     "Zero Trust Design",
     "AI & Machine Learning",
     "Cloud Security",
-    "Software Development",
-    "Threat Modeling"
+    "Development Security"
   ];
 
   return (
     <>
       <SEOHead title="About" description="Learn more about this website and its creator." />
-      <PageLayout>
+      <PageLayout maxWidth="2xl">
         <PageTransition animated={false}>
           {/* Page Header */}
           <FadeSlideIn intensity={2} durationMs={360}>
             <div className="space-y-4 mb-8 sm:mb-12">
-              <h1 className="theme-heading-1">About</h1>
-              <p className="theme-text max-w-prose">
+              <h1 className="text-4xl font-bold font-sans tracking-tight mb-8">About</h1>
+              <p className="text-base leading-relaxed text-foreground max-w-prose font-sans">
                 As a <Link to="/resume" className="text-primary font-semibold">Security Architect</Link>, I specialize in designing robust, cybersecurity frameworks that protect digital ecosystems. My passion lies in developing innovative solutions that anticipate and mitigate emerging cyber threats through strategic architectural design.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -58,7 +57,7 @@ const About: FC = () => {
           {/* Page Content */}
           <FadeSlideIn delayMs={120}>
             <div className="space-y-4 mb-8 sm:mb-12">
-              <h2 className="theme-heading-2">This site</h2>
+              <h2 className="text-3xl font-semibold font-sans tracking-tight mb-6">This site</h2>
               <div className="flex flex-wrap gap-2">
                 {technologies.map((tech, index) => (
                   <TooltipProvider key={tech.name}>

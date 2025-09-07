@@ -33,7 +33,7 @@ const Resume: React.FC = React.memo(() => {
   }> = ({ title, count }) => (
     <div className="space-y-3 sm:space-y-4">
       <div className="flex items-center justify-between pb-1">
-        <h2 className="theme-heading-2">{title}</h2>
+        <h2 className="text-3xl font-semibold font-sans tracking-tight mb-6">{title}</h2>
         {count !== undefined && (
           <Badge variant="secondary" className="ml-4">{count}</Badge>
         )}
@@ -47,18 +47,18 @@ const Resume: React.FC = React.memo(() => {
     period: string, 
     achievements: string[] 
   }> = ({ title, company, period, achievements }) => (
-    <Card className="card-interactive">
+    <Card className="transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99]">
       <CardHeader>
         <div className="flex flex-col">
           <Badge variant="outline" className="mb-4 mr-auto">{period}</Badge>
           <CardTitle className="flex items-center justify-between gap-2 transition-colors group-hover:text-primary">
-            <span className="theme-text-lg font-semibold">{title}</span>
+            <span className="text-lg font-semibold leading-relaxed text-foreground">{title}</span>
           </CardTitle>
-          <CardDescription className="theme-text-muted">{company}</CardDescription>
+          <CardDescription className="text-sm text-muted-foreground font-sans">{company}</CardDescription>
         </div>
       </CardHeader>
       <CardContent>
-        <ul className="list-disc list-inside space-y-1 theme-text-muted text-sm">
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground font-sans">
           {achievements.map((achievement, index) => (
             <li key={index}>{achievement}</li>
           ))}
@@ -68,7 +68,7 @@ const Resume: React.FC = React.memo(() => {
   );
 
   const SkillCategory: React.FC<{ category: string, skills: string[] }> = ({ category, skills }) => (
-    <Card className="card-interactive">
+    <Card className="transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99]">
       <CardHeader>
         <CardTitle>{category}</CardTitle>
       </CardHeader>
@@ -89,13 +89,13 @@ const Resume: React.FC = React.memo(() => {
         description="Comprehensive resume of Drew, a cybersecurity professional specializing in security architecture, incident response, and enterprise security solutions."
         keywords="cybersecurity, resume, security architect, zero trust, threat modeling, incident response, SIEM, SOAR, cloud security, professional experience"
       />
-  <PageLayout>
+  <PageLayout maxWidth="2xl">
         <PageTransition animated={false}>
           {/* Page Header */}
           <FadeSlideIn intensity={2} durationMs={360}>
             <div className="space-y-4 mb-8 sm:mb-12">
-              <h1 className="theme-heading-1">Resume</h1>
-      <p className="theme-text max-w-prose">
+              <h1 className="text-4xl font-bold font-sans tracking-tight mb-8">Resume</h1>
+      <p className="text-base leading-relaxed text-foreground max-w-prose font-sans">
                 Cybersecurity professional with over 5 years of experience in designing and implementing secure architectures, specializing in zero trust, threat modeling, and enterprise security solutions. Proven track record in reducing security incidents and enhancing organizational resilience.
               </p>
             </div>

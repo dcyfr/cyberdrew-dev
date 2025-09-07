@@ -25,14 +25,14 @@ const NotFound = () => {
         title="Page Not Found"
         description="The page you're looking for doesn't exist or has been moved."
       />
-      <PageLayout>
+      <PageLayout maxWidth="2xl">
         <PageTransition animated={false}>
           <div className="mx-auto max-w-4xl px-4 py-12 sm:py-24">
             <FadeSlideIn className="text-center mb-12" intensity={2} durationMs={360}>
               {/* Main Heading and Description */}
               <div className="mb-6">
-                <h1 className="theme-heading-1 mb-4">Page Not Found</h1>
-                <p className="theme-text-muted mb-8 max-w-md mx-auto">
+                <h1 className="text-4xl font-bold font-sans tracking-tight mb-4">Page Not Found</h1>
+                <p className="text-sm text-muted-foreground mb-8 max-w-md mx-auto">
                   Oops! The page you're looking for doesn't exist or has been moved.
                 </p>
               </div>

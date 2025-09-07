@@ -112,9 +112,18 @@ export function BlogSidebar({
                 {allTags.map((tag, index) => (
                   <Badge
                     key={index}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={selectedTag === tag}
                     variant={selectedTag === tag ? "default" : "outline"}
-                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs"
+                    className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-all text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     onClick={() => handleTagClick(tag)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleTagClick(tag);
+                      }
+                    }}
                   >
                     {tag}
                   </Badge>

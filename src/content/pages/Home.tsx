@@ -44,13 +44,6 @@ const Home = () => {
       icon: FileText
     },
     {
-      title: "Credentials",
-      description: "My certifications and achievements",
-      link: "https://www.credly.com/users/dcyfr",
-      internal: false,
-      icon: FileBadge
-    },
-    {
       title: "Sponsorship",
       description: "Support my work on GitHub",
       link: "https://github.com/sponsors/dcyfr",
@@ -82,10 +75,10 @@ const Home = () => {
             
             {/* Profile Name and Title */}
             <FadeSlideIn intensity={2} durationMs={350} delayMs={120}>
-              <h1 className="theme-heading-1 text-center text-primary mb-2">
-                Hi, I'm Drew <span aria-hidden="true" className="ml-2">&#10022;</span>
+              <h1 className="text-4xl font-bold font-sans tracking-tight text-center text-primary mb-2">
+                Hi, I'm Drew <span aria-hidden="true" className="font-sans ml-2">&#10022;</span>
               </h1>
-              <p className="text-center text-muted-foreground max-w-md px-4 mb-12">
+              <p className="text-center text-muted-foreground max-w-md px-4 mb-12 font-sans">
                 Cybersecurity Architect
               </p>
             </FadeSlideIn>
@@ -99,6 +92,9 @@ const Home = () => {
                 <a href="https://www.linkedin.com/in/dcyfr" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                   <Linkedin className="w-6 h-6" />
                 </a>
+                <a href="https://www.credly.com/users/dcyfr" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  <FileBadge className="w-6 h-6" />
+                </a>
               </div>
             </FadeSlideIn>
 
@@ -108,7 +104,7 @@ const Home = () => {
                 {connectCards.map((card, idx) => {
                   const Icon = card.icon;
                   const content = (
-                    <Card className="card-interactive group h-full flex flex-col">
+                    <Card className="transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99] group h-full flex flex-col">
                       <CardHeader className="flex flex-row items-center space-x-4 pb-2">
                         <Icon aria-hidden className="w-6 h-6 text-primary" />
                         <CardTitle className="transition-colors group-hover:text-primary font-semibold">{card.title}</CardTitle>

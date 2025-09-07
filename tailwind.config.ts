@@ -23,7 +23,7 @@ export default {
 	   extend: {
 		   fontFamily: {
 			   sans: ["Geist", "ui-sans-serif", "system-ui", "sans-serif"],
-			   serif: ["Geist Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"], // accent now uses Geist Mono
+			   serif: ["Gelasio", "Georgia", "Times New Roman", "serif"],
 			   mono: ["Geist Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
 		   },
 			colors: {

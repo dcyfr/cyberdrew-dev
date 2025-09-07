@@ -9,8 +9,14 @@ export interface BadgeProps
     VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
+  // Provide a stable class and data attributes for accessibility and theming hooks
+  const v = variant ?? "default";
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div
+      className={cn("badge", badgeVariants({ variant: v }), className)}
+      data-variant={v}
+      {...props}
+    />
   )
 }
 
