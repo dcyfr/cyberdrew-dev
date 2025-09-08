@@ -33,7 +33,6 @@ const SidebarProvider = React.forwardRef<
   React.ComponentProps<"div"> & {
     defaultOpen?: boolean
     open?: boolean
-  // eslint-disable-next-line no-unused-vars
   onOpenChange?: (value: boolean) => void
   }
 >(

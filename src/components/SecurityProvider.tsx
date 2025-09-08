@@ -6,18 +6,12 @@ interface SecurityProviderProps {
 }
 
 /**
- * Security Provider component - Lovable-compatible version
+ * Security Provider component for Vercel deployment
  */
 export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) => {
   useEffect(() => {
-    // Apply security meta tags that don't interfere with Lovable
-    const safeMetaTags = SECURITY_META_TAGS.filter(tag => 
-      // Only apply safe meta tags
-      tag.name === 'format-detection' || 
-      tag.name === 'robots'
-    );
-
-    safeMetaTags.forEach(tag => {
+  // Apply all configured security meta tags (Vercel-friendly)
+  SECURITY_META_TAGS.forEach(tag => {
       const existingTag = document.querySelector(`meta[name="${tag.name}"], meta[http-equiv="${tag['http-equiv']}"]`);
       
       if (!existingTag) {
@@ -29,14 +23,13 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) 
       }
     });
 
-    // Only enforce HTTPS for production custom domains, not Lovable subdomains
-    const isCustomDomain = !location.hostname.includes('lovableproject.com') && 
-                          !location.hostname.includes('localhost') &&
-                          !location.hostname.includes('127.0.0.1');
+  // Enforce HTTPS for any non-local environment (Vercel uses HTTPS on all domains)
+  const isNonLocal = !location.hostname.includes('localhost') &&
+             !location.hostname.includes('127.0.0.1');
     
-    if (process.env.NODE_ENV === 'production' && 
-        location.protocol !== 'https:' && 
-        isCustomDomain) {
+  if (process.env.NODE_ENV === 'production' && 
+    location.protocol !== 'https:' && 
+    isNonLocal) {
       location.replace(`https:${location.href.substring(location.protocol.length)}`);
     }
 
