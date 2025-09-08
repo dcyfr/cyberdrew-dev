@@ -1,7 +1,8 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
+import { AppCard } from '@/components/ui/app-card';
 
 interface LinkCardProps {
   title: string;
@@ -31,10 +32,8 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   };
   
   return (
-    <Card 
-      className={`group cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
-                  active:scale-[0.99] ${className}`}
+    <AppCard
+      className={`group cursor-pointer ${className}`}
       onClick={handleClick}
       role="button"
       tabIndex={0}
@@ -66,6 +65,6 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           </div>
         </div>
       </CardContent>
-    </Card>
+    </AppCard>
   );
 };

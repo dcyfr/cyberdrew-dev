@@ -2,7 +2,7 @@ import { FC } from "react";
 import { PageLayout } from "@/components/PageLayout";
 import { PageTransition } from "@/components/PageTransition";
 import { SEOHead } from "@/components/SEOHead";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// No cards on this page; remove unused import
 import { Badge } from "@/components/ui/badge";
 import { 
   Tooltip, 

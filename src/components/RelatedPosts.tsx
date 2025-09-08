@@ -1,5 +1,6 @@
 import { getRelatedPosts, type BlogPost } from "@/lib/blog";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AppCard } from "@/components/ui/app-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -60,9 +61,9 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
 
   <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 items-stretch">
         {relatedPosts.map((post) => (
-          <Card 
+          <AppCard 
             key={post.slug} 
-    className="group h-full flex flex-col cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 border-border/50 hover:border-primary/20 bg-card/80 backdrop-blur-sm hover:-translate-y-1 relative overflow-hidden"
+            className="group h-full flex flex-col cursor-pointer transition-shadow duration-300 hover:shadow-xl hover:shadow-primary/20 border-border/50 hover:border-primary/20 bg-card/80 backdrop-blur-sm relative overflow-hidden"
             onClick={() => handlePostClick(post.slug)}
           >
             {/* Relevance indicator */}
@@ -135,7 +136,7 @@ export const RelatedPosts = ({ currentPost, maxPosts = 3 }: RelatedPostsProps) =
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </AppCard>
         ))}
       </div>
 

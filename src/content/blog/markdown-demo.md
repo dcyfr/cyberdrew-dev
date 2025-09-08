@@ -8,94 +8,177 @@ featureImage: "/placeholder_light.webp"
 [//]: # (draft: "true")
 ---
 
-## Frontmatter Options
+## Headings
 
 ```markdown
-date: "2020-01-01" # Required
-title: "Post Title" # Required
-excerpt: "A brief summary of the article." # Required
-slug: "post-slug" # Required
-[//]: # (tags: ["tag1", "tag2", "tag3"]) # Optional, adds filtering
-[//]: # (draft: "true") # Optional, defaults to true (draft mode)
-[//]: # (featureImage: "/path/to/image.webp") # Optional, adds featured image elements
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
 ```
 
-## Paragraphs
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
 
-These are paragraphs. They can contain **bold text**, *italic text*, ~~strikethrough text~~, and `inline code`.
+## Paragraphs and line breaks
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+End a line with two spaces to create a line break:
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+````markdown
+First line with two spaces at the end··
+Second line starts here.
+````
 
-## Links
+First line with two spaces at the end  
+Second line starts here.
 
-Links can be created using square brackets and parentheses:
+## Emphasis
 
 ```markdown
-[Homepage](/)
-[Articles](/blog)
+Bold with **asterisks** or __underscores__
+Italic with *asterisks* or _underscores_
+Bold and italic with ***three asterisks***
+Inline code with `backticks`
 ```
 
-[Homepage](/)
-[Articles](/blog)
+Bold with **asterisks** or __underscores__
 
-## Lists
+Italic with *asterisks* or _underscores_
 
-Lists can be unordered or ordered.
+Bold and italic with ***three asterisks***
 
-### Unordered List
-
-Unordered lists can be created using dashes, asterisks, or plus signs:
-
-```markdown
-* Item 1
-- Item 2
-  + Subitem 2.1
-  + Subitem 2.2
-```
-
-* Item 1
-- Item 2
-  + Subitem 2.1
-  + Subitem 2.2
-
-### Ordered List
-
-Ordered lists are created using numbers:
-
-```markdown
-1. Item 1
-2. Item 2
-   1. Subitem 2.1
-   2. Subitem 2.2
-```
-
-1. Item 1
-2. Item 2
-   1. Subitem 2.1
-   2. Subitem 2.2
+Inline code with `backticks`
 
 ## Blockquotes
 
-Blockquotes can be used to highlight important information or quotes:
-
 ```markdown
-> This is a blockquote.
->
-> It can span multiple lines.
+> Dorothy followed her through many of the beautiful rooms in her castle.
 ```
 
-> This is a blockquote.
->
-> It can span multiple lines.
+> Dorothy followed her through many of the beautiful rooms in her castle.
+
+## Lists
+
+### Unordered lists
+
+You can use dashes (-), asterisks (*), or plus signs (+):
+
+```markdown
+- Item 1
+- Item 2
+  - Subitem 2.1
+  - Subitem 2.2
+
+* Item A
+* Item B
+
++ Item X
++ Item Y
+```
+
+- Item 1
+- Item 2
+  - Subitem 2.1
+  - Subitem 2.2
+
+* Item A
+* Item B
+
++ Item X
++ Item Y
+
+### Ordered lists
+
+```markdown
+1. First item
+2. Second item
+   1. Subitem 2.1
+   2. Subitem 2.2
+```
+
+1. First item
+2. Second item
+   1. Subitem 2.1
+   2. Subitem 2.2
+
+## Code
+
+Inline code uses backticks: `console.log("Hello")`.
+
+Fenced code blocks use triple backticks:
+
+````markdown
+```
+This is a code block without syntax highlighting.
+```
+````
+
+```
+This is a code block without syntax highlighting.
+```
+
+Add a language identifier for highlighting:
+
+````markdown
+```javascript
+function greet(name) {
+  console.log(`Hello, ${name}!`)
+}
+greet('World')
+```
+````
+
+```javascript
+function greet(name) {
+  console.log(`Hello, ${name}!`)
+}
+greet('World')
+```
+
+## Horizontal rules
+
+Use three or more hyphens, asterisks, or underscores:
+
+```markdown
+---
+***
+___
+```
+
+---
+***
+___
+
+## Links
+
+```markdown
+[Homepage](/)
+[Markdown Guide](https://www.markdownguide.org/basic-syntax/ "Basic Syntax")
+```
+
+[Homepage](/)
+[Markdown Guide](https://www.markdownguide.org/basic-syntax/ "Basic Syntax")
 
 ## Images
 
-Images can be embedded using the same syntax as links, but with an exclamation mark at the beginning:
-
 ```markdown
 ![Site Logo](/dcyfr.webp)
 ```
 
 ![Site Logo](/dcyfr.webp)
+
+## Escaping characters
+
+Use a backslash to show literal Markdown characters:
+
+````markdown
+\*This asterisk is literal, not italic.\*
+````
+
+\*This asterisk is literal, not italic.\*

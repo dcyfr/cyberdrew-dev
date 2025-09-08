@@ -233,16 +233,24 @@
     @apply text-foreground leading-relaxed my-4 font-sans;
   }
   
+  /* Lists: keep UL and OL spacing consistent */
   .prose-content ul {
-    @apply list-disc ml-6 space-y-1 font-sans;
+    @apply list-disc pl-6 space-y-1 font-sans;
   }
   
   .prose-content ol {
-    @apply list-decimal ml-6 space-y-1 font-sans;
+    @apply list-decimal pl-6 space-y-1 font-sans;
   }
   
+  /* Ensure list items themselves don't add extra margins (typography defaults) */
   .prose-content li {
-    @apply leading-relaxed pl-2 font-sans;
+    @apply leading-relaxed my-0 pl-2 font-sans;
+  }
+  
+  /* Nested lists get tighter spacing and smaller indent equally for UL/OL */
+  .prose-content li > ul,
+  .prose-content li > ol {
+    @apply my-1 pl-4 space-y-1;
   }
   
   .prose-content strong {

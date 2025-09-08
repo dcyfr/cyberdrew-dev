@@ -2,7 +2,8 @@ import { SEOHead } from "@/components/SEOHead";
 import { PageTransition } from "@/components/PageTransition";
 // Removed framer-motion; using CSS-based transitions
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
+import { AppCard } from "@/components/ui/app-card";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getAllBlogPosts, getAllTags } from "@/lib/blog";
@@ -138,10 +139,8 @@ const Blog = () => {
                 ) : (
                   filteredPosts.map((post, index) => (
                     <FadeSlideIn key={`${post.slug}-${post.date}`} delayMs={120 + index * 80} durationMs={280}>
-                      <Card 
-                        className={`group cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 
-                                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
-                                  active:scale-[0.99] overflow-hidden relative ${post.featureImage ? 'min-h-[200px]' : 'min-h-[160px]'}`}
+                      <AppCard
+                        className={`group cursor-pointer overflow-hidden relative ${post.featureImage ? 'min-h-[200px]' : 'min-h-[160px]'}`}
                         style={post.featureImage ? {
                           backgroundImage: `url(${post.featureImage})`,
                           backgroundSize: 'cover',
@@ -213,7 +212,7 @@ const Blog = () => {
                             <span>{post.readTime}</span>
                           </div>
                         </CardContent>
-                      </Card>
+                      </AppCard>
                     </FadeSlideIn>
                   ))
                 )}

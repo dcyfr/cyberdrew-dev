@@ -3,13 +3,8 @@ import { SEOHead } from "@/components/SEOHead";
 import { PageTransition } from "@/components/PageTransition";
 import { PageLayout } from "@/components/PageLayout";
 import { FadeSlideIn } from "@/components/anim/FadeSlideIn";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AppCard } from "@/components/ui/app-card";
 import { Badge } from "@/components/ui/badge";
 import { 
   certifications, 
@@ -26,6 +21,8 @@ const Resume: React.FC = React.memo(() => {
       console.warn('Resume data validation failed. Some content may be incorrect.');
     }
   }, []);
+
+  // Card styling shared via AppCard wrapper
 
   const ResumeSection: React.FC<{ 
     title: string, 
@@ -47,7 +44,7 @@ const Resume: React.FC = React.memo(() => {
     period: string, 
     achievements: string[] 
   }> = ({ title, company, period, achievements }) => (
-    <Card className="transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99]">
+    <AppCard>
       <CardHeader>
         <div className="flex flex-col">
           <Badge variant="outline" className="mb-4 mr-auto">{period}</Badge>
@@ -64,22 +61,22 @@ const Resume: React.FC = React.memo(() => {
           ))}
         </ul>
       </CardContent>
-    </Card>
+    </AppCard>
   );
 
   const SkillCategory: React.FC<{ category: string, skills: string[] }> = ({ category, skills }) => (
-    <Card className="transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99]">
+    <AppCard>
       <CardHeader>
         <CardTitle>{category}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2">
           {skills.map((skill, index) => (
-            <Badge key={index} variant="outline">{skill}</Badge>
+            <Badge key={index} variant="secondary">{skill}</Badge>
           ))}
         </div>
       </CardContent>
-    </Card>
+    </AppCard>
   );
 
   return (
@@ -143,7 +140,7 @@ const Resume: React.FC = React.memo(() => {
               <div className="space-y-4 mt-4">
                 {certifications.map((org, index) => (
                   <FadeSlideIn key={`${org.organization}-${index}`} delayMs={140 + index * 90} durationMs={280}>
-                    <Card>
+                    <AppCard>
                       <CardHeader>
                         <CardTitle>{org.organization}</CardTitle>
                       </CardHeader>
@@ -154,7 +151,7 @@ const Resume: React.FC = React.memo(() => {
                           ))}
                         </div>
                       </CardContent>
-                    </Card>
+                    </AppCard>
                   </FadeSlideIn>
                 ))}
               </div>

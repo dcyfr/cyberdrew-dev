@@ -3,13 +3,8 @@ import { PageTransition } from '@/components/PageTransition';
 import { FileBadge, FileText, Github, Linkedin, Rss, HeartHandshake } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { PageLayout } from "@/components/PageLayout";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AppCard } from "@/components/ui/app-card";
 import { 
   Avatar, 
   AvatarFallback, 
@@ -104,7 +99,7 @@ const Home = () => {
                 {connectCards.map((card, idx) => {
                   const Icon = card.icon;
                   const content = (
-                    <Card className="transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99] group h-full flex flex-col">
+                    <AppCard className="group h-full flex flex-col">
                       <CardHeader className="flex flex-row items-center space-x-4 pb-2">
                         <Icon aria-hidden className="w-6 h-6 text-primary" />
                         <CardTitle className="transition-colors group-hover:text-primary font-semibold">{card.title}</CardTitle>
@@ -112,7 +107,7 @@ const Home = () => {
                       <CardContent>
                         <CardDescription className="mb-2">{card.description}</CardDescription>
                       </CardContent>
-                    </Card>
+                    </AppCard>
                   );
 
                   return (
