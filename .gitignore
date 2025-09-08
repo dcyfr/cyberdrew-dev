@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Package manager lockfiles to ignore (we use npm)
+bun.lockb
+pnpm-lock.yaml

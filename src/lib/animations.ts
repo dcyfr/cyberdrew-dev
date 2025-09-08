@@ -1,21 +1,20 @@
-// Standard animation variants and transitions for Framer Motion
+// Deprecated framer-motion helpers: kept as plain objects for backward-compat without importing the library.
+// Prefer CSS-based animations (tailwindcss-animate) and the PageTransition component.
 
-import { Variants, Transition } from "framer-motion";
-
-export const PAGE_TRANSITION: Transition = {
+export const PAGE_TRANSITION = {
   type: "spring",
   stiffness: 300,
   damping: 30,
   duration: 0.3,
-};
+} as const;
 
-export const pageVariants: Variants = {
+export const pageVariants = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -20 },
-};
+} as const;
 
-export const containerVariants: Variants = {
+export const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -24,9 +23,9 @@ export const containerVariants: Variants = {
       delayChildren: 0.3,
     },
   },
-};
+} as const;
 
-export const itemVariants: Variants = {
+export const itemVariants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -36,4 +35,4 @@ export const itemVariants: Variants = {
       stiffness: 100,
     },
   },
-};
+} as const;

@@ -45,15 +45,14 @@ export default defineConfig(({ mode }) => ({
   chunkSizeWarningLimit: 450, // match CI vendor budget to avoid noisy warnings
     rollupOptions: {
       output: {
-    manualChunks(id) {
+        manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('@radix-ui')) return 'radix';
             if (id.includes('react-router')) return 'router';
-            if (id.includes('framer-motion')) return 'motion';
-      if (id.includes('markdown-it')) return 'markdown';
-      if (id.includes('highlight.js')) return 'highlight';
-      if (id.includes('@tanstack/react-query')) return 'query';
-      if (id.includes('lucide-react')) return 'icons';
+            if (id.includes('markdown-it')) return 'markdown';
+            if (id.includes('highlight.js')) return 'highlight';
+            if (id.includes('@tanstack/react-query')) return 'query';
+            if (id.includes('lucide-react')) return 'icons';
             return 'vendor';
           }
         },

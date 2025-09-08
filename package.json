@@ -12,6 +12,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "build:analyze": "ANALYZE=true vite build",
+  "clean": "rimraf dist dist-ssr ./dist/stats.html || rm -rf dist dist-ssr ./dist/stats.html",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "guard": "npm run typecheck && npm run lint && npm run build",
