@@ -19,7 +19,7 @@ export function sanitizeHtml(html: string): string {
       'class', 'id', 'target', 'rel'
     ],
   // Allow only https, mailto, tel, same-origin relative paths (not protocol-relative), and hash anchors
-  ALLOWED_URI_REGEXP: /^(https?:|mailto:|tel:|\/(?!\/)|#)/i,
+  ALLOWED_URI_REGEXP: /^(https:|mailto:|tel:|\/(?!\/)|#)/i,
     ADD_ATTR: ['target'],
     FORBID_TAGS: ['script', 'object', 'embed', 'iframe', 'form', 'input', 'textarea', 'button'],
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit']

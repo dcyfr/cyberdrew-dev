@@ -1,4 +1,5 @@
 import React from 'react';
+import { isSecureUrl } from '@/lib/security-headers';
 import { ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CardContent } from '@/components/ui/card';
@@ -27,7 +28,12 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     if (internal) {
       navigate(link);
     } else {
-      window.open(link, "_blank", "noopener,noreferrer");
+      if (isSecureUrl(link)) {
+        window.open(link, "_blank", "noopener,noreferrer");
+      } else {
+        // Ignore non-secure links
+        console.warn('Blocked non-secure external link:', link);
+      }
     }
   };
   
