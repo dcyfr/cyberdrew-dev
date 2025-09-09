@@ -30,7 +30,9 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) 
   if (process.env.NODE_ENV === 'production' && 
     location.protocol !== 'https:' && 
     isNonLocal) {
-      location.replace(`https:${location.href.substring(location.protocol.length)}`);
+  // Build a same-origin HTTPS URL explicitly to avoid open redirect (CWE-601)
+  const httpsUrl = `https://${location.host}${location.pathname}${location.search}${location.hash}`;
+  window.location.replace(httpsUrl);
     }
 
     // Add subtle security monitoring (non-intrusive)
