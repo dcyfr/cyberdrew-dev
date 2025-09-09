@@ -6,3 +6,10 @@
 - Update docs and budgets when changing bundles.
 - Validate with: `npm run guard` then `npm run build && node scripts/ci-bundle-budget.mjs`.
 - Avoid adding new heavy deps without prior discussion; prefer lazy-load.
+
+Copilot-specific notes:
+- Use the docs in `/docs` as primary context. Prioritize `architecture.md`, `codebase-map.md`, and `performance.md` when making refactors.
+- When suggesting imports, prefer per-component shadcn/Radix imports and avoid wildcard imports.
+- For animations on initial routes, use `PageTransition` and Tailwind classes—do not add framer-motion.
+- For blog rendering, use `renderMarkdownToHtml` from `src/lib/blog-render.ts`; do not import full highlight.js.
+

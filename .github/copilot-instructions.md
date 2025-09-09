@@ -5,6 +5,8 @@ description: Comprehensive coding guidelines for project development
 
 # Project Coding Standards and Guidelines
 
+Start by reading the docs hub at `docs/index.md` and `docs/codebase-map.md`. These are authoritative for architecture, performance budgets, and file locations.
+
 ## 1. General Coding Principles
 
 ### Code Quality
@@ -53,6 +55,9 @@ description: Comprehensive coding guidelines for project development
 - Use `React.memo()` for preventing unnecessary re-renders
 - Avoid inline function definitions in render methods
 - Use `useCallback` and `useMemo` judiciously
+ - Keep initial route bundles lean; prefer CSS-based transitions via `src/components/PageTransition.tsx` (no framer-motion on initial routes)
+ - Use route-level code splitting (`src/components/LazyRoutes.tsx`) and `<Suspense>`
+ - For blog code highlighting, do not import full `highlight.js`; use `src/lib/blog-render.ts` which registers a minimal language set and lazy-loads theme CSS
 
 ## 5. Security Practices
 
@@ -62,6 +67,7 @@ description: Comprehensive coding guidelines for project development
 - Implement proper error boundaries
 - Avoid exposing sensitive information
 - Use environment variables for configuration
+ - Prefer `SecureLink` for external anchors and use helpers in `src/lib/security-headers.ts`
 
 ## 6. Testing and Documentation
 
@@ -76,6 +82,7 @@ description: Comprehensive coding guidelines for project development
 - Document component props and return types
 - Keep comments concise and meaningful
 - Update documentation alongside code changes
+ - When changes affect performance or architecture, update `docs/architecture.md` and `docs/performance.md`
 
 ## 7. Error Handling
 
@@ -94,6 +101,7 @@ description: Comprehensive coding guidelines for project development
 - Optimize bundle size
 - Implement lazy loading for components
 - Use code splitting techniques
+ - Validate budgets locally: `npm run guard` and `node scripts/ci-bundle-budget.mjs`
 
 ## 9. Accessibility
 
@@ -116,3 +124,9 @@ description: Comprehensive coding guidelines for project development
 ## Conclusion
 
 These guidelines are living documentation. They should evolve with the project and team's understanding. Always prioritize pragmatism and team collaboration over strict adherence to rules.
+
+See also:
+- Docs hub: `docs/index.md`
+- Codebase map: `docs/codebase-map.md`
+- Architecture: `docs/architecture.md`
+- Performance: `docs/performance.md`
