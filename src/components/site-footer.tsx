@@ -7,9 +7,6 @@ export function SiteFooter() {
           <a href="/sitemap.xml" className="hover:underline underline-offset-4">
             Sitemap
           </a>
-          <a href="/robots.txt" className="hover:underline underline-offset-4">
-            Robots
-          </a>
         </div>
       </div>
     </footer>

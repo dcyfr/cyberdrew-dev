@@ -46,6 +46,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  alternates: {
+    types: {
+      "application/rss+xml": "https://cyberdrew.dev/rss.xml",
+      "application/atom+xml": "https://cyberdrew.dev/atom.xml",
+    },
+  },
 };
 
 export default function RootLayout({

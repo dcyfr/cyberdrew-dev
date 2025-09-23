@@ -12,6 +12,23 @@ export function ThemeToggle() {
 
   const isDark = (mounted ? resolvedTheme : theme) === "dark";
 
+  // Avoid hydration mismatch by rendering a stable placeholder until mounted.
+  if (!mounted) {
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        aria-label="Toggle theme"
+        className="opacity-0"
+        tabIndex={-1}
+        aria-hidden
+        disabled
+      >
+        <Sun className="size-5" />
+      </Button>
+    );
+  }
+
   return (
     <Button
       variant="ghost"
