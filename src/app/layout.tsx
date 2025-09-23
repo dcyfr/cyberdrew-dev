@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,6 +61,9 @@ export default function RootLayout({
           <main className="min-h-[calc(100dvh-128px)] px-6 md:px-8">{children}</main>
           <SiteFooter />
           <Toaster richColors position="top-center" />
+          {/* Vercel Analytics & Speed Insights */}
+          <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

@@ -8,6 +8,7 @@ A modern, minimal portfolio built with Next.js (App Router), TypeScript, Tailwin
 - Tailwind CSS v4
 - shadcn/ui (Radix + CVA)
 - next-themes, sonner
+- Vercel Analytics & Speed Insights
 
 ## Development
 
@@ -44,6 +45,15 @@ npm start
 - Point your domain (cyberdrew.dev) to your hosting provider (e.g., Vercel).
 - On Vercel: import this repo, set production branch, add domain in Project Settings.
 - DNS: add A/AAAA or CNAME as directed by your host.
+
+### Vercel Analytics & Speed Insights
+- Already wired in `src/app/layout.tsx` via `<Analytics />` and `<SpeedInsights />`.
+- Works automatically on Vercel deployments; no extra config required.
+- Disable or relocate only if requested.
+
+### Vercel project config
+- `vercel.json` provides sensible defaults for caching static assets and adds basic security headers.
+- You can extend headers or rewrites as needed; Next.js routing remains managed by the App Router.
 
 ## Contact Form
 - The API route at `/api/contact` validates input and logs it on the server.
