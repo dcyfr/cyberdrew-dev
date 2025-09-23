@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "outputDirectory": ".next",
   "trailingSlash": false,
   "headers": [
     {
