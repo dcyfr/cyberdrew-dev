@@ -2,6 +2,8 @@
 
 A modern, minimal portfolio built with Next.js (App Router), TypeScript, Tailwind CSS v4, and shadcn/ui.
 
+Developing with an AI assistant? See `agents.md` for the AI contributor guide (kept in sync with `.github/copilot-instructions.md`).
+
 ## Tech
 - Next.js 15 (App Router) + React 19
 - TypeScript, ESLint

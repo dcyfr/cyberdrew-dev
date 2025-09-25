@@ -20,7 +20,7 @@ export default function Home() {
             <Link href="/projects">View Projects</Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/contact">Get in touch</Link>
+            <Link href="mailto:hello@cyberdrew.dev">Get in touch</Link>
           </Button>
         </div>
       </section>
