@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { loadCachedGitHubData } from "@/lib/github-cache";
 
 interface GitHubContribution {
   date: string;
@@ -74,12 +75,33 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // Try to load build-time cached data first (from public/data/)
+    const buildCachedData = loadCachedGitHubData();
+    if (buildCachedData && buildCachedData.username === username) {
+      console.log('📦 Using build-time cached GitHub data');
+      
+      const result = {
+        contributions: buildCachedData.contributions,
+        source: 'build-cache',
+        totalContributions: buildCachedData.totalContributions,
+        fetchedAt: buildCachedData.fetchedAt,
+      };
+
+      // Cache in memory for subsequent requests
+      cache.set(cacheKey, {
+        data: result,
+        timestamp: Date.now(),
+      });
+
+      return NextResponse.json(result);
+    }
+
     // Calculate date range (1 year ago to now)
     const to = new Date();
     const from = new Date(to);
     from.setFullYear(from.getFullYear() - 1);
 
-    // First, try to fetch real data from GitHub's GraphQL API
+    // Second, try to fetch real data from GitHub's GraphQL API
     const githubToken = process.env.GITHUB_TOKEN;
     
     if (!githubToken) {

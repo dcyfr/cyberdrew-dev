@@ -26,11 +26,11 @@ export const metadata: Metadata = {
     template: "%s — Drew's Lab",
   },
   description:
-    "Modern, minimalistic developer portfolio of Drew. Full‑stack engineering, TypeScript, React, Node.js, cloud-native.",
+    "Security architect and engineer sharing insights on cybersecurity, enterprise security operations, and technology. Building secure systems, leading teams, and writing about security best practices.",
   openGraph: {
     title: "Drew's Lab",
     description:
-      "Modern, minimalistic developer portfolio of Drew. Full‑stack engineering, TypeScript, React, Node.js, cloud-native.",
+      "Security architect and engineer sharing insights on cybersecurity, enterprise security operations, and technology. Building secure systems, leading teams, and writing about security best practices.",
     url: "https://cyberdrew.dev",
     siteName: "Drew's Lab",
     locale: "en_US",

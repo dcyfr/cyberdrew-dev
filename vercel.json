@@ -1,6 +1,9 @@
 {
   "framework": "nextjs",
   "trailingSlash": false,
+  "github": {
+    "silent": true
+  },
   "headers": [
     {
       "source": "/_next/static/(.*)",
