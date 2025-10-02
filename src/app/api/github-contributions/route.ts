@@ -45,6 +45,7 @@ interface CacheEntry {
     contributions: GitHubContribution[];
     source: string;
     totalContributions?: number;
+    warning?: string;
   };
   timestamp: number;
 }
@@ -80,6 +81,10 @@ export async function GET(request: NextRequest) {
 
     // First, try to fetch real data from GitHub's GraphQL API
     const githubToken = process.env.GITHUB_TOKEN;
+    
+    if (!githubToken) {
+      console.warn('⚠️ GITHUB_TOKEN not configured. Set it in Vercel environment variables for real contribution data.');
+    }
     
     if (githubToken) {
       try {
@@ -164,10 +169,12 @@ export async function GET(request: NextRequest) {
 
     // Final fallback: generate realistic mock data
     if (!result) {
+      console.warn('⚠️ Using mock data. Configure GITHUB_TOKEN in Vercel for real contribution data.');
       const contributions = generateMockContributions();
       result = { 
         contributions,
-        source: 'mock-data' 
+        source: 'mock-data',
+        warning: 'Using demo data. Configure GITHUB_TOKEN for real contributions.'
       };
     }
 

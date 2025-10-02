@@ -15,6 +15,7 @@ interface ContributionResponse {
   source?: string;
   totalContributions?: number;
   timestamp?: number;
+  warning?: string;
 }
 
 interface GitHubHeatmapProps {
@@ -31,6 +32,7 @@ export function GitHubHeatmap({ username }: GitHubHeatmapProps) {
   const [error, setError] = useState<string | null>(null);
   const [dataSource, setDataSource] = useState<string>('');
   const [totalContributions, setTotalContributions] = useState<number>(0);
+  const [warning, setWarning] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchContributions = async (): Promise<ContributionResponse> => {
@@ -106,6 +108,7 @@ export function GitHubHeatmap({ username }: GitHubHeatmapProps) {
         setContributions(data.contributions || []);
         setDataSource(data.source || 'unknown');
         setTotalContributions(data.totalContributions || data.contributions?.length || 0);
+        setWarning(data.warning || null);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load contributions");
@@ -193,6 +196,22 @@ export function GitHubHeatmap({ username }: GitHubHeatmapProps) {
           </a>
         </div>
         
+        {warning && (
+          <div className="rounded-md bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 p-3 mb-4">
+            <div className="flex items-start gap-2">
+              <svg className="w-4 h-4 text-yellow-600 dark:text-yellow-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+              </svg>
+              <div className="flex-1">
+                <p className="text-sm text-yellow-800 dark:text-yellow-200 font-medium">Demo Data</p>
+                <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">
+                  {warning} <a href="https://github.com/dcyfr/cyberdrew-dev/blob/main/GITHUB_SETUP.md" target="_blank" rel="noopener noreferrer" className="underline hover:text-yellow-900 dark:hover:text-yellow-100">Learn how to configure</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        
         {error && (
           <div className="text-sm text-muted-foreground mb-2">
             Using cached data • <a
@@ -231,9 +250,10 @@ export function GitHubHeatmap({ username }: GitHubHeatmapProps) {
             showOutOfRangeDays={true}
             gutterSize={4}
             />
-            {dataSource === 'github-api' && totalContributions > 0 && (
+            {totalContributions > 0 && (
                 <div className="text-sm text-muted-foreground mt-6 text-center">
                     {totalContributions} contributions in the last year
+                    {dataSource === 'mock-data' && <span className="text-yellow-600 dark:text-yellow-500"> (demo)</span>}
                 </div>
             )}
         </div>
