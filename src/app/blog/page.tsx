@@ -40,8 +40,8 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
                 {new Date(p.publishedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}
               </time>
               <span>•</span>
-              <span>{p.tags.join(" · ")}</span>
-              <span>•</span>
+              <span className="hidden md:inline-block">{p.tags.join(" · ")}</span>
+              <span className="hidden md:inline-block">•</span>
               <span>{p.readingTime.text}</span>
               {p.archived && (
                 <>

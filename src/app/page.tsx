@@ -23,7 +23,7 @@ export default function Home() {
           <Button variant="outline" asChild>
             <Link href="/blog">Read my blog</Link>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" className="hidden sm:inline-block" asChild>
             <Link href="/projects">View Projects</Link>
           </Button>
         </div>
@@ -46,8 +46,8 @@ export default function Home() {
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <time dateTime={p.publishedAt}>{new Date(p.publishedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</time>
                   <span>•</span>
-                  <span>{p.tags.join(" · ")}</span>
-                  <span>•</span>
+                  <span className="hidden md:inline-block">{p.tags.join(" · ")}</span>
+                  <span className="hidden md:inline-block">•</span>
                   <span>{p.readingTime.text}</span>
                 </div>
                 <h3 className="mt-1 text-lg font-medium">
