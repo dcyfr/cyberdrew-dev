@@ -35,13 +35,20 @@ const components: NonNullable<MDXRemoteProps["components"]> = {
   ),
   a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const isHeaderAnchor = props.className?.includes('no-underline');
+    const href = props.href || '';
+    const isExternal = href.startsWith('http://') || href.startsWith('https://');
+    
     return (
       <a 
         {...props} 
         className={isHeaderAnchor 
           ? "hover:text-primary" 
           : "underline underline-offset-4 hover:text-primary"
-        } 
+        }
+        {...(isExternal && {
+          target: "_blank",
+          rel: "noopener noreferrer"
+        })}
       />
     );
   },
