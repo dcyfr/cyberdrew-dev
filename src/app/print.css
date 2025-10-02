@@ -35,26 +35,10 @@
     display: none !important;
   }
 
-  /* Hide navigation menu items that aren't useful in print */
-  nav a[href*="github"],
-  nav a[href*="linkedin"],
-  .site-header nav {
-    display: none !important;
-  }
-
-  /* Keep header minimal */
-  .site-header {
-    border-bottom: 2pt solid #000;
-    padding-bottom: 0.3cm;
-    margin-bottom: 0.5cm;
-  }
-
-  /* Hide footer or keep minimal */
+  /* Hide header and footer completely in print */
+  .site-header,
   .site-footer {
-    border-top: 1pt solid #000;
-    padding-top: 0.3cm;
-    margin-top: 0.5cm;
-    font-size: 10pt;
+    display: none !important;
   }
 
   /* Typography */
@@ -206,6 +190,14 @@
   /* GitHub contribution heatmap - hide or simplify */
   .github-heatmap,
   [class*="heatmap"] {
+    display: none !important;
+  }
+
+  /* Hide section breaks/separators */
+  hr,
+  .separator,
+  [role="separator"],
+  [data-orientation="horizontal"] {
     display: none !important;
   }
 
