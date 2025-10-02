@@ -1,0 +1,252 @@
+/**
+ * Print stylesheet for cyberdrew.dev
+ * Optimized for clean, readable printed pages
+ */
+
+@media print {
+  /* Reset and base styles */
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 1.5cm;
+    size: letter;
+  }
+
+  /* Body and layout */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+
+  /* Hide interactive elements */
+  button,
+  .theme-toggle,
+  nav button,
+  [role="button"],
+  .no-print {
+    display: none !important;
+  }
+
+  /* Hide navigation menu items that aren't useful in print */
+  nav a[href*="github"],
+  nav a[href*="linkedin"],
+  .site-header nav {
+    display: none !important;
+  }
+
+  /* Keep header minimal */
+  .site-header {
+    border-bottom: 2pt solid #000;
+    padding-bottom: 0.3cm;
+    margin-bottom: 0.5cm;
+  }
+
+  /* Hide footer or keep minimal */
+  .site-footer {
+    border-top: 1pt solid #000;
+    padding-top: 0.3cm;
+    margin-top: 0.5cm;
+    font-size: 10pt;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: 24pt;
+    margin-bottom: 0.3cm;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 18pt;
+    margin-top: 0.3cm;
+    margin-bottom: 0.2cm;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 14pt;
+    margin-top: 0.2cm;
+    margin-bottom: 0.15cm;
+    page-break-after: avoid;
+  }
+
+  h4, h5, h6 {
+    font-size: 12pt;
+    margin-top: 0.2cm;
+    margin-bottom: 0.15cm;
+    page-break-after: avoid;
+  }
+
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Links */
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  /* Show URLs for external links */
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    font-weight: normal;
+  }
+
+  /* Don't show URLs for internal links or anchors */
+  a[href^="/"]:after,
+  a[href^="#"]:after {
+    content: "";
+  }
+
+  /* Code blocks */
+  pre,
+  code {
+    border: 1pt solid #999;
+    page-break-inside: avoid;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 10pt;
+    padding: 0.2cm;
+    background: #f5f5f5 !important;
+    color: #000 !important;
+  }
+
+  code {
+    padding: 0.1cm 0.2cm;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    page-break-inside: avoid;
+  }
+
+  th,
+  td {
+    border: 1pt solid #000;
+    padding: 0.2cm;
+    text-align: left;
+  }
+
+  th {
+    font-weight: bold;
+    background: #f0f0f0 !important;
+  }
+
+  /* Images */
+  img {
+    max-width: 100%;
+    page-break-inside: avoid;
+  }
+
+  /* Convert all grids to vertical flex layout */
+  [style*="display: grid"],
+  [class*="grid"],
+  .grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.3cm !important;
+  }
+
+  /* Cards and sections */
+  .card,
+  article,
+  section {
+    page-break-inside: avoid;
+    margin-bottom: 0.3cm;
+  }
+
+  /* Project cards */
+  .project-card {
+    border: 1pt solid #000;
+    padding: 0.2cm;
+    margin-bottom: 0.3cm;
+    page-break-inside: avoid;
+  }
+
+  /* Badges */
+  .badge {
+    border: 1pt solid #000;
+    padding: 0.1cm 0.2cm;
+    margin-right: 0.2cm;
+    display: inline-block;
+    font-size: 9pt;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    margin-left: 0.5cm;
+  }
+
+  li {
+    margin-bottom: 0.2cm;
+  }
+
+  /* Blockquotes */
+  blockquote {
+    border-left: 3pt solid #000;
+    padding-left: 0.5cm;
+    margin-left: 0;
+    font-style: italic;
+    page-break-inside: avoid;
+  }
+
+  /* GitHub contribution heatmap - hide or simplify */
+  .github-heatmap,
+  [class*="heatmap"] {
+    display: none !important;
+  }
+
+  /* Avoid page breaks */
+  .page-break-avoid {
+    page-break-inside: avoid;
+  }
+
+  /* Force page breaks */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  /* Resume/CV specific styles */
+  .resume-section {
+    margin-bottom: 0.4cm;
+    page-break-inside: avoid;
+  }
+
+  /* Blog post metadata */
+  .post-meta {
+    font-size: 10pt;
+    color: #666 !important;
+    margin-bottom: 0.3cm;
+  }
+
+  /* Hide video embeds, iframes */
+  iframe,
+  video,
+  audio {
+    display: none !important;
+  }
+
+  /* Ensure dark mode elements print correctly */
+  [data-theme="dark"],
+  .dark {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}

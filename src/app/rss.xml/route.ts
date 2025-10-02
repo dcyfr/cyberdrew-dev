@@ -5,11 +5,11 @@ export const revalidate = 3600; // 1 hour
 
 export async function GET() {
   const site = "https://cyberdrew.dev";
-  const items = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const items = [...posts].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>CyberDrew — Blog</title>
+    <title>Drew's Blog</title>
     <link>${site}/blog</link>
     <description>Articles and notes on web development, DX, and TypeScript.</description>
     <language>en-us</language>
@@ -17,11 +17,11 @@ export async function GET() {
       .map(
         (p) => `
     <item>
-      <title><![CDATA[${p.title}]]></title>
-      <link>${site}/blog/${p.slug}</link>
-      <guid>${site}/blog/${p.slug}</guid>
-      <pubDate>${new Date(p.date).toUTCString()}</pubDate>
-      <description><![CDATA[${p.excerpt}]]></description>
+  <title><![CDATA[${p.title}]]></title>
+  <link>${site}/blog/${p.slug}</link>
+  <guid>${site}/blog/${p.slug}</guid>
+  <pubDate>${new Date(p.publishedAt).toUTCString()}</pubDate>
+  <description><![CDATA[${p.summary}]]></description>
     </item>`
       )
       .join("")}

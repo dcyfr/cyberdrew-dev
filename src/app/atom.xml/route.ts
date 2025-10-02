@@ -5,11 +5,11 @@ export const revalidate = 3600; // 1 hour
 
 export async function GET() {
   const site = "https://cyberdrew.dev";
-  const items = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
-  const updated = items[0]?.date ?? new Date().toISOString();
+  const items = [...posts].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
+  const updated = items[0]?.updatedAt ?? items[0]?.publishedAt ?? new Date().toISOString();
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>CyberDrew — Blog</title>
+  <title>Drew's Blog</title>
   <link href="${site}/atom.xml" rel="self" />
   <link href="${site}/blog" />
   <updated>${updated}</updated>
@@ -21,8 +21,8 @@ export async function GET() {
     <title><![CDATA[${p.title}]]></title>
     <link href="${site}/blog/${p.slug}" />
     <id>${site}/blog/${p.slug}</id>
-    <updated>${p.date}</updated>
-    <summary type="html"><![CDATA[${p.excerpt}]]></summary>
+  <updated>${p.updatedAt ?? p.publishedAt}</updated>
+  <summary type="html"><![CDATA[${p.summary}]]></summary>
   </entry>`
     )
     .join("")}

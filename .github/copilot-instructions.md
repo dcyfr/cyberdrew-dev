@@ -8,6 +8,18 @@ This repo is a minimal developer portfolio built with Next.js (App Router), Type
 - Theming via `next-themes` (`ThemeProvider`) and toasts via `sonner` (`Toaster`).
 - Path alias: `@/*` -> `src/*` (see `tsconfig.json`). Prefer `@/…` imports over long relative paths.
 
+## MCP servers in VS Code
+If you’re running in VS Code with Model Context Protocol (MCP) servers configured, prefer using them for local/secure integrations instead of making direct network calls.
+
+- Discovery: First check if MCP servers are available in the editor session. If present, use them for supported tasks (docs lookup, repository intelligence, secret-scoped SaaS actions) before falling back to generic web calls.
+- Preferred use cases:
+  - Documentation and framework references (e.g., Next.js, React, Tailwind, shadcn/ui) via an MCP doc/index provider.
+  - Source navigation, symbol search, and code intelligence for the open workspace.
+  - Access to developer tools or services (e.g., GitHub, Vercel) that the user has explicitly wired through an MCP with scoped credentials.
+- Fallbacks: When no suitable MCP is available for a request, proceed with local workspace analysis first, then minimal external calls as needed.
+- Security: Never exfiltrate secrets. Keep all credentials within MCP boundaries; do not print tokens or environment details. Prefer server-side routes for any third‑party calls (see `src/app/api/*`).
+- Offline-friendly: When network is restricted, rely on MCP-backed indexes and local workspace context.
+
 ## Run and build
 - Dev: `npm run dev` (Turbopack) → http://localhost:3000
 - Build: `npm run build` (Turbopack) • Start: `npm start`

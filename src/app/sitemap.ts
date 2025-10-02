@@ -82,7 +82,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Generate sitemap entries for blog posts
   const blogPostEntries = posts.map((post) => ({
     url: `${base}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+    lastModified: new Date(post.updatedAt ?? post.publishedAt),
     changeFrequency: "yearly" as const,
     priority: 0.6,
   }));

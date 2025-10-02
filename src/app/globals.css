@@ -120,3 +120,49 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* GitHub Heatmap Styles */
+.react-calendar-heatmap .color-empty {
+  fill: hsl(var(--muted));
+}
+
+.react-calendar-heatmap .color-scale-1 {
+  fill: oklch(0.8 0.1 142);
+}
+
+.react-calendar-heatmap .color-scale-2 {
+  fill: oklch(0.65 0.15 142);
+}
+
+.react-calendar-heatmap .color-scale-3 {
+  fill: oklch(0.5 0.2 142);
+}
+
+.react-calendar-heatmap .color-scale-4 {
+  fill: oklch(0.35 0.25 142);
+}
+
+.dark .react-calendar-heatmap .color-empty {
+  fill: oklch(0.15 0 0);
+}
+
+.dark .react-calendar-heatmap .color-scale-1 {
+  fill: oklch(0.25 0.08 142);
+}
+
+.dark .react-calendar-heatmap .color-scale-2 {
+  fill: oklch(0.4 0.12 142);
+}
+
+.dark .react-calendar-heatmap .color-scale-3 {
+  fill: oklch(0.55 0.16 142);
+}
+
+.dark .react-calendar-heatmap .color-scale-4 {
+  fill: oklch(0.7 0.2 142);
+}
+
+.react-calendar-heatmap text {
+  fill: hsl(var(--muted-foreground));
+  font-size: 10px;
+}

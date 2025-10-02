@@ -1,20 +1,40 @@
-export type Post = {
-  title: string;
-  slug: string; // unique URL segment
-  date: string; // ISO string
-  excerpt: string;
-  tags: string[];
-  body: string; // MDX content
+import { getAllPosts } from "@/lib/blog";
+
+export type PostSource = {
+  label: string;
+  href: string;
 };
 
-export const posts: Post[] = [
-  {
-    title: "Shipping a tiny portfolio with Next.js",
-    slug: "next-tiny-portfolio",
-    date: "2025-09-10",
-    excerpt:
-      "How I built this minimal developer portfolio with the App Router, TypeScript, Tailwind v4, and shadcn/ui.",
-    tags: ["Next.js", "TypeScript", "Tailwind", "shadcn/ui"],
-    body: `I wanted a small, focused site that is fast to load, easy to iterate on, and simple to host.\n\n## Why App Router?\n\nServer-first by default, with client components only where needed.\n\n## Stack\n\n- Next.js 15\n- TypeScript\n- Tailwind v4\n- shadcn/ui`,
+export type Post = {
+  slug: string; // unique URL segment
+  title: string;
+  summary: string;
+  publishedAt: string; // ISO string
+  updatedAt?: string; // ISO string
+  tags: string[];
+  featured?: boolean;
+  archived?: boolean; // posts that are no longer updated
+  body: string; // MDX content
+  sources?: PostSource[];
+  readingTime: {
+    words: number;
+    minutes: number;
+    text: string;
+  };
+};
+
+// Retrieve all posts from the file system
+export const posts: Post[] = getAllPosts();
+
+export const postsBySlug = Object.fromEntries(posts.map((post) => [post.slug, post])) as Record<string, Post>;
+
+export const postTagCounts = posts.reduce<Record<string, number>>((acc, post) => {
+  for (const tag of post.tags) {
+    acc[tag] = (acc[tag] ?? 0) + 1;
   }
-];
+  return acc;
+}, {});
+
+export const allPostTags = Object.freeze(Object.keys(postTagCounts).sort());
+
+export const featuredPosts = Object.freeze(posts.filter((post) => post.featured));

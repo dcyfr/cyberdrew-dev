@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./print.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -21,17 +22,17 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://cyberdrew.dev"),
   title: {
-    default: "CyberDrew — Developer Portfolio",
-    template: "%s — CyberDrew",
+    default: "Drew's Lab",
+    template: "%s — Drew's Lab",
   },
   description:
     "Modern, minimalistic developer portfolio of Drew. Full‑stack engineering, TypeScript, React, Node.js, cloud-native.",
   openGraph: {
-    title: "CyberDrew — Developer Portfolio",
+    title: "Drew's Lab",
     description:
       "Modern, minimalistic developer portfolio of Drew. Full‑stack engineering, TypeScript, React, Node.js, cloud-native.",
     url: "https://cyberdrew.dev",
-    siteName: "CyberDrew",
+    siteName: "Drew's Lab",
     locale: "en_US",
     type: "website",
     images: [
