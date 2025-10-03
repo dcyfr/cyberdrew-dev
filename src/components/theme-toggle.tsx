@@ -20,8 +20,6 @@ export function ThemeToggle() {
         size="icon"
         aria-label="Toggle theme"
         className="opacity-0"
-        tabIndex={-1}
-        aria-hidden
         disabled
       >
         <Sun className="size-5" />

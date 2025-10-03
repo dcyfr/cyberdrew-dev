@@ -1,4 +1,4 @@
-# cyberdrew.dev — Minimal Developer Portfolio
+# Minimal Next.js Developer Portfolio
 
 A modern, minimal portfolio built with Next.js (App Router), TypeScript, Tailwind CSS v4, and shadcn/ui.
 
@@ -44,7 +44,7 @@ npm start
 - `src/app/sitemap.ts` and `src/app/robots.ts` are generated routes.
 
 ## Domain & Deployment
-- Point your domain (cyberdrew.dev) to your hosting provider (e.g., Vercel).
+- Point your domain to your hosting provider (e.g., Vercel).
 - On Vercel: import this repo, set production branch, add domain in Project Settings.
 - DNS: add A/AAAA or CNAME as directed by your host.
 
