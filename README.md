@@ -61,6 +61,14 @@ npm start
 - The API route at `/api/contact` validates input and logs it on the server.
 - Replace the placeholder with an email/SaaS integration (Resend, Sendgrid, etc.).
 
+## GitHub Contributions
+- The GitHub heatmap component fetches real contribution data via `/api/github-contributions`.
+- **Optional**: Set `GITHUB_TOKEN` in `.env.local` to increase rate limits (60 → 5,000 req/hour).
+  - Create token at: https://github.com/settings/tokens (no scopes needed)
+  - See `.env.example` for setup instructions
+- Without a token, the API uses GitHub's public GraphQL API with basic rate limits.
+- Falls back to sample data if the API is unavailable.
+
 ## License
 MIT
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
