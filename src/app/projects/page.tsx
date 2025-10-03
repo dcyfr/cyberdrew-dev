@@ -13,7 +13,7 @@ export default function ProjectsPage() {
     <div className="mx-auto max-w-5xl py-12 md:py-16">
       {/* GitHub activity heatmap */}
       <section className="mb-8">
-        <GitHubHeatmap username="dcyfr" />
+        <GitHubHeatmap />
       </section>
 
       {/* Projects Section */}

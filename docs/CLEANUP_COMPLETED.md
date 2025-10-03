@@ -87,7 +87,6 @@ Route (app)                                      Size  First Load JS
 ├ ○ /_not-found                                 147 B         102 kB
 ├ ƒ /.well-known/security.txt                   147 B         102 kB
 ├ ○ /about                                      147 B         102 kB
-├ ƒ /api/github-contributions                   147 B         102 kB
 ├ ○ /atom.xml                                   147 B         102 kB
 ├ ƒ /blog                                       165 B         105 kB
 ├ ● /blog/[slug]                                147 B         102 kB
@@ -106,11 +105,6 @@ Route (app)                                      Size  First Load JS
 ## What's Next (Optional)
 
 From the original analysis, these items remain as optional improvements:
-
-### Documentation Consolidation (Medium Priority)
-- [ ] Merge `GITHUB_SETUP.md` and `docs/GITHUB_DATA_CACHING.md`
-- [ ] Create single source of truth in `/docs`
-- [ ] Update README.md references
 
 ### Code Quality Review (Low Priority)
 - [ ] Review console statements in API routes

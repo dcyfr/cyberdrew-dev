@@ -8,9 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "sync:agents": "node ./scripts/sync-agents.mjs",
-    "fetch:github": "node ./scripts/fetch-github-data.mjs",
     "predev": "npm run sync:agents",
-    "prebuild": "npm run sync:agents && npm run fetch:github"
+    "prebuild": "npm run sync:agents"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",

@@ -58,11 +58,6 @@ The Snyk security scan reported three vulnerabilities in files that **no longer 
 - Static generation at build time
 - No dynamic client-side HTML construction
 
-**API Routes** (`src/app/api/github-contributions/route.ts`)
-- Proper input validation with `searchParams.get()`
-- No eval, Function(), or dynamic code execution
-- Environment variables kept server-side
-
 ### ✅ Open Redirect Prevention
 
 - No usage of `window.location.replace()`
@@ -87,15 +82,13 @@ The Snyk security scan reported three vulnerabilities in files that **no longer 
 src/
 ├── app/
 │   ├── blog/[slug]/page.tsx ✅
-│   ├── api/github-contributions/route.ts ✅
 │   └── layout.tsx ✅
 ├── components/
 │   ├── mdx.tsx ✅
 │   ├── github-heatmap.tsx ✅
 │   └── ui/* ✅
 └── lib/
-    ├── blog.ts ✅
-    └── github-cache.ts ✅
+    └── blog.ts ✅
 ```
 
 ### Security Patterns Found

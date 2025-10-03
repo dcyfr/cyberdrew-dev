@@ -187,12 +187,6 @@
     page-break-inside: avoid;
   }
 
-  /* GitHub contribution heatmap - hide or simplify */
-  .github-heatmap,
-  [class*="heatmap"] {
-    display: none !important;
-  }
-
   /* Hide section breaks/separators */
   hr,
   .separator,

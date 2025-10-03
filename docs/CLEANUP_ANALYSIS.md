@@ -57,20 +57,7 @@ rm src/components/ui/tooltip.tsx
 - Option A: Delete `.dcignore` entirely if it's not actively used
 - Option B: Replace with a minimal version specific to this stack
 
-### 3. Documentation Consolidation 📝 MEDIUM IMPACT
-
-**Finding**: Multiple documentation files with overlapping content about GitHub integration.
-
-**Files**:
-- `GITHUB_SETUP.md` (59 lines) - Basic setup instructions
-- `docs/GITHUB_DATA_CACHING.md` (85 lines) - Detailed caching explanation
-
-**Recommendation**: 
-- Merge these into a single comprehensive doc in `/docs`
-- Update README.md to reference the consolidated doc
-- Reduces maintenance burden (single source of truth)
-
-### 4. Remove Unused Dependencies 🔧 MEDIUM IMPACT
+### 3. Remove Unused Dependencies 🔧 MEDIUM IMPACT
 
 **Check for unused npm packages** - Need to verify if all installed Radix components are needed:
 
@@ -118,19 +105,15 @@ export default nextConfig;
 
 ### 7. Console Statements Review
 
-**Finding**: 21+ console.log/warn/error statements found throughout the codebase.
+**Finding**: Console statements found throughout the codebase.
 
 **Acceptable Usage** (Scripts):
 - ✅ `scripts/sync-agents.mjs` - Build-time logging
-- ✅ `scripts/fetch-github-data.mjs` - Build-time logging
 
-**Review Needed** (API/Components):
-- ⚠️ `src/app/api/github-contributions/route.ts` - 7 console statements
-- ⚠️ `src/lib/github-cache.ts` - 1 console.warn
+**Review Needed** (Components):
 - ⚠️ `src/components/github-heatmap.tsx` - 1 console.error
 
 **Recommendation**: 
-- API routes: Consider structured logging or remove for production
 - Client components: Replace with proper error handling/user feedback
 - Or: Accept current state as helpful for debugging
 
