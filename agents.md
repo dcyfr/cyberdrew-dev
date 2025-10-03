@@ -1,3 +1,8 @@
+<!--
+  NOTE: This file is auto-synced from .github/copilot-instructions.md.
+  Edit the source file instead: .github/copilot-instructions.md
+-->
+
 # AI contributor guide for this repo
 
 This repo is a minimal developer portfolio built with Next.js (App Router), TypeScript, Tailwind CSS v4, and shadcn/ui. Optimize for small, typed components, server-first rendering, and simple data flows.
@@ -64,4 +69,4 @@ If you’re running in VS Code with Model Context Protocol (MCP) servers configu
 - Don’t bypass the `@/*` import alias.
 - Don’t move SEO routes (`sitemap.ts`, `robots.ts`) out of `src/app/`.
 
-Key files for reference: `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/api/contact/route.ts`, `src/components/project-card.tsx`, `src/data/projects.ts`, `src/lib/utils.ts`. 
+Key files for reference: `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/api/contact/route.ts`, `src/components/project-card.tsx`, `src/data/projects.ts`, `src/lib/utils.ts`.

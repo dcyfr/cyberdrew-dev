@@ -1,92 +1,101 @@
-# cyberdrew.dev
+# Minimal Next.js Developer Portfolio
 
-A modern, accessible, and secure blog and UI component platform built with React, TypeScript, Vite, Tailwind CSS, and shadcn-ui.
+A modern, minimal portfolio built with Next.js (App Router), TypeScript, Tailwind CSS v4, and shadcn/ui.
 
-## Features
+Developing with an AI assistant? See `agents.md` for the AI contributor guide (kept in sync with `.github/copilot-instructions.md`).
 
-- **Blog Platform**: Write, organize, and display blog posts with Markdown support and advanced content blocks.
-- **UI Component Library**: 40+ reusable, accessible, and themeable UI components (see `src/components/ui/`).
-- **Performance Optimized**: Fast load times, code splitting, lazy loading, and bundle optimizations.
-- **Security First**: Strong security headers, rate limiting, and input validation (see `src/lib/security.ts`).
-- **Accessibility**: WCAG-compliant components, semantic HTML, keyboard navigation, and ARIA support.
-- **Custom Hooks**: Utilities for mobile detection, toasts, and more (`src/hooks/`).
-- **Theming**: Light/dark mode toggle and theme provider.
-- **SEO Ready**: SEO meta tags and Open Graph support.
-- **Bundle Budgets**: CI guardrails enforce chunk size budgets.
-- **Developer Experience**: TypeScript strictness, ESLint, Prettier, and fast refresh.
-- **Deployment Ready**: Vercel configuration and easy custom domain setup.
+## Tech
+- Next.js 15 (App Router) + React 19
+- TypeScript, ESLint
+- Tailwind CSS v4
+- shadcn/ui (Radix + CVA)
+- next-themes, sonner
+- Vercel Analytics & Speed Insights
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v18+ recommended)
-- npm
-
-### Installation
+## Development
 
 ```sh
-git clone https://github.com/dcyfr/cyberdrew-dev.git
-cd cyberdrew-dev
 npm install
-```
-
-### Development
-
-```sh
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) to view the app.
+Then open http://localhost:3000.
 
-Useful scripts:
-
-- Guard (typecheck + lint + build): `npm run guard`
-- Analyze (assets, deps, dead exports): `npm run analyze`
-
-See full docs in `docs/index.md`.
-
-### Build for Production
+## Build & Start
 
 ```sh
 npm run build
-```
-
-### Linting & Formatting
-
-```sh
-npm run lint
+npm start
 ```
 
 ## Project Structure
+- `src/app` — App Router pages and API routes
+- `src/components` — UI components (shadcn/ui + custom)
+- `src/data` — Static content/data
+- `src/lib` — Utilities
 
-- `src/components/` — React components (UI, layout, blog, etc.)
-- `src/content/` — Blog posts and content pages
-- `src/hooks/` — Custom React hooks
-- `src/lib/` — Utilities, security, performance, and constants
-- `public/` — Static assets
-- `docs/` — Documentation and guides
+## Customization
+- Update site copy in `src/app/page.tsx`, `about`, `projects`, `contact`.
+- Add/edit projects in `src/data/projects.ts`.
+- Tweak theme tokens in `src/app/globals.css`.
 
-## Accessibility
+## SEO
+- Edit `metadata` in `src/app/layout.tsx`.
+- `src/app/sitemap.ts` and `src/app/robots.ts` are generated routes.
 
-- All UI components follow WCAG guidelines
-- Semantic HTML and ARIA attributes
-- Keyboard navigation support
-- Color contrast and screen reader tested
+## Domain & Deployment
+- Point your domain to your hosting provider (e.g., Vercel).
+- On Vercel: import this repo, set production branch, add domain in Project Settings.
+- DNS: add A/AAAA or CNAME as directed by your host.
 
-## Security
+### Vercel Analytics & Speed Insights
+- Already wired in `src/app/layout.tsx` via `<Analytics />` and `<SpeedInsights />`.
+- Works automatically on Vercel deployments; no extra config required.
+- Disable or relocate only if requested.
 
-- Input validation and sanitization
-- Secure headers and rate limiting
-- No secrets or sensitive data in client code
+### Vercel project config
+- `vercel.json` provides sensible defaults for caching static assets and adds basic security headers.
+- You can extend headers or rewrites as needed; Next.js routing remains managed by the App Router.
 
-## Tooling & Budgets
+## Contact Form
+- The API route at `/api/contact` validates input and logs it on the server.
+- Replace the placeholder with an email/SaaS integration (Resend, Sendgrid, etc.).
 
-- ESLint, TypeScript strict, and bundle analyzer. Budgets enforced by `scripts/ci-bundle-budget.mjs`.
-- Analyze helpers: `npm run analyze` (assets, deps, dead exports).
+## License
+MIT
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Deployment
+## Getting Started
 
-- Deploy to [Vercel](https://vercel.com/) or any static hosting provider
-- Custom domain support via Vercel or your host
+First, run the development server:
 
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

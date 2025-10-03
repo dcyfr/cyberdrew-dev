@@ -1,0 +1,78 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import "./print.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://cyberdrew.dev"),
+  title: {
+    default: "Drew's Lab",
+    template: "%s — Drew's Lab",
+  },
+  description:
+    "Security architect and engineer sharing insights on cybersecurity, enterprise security operations, and technology. Building secure systems, leading teams, and writing about security best practices.",
+  openGraph: {
+    title: "Drew's Lab",
+    description:
+      "Security architect and engineer sharing insights on cybersecurity, enterprise security operations, and technology. Building secure systems, leading teams, and writing about security best practices.",
+    url: "https://cyberdrew.dev",
+    siteName: "Drew's Lab",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/og.svg",
+        width: 1200,
+        height: 630,
+        alt: "cyberdrew.dev — Developer Portfolio",
+      },
+    ],
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  alternates: {
+    types: {
+      "application/rss+xml": "https://cyberdrew.dev/rss.xml",
+      "application/atom+xml": "https://cyberdrew.dev/atom.xml",
+    },
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <SiteHeader />
+          <main className="min-h-[calc(100dvh-128px)] px-6 md:px-8">{children}</main>
+          <SiteFooter />
+          <Toaster richColors position="top-center" />
+          {/* Vercel Analytics & Speed Insights */}
+          <Analytics />
+          <SpeedInsights />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
