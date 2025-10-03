@@ -47,6 +47,7 @@ If you’re running in VS Code with Model Context Protocol (MCP) servers configu
   - Example: `src/data/projects.ts` exports `projects: Project[]`, where `Project` is the type from `src/components/project-card.tsx`.
 - Composition: Small, focused components under `src/components/*` (e.g., `project-card`, `site-header`, `site-footer`).
 - Imports: Use `@/…` alias consistently.
+- Documentation: Store all documentation files (analysis, guides, architecture docs) in `/docs` directory unless explicitly required in the project root (e.g., `README.md`, `LICENSE`). This keeps the workspace organized and separates documentation from code.
 
 ## Forms and API
 - Client pages use fetch to App Router API routes and `sonner` for UX feedback.
