@@ -70,9 +70,9 @@ export const resume: Resume = {
       company: "Information Security Network, Inc.",
       duration: "Sep 2019 → Sep 2021",
       responsibilities: [
-        "Promoted security awareness and education through collaborations with DC850",
-        "Led virtual seminars, training, and events such as BSides and Hack Pensacola",
-        "Aligned IT and security objectives with nonprofit strategies"
+        "Led virtual seminars, training, and events such as BSides and Hack Pensacola.",
+        "Promoted security awareness/education in collaboration with DC850.",
+        "Aligned IT and security objectives with nonprofit strategies."
       ]
     },
     {
@@ -80,9 +80,10 @@ export const resume: Resume = {
       company: "Creative Breakthroughs, Inc.",
       duration: "Dec 2020 → Jul 2021",
       responsibilities: [
-        "Assisted engineering teams with issue resolution and procedural enhancements",
-        "Created playbooks and documentation tailored to client environments",
-        "Placed 1st in the Corporate Boss of the SOC Capture the Flag event"
+        "Triaged and validated level one escalations, leading incident response for the SOC.",
+        "Assisted engineering teams with issue resolution and procedural enhancements.",
+        "Created playbooks and documentation tailored to client environments.",
+        "Placed 1st in the Corporate Boss of the SOC Capture the Flag event."
       ]
     },
     {
@@ -90,16 +91,16 @@ export const resume: Resume = {
       company: "Escambia County Board of County Commissioners",
       duration: "Mar 2020 → Dec 2020",
       responsibilities: [
-        "Implemented a security awareness program, improving phishing detection rates by 40%",
+        "Implemented an awareness program which improved phishing detection rates over 40%",
         "Triaged alerts, incidents, and remote forensics across 1k CJIS-certified systems",
-        "Implemented controls from CIS and NIST for public and emergency systems"
+        "Applied CIS/NIST controls to public use and emergency support systems"
       ]
     }
   ],
 
   education: [
     {
-      degree: "Master of Science in Information Security Engineering",
+      degree: "Master of Science Information Security Engineering",
       institution: "SANS Technology Institute",
       duration: "Jan 2024 → Present",
       highlights: [
@@ -110,7 +111,7 @@ export const resume: Resume = {
       ]
     },
     {
-      degree: "Bachelor of Applied Science in Cybersecurity",
+      degree: "Bachelor of Applied Science Cybersecurity",
       institution: "Pensacola State College",
       duration: "Dec 2020",
       highlights: [
