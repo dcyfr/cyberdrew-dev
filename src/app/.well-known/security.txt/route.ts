@@ -7,12 +7,13 @@ export function GET(request: Request) {
   // Expires must be within 1 year. We'll set ~180 days ahead.
   const expires = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString();
 
-  // Prefer a stable, non-invented contact URL. This repo references a /contact route in sitemap.
-  // If that page is not present yet, it can be added later without changing this endpoint.
-  const contactUrl = `security@cyberdrew.dev`;
+  // Primary contact is the contact form, fallback to email
+  const contactEmail = `security@cyberdrew.dev`;
+  const contactPage = `${origin}/contact`;
 
   const body = [
-    `Contact: ${contactUrl}`,
+    `Contact: ${contactPage}`,
+    `Contact: ${contactEmail}`,
     `Expires: ${expires}`,
     `Preferred-Languages: en`,
     `Canonical: ${origin}/.well-known/security.txt`,

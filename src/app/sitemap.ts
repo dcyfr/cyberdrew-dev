@@ -9,6 +9,7 @@ const pageConfig = {
   "/about": { changeFrequency: "yearly" as const, priority: 0.5 },
   "/blog": { changeFrequency: "weekly" as const, priority: 0.8 },
   "/projects": { changeFrequency: "monthly" as const, priority: 0.7 },
+  "/contact": { changeFrequency: "yearly" as const, priority: 0.6 },
 } as const;
 
 function getStaticPages(): string[] {

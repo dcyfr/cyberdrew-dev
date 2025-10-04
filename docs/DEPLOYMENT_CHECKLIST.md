@@ -111,7 +111,6 @@ To avoid rate limiting (increases from 60 to 5,000 requests/hour):
 
 ### 📚 Documentation
 
-- `docs/GITHUB_API.md` - Complete API documentation
-- `docs/GITHUB_CONTRIBUTIONS_FIX.md` - Technical details of the fix
+- `docs/API.md` - Complete API documentation
 - `.env.example` - Environment variable setup
 - `README.md` - Quick start guide

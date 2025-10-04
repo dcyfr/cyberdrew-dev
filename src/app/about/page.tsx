@@ -26,9 +26,9 @@ export default function AboutPage() {
           </a>
           {" "}or{" "}
           <a
-            href="mailto:hello@cyberdrew.dev"
+            href="/contact"
             className="underline hover:text-primary transition"
-          > send me an email
+          >send me a message
           </a>.
         </p>
       </div>
