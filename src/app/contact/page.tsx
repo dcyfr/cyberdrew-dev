@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,10 +9,14 @@ import { toast } from "sonner";
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [, startTransition] = useTransition();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsSubmitting(true);
+    
+    startTransition(() => {
+      setIsSubmitting(true);
+    });
 
     const formData = new FormData(e.currentTarget);
     const data = {
@@ -33,7 +37,13 @@ export default function ContactPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.error || "Failed to send message");
+        // Handle rate limiting with specific message
+        if (response.status === 429) {
+          const retryAfter = result.retryAfter || 60;
+          toast.error(`Too many requests. Please try again in ${retryAfter} seconds.`);
+        } else {
+          toast.error(result.error || "Failed to send message");
+        }
         return;
       }
 
@@ -62,6 +72,7 @@ export default function ContactPage() {
             name="name"
             type="text"
             placeholder="Your name"
+            autoComplete="name"
             required
             disabled={isSubmitting}
           />
@@ -74,6 +85,7 @@ export default function ContactPage() {
             name="email"
             type="email"
             placeholder="your.email@example.com"
+            autoComplete="email"
             required
             disabled={isSubmitting}
           />

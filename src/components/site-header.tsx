@@ -9,13 +9,25 @@ export function SiteHeader() {
           Drew <span className="ml-1 font-sans not-italic">&#10022;</span>
         </Link>
         <nav aria-label="Main navigation" className="flex items-center gap-4 text-sm">
-          <Link href="/about" className="hover:underline underline-offset-4">
+          <Link 
+            href="/about" 
+            className="hover:underline underline-offset-4 will-change-auto"
+            prefetch={false}
+          >
             About
           </Link>
-          <Link href="/blog" className="hover:underline underline-offset-4">
+          <Link 
+            href="/blog" 
+            className="hover:underline underline-offset-4 will-change-auto"
+            prefetch={false}
+          >
             Blog
           </Link>
-          <Link href="/projects" className="hover:underline underline-offset-4">
+          <Link 
+            href="/projects" 
+            className="hover:underline underline-offset-4 will-change-auto"
+            prefetch={false}
+          >
             Projects
           </Link>
           <ThemeToggle />

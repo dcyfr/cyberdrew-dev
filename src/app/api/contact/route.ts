@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { rateLimit, getClientIp, createRateLimitHeaders } from "@/lib/rate-limit";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Rate limit: 3 requests per 60 seconds per IP
+const RATE_LIMIT_CONFIG = {
+  limit: 3,
+  windowInSeconds: 60,
+};
 
 type ContactFormData = {
   name: string;
@@ -20,6 +27,26 @@ function sanitizeInput(input: string): string {
 
 export async function POST(request: Request) {
   try {
+    // Apply rate limiting
+    const clientIp = getClientIp(request);
+    const rateLimitResult = rateLimit(clientIp, RATE_LIMIT_CONFIG);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { 
+          error: "Too many requests. Please try again later.",
+          retryAfter: Math.ceil((rateLimitResult.reset - Date.now()) / 1000),
+        },
+        { 
+          status: 429,
+          headers: {
+            ...createRateLimitHeaders(rateLimitResult),
+            "Retry-After": Math.ceil((rateLimitResult.reset - Date.now()) / 1000).toString(),
+          },
+        }
+      );
+    }
+
     const body = await request.json();
     const { name, email, message } = body as ContactFormData;
 
@@ -90,7 +117,10 @@ export async function POST(request: Request) {
         success: true,
         message: "Message received successfully" 
       },
-      { status: 200 }
+      { 
+        status: 200,
+        headers: createRateLimitHeaders(rateLimitResult),
+      }
     );
   } catch (error) {
     console.error("Contact form error:", error);

@@ -6,8 +6,66 @@ import { posts } from "@/data/posts";
 import { resume } from "@/data/resume";
 
 export default function Home() {
+  // JSON-LD structured data for home page
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://cyberdrew.dev/#website",
+        url: "https://cyberdrew.dev",
+        name: "Drew's Lab",
+        description: resume.shortSummary,
+        publisher: {
+          "@id": "https://cyberdrew.dev/#person",
+        },
+        inLanguage: "en-US",
+      },
+      {
+        "@type": "Person",
+        "@id": "https://cyberdrew.dev/#person",
+        name: "Drew",
+        url: "https://cyberdrew.dev",
+        image: "https://cyberdrew.dev/og.svg",
+        description: resume.shortSummary,
+        jobTitle: "Cybersecurity Professional",
+        sameAs: [
+          // Add social media profiles here if available
+        ],
+        knowsAbout: [
+          "Cybersecurity",
+          "Information Security",
+          "Security Operations",
+          "Vulnerability Management",
+          "Incident Response",
+          "Cloud Security",
+          "Software Development",
+        ],
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://cyberdrew.dev/#webpage",
+        url: "https://cyberdrew.dev",
+        name: "Drew's Lab - Cybersecurity & Software Development",
+        isPartOf: {
+          "@id": "https://cyberdrew.dev/#website",
+        },
+        about: {
+          "@id": "https://cyberdrew.dev/#person",
+        },
+        description: resume.shortSummary,
+        inLanguage: "en-US",
+      },
+    ],
+  };
+
   return (
-    <div className="mx-auto max-w-5xl py-14 md:py-20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="mx-auto max-w-5xl py-14 md:py-20">
       {/* Introduction Section */}
       <section className="space-y-4">
         <h1 className="text-3xl md:text-5xl font-semibold tracking-tight italic font-serif">
@@ -71,5 +129,6 @@ export default function Home() {
         </div>
       </section>
     </div>
+    </>
   );
 }

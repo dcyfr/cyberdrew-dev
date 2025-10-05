@@ -119,6 +119,27 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Performance optimizations for navigation links */
+  a[class*="hover:underline"] {
+    text-decoration-skip-ink: auto;
+    text-underline-offset: 4px;
+    contain: layout style;
+  }
+  
+  /* Hardware acceleration for interactive elements */
+  button,
+  a {
+    transform: translateZ(0);
+    will-change: auto;
+  }
+  
+  /* Optimize hover states */
+  @media (hover: hover) {
+    a:hover {
+      transition: text-decoration-color 0.15s ease;
+    }
+  }
 }
 
 /* GitHub Heatmap Styles */

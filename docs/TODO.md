@@ -2,7 +2,7 @@
 
 This document tracks bugs, feature requests, improvements, and technical debt for the cyberdrew.dev portfolio site.
 
-**Last Updated:** October 3, 2025
+**Last Updated:** October 5, 2025
 
 ---
 
@@ -99,12 +99,18 @@ This document tracks bugs, feature requests, improvements, and technical debt fo
 ## 🔐 Security
 
 ### Active
-- [ ] **Rate limiting** - Add rate limiting to contact form API
 - [ ] **CAPTCHA consideration** - Evaluate need for spam prevention on contact form
 - [ ] **Environment variable audit** - Ensure all sensitive data uses env vars
+- [ ] **CSP violation monitoring** - Set up endpoint to log CSP violations
 
 ### Completed
-- ✅ Security headers configured in vercel.json
+- ✅ **Security Assessment Findings** - All 3 findings from security report resolved (2025-10-05)
+  - Finding #1: Content Security Policy implemented
+  - Finding #2: Clickjacking protection (CSP + X-Frame-Options)
+  - Finding #3: MIME-sniffing protection (X-Content-Type-Options)
+- ✅ **Content Security Policy (CSP)** - Implemented comprehensive CSP with middleware and nonce support (2025-10-05)
+- ✅ **Rate limiting** - Implemented rate limiting for contact form API (3 req/60s per IP) (2025-10-05)
+- ✅ Security headers configured in vercel.json (X-Frame-Options, X-Content-Type-Options, HSTS, etc.)
 - ✅ API route input validation implemented
 - ✅ Safe MDX rendering with next-mdx-remote/rsc
 
@@ -168,6 +174,25 @@ This document tracks bugs, feature requests, improvements, and technical debt fo
 ## Archive
 
 Completed tasks are moved here with completion date for reference.
+
+### 2025-10-05
+- ✅ Resolved all security findings from security assessment
+  - Finding #1: Implemented Content Security Policy (CSP)
+  - Finding #2: Confirmed clickjacking protection (CSP frame-src + X-Frame-Options)
+  - Finding #3: Confirmed MIME-sniffing protection (X-Content-Type-Options)
+  - Created comprehensive documentation in `docs/SECURITY_FINDINGS_RESOLUTION.md`
+- ✅ Implemented Content Security Policy (CSP)
+  - Created `src/middleware.ts` with dynamic CSP and nonce generation
+  - Updated `vercel.json` with static CSP header (defense in depth)
+  - Configured CSP directives for Vercel Analytics, Google Fonts, and app resources
+  - Protection against XSS and Clickjacking attacks
+  - Created comprehensive documentation in `docs/CSP_IMPLEMENTATION.md`
+- ✅ Implemented rate limiting for contact form API
+  - Created `src/lib/rate-limit.ts` with in-memory rate limiter
+  - Updated `/api/contact` route with IP-based rate limiting (3 req/60s)
+  - Added standard rate limit headers (X-RateLimit-*)
+  - Enhanced contact page to handle 429 responses gracefully
+  - Created comprehensive documentation in `docs/RATE_LIMITING.md`
 
 ### 2025-10-03
 - ✅ Fixed Turbopack build claim in shipping blog post
