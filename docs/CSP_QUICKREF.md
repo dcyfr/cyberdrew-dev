@@ -1,16 +1,23 @@
 # CSP Quick Reference
 
-Quick reference for Content Security Policy implementation on cyberdrew.dev.
+Quick reference for Content Security Policy implement| Service | Domain | Directive |
+|---------|--------|--------|
+| Vercel Analytics | `va.vercel-scripts.com` | `script-src`, `connect-src` |
+| Vercel Insights | `*.vercel-insights.com` | `script-src`, `connect-src` |
+| Vercel Live | `vercel.live`, `*.pusher.com` | `script-src`, `style-src`, `img-src`, `font-src`, `connect-src` |
+| Google Fonts API | `fonts.googleapis.com` | `style-src` |
+| Google Fonts CDN | `fonts.gstatic.com` | `font-src` |
+| Vercel Images | `*.vercel.com` | `img-src` |n cyberdrew.dev.
 
 ## Current CSP Header
 
 ```
 default-src 'self';
-script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://*.vercel-insights.com;
-style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-img-src 'self' data: https://*.vercel.com https://vercel.com;
-font-src 'self' https://fonts.gstatic.com;
-connect-src 'self' https://va.vercel-scripts.com https://*.vercel-insights.com https://vercel-insights.com;
+script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://*.vercel-insights.com https://vercel.live;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://vercel.live;
+img-src 'self' data: https://*.vercel.com https://vercel.com https://vercel.live;
+font-src 'self' https://fonts.gstatic.com https://vercel.live;
+connect-src 'self' https://va.vercel-scripts.com https://*.vercel-insights.com https://vercel-insights.com https://vercel.live https://*.pusher.com wss://*.pusher.com;
 frame-src 'none';
 object-src 'none';
 base-uri 'self';

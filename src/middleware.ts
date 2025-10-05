@@ -4,38 +4,38 @@ import type { NextRequest } from "next/server";
 /**
  * Content Security Policy (CSP) Middleware
  * 
- * Generates a unique nonce for each request to allow inline scripts and styles
- * while maintaining strong CSP protection against XSS attacks.
+ * Adds CSP headers to protect against XSS attacks and control resource loading.
  * 
- * This middleware adds CSP headers with nonce support for:
- * - JSON-LD structured data scripts
- * - Inline styles from Tailwind and component libraries
- * - Vercel Analytics and Speed Insights
+ * Current implementation uses 'unsafe-inline' for compatibility with:
+ * - Next.js hydration scripts
+ * - Tailwind JIT inline styles
+ * - Vercel Analytics inline scripts
+ * - Third-party component libraries (Sonner, etc.)
+ * 
+ * Future enhancement: Migrate to nonce-based CSP for stricter security
  */
 
 export function middleware(request: NextRequest) {
-  // Generate a unique nonce for this request
-  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
-  
   // Build CSP directives
   const cspDirectives = [
     // Default: only allow same-origin resources
     "default-src 'self'",
     
-    // Scripts: self, Vercel analytics, and nonce for inline scripts (JSON-LD)
-    `script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://*.vercel-insights.com 'nonce-${nonce}'`,
+    // Scripts: self, Vercel analytics, Vercel Live (preview/dev), and unsafe-inline
+    // Note: We use unsafe-inline for compatibility with Next.js hydration and third-party scripts
+    `script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://*.vercel-insights.com https://vercel.live`,
     
-    // Styles: self, unsafe-inline for Tailwind/Sonner, Google Fonts
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    // Styles: self, unsafe-inline for Tailwind/Sonner, Google Fonts, Vercel Live
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://vercel.live",
     
-    // Images: self, data URIs, and Vercel domains
-    "img-src 'self' data: https://*.vercel.com https://vercel.com",
+    // Images: self, data URIs, Vercel domains, and Vercel Live
+    "img-src 'self' data: https://*.vercel.com https://vercel.com https://vercel.live",
     
-    // Fonts: self and Google Fonts CDN
-    "font-src 'self' https://fonts.gstatic.com",
+    // Fonts: self, Google Fonts CDN, and Vercel Live
+    "font-src 'self' https://fonts.gstatic.com https://vercel.live",
     
-    // Connect: self and Vercel analytics endpoints
-    "connect-src 'self' https://va.vercel-scripts.com https://*.vercel-insights.com https://vercel-insights.com",
+    // Connect: self, Vercel analytics endpoints, and Vercel Live (for feedback/comments)
+    "connect-src 'self' https://va.vercel-scripts.com https://*.vercel-insights.com https://vercel-insights.com https://vercel.live https://*.pusher.com wss://*.pusher.com",
     
     // Frame: deny all frames (clickjacking protection)
     "frame-src 'none'",
@@ -60,7 +60,6 @@ export function middleware(request: NextRequest) {
 
   // Clone response headers
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-nonce", nonce);
 
   const response = NextResponse.next({
     request: {

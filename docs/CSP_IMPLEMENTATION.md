@@ -2,7 +2,14 @@
 
 **Date:** October 5, 2025  
 **Status:** ✅ Implemented  
-**Security Finding:** #1 - Missing CSP Headers
+**Security Finding:** #1 - Missing### Allowed Services
+
+| Service | Domains | Purpose |
+|---------|---------|---------|------|
+| **Vercel Analytics** | `va.vercel-scripts.com`, `*.vercel-insights.com` | Traffic analytics |
+| **Vercel Speed Insights** | `vercel-insights.com` | Performance monitoring |
+| **Vercel Live** | `vercel.live`, `*.pusher.com` | Preview/feedback tools (dev/preview) |
+| **Google Fonts** | `fonts.googleapis.com`, `fonts.gstatic.com` | Geist font family |aders
 
 ---
 
@@ -151,7 +158,13 @@ The middleware applies to all routes except:
    - Required for deployment metrics
    - Hosted on Vercel infrastructure
 
-2. **Google Fonts**
+2. **Vercel Live**
+   - Preview deployment feedback and comments
+   - Development/staging environment only
+   - Uses Pusher for real-time communication
+   - Not loaded in production
+
+3. **Google Fonts**
    - Required for Geist font (Next.js default)
    - Loaded via `next/font/google`
    - Fonts cached locally after first load
