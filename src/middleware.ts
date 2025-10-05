@@ -37,8 +37,8 @@ export function middleware(request: NextRequest) {
     // Connect: self, Vercel analytics endpoints, and Vercel Live (for feedback/comments)
     "connect-src 'self' https://va.vercel-scripts.com https://*.vercel-insights.com https://vercel-insights.com https://vercel.live https://*.pusher.com wss://*.pusher.com",
     
-    // Frame: deny all frames (clickjacking protection)
-    "frame-src 'none'",
+    // Frame: allow Vercel Live for preview feedback, deny all others (clickjacking protection)
+    "frame-src https://vercel.live",
     
     // Objects: no plugins
     "object-src 'none'",
