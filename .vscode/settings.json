@@ -5,9 +5,11 @@
         "frontmatter",
         "geolocation",
         "Giscus",
+        "jank",
         "nosniff",
         "pexpire",
         "QUICKREF",
+        "shadcn",
         "signup",
         "Turbopack",
         "webp"
