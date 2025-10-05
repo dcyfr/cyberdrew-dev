@@ -37,7 +37,13 @@ export default function ContactPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.error || "Failed to send message");
+        // Handle rate limiting with specific message
+        if (response.status === 429) {
+          const retryAfter = result.retryAfter || 60;
+          toast.error(`Too many requests. Please try again in ${retryAfter} seconds.`);
+        } else {
+          toast.error(result.error || "Failed to send message");
+        }
         return;
       }
 

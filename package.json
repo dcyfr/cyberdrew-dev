@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "sync:agents": "node ./scripts/sync-agents.mjs",
+    "test:rate-limit": "node ./scripts/test-rate-limit.mjs",
     "predev": "npm run sync:agents",
     "prebuild": "npm run sync:agents"
   },
