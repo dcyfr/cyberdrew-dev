@@ -30,8 +30,41 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = posts.find((p) => p.slug === slug);
   if (!post) notFound();
 
+  // JSON-LD structured data for SEO and AI assistants
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.summary,
+    datePublished: post.publishedAt,
+    ...(post.updatedAt && { dateModified: post.updatedAt }),
+    author: {
+      "@type": "Person",
+      name: "Drew",
+      url: "https://cyberdrew.dev",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Drew",
+      url: "https://cyberdrew.dev",
+    },
+    url: `https://cyberdrew.dev/blog/${post.slug}`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://cyberdrew.dev/blog/${post.slug}`,
+    },
+    keywords: post.tags.join(", "),
+    wordCount: post.readingTime.words,
+    ...(post.archived && { archivedAt: post.updatedAt || post.publishedAt }),
+  };
+
   return (
-    <article className="mx-auto max-w-3xl py-14 md:py-20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <article className="mx-auto max-w-3xl py-14 md:py-20">
       <header>
         <div className="text-xs text-muted-foreground">
           <time dateTime={post.publishedAt}>
@@ -76,5 +109,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </footer>
       )}
     </article>
+    </>
   );
 }

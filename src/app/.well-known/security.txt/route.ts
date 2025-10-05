@@ -7,13 +7,11 @@ export function GET(request: Request) {
   // Expires must be within 1 year. We'll set ~180 days ahead.
   const expires = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString();
 
-  // Primary contact is the contact form, fallback to email
-  const contactEmail = `security@cyberdrew.dev`;
+  // Primary contact is the contact form
   const contactPage = `${origin}/contact`;
 
   const body = [
     `Contact: ${contactPage}`,
-    `Contact: ${contactEmail}`,
     `Expires: ${expires}`,
     `Preferred-Languages: en`,
     `Canonical: ${origin}/.well-known/security.txt`,

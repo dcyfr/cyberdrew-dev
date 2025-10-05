@@ -9,8 +9,47 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
+  // JSON-LD structured data for projects collection
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Projects",
+    description: "A collection of my active, in-progress, and archived projects in cybersecurity and software development.",
+    url: "https://cyberdrew.dev/projects",
+    author: {
+      "@type": "Person",
+      name: "Drew",
+      url: "https://cyberdrew.dev",
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: visibleProjects.map((project, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "SoftwareSourceCode",
+          name: project.title,
+          description: project.description,
+          url: `https://cyberdrew.dev/projects#${project.slug}`,
+          ...(project.links.find(l => l.type === "github") && {
+            codeRepository: project.links.find(l => l.type === "github")?.href,
+          }),
+          programmingLanguage: project.tech,
+          keywords: [...project.tech, ...(project.tags || [])].join(", "),
+          creativeWorkStatus: project.status === "active" ? "Published" : 
+                             project.status === "in-progress" ? "Draft" : "Archived",
+        },
+      })),
+    },
+  };
+
   return (
-    <div className="mx-auto max-w-5xl py-12 md:py-16">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="mx-auto max-w-5xl py-12 md:py-16">
       {/* GitHub activity heatmap */}
       <section className="mb-8">
         <GitHubHeatmap />
@@ -26,5 +65,6 @@ export default function ProjectsPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }
