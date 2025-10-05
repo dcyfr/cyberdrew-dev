@@ -72,6 +72,7 @@ export default function ContactPage() {
             name="name"
             type="text"
             placeholder="Your name"
+            autoComplete="name"
             required
             disabled={isSubmitting}
           />
@@ -84,6 +85,7 @@ export default function ContactPage() {
             name="email"
             type="email"
             placeholder="your.email@example.com"
+            autoComplete="email"
             required
             disabled={isSubmitting}
           />
