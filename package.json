@@ -51,7 +51,7 @@
     "gray-matter": "^4.0.3",
     "inngest": "^3.44.3",
     "katex": "^0.16.25",
-    "lucide-react": "^0.544.0",
+    "lucide-react": "^0.553.0",
     "mermaid": "^11.12.1",
     "next": "15.5.4",
     "next-mdx-remote": "^5.0.0",
