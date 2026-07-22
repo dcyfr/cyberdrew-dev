@@ -123,27 +123,27 @@ export type Post = { num: string; title: string; meta: string; href: string };
 export const writing: Post[] = [
   {
     num: "01",
-    title: "Running a 30-agent autonomous fleet on a $100/mo budget",
-    meta: "Essay · dev.to",
-    href: "https://dev.to/dcyfr",
+    title: "What's New in @dcyfr/ai: The v3 Line",
+    meta: "Release notes · Jun 2026",
+    href: "https://www.dcyfr.ai/blog/whats-new-in-dcyfr-ai-v3",
   },
   {
     num: "02",
-    title: "Giving agents a conscience: metacognition & circuit-breakers",
-    meta: "Essay · dev.to",
-    href: "https://dev.to/dcyfr",
+    title: "AI Assistants as Development Partners",
+    meta: "AI workflows · Mar 2026",
+    href: "https://www.dcyfr.ai/blog/ai-assistants-as-development-partners",
   },
   {
     num: "03",
-    title: "Local-first inference: shipping without the token bill",
-    meta: "Note · garden",
-    href: "https://dev.to/dcyfr",
+    title: "OWASP Top 10 for Agentic AI",
+    meta: "AI security · Dec 2025",
+    href: "https://www.dcyfr.ai/blog/owasp-top-10-agentic-ai",
   },
   {
     num: "04",
-    title: "The garden — evergreen notes, always growing",
-    meta: "Index →",
-    href: "#",
+    title: "Building with AI",
+    meta: "Essay · Nov 2025",
+    href: "https://www.dcyfr.ai/blog/building-with-ai",
   },
 ];
 
