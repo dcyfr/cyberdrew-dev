@@ -10,7 +10,7 @@ export const person = {
   name: "Drew",
   handle: "@cyberdrew",
   domain: "cyberdrew.dev",
-  email: "drew@dcyfr.ai",
+  email: "hello@cyberdrew.dev",
   cal: "https://cal.com/dcyfr/intro",
   roles: "Founder @ DCYFR Labs · Head of AI @ GameShark Labs · remote",
   eyebrow: "Building at the agentic frontier",

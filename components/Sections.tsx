@@ -154,7 +154,7 @@ export function Footer() {
           <span>© 2026 Drew</span>
           <span className="accent">// think freely · build securely · ship boldly</span>
           <span className="spacer" />
-          <span>hand-built · cyberdrew.dev</span>
+          <span>built agentically · cyberdrew.dev</span>
         </div>
       </div>
     </footer>
