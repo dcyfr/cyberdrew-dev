@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 
-const SITE = "https://cyberdrew.dev";
+const SITE = "https://www.cyberdrew.dev";
 const TITLE = "Drew — I build the systems that build";
 const DESC =
   "Autonomy engineer at the agentic frontier. Founder @ DCYFR Labs, Head of AI @ GameShark Labs — building AI that reasons, acts, and runs itself: a governed fleet of agents that research, ship code, and self-heal 24/7.";
