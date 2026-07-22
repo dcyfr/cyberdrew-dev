@@ -58,7 +58,7 @@ export default function FleetStream() {
           </span>
         </span>
       </div>
-      <div className="log">
+      <div className="log" aria-hidden="true">
         {lines.map((l) => (
           <div className="ln" key={l.id}>
             <span className="t">{l.time}</span>

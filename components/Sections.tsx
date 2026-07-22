@@ -149,11 +149,13 @@ export function Connect() {
 export function Footer() {
   return (
     <footer>
-      <div className="row">
-        <span>© 2026 Drew</span>
-        <span className="accent">// think freely · build securely · ship boldly</span>
-        <span className="spacer" />
-        <span>hand-built · cyberdrew.dev</span>
+      <div className="wrap">
+        <div className="row">
+          <span>© 2026 Drew</span>
+          <span className="accent">// think freely · build securely · ship boldly</span>
+          <span className="spacer" />
+          <span>hand-built · cyberdrew.dev</span>
+        </div>
       </div>
     </footer>
   );

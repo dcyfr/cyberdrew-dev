@@ -13,6 +13,12 @@ function useDecrypt(final: string, enabled: boolean) {
   useEffect(() => {
     const el = ref.current;
     if (!el || !enabled) return;
+    // Lock the box to the final word's width so scrambling proportional serif
+    // glyphs can't reflow the surrounding <h1> — kills the load-in jitter.
+    el.style.width = `${el.getBoundingClientRect().width}px`;
+    el.style.textAlign = "center";
+    el.style.whiteSpace = "nowrap";
+    el.style.overflow = "hidden";
     let frame = 0;
     const total = 28;
     const id = setInterval(() => {
@@ -30,6 +36,11 @@ function useDecrypt(final: string, enabled: boolean) {
       if (frame >= total) {
         clearInterval(id);
         el.textContent = final;
+        // release the lock — natural width now equals the locked width, no shift
+        el.style.width = "";
+        el.style.overflow = "";
+        el.style.whiteSpace = "";
+        el.style.textAlign = "";
       }
     }, 42);
     return () => clearInterval(id);
@@ -57,7 +68,8 @@ export default function Hero() {
           {!booted && <span className="caret" />}
         </div>
         <p className="eyebrow">{person.eyebrow}</p>
-        <h1 className="serif">
+        <h1 className="serif" aria-label="I build the systems that build.">
+
           I build the{" "}
           <span className="glitch" ref={glitchRef}>
             systems

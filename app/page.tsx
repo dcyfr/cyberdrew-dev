@@ -17,13 +17,17 @@ import {
 export default function Page() {
   return (
     <>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+
       <AgentMesh />
       <div className="grid-tex" aria-hidden="true" />
       <div className="glowfield" aria-hidden="true" />
 
       <Hud />
 
-      <div className="wrap">
+      <main id="main" tabIndex={-1} className="wrap">
         <Hero />
         <FleetStream />
         <Statement />
@@ -32,8 +36,9 @@ export default function Page() {
         <Writing />
         <Now />
         <Connect />
-        <Footer />
-      </div>
+      </main>
+
+      <Footer />
 
       <Ornaments />
       <RevealController />
