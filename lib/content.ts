@@ -33,22 +33,8 @@ export type WorkItem = {
 export const work: WorkItem[] = [
   {
     num: "01",
-    title: "Autonomous Agent Fleet",
-    href: "#connect",
-    desc:
-      "A governed swarm of AI daemons — research, code review, monitoring, self-healing — running a 30-minute cognitive loop on a local-first model stack, under a hard spend gate with metacognition to stop it spinning.",
-    tags: [
-      { label: "Multi-agent", hot: true },
-      { label: "Local-first inference", hot: true },
-      { label: "Self-healing" },
-      { label: "Metacognition" },
-    ],
-    status: { label: "Running", kind: "live" },
-  },
-  {
-    num: "02",
     title: "DCYFR AI",
-    href: "https://github.com/dcyfr",
+    href: "https://www.dcyfr.ai/ai",
     external: true,
     desc:
       "The portable TypeScript runtime my agents think in — model routing across local and frontier tiers, tool-use, and MCP wiring you drop into any project.",
@@ -61,9 +47,10 @@ export const work: WorkItem[] = [
     status: { label: "Open", kind: "open" },
   },
   {
-    num: "03",
+    num: "02",
     title: "Agent Governance & Safety",
-    href: "#connect",
+    href: "https://www.dcyfr.ai/about",
+    external: true,
     desc:
       "The rails that let agents take real actions without going off the rails — sandboxes, kill-switches, per-process credential isolation, and enforced spend limits. Autonomy you can trust.",
     tags: [
@@ -74,9 +61,24 @@ export const work: WorkItem[] = [
     status: { label: "Live", kind: "live" },
   },
   {
+    num: "03",
+    title: "Autonomous Agent Fleet",
+    href: "https://github.com/dcyfr-labs",
+    external: true,
+    desc:
+      "A governed swarm of AI daemons — research, code review, monitoring, self-healing — running a 30-minute cognitive loop on a local-first model stack, under a hard spend gate with metacognition to stop it spinning.",
+    tags: [
+      { label: "Multi-agent", hot: true },
+      { label: "Local-first inference", hot: true },
+      { label: "Self-healing" },
+      { label: "Metacognition" },
+    ],
+    status: { label: "Running", kind: "live" },
+  },
+  {
     num: "04",
     title: "SharkVault",
-    href: "https://gamesharklabs.com",
+    href: "https://sharkvault.gamesharklabs.com",
     external: true,
     desc:
       "Proof the fleet ships real product: a backer-funded consumer app taken end-to-end — auth, payments, content pipeline — largely by agents.",
