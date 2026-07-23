@@ -1,11 +1,6 @@
-"use client";
-
-import { useClock } from "@/lib/hooks";
-
-// Fixed corner "instrument" ornaments — a build indicator and an online/clock
-// readout, echoing an operator console's chrome.
+// Fixed corner "instrument" ornaments — a build indicator and an online readout,
+// echoing an operator console's chrome.
 export default function Ornaments() {
-  const clock = useClock();
   return (
     <>
       <div className="ornament left" aria-hidden="true">
@@ -18,7 +13,7 @@ export default function Ornaments() {
         </span>
       </div>
       <div className="ornament right" aria-hidden="true">
-        <span className="on">● ONLINE</span> / <span className="v">{clock}</span>
+        <span className="on">● ONLINE</span>
       </div>
     </>
   );

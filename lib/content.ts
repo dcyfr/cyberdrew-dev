@@ -175,51 +175,7 @@ export const streamEvents: StreamEvent[] = [
   { ch: "build", before: "daemon cycle complete — 3 tasks shipped" },
   { ch: "grade", before: "self-review passed — output accepted" },
   { ch: "ingest", before: "corpus updated — 218 new documents" },
-  { ch: "guard", before: "spend check — ", ok: "under $100/mo gate" },
-];
-
-// ---------------------------------------------------------------------------
-// Case studies — outcome-shaped proof (problem -> built -> result).
-// Figures reflect the real systems; confirm/soften before any high-stakes use.
-// ---------------------------------------------------------------------------
-export type CaseStudy = {
-  title: string;
-  href: string;
-  tag: string;
-  problem: string;
-  built: string;
-  result: string;
-};
-
-export const caseStudies: CaseStudy[] = [
-  {
-    title: "SharkVault",
-    href: "https://sharkvault.gamesharklabs.com",
-    tag: "Shipped · backer-funded",
-    problem:
-      "Ship a backer-funded consumer product — accounts, payments, and a living content vault — solo, on a real deadline.",
-    built:
-      "Built end-to-end on Next.js + Supabase, with an agent fleet doing the bulk of the code, the content pipeline, and the security hardening.",
-    result: "Live and funded — real backers, real revenue, shipped by one person and a swarm of agents.",
-  },
-  {
-    title: "Autonomous Agent Fleet",
-    href: "https://github.com/dcyfr-labs",
-    tag: "Running · 24/7",
-    problem:
-      "Run my own research, code review, and ops without being the bottleneck — around the clock, without a runaway cloud bill.",
-    built:
-      "A governed swarm of 30+ daemons on a 30-minute cognitive loop: local-first inference, self-healing, and a metacognition circuit-breaker to stop it spinning.",
-    result: "Runs unsupervised under a hard $100/mo spend gate — the fleet keeps shipping while I sleep, safely.",
-  },
-  {
-    title: "DCYFR AI",
-    href: "https://www.dcyfr.ai/ai",
-    tag: "Open source · on npm",
-    problem: "Every agent project kept rebuilding the same plumbing — model routing, tool-use, MCP wiring.",
-    built: "Extracted it into one portable TypeScript runtime and open-sourced it as @dcyfr/ai.",
-    result: "The runtime my own fleet thinks in — now anyone's, installable from npm.",
-  },
+  { ch: "guard", before: "spend check — ", ok: "within budget" },
 ];
 
 // ---------------------------------------------------------------------------

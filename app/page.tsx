@@ -5,12 +5,10 @@ import Hud from "@/components/Hud";
 import Ornaments from "@/components/Ornaments";
 import RevealController from "@/components/RevealController";
 import {
-  CaseStudies,
   Connect,
   Footer,
   Now,
   Offer,
-  Statement,
   Ventures,
   Work,
   Writing,
@@ -32,9 +30,7 @@ export default function Page() {
       <main id="main" tabIndex={-1} className="wrap">
         <Hero />
         <FleetStream />
-        <Statement />
         <Work />
-        <CaseStudies />
         <Ventures />
         <Writing />
         <Now />

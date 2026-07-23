@@ -1,10 +1,6 @@
-"use client";
-
 import { person } from "@/lib/content";
-import { useClock } from "@/lib/hooks";
 
 export default function Hud() {
-  const clock = useClock();
   return (
     <nav>
       <span className="logo">
@@ -14,9 +10,6 @@ export default function Hud() {
       <span className="spacer" />
       <span className="stat hide-sm">
         FLEET <span className="v" style={{ color: "var(--accent)" }}>30+ AGENTS</span>
-      </span>
-      <span className="stat">
-        LOCAL <span className="v">{clock}</span>
       </span>
       <span className="nav-links">
         <a href="#work">Work</a>

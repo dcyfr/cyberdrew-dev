@@ -1,23 +1,7 @@
-import { caseStudies, offer, socialLinks, ventures, work, writing } from "@/lib/content";
+import { offer, socialLinks, ventures, work, writing } from "@/lib/content";
 
 const ext = (external?: boolean) =>
   external ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
-
-export function Statement() {
-  return (
-    <section className="statement reveal">
-      <p>I build autonomous AI systems that operate the same tools people do.</p>
-      <p className="sub">
-        They reason, take action, and run entire workflows — research, code, ops — for hours or months,
-        so I ship outcomes, not keystrokes.
-      </p>
-      <p className="closer">
-        Chat answers. Agents act. <b>Someone has to make sure they act safely</b>{" "}— that&apos;s the job
-        I&apos;ve done for six years, now pointed at agents.
-      </p>
-    </section>
-  );
-}
 
 export function Work() {
   return (
@@ -50,46 +34,6 @@ export function Work() {
             </div>
             <span className={`status ${w.status.kind}`}>{w.status.label}</span>
           </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function CaseStudies() {
-  return (
-    <section className="block reveal" id="cases">
-      <div className="sec-head">
-        <p className="eyebrow">Case studies</p>
-        <h2 className="serif">Shipped, running, proven.</h2>
-        <p className="lede">
-          Not a portfolio of screenshots — three systems that solved a real problem and are live today.
-        </p>
-      </div>
-      <div className="cases">
-        {caseStudies.map((c) => (
-          <a className="case" key={c.title} href={c.href} target="_blank" rel="noopener noreferrer">
-            <div className="case-head">
-              <h3 className="serif">
-                {c.title} <span className="arw">↗</span>
-              </h3>
-              <span className="case-tag">{c.tag}</span>
-            </div>
-            <dl className="case-body">
-              <div>
-                <dt>Problem</dt>
-                <dd>{c.problem}</dd>
-              </div>
-              <div>
-                <dt>Built</dt>
-                <dd>{c.built}</dd>
-              </div>
-              <div>
-                <dt>Result</dt>
-                <dd className="res">{c.result}</dd>
-              </div>
-            </dl>
-          </a>
         ))}
       </div>
     </section>
@@ -194,7 +138,7 @@ export function Connect() {
   return (
     <section className="closing reveal" id="connect">
       <h2 className="serif">
-        Let&apos;s build something <em>autonomous</em> — and hard to break.
+        Let&apos;s build something <em>autonomous</em> and hard to break.
       </h2>
       <p className="frame">
         20 min, no pitch — tell me what you&apos;re trying to automate, and I&apos;ll tell you if it&apos;s
@@ -215,10 +159,6 @@ export function Footer() {
   return (
     <footer>
       <div className="wrap">
-        <p className="aside">
-          Yes — agents helped build this page. That&apos;s rather the point. I read every line before it
-          shipped.
-        </p>
         <div className="row">
           <span>© 2026 Drew</span>
           <span className="accent">// think freely · build securely · ship boldly</span>
