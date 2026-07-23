@@ -160,7 +160,7 @@ export function Footer() {
     <footer>
       <div className="wrap">
         <div className="row">
-          <span>© 2026 Drew</span>
+          <span>© 2026 Drew (dcyfr)</span>
           <span className="accent">// think freely · build securely · ship boldly</span>
           <span className="spacer" />
           <span>built agentically · cyberdrew.dev</span>

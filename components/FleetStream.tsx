@@ -26,8 +26,8 @@ export default function FleetStream() {
       return { ...ev, id: id++, time: stamp() };
     };
 
-    // Seed immediately so the panel is never empty.
-    const seed = reduce ? 6 : 3;
+    // Seed the panel full so it's never a hollow box (and never shifts height).
+    const seed = 7;
     setLines(Array.from({ length: seed }, next));
 
     if (reduce) return;

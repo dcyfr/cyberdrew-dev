@@ -163,6 +163,7 @@
   .steps { border-top:1px solid var(--line); margin-inline:calc(-1 * clamp(12px,1.8vw,20px)); }
   .step { display:grid; grid-template-columns:3.2rem 1fr auto; gap:clamp(16px,3vw,40px); align-items:start; padding:clamp(24px,3.2vw,36px) clamp(12px,1.8vw,20px); border-bottom:1px solid var(--line); transition:background .18s; }
   .step:hover { background:color-mix(in oklab,var(--accent) 6%,transparent); }
+  .step:last-child { border-bottom:0; }
   .step .num { font-family:var(--font-mono); font-size:13px; color:var(--accent); padding-top:8px; font-variant-numeric:tabular-nums; }
   .step .body h3 { font-family:var(--font-display); font-weight:400; font-size:clamp(1.35rem,2.4vw,1.85rem); margin:0 0 8px; letter-spacing:-.01em; }
   .step .body h3 a:hover { color:var(--accent); }

@@ -125,10 +125,6 @@ export default function Hero() {
             </span>
           </div>
           <div className="irow">
-            <span className="k">spend gate</span>
-            <span className="v">hard cap</span>
-          </div>
-          <div className="irow">
             <span className="k">load</span>
             <span className="v">
               <span className="load">

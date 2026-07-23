@@ -8,7 +8,7 @@
 
 export const person = {
   name: "Drew",
-  handle: "@cyberdrew",
+  handle: "@dcyfr",
   domain: "cyberdrew.dev",
   email: "hello@cyberdrew.dev",
   cal: "https://cal.com/dcyfr/intro",
