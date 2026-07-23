@@ -13,7 +13,7 @@ export const person = {
   email: "hello@cyberdrew.dev",
   cal: "https://cal.com/dcyfr/intro",
   roles: "Founder @ DCYFR Labs · Head of AI @ GameShark Labs · remote",
-  eyebrow: "Building at the agentic frontier",
+  eyebrow: "Security architect · autonomous AI you can trust",
 } as const;
 
 export type StatusKind = "live" | "open";

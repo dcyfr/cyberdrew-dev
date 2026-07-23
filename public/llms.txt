@@ -1,0 +1,28 @@
+# cyberdrew.dev — Drew
+
+> Drew is a security architect who builds autonomous AI systems you can trust — agentic
+> dev-tooling, security-first products, and a governed fleet of AI daemons. Founder of DCYFR
+> Labs and Head of AI at GameShark Labs. He works at the intersection of autonomous agents
+> and security: building AI that can take real actions, with the sandboxes, kill-switches,
+> and spend gates that let it run unsupervised without going off the rails.
+
+## Key pages
+- [cyberdrew.dev](https://www.cyberdrew.dev): Positioning, selected work, writing, and contact.
+- [DCYFR Labs](https://www.dcyfr.ai): AI-native studio — agentic infrastructure and security-first autonomy.
+- [Blog](https://www.dcyfr.ai/blog): Essays on agentic AI, AI security, and building with autonomous systems.
+
+## Selected work
+- DCYFR AI (@dcyfr/ai): Portable open-source TypeScript AI agent runtime — model routing, tool-use, and MCP wiring. https://www.dcyfr.ai/ai
+- Agent Governance & Safety: Sandboxes, kill-switches, credential isolation, and enforced spend limits for agents that take real actions. https://www.dcyfr.ai/about
+- Autonomous Agent Fleet: A governed swarm of AI daemons — research, code review, monitoring, self-healing — on a local-first model stack. https://github.com/dcyfr-labs
+- SharkVault: A backer-funded consumer product taken end-to-end, largely by agents. https://sharkvault.gamesharklabs.com
+
+## Writing
+- What's New in @dcyfr/ai: The v3 Line — https://www.dcyfr.ai/blog/whats-new-in-dcyfr-ai-v3
+- AI Assistants as Development Partners — https://www.dcyfr.ai/blog/ai-assistants-as-development-partners
+- OWASP Top 10 for Agentic AI — https://www.dcyfr.ai/blog/owasp-top-10-agentic-ai
+- Building with AI — https://www.dcyfr.ai/blog/building-with-ai
+
+## Contact
+- Email: hello@cyberdrew.dev
+- Book a 20-minute call: https://cal.com/dcyfr/intro

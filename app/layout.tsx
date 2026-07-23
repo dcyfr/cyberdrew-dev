@@ -47,10 +47,46 @@ export const viewport: Viewport = {
   ],
 };
 
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Drew",
+  alternateName: "cyberdrew",
+  url: SITE,
+  jobTitle: "Security Architect & AI Engineer",
+  description: DESC,
+  email: "mailto:hello@cyberdrew.dev",
+  knowsAbout: [
+    "Autonomous AI agents",
+    "Agentic AI security",
+    "AI safety",
+    "Multi-agent systems",
+    "Local-first inference",
+    "Model Context Protocol",
+    "Security architecture",
+    "TypeScript",
+  ],
+  sameAs: [
+    "https://www.dcyfr.ai",
+    "https://github.com/dcyfr",
+    "https://x.com/dcyfr_",
+    "https://linkedin.com/in/dcyfr",
+    "https://dev.to/dcyfr",
+  ],
+  worksFor: [
+    { "@type": "Organization", name: "DCYFR Labs", url: "https://www.dcyfr.ai" },
+    { "@type": "Organization", name: "GameShark Labs", url: "https://gamesharklabs.com" },
+  ],
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
         <noscript>
           <style
             dangerouslySetInnerHTML={{

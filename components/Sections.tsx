@@ -12,7 +12,8 @@ export function Statement() {
         so I ship outcomes, not keystrokes.
       </p>
       <p className="closer">
-        Chat answers. Agents act. <b>I operate the fleet.</b>
+        Chat answers. Agents act. <b>Someone has to make sure they act safely</b>{" "}— that&apos;s the job
+        I&apos;ve done for six years, now pointed at agents.
       </p>
     </section>
   );
@@ -133,8 +134,12 @@ export function Connect() {
   return (
     <section className="closing reveal" id="connect">
       <h2 className="serif">
-        Let&apos;s build something <em>autonomous</em>.
+        Let&apos;s build something <em>autonomous</em> — and hard to break.
       </h2>
+      <p className="frame">
+        20 min, no pitch — tell me what you&apos;re trying to automate, and I&apos;ll tell you if it&apos;s
+        safe to.
+      </p>
       <div className="links">
         {socialLinks.map((l) => (
           <a className="lnk" key={l.label} href={l.href} {...ext(l.external)}>
@@ -150,6 +155,10 @@ export function Footer() {
   return (
     <footer>
       <div className="wrap">
+        <p className="aside">
+          Yes — agents helped build this page. That&apos;s rather the point. I read every line before it
+          shipped.
+        </p>
         <div className="row">
           <span>© 2026 Drew</span>
           <span className="accent">// think freely · build securely · ship boldly</span>

@@ -77,12 +77,18 @@ export default function Hero() {
           that build.
         </h1>
         <p className="lede">
-          <span className="diff">Not web apps — autonomous agents.</span> I build AI that reasons, takes
-          action, and runs itself: a governed fleet that researches, writes code, monitors, and
-          self-heals — 24/7, on a local-first model stack, while I sleep.
+          <span className="diff">Not web apps — autonomous agents.</span>{" "}I&apos;m a security architect who
+          builds AI that can actually take actions: a governed fleet that researches, reviews code, and
+          self-heals on a local-first stack — with the sandboxes, kill-switches, and spend gates that let
+          it run unsupervised without going off the rails. <b>Autonomy you can trust, because I built it to
+          be trusted.</b>
         </p>
         <p className="roles">
           <b>Founder</b> @ DCYFR Labs &nbsp;·&nbsp; <b>Head of AI</b> @ GameShark Labs &nbsp;·&nbsp; remote
+        </p>
+        <p className="creds">
+          6+ yrs security architecture &nbsp;·&nbsp; 25 certifications &nbsp;·&nbsp; <b>@dcyfr/ai</b>{" "}on npm
+          &nbsp;·&nbsp; products shipped, built by agents
         </p>
         <div className="cta-row">
           <a className="btn primary" href={person.cal} target="_blank" rel="noopener noreferrer">
