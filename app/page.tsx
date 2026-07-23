@@ -5,9 +5,11 @@ import Hud from "@/components/Hud";
 import Ornaments from "@/components/Ornaments";
 import RevealController from "@/components/RevealController";
 import {
+  CaseStudies,
   Connect,
   Footer,
   Now,
+  Offer,
   Statement,
   Ventures,
   Work,
@@ -32,9 +34,11 @@ export default function Page() {
         <FleetStream />
         <Statement />
         <Work />
+        <CaseStudies />
         <Ventures />
         <Writing />
         <Now />
+        <Offer />
         <Connect />
       </main>
 

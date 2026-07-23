@@ -1,4 +1,4 @@
-import { socialLinks, ventures, work, writing } from "@/lib/content";
+import { caseStudies, offer, socialLinks, ventures, work, writing } from "@/lib/content";
 
 const ext = (external?: boolean) =>
   external ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
@@ -49,6 +49,66 @@ export function Work() {
               </div>
             </div>
             <span className={`status ${w.status.kind}`}>{w.status.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function CaseStudies() {
+  return (
+    <section className="block reveal" id="cases">
+      <div className="sec-head">
+        <p className="eyebrow">Case studies</p>
+        <h2 className="serif">Shipped, running, proven.</h2>
+        <p className="lede">
+          Not a portfolio of screenshots — three systems that solved a real problem and are live today.
+        </p>
+      </div>
+      <div className="cases">
+        {caseStudies.map((c) => (
+          <a className="case" key={c.title} href={c.href} target="_blank" rel="noopener noreferrer">
+            <div className="case-head">
+              <h3 className="serif">
+                {c.title} <span className="arw">↗</span>
+              </h3>
+              <span className="case-tag">{c.tag}</span>
+            </div>
+            <dl className="case-body">
+              <div>
+                <dt>Problem</dt>
+                <dd>{c.problem}</dd>
+              </div>
+              <div>
+                <dt>Built</dt>
+                <dd>{c.built}</dd>
+              </div>
+              <div>
+                <dt>Result</dt>
+                <dd className="res">{c.result}</dd>
+              </div>
+            </dl>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function Offer() {
+  return (
+    <section className="block reveal" id="work-with-me">
+      <div className="sec-head">
+        <p className="eyebrow">{offer.eyebrow}</p>
+        <h2 className="serif">{offer.headline}</h2>
+        <p className="lede">{offer.pitch}</p>
+      </div>
+      <div className="omodels">
+        {offer.models.map((m) => (
+          <div className="omodel" key={m.title}>
+            <h3 className="serif">{m.title}</h3>
+            <p>{m.desc}</p>
           </div>
         ))}
       </div>
