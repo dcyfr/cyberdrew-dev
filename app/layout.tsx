@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 const SITE = "https://www.cyberdrew.dev";
-const TITLE = "Drew — agents that act, rails that hold";
+const TITLE = "Drew · Agents that act. Rails that hold.";
 const DESC =
-  "Security architect building autonomous AI systems that take real actions in production — and the guardrails that make that a safe bet. Founding Architect at DCYFR Labs, Head of AI at GameShark Labs.";
+  "Security architect building autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet. Founding Architect at DCYFR Labs, Head of AI at GameShark Labs.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -69,9 +69,8 @@ const personSchema = {
   sameAs: [
     "https://www.dcyfr.ai",
     "https://github.com/dcyfr",
-    "https://x.com/dcyfr_",
     "https://linkedin.com/in/dcyfr",
-    "https://dev.to/dcyfr",
+    "https://x.com/dcyfr_",
   ],
   worksFor: [
     { "@type": "Organization", name: "DCYFR Labs", url: "https://www.dcyfr.ai" },

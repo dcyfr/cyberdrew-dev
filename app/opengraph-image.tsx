@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const alt = "Drew — agents that act, rails that hold";
+export const alt = "Drew: agents that act, rails that hold";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -77,7 +77,7 @@ export default function OpengraphImage() {
               color: MUT,
             }}
           >
-            <span style={{ display: "flex" }}>Security architecture for autonomous AI</span>
+            <span style={{ display: "flex" }}>Secure architecture for autonomous AI</span>
             <span style={{ display: "flex" }}>DCYFR Labs · GameShark Labs</span>
           </div>
         </div>

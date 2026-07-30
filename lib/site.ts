@@ -9,6 +9,7 @@
 export const person = {
   name: "Drew",
   callsign: "cyberdrew",
+  handle: "dcyfr",
   domain: "cyberdrew.dev",
   email: "hello@cyberdrew.dev",
   cal: "https://cal.com/dcyfr/intro",
@@ -24,17 +25,17 @@ export const nav = [
 // Hero. Silhouette test: this has to work as one shape on one ground.
 // ---------------------------------------------------------------------------
 export const hero = {
-  eyebrow: "Security architecture for autonomous AI",
+  eyebrow: "Secure architecture for autonomous AI",
   headline: ["Agents that act.", "Rails that hold."],
   deck:
-    "I'm Drew — a security architect who builds autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet.",
+    "I'm Drew, a security architect. I build autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet.",
   roles: [
     { role: "Founding Architect", org: "DCYFR Labs", href: "https://www.dcyfr.ai" },
     { role: "Principal Security Engineer", org: "Monks", href: null },
     { role: "Head of AI", org: "GameShark Labs", href: "https://gamesharklabs.com" },
   ],
-  primary: { label: "Work with me", href: "#contact" },
-  secondary: { label: "See the work", href: "#work" },
+  primary: { label: "See my work", href: "#work" },
+  secondary: { label: "Work with me", href: "#contact" },
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -51,13 +52,13 @@ export type WorkItem = {
 
 export const work = {
   eyebrow: "Work",
-  headline: "Four things worth showing.",
+  headline: "Selected work.",
   items: [
     {
       num: "01",
       title: "@dcyfr/ai",
       href: "https://www.dcyfr.ai/ai",
-      desc: "The portable TypeScript runtime the fleet thinks in — model routing across local and frontier tiers, tool-use, and MCP wiring you drop into an existing project.",
+      desc: "The portable TypeScript runtime the fleet thinks in: model routing across local and frontier tiers, tool-use, and MCP wiring you drop into an existing project.",
       tags: ["Agent runtime", "TypeScript", "MCP"],
       status: "Open source",
     },
@@ -73,7 +74,7 @@ export const work = {
       num: "03",
       title: "The agent fleet",
       href: "https://github.com/dcyfr-labs",
-      desc: "Thirty-odd daemons on a shared substrate — research, code review, monitoring, self-healing — running unsupervised on a local-first model stack under a hard budget.",
+      desc: "Thirty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs unsupervised on a local-first model stack under a hard budget.",
       tags: ["Multi-agent", "Local-first", "Self-healing"],
       status: "Running",
     },
@@ -81,7 +82,7 @@ export const work = {
       num: "04",
       title: "SharkVault",
       href: "https://sharkvault.gamesharklabs.com",
-      desc: "Proof the fleet ships product and not just diffs: a backer-funded consumer app taken end to end — auth, payments, content pipeline — largely by agents.",
+      desc: "Proof the fleet ships product and not just diffs: a backer-funded consumer app taken end to end, from auth to payments to content pipeline, largely by agents.",
       tags: ["Autonomous delivery", "Next.js", "Product"],
       status: "Live",
     },
@@ -136,7 +137,7 @@ export const contact = {
   eyebrow: "Contact",
   headline: "Ship autonomy you can defend.",
   deck:
-    "I work with teams putting agents into production — a first safe agent, a governed fleet, or a hard look at what you already run.",
+    "I work with teams putting agents into production: a first safe agent, a governed fleet, or a hard look at what you already run.",
   primary: { label: "Book an intro call", href: person.cal },
   secondary: { label: person.email, href: `mailto:${person.email}` },
 };
@@ -144,13 +145,12 @@ export const contact = {
 // ---------------------------------------------------------------------------
 // Footer.
 // ---------------------------------------------------------------------------
-export type Social = { label: string; href: string };
+export type Social = { id: "github" | "linkedin" | "x"; label: string; href: string };
 
 export const socials: Social[] = [
-  { label: "GitHub", href: "https://github.com/dcyfr" },
-  { label: "X", href: "https://x.com/dcyfr_" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/dcyfr" },
-  { label: "dev.to", href: "https://dev.to/dcyfr" },
+  { id: "github", label: "GitHub", href: "https://github.com/dcyfr" },
+  { id: "linkedin", label: "LinkedIn", href: "https://linkedin.com/in/dcyfr" },
+  { id: "x", label: "X", href: "https://x.com/dcyfr_" },
 ];
 
 export const footer = {

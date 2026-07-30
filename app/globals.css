@@ -394,13 +394,18 @@ h1, h2, h3 {
   font-size: clamp(1.2rem, 2.2vw, 1.7rem); letter-spacing: -0.04em;
   max-width: 16ch;
 }
-.footer-links { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; align-items: flex-start; }
+.footer-links { display: flex; flex-wrap: wrap; gap: .6rem 1.1rem; align-items: center; }
 .footer-links a {
   font-family: var(--font-mono); font-size: var(--t-mono);
   color: var(--ink-mut); text-decoration: none;
   border-bottom: 1px solid transparent;
 }
 .footer-links a:hover { color: var(--ink); border-bottom-color: var(--accent); }
+/* Icon links: colour shift only (an underline under a glyph reads as clutter),
+   and padding brings the 18px mark up to a >=24px hit target. */
+.footer-links .icon-link { display: inline-flex; padding: .3rem; border-bottom: 0; }
+.footer-links .icon-link:hover { color: var(--ink); border-bottom: 0; }
+.footer-links .icon-link svg { display: block; }
 .footer-bar {
   border-top: 1px solid var(--line); padding-block: 1.25rem;
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem;
