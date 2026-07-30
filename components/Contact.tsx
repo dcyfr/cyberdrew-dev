@@ -7,7 +7,7 @@ import { contact } from "@/lib/site";
  */
 export function Contact() {
   return (
-    <section className="contact" id="contact">
+    <section className="contact" id="contact" data-reveal>
       <div className="wide">
         <p className="eyebrow">
           <span className="idx">{contact.index}</span>

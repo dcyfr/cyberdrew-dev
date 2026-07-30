@@ -33,6 +33,22 @@ Type is one engineered grotesk for display and running text (weight separates
 the two), with mono strictly for labels and data. The former old-style serif
 body is parked in a comment in globals.css if the humanist voice comes back.
 
+## Layout: floating, not fenced
+
+Nothing is bounded by a shared rule. The header is a **floating dock**, fixed
+and inset from every edge, with the page scrolling under it. Work and writing
+items are **discrete cards** that lift on hover rather than list rows divided
+by hairlines. The contact block is an **inset slab** with radius and elevation
+instead of a full-bleed band. Tags are soft chips, not outlined boxes.
+
+That is why `--radius` is no longer `0`: a floating object needs an edge and a
+shadow to read as floating. The identity doc's "hard cut, not a soft card"
+governs imagery and plates; its own carve-out gives interface chrome radius
+and elevation, because affordance beats purity.
+
+Sections rise into place on scroll (`[data-reveal]`, staggered via `--i`),
+transform and opacity only.
+
 ## Stack
 
 - **Next.js 16** (App Router) · **React 19** · **TypeScript**
@@ -86,6 +102,7 @@ components/
   ThemeToggle.tsx  light/dark, with the one-frame transition guard
   TextCycler.tsx   token-streaming hero eyebrow (client)
   NavSpy.tsx       marks the nav link owning the viewport (client)
+  ScrollReveal.tsx reveals [data-reveal] on entry (client)
   StarMark.tsx     renders lib/mark.ts
 lib/
   site.ts          ALL copy and links — edit here
@@ -101,6 +118,11 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   `public/llms.txt` silently drifted until it advertised a project the site no
   longer listed. Do not reintroduce a file in `public/`: it would shadow the
   route and drift again.
+- **The reveal's hidden state is gated on `.js-reveal`,** set pre-paint in
+  layout.tsx. Without that gate a JS failure strands every section at
+  opacity 0; setting it after hydration flashes instead.
+- **Chips need `--chip-ink`, not `--ink-mut`.** A chip sits on `--surface-2`,
+  not the page ground, and the muted ink measured 4.34:1 there in light.
 - **`lib/mark.ts` is the only definition of the star.** Header, status
   bullets, favicon and OG card all read it.
 - **Satori (OG images) parses TTF/OTF only.** It rejects woff2 with

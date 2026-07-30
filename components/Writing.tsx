@@ -1,10 +1,11 @@
+import type { CSSProperties } from "react";
 import { writing } from "@/lib/site";
 
 export function Writing() {
   return (
     <section className="bay" id="writing">
       <div className="wide">
-        <div className="sect-head">
+        <div className="sect-head" data-reveal>
           <p className="eyebrow">
             <span className="idx">{writing.index}</span>
             {writing.eyebrow}
@@ -13,10 +14,12 @@ export function Writing() {
         </div>
 
         <div className="rows">
-          {writing.posts.map((p) => (
+          {writing.posts.map((p, i) => (
             <a
               className="row row-post"
               key={p.num}
+              data-reveal
+              style={{ "--i": i } as CSSProperties}
               href={p.href}
               target="_blank"
               rel="noreferrer"
@@ -35,7 +38,7 @@ export function Writing() {
           ))}
         </div>
 
-        <a className="more" href={writing.more.href} target="_blank" rel="noreferrer">
+        <a className="more" data-reveal href={writing.more.href} target="_blank" rel="noreferrer">
           {writing.more.label} ↗
         </a>
       </div>

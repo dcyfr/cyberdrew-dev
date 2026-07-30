@@ -97,14 +97,16 @@ const personSchema = {
   ],
 };
 
-// Runs before first paint so a stored theme never flashes the other ground.
-const THEME_BOOT = `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t)}}catch(e){}})()`;
+// Runs before first paint: a stored theme never flashes the other ground, and
+// .js-reveal gates the reveal's hidden state so the page can only be hidden
+// when the script that reveals it has actually run.
+const BOOT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){d.setAttribute("data-theme",t)}}catch(e){}d.classList.add("js-reveal")})()`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={archivo.variable} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+        <script dangerouslySetInnerHTML={{ __html: BOOT }} />
       </head>
       <body>
         <script

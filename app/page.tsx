@@ -5,6 +5,7 @@ import { Writing } from "@/components/Writing";
 import { Contact } from "@/components/Contact";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavSpy } from "@/components/NavSpy";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 export default function Page() {
   return (
@@ -12,6 +13,7 @@ export default function Page() {
       {/* Scroll readout: CSS scroll-driven, no listener on the main thread. */}
       <div className="progress" aria-hidden="true" />
       <NavSpy />
+      <ScrollReveal />
 
       <Header />
 

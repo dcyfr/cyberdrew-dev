@@ -10,7 +10,7 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="wide">
-        <div className="footer-in">
+        <div className="footer-in" data-reveal>
           <p className="footer-sign">{footer.signoff}</p>
 
           <nav className="footer-links" aria-label="Elsewhere">

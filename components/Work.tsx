@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { work } from "@/lib/site";
 import { StarMark } from "./StarMark";
 
@@ -5,7 +6,7 @@ export function Work() {
   return (
     <section className="bay" id="work">
       <div className="wide">
-        <div className="sect-head">
+        <div className="sect-head" data-reveal>
           <p className="eyebrow">
             <span className="idx">{work.index}</span>
             {work.eyebrow}
@@ -14,10 +15,12 @@ export function Work() {
         </div>
 
         <div className="rows">
-          {work.items.map((w) => (
+          {work.items.map((w, i) => (
             <a
               className="row row-work"
               key={w.num}
+              data-reveal
+              style={{ "--i": i } as CSSProperties}
               href={w.href}
               target="_blank"
               rel="noreferrer"
