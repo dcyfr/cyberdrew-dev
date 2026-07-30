@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Console from "@/components/Console";
 import { person } from "@/lib/content";
-import { usePrefersReducedMotion, useUptime } from "@/lib/hooks";
+import { usePrefersReducedMotion } from "@/lib/hooks";
 
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*/<>_01".split("");
 
@@ -13,8 +14,8 @@ function useDecrypt(final: string, enabled: boolean) {
   useEffect(() => {
     const el = ref.current;
     if (!el || !enabled) return;
-    // Lock the box to the final word's width so scrambling proportional serif
-    // glyphs can't reflow the surrounding <h1> — kills the load-in jitter.
+    // Lock the box to the final word's width so scrambling glyphs can't reflow
+    // the surrounding <h1> — kills the load-in jitter.
     el.style.width = `${el.getBoundingClientRect().width}px`;
     el.style.textAlign = "center";
     el.style.whiteSpace = "nowrap";
@@ -30,13 +31,15 @@ function useDecrypt(final: string, enabled: boolean) {
           continue;
         }
         const settle = (i / final.length) * total * 0.8;
-        out += frame > settle + Math.random() * 6 ? final[i] : GLYPHS[(Math.random() * GLYPHS.length) | 0];
+        out +=
+          frame > settle + Math.random() * 6
+            ? final[i]
+            : GLYPHS[(Math.random() * GLYPHS.length) | 0];
       }
       el.textContent = out;
       if (frame >= total) {
         clearInterval(id);
         el.textContent = final;
-        // release the lock — natural width now equals the locked width, no shift
         el.style.width = "";
         el.style.overflow = "";
         el.style.whiteSpace = "";
@@ -50,7 +53,6 @@ function useDecrypt(final: string, enabled: boolean) {
 
 export default function Hero() {
   const reduce = usePrefersReducedMotion();
-  const uptime = useUptime();
   const [booted, setBooted] = useState(false);
   const glitchRef = useDecrypt("systems", !reduce);
 
@@ -61,87 +63,64 @@ export default function Hero() {
 
   return (
     <header className="hero">
-      <div>
-        <div className="boot">
-          <span className="cur">&gt;</span> initializing <span className="cur">agent.fleet</span> …{" "}
-          {booted && <span className="ok">● online · 30+ agents · nominal</span>}
-          {!booted && <span className="caret" />}
-        </div>
-        <p className="eyebrow">{person.eyebrow}</p>
-        <h1 className="serif" aria-label="I build the systems that build.">
+      {/* One dramatic field per view — cel bands, a slow bloom, grain, and a
+          scrim that is effectively solid through the entire text zone so hero
+          contrast is measurable rather than a function of what sits behind. */}
+      <div className="hero-field" aria-hidden="true">
+        <div className="bands" />
+        <div className="bloom" />
+        <div className="fieldgrain" />
+        <div className="scrim" />
+      </div>
 
+      <div className="wrap hero-inner">
+        <p className="boot">
+          <span className="pulse" aria-hidden="true" />
+          {booted ? (
+            <>
+              <span className="ok">online</span> · 30+ agents · nominal
+            </>
+          ) : (
+            <>initializing agent.fleet …</>
+          )}
+        </p>
+
+        <h1 aria-label="I build the systems that build.">
           I build the{" "}
           <span className="glitch" ref={glitchRef}>
             systems
           </span>{" "}
           that build.
         </h1>
+
         <p className="lede">
-          <span className="diff">Not web apps — autonomous agents.</span>{" "}I&apos;m a security architect who
-          builds AI that can actually take actions: a governed fleet that researches, reviews code, and
-          self-heals on a local-first stack — with the sandboxes, kill-switches, and spend gates that let
-          it run unsupervised without going off the rails. <b>Autonomy you can trust, because I built it to
-          be trusted.</b>
+          <span className="diff">Not web apps — autonomous agents.</span>{" "}
+          I&apos;m a security architect who builds AI that can actually take actions: a governed
+          fleet that researches,
+          reviews code, and self-heals on a local-first stack, with the sandboxes, kill-switches and
+          spend gates that let it run unsupervised.{" "}
+          <b>Autonomy you can trust, because I built it to be trusted.</b>
         </p>
-        <p className="roles">
-          <b>Founder</b> @ DCYFR Labs &nbsp;·&nbsp; <b>Head of AI</b> @ GameShark Labs &nbsp;·&nbsp; remote
-        </p>
+
         <p className="creds">
-          6+ yrs security architecture &nbsp;·&nbsp; 25 certifications &nbsp;·&nbsp; <b>@dcyfr/ai</b>{" "}on npm
-          &nbsp;·&nbsp; products shipped, built by agents
+          Founder @ DCYFR Labs · Head of AI @ GameShark Labs · 6+ yrs security architecture ·{" "}
+          <b>@dcyfr/ai</b> on npm
         </p>
+
         <div className="cta-row">
           <a className="btn primary" href={person.cal} target="_blank" rel="noopener noreferrer">
             Book a 1:1 <span className="arw">→</span>
           </a>
-          <a className="btn" href="#work">
-            See the work
+          <a className="btn" href="#fleet">
+            See the fleet
           </a>
-          <a className="btn" href={`mailto:${person.email}`}>
+          <a className="btn ghost" href={`mailto:${person.email}`}>
             {person.email}
           </a>
         </div>
-      </div>
 
-      <aside className="instrument" aria-label="operator status">
-        <div className="bar">
-          <span className="led" /> operator.status <span className="tag">◇ online</span>
-        </div>
-        <div className="rows">
-          <div className="irow">
-            <span className="k">callsign</span>
-            <span className="v">{person.handle}</span>
-          </div>
-          <div className="irow">
-            <span className="k">agents live</span>
-            <span className="v">
-              <span className="mini live" /> 30+ · shipping
-            </span>
-          </div>
-          <div className="irow">
-            <span className="k">inference</span>
-            <span className="v">
-              <span className="mini on" /> local-first
-            </span>
-          </div>
-          <div className="irow">
-            <span className="k">load</span>
-            <span className="v">
-              <span className="load">
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </span>
-            </span>
-          </div>
-          <div className="irow">
-            <span className="k">uptime</span>
-            <span className="v">{uptime}</span>
-          </div>
-        </div>
-      </aside>
+        <Console />
+      </div>
     </header>
   );
 }

@@ -38,41 +38,45 @@ export default function FleetStream() {
   }, [reduce]);
 
   return (
-    <section className="stream reveal" aria-label="live fleet telemetry">
-      <div className="shead">
-        <span className="title">
-          <span className="dotlive" /> fleet.stream
-        </span>
-        <span className="metrics">
-          <span>
-            <b>30+</b> agents
-          </span>
-          <span>
-            <b>24/7</b> autonomy
-          </span>
-          <span>
-            <b>local-first</b> inference
-          </span>
-          <span>
-            <b>cost</b>-gated
-          </span>
-        </span>
-      </div>
-      <div className="log" aria-hidden="true">
-        {lines.map((l) => (
-          <div className="ln" key={l.id}>
-            <span className="t">{l.time}</span>
-            <span className="ch">{l.ch}</span>
-            <span className="ms">
-              {l.before}
-              {l.ok && <span className="ok">{l.ok}</span>}
-              {l.after}
+    <section className="block tight reveal">
+      <div className="wrap">
+        <div className="stream" aria-label="live fleet telemetry">
+          <div className="shead">
+            <span className="title">
+              <span className="pulse" aria-hidden="true" /> fleet.stream
+            </span>
+            <span className="metrics">
+              <span>
+                <b>30+</b> agents
+              </span>
+              <span>
+                <b>24/7</b> autonomy
+              </span>
+              <span>
+                <b>local-first</b> inference
+              </span>
+              <span>
+                <b>cost</b>-gated
+              </span>
             </span>
           </div>
-        ))}
-        <div className="cursor">
-          &gt;
-          <span className="blk" />
+          <div className="log" aria-hidden="true">
+            {lines.map((l) => (
+              <div className="ln" key={l.id}>
+                <span className="t">{l.time}</span>
+                <span className="ch">{l.ch}</span>
+                <span className="ms">
+                  {l.before}
+                  {l.ok && <span className="ok">{l.ok}</span>}
+                  {l.after}
+                </span>
+              </div>
+            ))}
+            <div className="cursor">
+              &gt;
+              <span className="caret" />
+            </div>
+          </div>
         </div>
       </div>
     </section>

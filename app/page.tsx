@@ -6,7 +6,9 @@ import Ornaments from "@/components/Ornaments";
 import RevealController from "@/components/RevealController";
 import {
   Connect,
+  Fleet,
   Footer,
+  Marquee,
   Now,
   Offer,
   Ventures,
@@ -22,19 +24,20 @@ export default function Page() {
       </a>
 
       <AgentMesh />
-      <div className="grid-tex" aria-hidden="true" />
-      <div className="glowfield" aria-hidden="true" />
+      <div className="grain" aria-hidden="true" />
 
       <Hud />
 
-      <main id="main" tabIndex={-1} className="wrap">
+      <main id="main" tabIndex={-1}>
         <Hero />
+        <Marquee />
+        <Fleet />
         <FleetStream />
         <Work />
         <Ventures />
         <Writing />
-        <Now />
         <Offer />
+        <Now />
         <Connect />
       </main>
 

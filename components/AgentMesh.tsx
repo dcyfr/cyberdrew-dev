@@ -26,13 +26,8 @@ export default function AgentMesh() {
     let running = true;
     let raf = 0;
 
-    const computeAccent = (): [number, number, number] => {
-      const t = document.documentElement.getAttribute("data-theme");
-      const dark = t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-      return dark ? [76, 227, 255] : [10, 110, 134];
-    };
-    // cached — recomputed only when the theme changes, never per frame
-    let color = computeAccent();
+    // PHOSPHOR --accent-500 (#de3a22). Dark-only surface, so this is constant.
+    const color: [number, number, number] = [222, 58, 34];
 
     const resize = () => {
       W = canvas.width = Math.floor(window.innerWidth * dpr);
@@ -103,14 +98,6 @@ export default function AgentMesh() {
       running = !document.hidden;
       if (running) raf = requestAnimationFrame(frame);
     };
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onTheme = () => {
-      color = computeAccent();
-    };
-    mq.addEventListener("change", onTheme);
-    const mo = new MutationObserver(onTheme);
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-
     window.addEventListener("resize", onResize);
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -118,8 +105,6 @@ export default function AgentMesh() {
       running = false;
       cancelAnimationFrame(raf);
       clearTimeout(rt);
-      mq.removeEventListener("change", onTheme);
-      mo.disconnect();
       window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibility);
     };

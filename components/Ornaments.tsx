@@ -1,10 +1,10 @@
-// Fixed corner "instrument" ornaments — a build indicator and an online readout,
-// echoing an operator console's chrome.
+// Fixed corner instrument chrome — a build indicator and an online readout,
+// echoing the console's own status bar.
 export default function Ornaments() {
   return (
     <>
       <div className="ornament left" aria-hidden="true">
-        BUILDING{" "}
+        BUILDING
         <span className="blocks">
           <i />
           <i />
@@ -13,7 +13,8 @@ export default function Ornaments() {
         </span>
       </div>
       <div className="ornament right" aria-hidden="true">
-        <span className="on">● ONLINE</span>
+        <span className="pulse" />
+        <span className="v">ONLINE</span>
       </div>
     </>
   );

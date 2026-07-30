@@ -179,6 +179,120 @@ export const streamEvents: StreamEvent[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Console — the hero product surface. A dispatch palette for the fleet: the
+// launcher metaphor pointed at agents instead of apps.
+// ---------------------------------------------------------------------------
+export type Command = {
+  ico: string;
+  name: string;
+  desc: string;
+  keys: string[];
+};
+
+export const commands: Command[] = [
+  { ico: "◇", name: "research", desc: "sweep sources, synthesize a brief", keys: ["⌘", "R"] },
+  { ico: "◆", name: "review", desc: "gate a PR on the security checklist", keys: ["⌘", "G"] },
+  { ico: "◈", name: "monitor", desc: "watch the fleet, escalate anomalies", keys: ["⌘", "M"] },
+  { ico: "◉", name: "heal", desc: "restore a downed service, unattended", keys: ["⌘", "H"] },
+  { ico: "▨", name: "ship", desc: "decompose a mission, run it to green", keys: ["⌘", "S"] },
+];
+
+// Typed into the console's search line, one after another.
+export const dispatchQueries = [
+  "dispatch an agent",
+  "audit my agent permissions",
+  "route this to a local model",
+  "decompose and ship it",
+] as const;
+
+// ---------------------------------------------------------------------------
+// Constraints — the marquee strip. These are the guarantees, not features.
+// ---------------------------------------------------------------------------
+export const constraints = [
+  "local-first inference",
+  "hard spend ceiling",
+  "sandboxed tool-use",
+  "kill-switchable senders",
+  "per-process credentials",
+  "metacognition circuit-breaker",
+  "no secret ever in context",
+  "self-healing watchdog",
+] as const;
+
+// ---------------------------------------------------------------------------
+// Capabilities — the bento grid. What the fleet actually does all day.
+// ---------------------------------------------------------------------------
+export type Capability = {
+  num: string;
+  title: string;
+  desc: string;
+  state: string;
+  span: "w3" | "w2";
+};
+
+export const capabilities: Capability[] = [
+  {
+    num: "30+",
+    title: "Agents on a 30-minute loop",
+    desc:
+      "Observe, triage, think, act, record. The fleet wakes on a cycle, picks its own work off the queue, and writes down what it learned.",
+    state: "running",
+    span: "w3",
+  },
+  {
+    num: "24/7",
+    title: "Autonomy without a babysitter",
+    desc:
+      "Sandboxes, kill-switches and enforced spend gates mean it runs unsupervised — and stops itself before it costs you.",
+    state: "governed",
+    span: "w3",
+  },
+  {
+    num: "$0",
+    title: "Tier-0 by default",
+    desc: "Local models first, frontier only when the task earns it.",
+    state: "cost-gated",
+    span: "w2",
+  },
+  {
+    num: "6",
+    title: "Cycles to give up",
+    desc: "A metacognition breaker halts an agent that's spinning instead of shipping.",
+    state: "self-aware",
+    span: "w2",
+  },
+  {
+    num: "0",
+    title: "Secrets in context",
+    desc: "Credentials resolve per-process at exec time. Nothing sensitive reaches a prompt.",
+    state: "enforced",
+    span: "w2",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Footer navigation.
+// ---------------------------------------------------------------------------
+export const footerNav = [
+  {
+    heading: "Work",
+    items: [
+      { label: "Selected work", href: "#work" },
+      { label: "Work with me", href: "#work-with-me" },
+      { label: "Writing", href: "#writing" },
+    ],
+  },
+  {
+    heading: "Elsewhere",
+    items: [
+      { label: "GitHub", href: "https://github.com/dcyfr", external: true },
+      { label: "X", href: "https://x.com/dcyfr_", external: true },
+      { label: "LinkedIn", href: "https://linkedin.com/in/dcyfr", external: true },
+    ],
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Offer — the buyable "work with me" (confirm the exact services/wording).
 // ---------------------------------------------------------------------------
 export type OfferModel = { title: string; desc: string };
