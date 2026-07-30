@@ -25,14 +25,14 @@ export const nav = [
 // Hero. Silhouette test: this has to work as one shape on one ground.
 // ---------------------------------------------------------------------------
 export const hero = {
-  eyebrow: "Secure architecture for autonomous AI",
-  headline: ["Agents that act.", "Rails that hold."],
+  eyebrow: "Secure architecture for autonomous systems",
+  headline: ["Agents that act", "Rails that hold"],
   deck:
     "I'm Drew, a security architect. I build autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet.",
   roles: [
     { role: "Founding Architect", org: "DCYFR Labs", href: "https://www.dcyfr.ai" },
-    { role: "Principal Security Engineer", org: "Monks", href: null },
     { role: "Head of AI", org: "GameShark Labs", href: "https://gamesharklabs.com" },
+    { role: "Principal Security Engineer", org: "Monks", href: "https://www.monks.com/" },
   ],
   primary: { label: "See my work", href: "#work" },
   secondary: { label: "Work with me", href: "#contact" },
@@ -52,7 +52,7 @@ export type WorkItem = {
 
 export const work = {
   eyebrow: "Work",
-  headline: "Selected work.",
+  headline: "Projects and initiatives",
   items: [
     {
       num: "01",
@@ -64,14 +64,6 @@ export const work = {
     },
     {
       num: "02",
-      title: "Governance & safety rails",
-      href: "https://www.dcyfr.ai/about",
-      desc: "Sandboxes, kill switches, per-process credentials and enforced spend gates, as a reusable layer. The part most agent stacks skip.",
-      tags: ["AI safety", "Sandboxing", "Policy"],
-      status: "In production",
-    },
-    {
-      num: "03",
       title: "The agent fleet",
       href: "https://github.com/dcyfr-labs",
       desc: "Thirty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs unsupervised on a local-first model stack under a hard budget.",
@@ -79,7 +71,7 @@ export const work = {
       status: "Running",
     },
     {
-      num: "04",
+      num: "03",
       title: "SharkVault",
       href: "https://sharkvault.gamesharklabs.com",
       desc: "Proof the fleet ships product and not just diffs: a backer-funded consumer app taken end to end, from auth to payments to content pipeline, largely by agents.",
@@ -96,7 +88,7 @@ export type Post = { num: string; title: string; kind: string; date: string; hre
 
 export const writing = {
   eyebrow: "Writing",
-  headline: "Notes from the build.",
+  headline: "Notes from the build",
   posts: [
     {
       num: "01",
@@ -135,7 +127,7 @@ export const writing = {
 // ---------------------------------------------------------------------------
 export const contact = {
   eyebrow: "Contact",
-  headline: "Ship autonomy you can defend.",
+  headline: "Ship autonomy you can defend",
   deck:
     "I work with teams putting agents into production: a first safe agent, a governed fleet, or a hard look at what you already run.",
   primary: { label: "Book an intro call", href: person.cal },
@@ -154,5 +146,13 @@ export const socials: Social[] = [
 ];
 
 export const footer = {
-  signoff: "Think freely, build securely, ship boldly.",
+  signoff: "Think freely, build securely, ship boldly",
 };
+
+// Header wordmark cycle. First entry is the resting/reduced-motion state.
+export const wordmarkCycle = [
+  "cyberdrew.dev",
+  "secure architecture",
+  "agentic design",
+  "autonomous workflows",
+] as const;

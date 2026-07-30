@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const alt = "Drew: agents that act, rails that hold";
+export const alt = "Drew's Agentic Architecture and Design";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -47,8 +47,10 @@ export default function OpengraphImage() {
             color: MUT,
           }}
         >
-          {/* the mark is the material */}
-          <div style={{ display: "flex", width: 14, height: 14, backgroundColor: BONE }} />
+          {/* the mark is the material: a solid four-pointed star */}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill={BONE}>
+            <path d="M12 0 Q13.8 10.2 24 12 Q13.8 13.8 12 24 Q10.2 13.8 0 12 Q10.2 10.2 12 0 Z" />
+          </svg>
           <span style={{ display: "flex", color: BONE }}>cyberdrew.dev</span>
         </div>
 
@@ -62,8 +64,8 @@ export default function OpengraphImage() {
             color: INK,
           }}
         >
-          <span style={{ display: "flex" }}>Agents that act.</span>
-          <span style={{ display: "flex", color: MUT }}>Rails that hold.</span>
+          <span style={{ display: "flex" }}>Agents that act</span>
+          <span style={{ display: "flex", color: MUT }}>Rails that hold</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
@@ -77,7 +79,7 @@ export default function OpengraphImage() {
               color: MUT,
             }}
           >
-            <span style={{ display: "flex" }}>Secure architecture for autonomous AI</span>
+            <span style={{ display: "flex" }}>Secure architecture for autonomous systems</span>
             <span style={{ display: "flex" }}>DCYFR Labs · GameShark Labs</span>
           </div>
         </div>

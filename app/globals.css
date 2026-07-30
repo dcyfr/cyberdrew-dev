@@ -154,6 +154,12 @@ code, th, td, button {
 a { color: inherit; text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
+/* Text selection is the theme's own move: inversion. Selecting swaps the
+   materials, exactly like a filled control. Inside the contact block the
+   ground already IS the accent, so selection inverts back the other way. */
+::selection { background: var(--accent); color: var(--on-accent); }
+.contact ::selection { background: var(--on-accent); color: var(--accent); }
+
 .skip {
   position: absolute; left: -9999px; top: 0; z-index: 100;
   background: var(--accent); color: var(--on-accent);
@@ -208,8 +214,8 @@ h1, h2, h3 {
   text-decoration: none; color: var(--ink);
   display: inline-flex; align-items: center; gap: .55rem;
 }
-/* The mark is the material itself: a bone square on obsidian, and inverted. */
-.wordmark i { width: 9px; height: 9px; background: var(--accent); flex: none; }
+/* The mark is the material itself: a bone star on obsidian, and inverted. */
+.wordmark svg { color: var(--accent); flex: none; }
 
 .nav { display: flex; align-items: center; gap: clamp(.75rem, 2.5vw, 2rem); }
 .nav-link {

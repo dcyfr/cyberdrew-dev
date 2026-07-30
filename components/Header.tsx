@@ -1,17 +1,17 @@
 import { nav, person } from "@/lib/site";
+import { StarMark } from "./StarMark";
 import { ThemeToggle } from "./ThemeToggle";
+import { WordmarkCycler } from "./WordmarkCycler";
 
 export function Header() {
   return (
     <header className="header">
       <div className="wide header-in">
-        {/* aria-label survives the narrow breakpoint, where the text is
-            display:none and would otherwise leave the link unnamed. */}
+        {/* The visible text cycles and is aria-hidden; this aria-label is the
+            link's stable accessible name. */}
         <a className="wordmark" href="#top" aria-label={`${person.callsign} — home`}>
-          {/* The mark is the material itself — a bone square on obsidian,
-              and the inverse in light. */}
-          <i aria-hidden="true" />
-          <span>{person.callsign}</span>
+          <StarMark />
+          <WordmarkCycler />
         </a>
 
         <nav className="nav" aria-label="Primary">

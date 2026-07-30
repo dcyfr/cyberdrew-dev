@@ -27,13 +27,9 @@ export function Hero() {
           {hero.roles.map((r) => (
             <span key={r.org}>
               {r.role},{" "}
-              {r.href ? (
-                <a href={r.href} target="_blank" rel="noreferrer">
-                  {r.org}
-                </a>
-              ) : (
-                <b>{r.org}</b>
-              )}
+              <a href={r.href} target="_blank" rel="noreferrer">
+                {r.org}
+              </a>
             </span>
           ))}
         </p>
