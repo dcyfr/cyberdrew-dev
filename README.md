@@ -103,6 +103,7 @@ components/
   TextCycler.tsx   token-streaming hero eyebrow (client)
   NavSpy.tsx       marks the nav link owning the viewport (client)
   ScrollReveal.tsx reveals [data-reveal] on entry (client)
+  DockAutoHide.tsx retracts the dock on scroll-down (client)
   StarMark.tsx     renders lib/mark.ts
 lib/
   site.ts          ALL copy and links — edit here
@@ -118,6 +119,9 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   `public/llms.txt` silently drifted until it advertised a project the site no
   longer listed. Do not reintroduce a file in `public/`: it would shadow the
   route and drift again.
+- **A hidden dock must repeat `translateX(-50%)`.** That is the centring
+  transform; omit it from the hidden state and the dock slides to the left
+  edge the moment it animates.
 - **The reveal's hidden state is gated on `.js-reveal`,** set pre-paint in
   layout.tsx. Without that gate a JS failure strands every section at
   opacity 0; setting it after hydration flashes instead.

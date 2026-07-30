@@ -6,6 +6,7 @@ import { Contact } from "@/components/Contact";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavSpy } from "@/components/NavSpy";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { DockAutoHide } from "@/components/DockAutoHide";
 
 export default function Page() {
   return (
@@ -14,6 +15,7 @@ export default function Page() {
       <div className="progress" aria-hidden="true" />
       <NavSpy />
       <ScrollReveal />
+      <DockAutoHide />
 
       <Header />
 
