@@ -1,11 +1,30 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import localFont from "next/font/local";
 import "./globals.css";
 
+/**
+ * The display face, self-hosted. On the system stack the hero measured 448px
+ * on macOS, 412px on Windows/Android and 462px on the Arial fallback: a 13%
+ * swing on the most important line of the site, in three different
+ * letterforms. One variable Latin subset (36KB) locks the identity.
+ *
+ * next/font/local self-hosts, preloads, and generates a size-adjusted
+ * fallback so the swap does not shift layout.
+ */
+const archivo = localFont({
+  src: "./fonts/archivo-latin-wght-normal.woff2",
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
+  variable: "--font-archivo",
+  fallback: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"],
+});
+
 const SITE = "https://www.cyberdrew.dev";
-const TITLE = "Drew — I build the systems that build";
+const TITLE = "Drew's Agentic Architecture and Design";
 const DESC =
-  "Autonomy engineer at the agentic frontier. Founder @ DCYFR Labs, Head of AI @ GameShark Labs — building AI that reasons, acts, and runs itself: a governed fleet of agents that research, ship code, and self-heal 24/7.";
+  "Security architect building autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet. Founder at DCYFR Labs, Head of AI at GameShark Labs.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -15,13 +34,13 @@ export const metadata: Metadata = {
   authors: [{ name: "Drew", url: SITE }],
   keywords: [
     "autonomous agents",
-    "agentic systems",
-    "AI engineering",
-    "local-first inference",
+    "agentic AI security",
     "AI safety",
+    "agent governance",
+    "local-first inference",
+    "security architecture",
     "DCYFR",
     "GameShark",
-    "Drew",
   ],
   alternates: { canonical: "/" },
   openGraph: {
@@ -34,7 +53,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: TITLE,
-    description: "Autonomy engineer at the agentic frontier.",
+    description: "Agents that act. Rails that hold.",
     creator: "@dcyfr_",
   },
 };
@@ -42,8 +61,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: "dark light",
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#060911" },
-    { media: "(prefers-color-scheme: light)", color: "#eef1f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f3f0" },
   ],
 };
 
@@ -69,9 +88,8 @@ const personSchema = {
   sameAs: [
     "https://www.dcyfr.ai",
     "https://github.com/dcyfr",
-    "https://x.com/dcyfr_",
     "https://linkedin.com/in/dcyfr",
-    "https://dev.to/dcyfr",
+    "https://x.com/dcyfr_",
   ],
   worksFor: [
     { "@type": "Organization", name: "DCYFR Labs", url: "https://www.dcyfr.ai" },
@@ -79,21 +97,22 @@ const personSchema = {
   ],
 };
 
+// Runs before first paint: a stored theme never flashes the other ground, and
+// .js-reveal gates the reveal's hidden state so the page can only be hidden
+// when the script that reveals it has actually run.
+const BOOT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){d.setAttribute("data-theme",t)}}catch(e){}d.classList.add("js-reveal")})()`;
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={archivo.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: BOOT }} />
+      </head>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
-        <noscript>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: ".reveal{opacity:1!important;transform:none!important}",
-            }}
-          />
-        </noscript>
         {children}
       </body>
     </html>

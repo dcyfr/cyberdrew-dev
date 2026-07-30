@@ -1,147 +1,58 @@
-"use client";
+import { hero } from "@/lib/site";
+import { TextCycler } from "./TextCycler";
 
-import { useEffect, useRef, useState } from "react";
-import { person } from "@/lib/content";
-import { usePrefersReducedMotion, useUptime } from "@/lib/hooks";
+const longestPhrase = [...hero.eyebrowCycle].sort((a, b) => b.length - a.length)[0];
 
-const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*/<>_01".split("");
-
-// Scramble-in "decrypt" reveal for a single word. SSR renders the final text
-// (good for SEO); the scramble only runs client-side when motion is allowed.
-function useDecrypt(final: string, enabled: boolean) {
-  const ref = useRef<HTMLSpanElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || !enabled) return;
-    // Lock the box to the final word's width so scrambling proportional serif
-    // glyphs can't reflow the surrounding <h1> — kills the load-in jitter.
-    el.style.width = `${el.getBoundingClientRect().width}px`;
-    el.style.textAlign = "center";
-    el.style.whiteSpace = "nowrap";
-    el.style.overflow = "hidden";
-    let frame = 0;
-    const total = 28;
-    const id = setInterval(() => {
-      frame++;
-      let out = "";
-      for (let i = 0; i < final.length; i++) {
-        if (final[i] === " ") {
-          out += " ";
-          continue;
-        }
-        const settle = (i / final.length) * total * 0.8;
-        out += frame > settle + Math.random() * 6 ? final[i] : GLYPHS[(Math.random() * GLYPHS.length) | 0];
-      }
-      el.textContent = out;
-      if (frame >= total) {
-        clearInterval(id);
-        el.textContent = final;
-        // release the lock — natural width now equals the locked width, no shift
-        el.style.width = "";
-        el.style.overflow = "";
-        el.style.whiteSpace = "";
-        el.style.textAlign = "";
-      }
-    }, 42);
-    return () => clearInterval(id);
-  }, [final, enabled]);
-  return ref;
-}
-
-export default function Hero() {
-  const reduce = usePrefersReducedMotion();
-  const uptime = useUptime();
-  const [booted, setBooted] = useState(false);
-  const glitchRef = useDecrypt("systems", !reduce);
-
-  useEffect(() => {
-    const id = setTimeout(() => setBooted(true), reduce ? 0 : 1100);
-    return () => clearTimeout(id);
-  }, [reduce]);
-
+export function Hero() {
   return (
-    <header className="hero">
-      <div>
-        <div className="boot">
-          <span className="cur">&gt;</span> initializing <span className="cur">agent.fleet</span> …{" "}
-          {booted && <span className="ok">● online · 30+ agents · nominal</span>}
-          {!booted && <span className="caret" />}
-        </div>
-        <p className="eyebrow">{person.eyebrow}</p>
-        <h1 className="serif" aria-label="I build the systems that build.">
+    <section className="hero" id="top">
+      <div className="wide">
+        {/* The cycling tail changes length, and at narrow widths the longer
+            phrases wrap to a second line while the shorter ones do not, which
+            walked the whole hero up and down. A hidden sizer holding the
+            longest phrase shares one grid cell with the live text, so the box
+            is always the tallest state and nothing below it moves. */}
+        <p className="eyebrow eyebrow-cycle">
+          <span className="sizer" aria-hidden="true">
+            {hero.eyebrowPrefix} {longestPhrase}
+          </span>
+          <span className="live">
+            {hero.eyebrowPrefix}{" "}
+            <TextCycler
+              items={hero.eyebrowCycle}
+              label={`${hero.eyebrowCycle[0]}, artificial intelligence, and agentic design`}
+            />
+          </span>
+        </p>
 
-          I build the{" "}
-          <span className="glitch" ref={glitchRef}>
-            systems
-          </span>{" "}
-          that build.
+        <h1 data-glow>
+          {hero.headline.map((line) => (
+            <span key={line}>{line}</span>
+          ))}
         </h1>
-        <p className="lede">
-          <span className="diff">Not web apps — autonomous agents.</span>{" "}I&apos;m a security architect who
-          builds AI that can actually take actions: a governed fleet that researches, reviews code, and
-          self-heals on a local-first stack — with the sandboxes, kill-switches, and spend gates that let
-          it run unsupervised without going off the rails. <b>Autonomy you can trust, because I built it to
-          be trusted.</b>
-        </p>
-        <p className="roles">
-          <b>Founder</b> @ DCYFR Labs &nbsp;·&nbsp; <b>Head of AI</b> @ GameShark Labs &nbsp;·&nbsp; remote
-        </p>
-        <p className="creds">
-          6+ yrs security architecture &nbsp;·&nbsp; 25 certifications &nbsp;·&nbsp; <b>@dcyfr/ai</b>{" "}on npm
-          &nbsp;·&nbsp; products shipped, built by agents
-        </p>
-        <div className="cta-row">
-          <a className="btn primary" href={person.cal} target="_blank" rel="noopener noreferrer">
-            Book a 1:1 <span className="arw">→</span>
-          </a>
-          <a className="btn" href="#work">
-            See the work
-          </a>
-          <a className="btn" href={`mailto:${person.email}`}>
-            {person.email}
-          </a>
-        </div>
-      </div>
 
-      <aside className="instrument" aria-label="operator status">
-        <div className="bar">
-          <span className="led" /> operator.status <span className="tag">◇ online</span>
+        <p className="hero-deck">{hero.deck}</p>
+
+        <div className="hero-actions">
+          <a className="btn btn-solid" href={hero.primary.href}>
+            {hero.primary.label}
+          </a>
+          <a className="btn btn-ghost" href={hero.secondary.href}>
+            {hero.secondary.label}
+          </a>
         </div>
-        <div className="rows">
-          <div className="irow">
-            <span className="k">callsign</span>
-            <span className="v">{person.handle}</span>
-          </div>
-          <div className="irow">
-            <span className="k">agents live</span>
-            <span className="v">
-              <span className="mini live" /> 30+ · shipping
+
+        <p className="hero-roles">
+          {hero.roles.map((r) => (
+            <span key={r.org}>
+              {r.role},{" "}
+              <a href={r.href} target="_blank" rel="noreferrer">
+                {r.org}
+              </a>
             </span>
-          </div>
-          <div className="irow">
-            <span className="k">inference</span>
-            <span className="v">
-              <span className="mini on" /> local-first
-            </span>
-          </div>
-          <div className="irow">
-            <span className="k">load</span>
-            <span className="v">
-              <span className="load">
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </span>
-            </span>
-          </div>
-          <div className="irow">
-            <span className="k">uptime</span>
-            <span className="v">{uptime}</span>
-          </div>
-        </div>
-      </aside>
-    </header>
+          ))}
+        </p>
+      </div>
+    </section>
   );
 }

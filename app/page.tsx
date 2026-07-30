@@ -1,47 +1,34 @@
-import AgentMesh from "@/components/AgentMesh";
-import FleetStream from "@/components/FleetStream";
-import Hero from "@/components/Hero";
-import Hud from "@/components/Hud";
-import Ornaments from "@/components/Ornaments";
-import RevealController from "@/components/RevealController";
-import {
-  Connect,
-  Footer,
-  Now,
-  Offer,
-  Ventures,
-  Work,
-  Writing,
-} from "@/components/Sections";
+import { Header } from "@/components/Header";
+import { Hero } from "@/components/Hero";
+import { Work } from "@/components/Work";
+import { Writing } from "@/components/Writing";
+import { Contact } from "@/components/Contact";
+import { SiteFooter } from "@/components/SiteFooter";
+import { NavSpy } from "@/components/NavSpy";
+import { ScrollReveal } from "@/components/ScrollReveal";
+import { CursorGlow } from "@/components/CursorGlow";
 
 export default function Page() {
   return (
     <>
-      <a href="#main" className="skip-link">
-        Skip to content
-      </a>
+      {/* Content fades into the ground before meeting the dock. */}
+      <div className="top-fade" aria-hidden="true" />
+      {/* Scroll readout: CSS scroll-driven, no listener on the main thread. */}
+      <div className="progress" aria-hidden="true" />
+      <NavSpy />
+      <ScrollReveal />
+      <CursorGlow />
 
-      <AgentMesh />
-      <div className="grid-tex" aria-hidden="true" />
-      <div className="glowfield" aria-hidden="true" />
+      <Header />
 
-      <Hud />
-
-      <main id="main" tabIndex={-1} className="wrap">
+      <main id="main">
         <Hero />
-        <FleetStream />
         <Work />
-        <Ventures />
         <Writing />
-        <Now />
-        <Offer />
-        <Connect />
+        <Contact />
       </main>
 
-      <Footer />
-
-      <Ornaments />
-      <RevealController />
+      <SiteFooter />
     </>
   );
 }

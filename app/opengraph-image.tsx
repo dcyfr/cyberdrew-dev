@@ -1,21 +1,28 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import { STAR_PATH } from "@/lib/mark";
 
-export const alt = "Drew — I build the systems that build";
+export const alt = "Drew's Agentic Architecture and Design";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Same Archivo the page uses, so the share card and the site are one face.
+// Satori parses TTF/OTF only (it rejects woff2 with "Unsupported OpenType
+// signature wOF2"), so the card gets static TTF cuts while the page gets the
+// variable woff2.
 const dir = join(process.cwd(), "app/og");
-const serif = readFileSync(join(dir, "PTSerif-Regular.ttf"));
-const serifItalic = readFileSync(join(dir, "PTSerif-Italic.ttf"));
+const displayBold = readFileSync(join(dir, "Archivo_700Bold.ttf"));
+const displayRegular = readFileSync(join(dir, "Archivo_400Regular.ttf"));
 const mono = readFileSync(join(dir, "PTMono-Regular.ttf"));
 
-const BG = "#060911";
-const INK = "#e9f1f9";
-const INK2 = "#9db2c6";
-const MUT = "#7d8ea3";
-const CYAN = "#4ce3ff";
+// Obsidian / bone. Satori resolves neither custom properties nor color-mix,
+// so the two materials and their derived steps are inlined.
+const OBSIDIAN = "#0b0b0d";
+const BONE = "#dcdad5";
+const INK = "#edece8";
+const MUT = "#86868d";
+const LINE = "#26262b";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -27,87 +34,70 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "74px 78px",
-          backgroundColor: BG,
+          padding: "72px 78px",
+          backgroundColor: OBSIDIAN,
           color: INK,
-          fontFamily: "PTSerif",
-          position: "relative",
+          fontFamily: "Archivo",
         }}
       >
-        {/* ambient glow */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            backgroundImage:
-              "radial-gradient(680px 520px at 20% 6%, rgba(76,227,255,0.18), transparent 60%), radial-gradient(560px 420px at 94% 2%, rgba(255,61,129,0.09), transparent 60%)",
-          }}
-        />
-
-        {/* eyebrow */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: 14,
             fontFamily: "PTMono",
-            fontSize: 24,
+            fontSize: 22,
             letterSpacing: 4,
-            textTransform: "uppercase",
-            color: CYAN,
-            zIndex: 1,
+            textTransform: "lowercase",
+            color: MUT,
           }}
         >
-          <div style={{ display: "flex", width: 12, height: 12, borderRadius: 6, backgroundColor: CYAN }} />
-          <span style={{ display: "flex", color: INK }}>cyberdrew.dev</span>
-          <span style={{ display: "flex", color: MUT }}>· building at the agentic frontier</span>
+          {/* the mark is the material: a solid four-pointed star */}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill={BONE}>
+            <path d={STAR_PATH} />
+          </svg>
+          <span style={{ display: "flex", color: BONE }}>cyberdrew.dev</span>
         </div>
 
-        {/* headline */}
         <div
           style={{
             display: "flex",
-            flexWrap: "wrap",
-            alignItems: "baseline",
-            gap: "8px 26px",
-            fontSize: 88,
-            lineHeight: 1.02,
-            letterSpacing: -1.5,
-            maxWidth: 1010,
-            zIndex: 1,
+            flexDirection: "column",
+            fontSize: 92,
+            fontWeight: 700,
+            lineHeight: 1.04,
+            letterSpacing: -3.5,
+            color: INK,
           }}
         >
-          <span style={{ display: "flex" }}>I build the</span>
-          <span style={{ display: "flex", fontStyle: "italic", color: CYAN }}>systems</span>
-          <span style={{ display: "flex" }}>that build.</span>
+          <span style={{ display: "flex" }}>Agents that act</span>
+          <span style={{ display: "flex", color: MUT }}>Rails that hold</span>
         </div>
 
-        {/* footer line */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 14,
-            fontFamily: "PTMono",
-            fontSize: 23,
-            color: INK2,
-            zIndex: 1,
-          }}
-        >
-          <span style={{ display: "flex", color: INK }}>@cyberdrew</span>
-          <span style={{ display: "flex", color: MUT }}>·</span>
-          <span style={{ display: "flex" }}>Founder @ DCYFR Labs · Head of AI @ GameShark Labs</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+          <div style={{ display: "flex", height: 1, backgroundColor: LINE }} />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              fontFamily: "PTMono",
+              fontSize: 20,
+              color: MUT,
+            }}
+          >
+            <span style={{ display: "flex" }}>Secure architecture for autonomous systems</span>
+            <span style={{ display: "flex" }}>DCYFR Labs · GameShark Labs</span>
+          </div>
         </div>
       </div>
     ),
     {
       ...size,
       fonts: [
-        { name: "PTSerif", data: serif, style: "normal", weight: 400 },
-        { name: "PTSerif", data: serifItalic, style: "italic", weight: 400 },
+        { name: "Archivo", data: displayRegular, style: "normal", weight: 400 },
+        { name: "Archivo", data: displayBold, style: "normal", weight: 700 },
         { name: "PTMono", data: mono, style: "normal", weight: 400 },
       ],
-    }
+    },
   );
 }

@@ -15,6 +15,8 @@
 
 # next.js
 /.next/
+# alternate build dirs via NEXT_DIST_DIR (concurrent preview servers)
+/.next-*/
 /out/
 
 # production
@@ -39,3 +41,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.preview/
