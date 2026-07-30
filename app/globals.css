@@ -123,6 +123,8 @@
      two can be guaranteed to line up. */
   --row-pad: min(clamp(1.1rem, 2.4vw, 1.75rem),
                  calc(var(--gutter) - var(--edge-inset)));
+  /* Floor for a card's internal padding, independent of the bleed. */
+  --card-pad-min: 1.15rem;
   --header-h: 3.75rem;
 }
 
@@ -682,9 +684,13 @@ h1, h2, h3 {
 .row {
   position: relative; isolation: isolate;
   display: grid; gap: .75rem clamp(1rem, 2.5vw, 2rem);
-  /* minus the 1px border, which sits between the negative margin and the
-     padding and would otherwise push content 1px off the section rail */
-  padding: clamp(1.25rem, 2.2vw, 1.85rem) calc(var(--row-pad) - 1px);
+  /* Inline padding is the bleed (minus the 1px border, which sits between
+     the negative margin and the padding) so content lands on the section
+     rail — but never less than --card-pad-min, or a narrow viewport leaves
+     text jammed against the plate: at 393px the bleed is only 8px.
+     Above ~700px the bleed wins and rail alignment is exact. */
+  padding: clamp(1.25rem, 2.2vw, 1.85rem)
+           max(calc(var(--row-pad) - 1px), var(--card-pad-min));
   border: 1px solid transparent;
   border-radius: var(--radius);
   text-decoration: none; color: inherit;
@@ -728,15 +734,25 @@ h1, h2, h3 {
   font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
   line-height: 1.35;
 }
+/* Not flex: as a flex container the arrow was an independent item and got
+   pushed onto a line of its own whenever the title wrapped. Normal inline
+   flow plus the non-breaking space keeps it welded to the last word. */
 .row h3 {
-  display: flex; align-items: baseline; gap: .45rem; flex-wrap: wrap;
   font-size: var(--t-h3); letter-spacing: -0.032em; line-height: 1.14;
+  text-wrap: pretty;
 }
-.row .arrow {
-  font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
+.row .arrow, .more .arrow {
+  display: inline-block;
+  vertical-align: baseline;
+  color: var(--ink-mut);
   transition: transform var(--snap), color var(--ease);
 }
-.row:hover .arrow { color: var(--accent); transform: translate(3px, -3px); }
+.row:hover .arrow, .more:hover .arrow {
+  color: var(--accent); transform: translate(2px, -2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .row:hover .arrow, .more:hover .arrow { transform: none; }
+}
 .row p { color: var(--ink-2); margin-block: .55rem 0; max-width: 58ch; }
 
 /* Work row. The ordinal and the status share one left rail: the status used
@@ -832,7 +848,8 @@ h1, h2, h3 {
     var(--shadow-lift);
   margin-inline: calc(-1 * var(--row-pad));
   padding-block: clamp(3rem, 8vh, 5.5rem);
-  padding-inline: calc(var(--row-pad) + clamp(.5rem, 2.5vw, 2rem));
+  padding-inline: max(calc(var(--row-pad) + clamp(.5rem, 2.5vw, 2rem)),
+                      calc(var(--card-pad-min) + .35rem));
 }
 .contact .eyebrow { color: color-mix(in srgb, var(--on-accent) 62%, transparent); }
 .contact h2 { font-size: var(--t-h2); letter-spacing: -0.05em; margin-block: .7rem 0; }

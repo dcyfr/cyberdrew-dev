@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { work } from "@/lib/site";
 import { StarMark } from "./StarMark";
+import { ArrowIcon } from "./ArrowIcon";
 
 export function Work() {
   return (
@@ -38,11 +39,12 @@ export function Work() {
               </div>
 
               <div>
+                {/* \u00A0 before the icon: a non-breaking space glues it to
+                    the last word, so it can never wrap onto a line alone. */}
                 <h3>
                   {w.title}
-                  <span className="arrow" aria-hidden="true">
-                    ↗
-                  </span>
+                  {"\u00A0"}
+                  <ArrowIcon />
                 </h3>
                 <p>{w.desc}</p>
                 <div className="tags">

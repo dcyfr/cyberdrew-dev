@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { writing } from "@/lib/site";
+import { ArrowIcon } from "./ArrowIcon";
 
 export function Writing() {
   return (
@@ -27,9 +28,8 @@ export function Writing() {
               <span className="num">{p.num}</span>
               <h3>
                 {p.title}
-                <span className="arrow" aria-hidden="true">
-                  ↗
-                </span>
+                {"\u00A0"}
+                <ArrowIcon />
               </h3>
               <span className="meta">
                 {p.kind} · {p.date}
@@ -39,7 +39,9 @@ export function Writing() {
         </div>
 
         <a className="more" data-reveal href={writing.more.href} target="_blank" rel="noreferrer">
-          {writing.more.label} ↗
+          {writing.more.label}
+          {"\u00A0"}
+          <ArrowIcon />
         </a>
       </div>
     </section>

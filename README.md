@@ -115,6 +115,7 @@ components/
   NavMenu.tsx      inline links wide, disclosure narrow (client)
   CursorGlow.tsx   warm-to-cool light under the pointer (client)
   StarMark.tsx     renders lib/mark.ts
+  ArrowIcon.tsx    outbound arrow; follow it with \u00A0, never a glyph
 lib/
   site.ts          ALL copy and links — edit here
   mark.ts          the star path, shared by header, status, favicon, OG
@@ -134,6 +135,12 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   can never come closer to the viewport edge than the slab. Uncapped, the
   17.6px bleed ate a 20px gutter and put cards 2px from the edge while the
   slab sat at 12px.
+- **A card's inline padding takes a floor (`--card-pad-min`).** Matching the
+  bleed exactly keeps content on the rail, but the bleed is only 8px at
+  393px, which left text jammed against the plate.
+- **The outbound arrow is an SVG preceded by `\u00A0`,** and its `h3` is not
+  a flex container. As a flex item the arrow was independent and got pushed
+  onto a line of its own whenever the title wrapped.
 - **The row's 1px border sits between the bleed and the padding,** so the
   padding subtracts it or content lands 1px off the rail.
 - **The dock collapses on a CONTAINER query, not a viewport breakpoint.** A
