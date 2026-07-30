@@ -1,47 +1,35 @@
-import AgentMesh from "@/components/AgentMesh";
-import FleetStream from "@/components/FleetStream";
-import Hero from "@/components/Hero";
-import Hud from "@/components/Hud";
-import Ornaments from "@/components/Ornaments";
-import RevealController from "@/components/RevealController";
-import {
-  Connect,
-  Footer,
-  Now,
-  Offer,
-  Ventures,
-  Work,
-  Writing,
-} from "@/components/Sections";
+import { Hero } from "@/components/Hero";
+import { Ledger } from "@/components/Ledger";
+import { Loop } from "@/components/Loop";
+import { Envelope } from "@/components/Envelope";
+import { Work } from "@/components/Work";
+import { Offer } from "@/components/Offer";
+import { Writing } from "@/components/Writing";
+import { SiteFooter } from "@/components/SiteFooter";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Reveal } from "@/components/Reveal";
 
 export default function Page() {
   return (
     <>
-      <a href="#main" className="skip-link">
+      <a className="skip" href="#main">
         Skip to content
       </a>
+      <ThemeToggle />
+      <Reveal />
 
-      <AgentMesh />
-      <div className="grid-tex" aria-hidden="true" />
-      <div className="glowfield" aria-hidden="true" />
+      <Hero />
 
-      <Hud />
-
-      <main id="main" tabIndex={-1} className="wrap">
-        <Hero />
-        <FleetStream />
+      <main id="main">
+        <Ledger />
+        <Loop />
+        <Envelope />
         <Work />
-        <Ventures />
-        <Writing />
-        <Now />
         <Offer />
-        <Connect />
+        <Writing />
       </main>
 
-      <Footer />
-
-      <Ornaments />
-      <RevealController />
+      <SiteFooter />
     </>
   );
 }

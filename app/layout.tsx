@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 const SITE = "https://www.cyberdrew.dev";
-const TITLE = "Drew — I build the systems that build";
+const TITLE = "Drew — agents that act, rails that hold";
 const DESC =
-  "Autonomy engineer at the agentic frontier. Founder @ DCYFR Labs, Head of AI @ GameShark Labs — building AI that reasons, acts, and runs itself: a governed fleet of agents that research, ship code, and self-heal 24/7.";
+  "Security architect building autonomous AI systems that take real actions in production — and the guardrails that make that a safe bet. Founding Architect at DCYFR Labs, Head of AI at GameShark Labs.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -15,13 +15,13 @@ export const metadata: Metadata = {
   authors: [{ name: "Drew", url: SITE }],
   keywords: [
     "autonomous agents",
-    "agentic systems",
-    "AI engineering",
-    "local-first inference",
+    "agentic AI security",
     "AI safety",
+    "agent governance",
+    "local-first inference",
+    "security architecture",
     "DCYFR",
     "GameShark",
-    "Drew",
   ],
   alternates: { canonical: "/" },
   openGraph: {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: TITLE,
-    description: "Autonomy engineer at the agentic frontier.",
+    description: "Agents that act. Rails that hold.",
     creator: "@dcyfr_",
   },
 };
@@ -42,8 +42,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: "dark light",
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#060911" },
-    { media: "(prefers-color-scheme: light)", color: "#eef1f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#050505" },
+    { media: "(prefers-color-scheme: light)", color: "#faf9f7" },
   ],
 };
 
@@ -79,21 +79,20 @@ const personSchema = {
   ],
 };
 
+// Runs before first paint so a stored theme never flashes the other ground.
+const THEME_BOOT = `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t)}}catch(e){}})()`;
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+      </head>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
-        <noscript>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: ".reveal{opacity:1!important;transform:none!important}",
-            }}
-          />
-        </noscript>
         {children}
       </body>
     </html>
