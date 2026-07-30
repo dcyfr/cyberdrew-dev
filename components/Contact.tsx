@@ -9,7 +9,10 @@ export function Contact() {
   return (
     <section className="contact" id="contact">
       <div className="wide">
-        <p className="eyebrow">{contact.eyebrow}</p>
+        <p className="eyebrow">
+          <span className="idx">{contact.index}</span>
+          {contact.eyebrow}
+        </p>
         <h2>{contact.headline}</h2>
         <p>{contact.deck}</p>
 

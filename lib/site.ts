@@ -54,7 +54,7 @@ export type WorkItem = {
 };
 
 export const work = {
-  eyebrow: "Work",
+  eyebrow: "Work", index: "01",
   headline: "Projects and initiatives",
   items: [
     {
@@ -68,7 +68,7 @@ export const work = {
     {
       num: "02",
       title: "The agentic fleet",
-      href: "https://www.dcyfr.ai/open-source",
+      href: "https://www.dcyfr.ai/about",
       desc: "Thirty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs autonomously on a local-first model stack under a hard budget.",
       tags: ["Multi-agent", "Local-first", "Self-healing"],
       status: "Running",
@@ -90,7 +90,7 @@ export const work = {
 export type Post = { num: string; title: string; kind: string; date: string; href: string };
 
 export const writing = {
-  eyebrow: "Writing",
+  eyebrow: "Writing", index: "02",
   headline: "Notes from the build",
   posts: [
     {
@@ -129,7 +129,7 @@ export const writing = {
 // Contact.
 // ---------------------------------------------------------------------------
 export const contact = {
-  eyebrow: "Contact",
+  eyebrow: "Contact", index: "03",
   headline: "Ship autonomy you can defend",
   deck:
     "I work with teams putting agents into production: a first safe agent, a governed fleet, or a hard look at what you already run.",

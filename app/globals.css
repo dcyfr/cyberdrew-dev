@@ -203,6 +203,10 @@ h1, h2, h3 {
   letter-spacing: .19em; text-transform: uppercase;
   color: var(--ink-mut); margin: 0;
 }
+/* Sections carry an index, like the rows do: the page reads as one addressed
+   system rather than a stack of unrelated blocks. */
+.eyebrow .idx { color: var(--accent); margin-right: .7rem; }
+.contact .eyebrow .idx { color: var(--on-accent); }
 
 .sect-h {
   font-size: var(--t-h2);
@@ -214,6 +218,33 @@ h1, h2, h3 {
   margin-block: 1rem 0; max-width: 46ch;
 }
 .sect-head { margin-bottom: clamp(1.75rem, 4vh, 2.75rem); }
+
+/* -------------------------------------------------------------- progress -- */
+/* Position in a document is information, so scroll drives a real readout
+   rather than parallax decoration. Scroll-driven CSS: no scroll listener, no
+   JS, nothing running on the main thread. Hidden entirely where the feature
+   is unsupported (it would otherwise sit at scaleX(0) forever) and under
+   reduced-motion. */
+.progress { display: none; }
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .progress {
+      display: block;
+      position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 60;
+      background: var(--accent);
+      transform: scaleX(0); transform-origin: 0 50%;
+      /* Longhands, not the shorthand: `animation: … linear both` sets
+         duration to 0s, and a scroll timeline needs `auto` to map progress
+         onto the scroll range. With 0s the bar just sits at scaleX(0). */
+      animation-name: progress-grow;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+    }
+    @keyframes progress-grow { to { transform: scaleX(1); } }
+  }
+}
 
 /* ---------------------------------------------------------------- header -- */
 

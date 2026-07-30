@@ -5,7 +5,10 @@ export function Writing() {
     <section className="bay" id="writing">
       <div className="wide">
         <div className="sect-head">
-          <p className="eyebrow">{writing.eyebrow}</p>
+          <p className="eyebrow">
+            <span className="idx">{writing.index}</span>
+            {writing.eyebrow}
+          </p>
           <h2 className="sect-h">{writing.headline}</h2>
         </div>
 

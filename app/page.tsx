@@ -14,6 +14,9 @@ export default function Page() {
       </a>
       <Reveal />
 
+      {/* Scroll readout: CSS scroll-driven, no listener on the main thread. */}
+      <div className="progress" aria-hidden="true" />
+
       <Header />
 
       <main id="main">
