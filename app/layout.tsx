@@ -5,7 +5,7 @@ import "./globals.css";
 const SITE = "https://www.cyberdrew.dev";
 const TITLE = "Drew's Agentic Architecture and Design";
 const DESC =
-  "Security architect building autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet. Founding Architect at DCYFR Labs, Head of AI at GameShark Labs.";
+  "Security architect building autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet. Founder at DCYFR Labs, Head of AI at GameShark Labs.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),

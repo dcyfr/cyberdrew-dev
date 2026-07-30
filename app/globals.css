@@ -36,8 +36,14 @@
   --radius-sm: 0px;
   --shadow: none;
 
+  /* Agentic type system: one engineered grotesk for statements AND running
+     text, mono strictly for machine labels. The old-style serif body read as
+     an editorial essay; a product built of autonomous systems should read as
+     a product surface. Weight, not family, now separates display from body.
+     (Former body stack, if the humanist voice comes back:
+      "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif) */
   --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 
   --snap: 90ms steps(4, end);
@@ -128,7 +134,8 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--t-body);
-  line-height: 1.6;
+  /* grotesk runs a touch tighter than the serif did */
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -294,9 +301,16 @@ h1, h2, h3 {
    an ordinal, a title, and a trailing label. */
 
 .rows { border-top: 1px solid var(--line); }
+/* Rows carry inline padding cancelled by an equal negative margin: the text
+   stays exactly on the section rail, but the surface that appears on hover
+   (and the row's hit area) extends past it, so content never sits flush
+   against the card edge. The negative margin stays inside .wide's gutter
+   (1rem pad vs 1.25rem+ gutter), so it cannot cause viewport overflow. */
 .row {
+  --row-pad: clamp(1rem, 2.5vw, 1.5rem);
   display: grid; gap: .75rem clamp(1rem, 2.5vw, 2rem);
-  padding: clamp(1.25rem, 2.2vw, 1.85rem) 0;
+  padding: clamp(1.25rem, 2.2vw, 1.85rem) var(--row-pad);
+  margin-inline: calc(-1 * var(--row-pad));
   border-bottom: 1px solid var(--line);
   text-decoration: none; color: inherit;
   transition: background var(--ease);
@@ -328,14 +342,15 @@ h1, h2, h3 {
   font-family: var(--font-mono); font-size: var(--t-mono-xs); letter-spacing: .05em;
   color: var(--ink-mut); border: 1px solid var(--line); padding: .24rem .55rem;
 }
-/* State is named, and the marker is a shape — there is no hue to lean on. */
+/* State is named, and the marker is a shape — there is no hue to lean on.
+   The shape is the identity star, same as the wordmark. */
 .status {
   display: inline-flex; align-items: center; gap: .42rem;
   font-family: var(--font-mono); font-size: var(--t-mono-xs);
   letter-spacing: .11em; text-transform: uppercase;
   color: var(--ink-mut); white-space: nowrap;
 }
-.status i { width: 6px; height: 6px; background: var(--accent); flex: none; }
+.status svg { color: var(--accent); flex: none; }
 
 /* writing row */
 .row-post {

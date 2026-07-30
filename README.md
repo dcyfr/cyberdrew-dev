@@ -23,14 +23,15 @@ Two consequences worth keeping:
 - **The contact block is the only full inversion on the page.** It is the
   strongest move the system has, so it is spent exactly once, on the conversion.
 - **State can't lean on hue**, so it never does: status markers are a filled
-  square plus a word. That is automatically colour-blind- and greyscale-safe.
+  identity star plus a word. That is automatically colour-blind- and greyscale-safe.
 
 Materials are not dead grey — bone carries a warm cast (R>G>B), obsidian a cool
 one (B>R). That residual temperature is what keeps two neutrals reading as two
 materials instead of two greys.
 
-Type keeps three non-overlapping roles: grotesk display, old-style serif body,
-mono for labels and data.
+Type is one engineered grotesk for display and running text (weight separates
+the two), with mono strictly for labels and data. The former old-style serif
+body is parked in a comment in globals.css if the humanist voice comes back.
 
 ## Stack
 
@@ -70,7 +71,7 @@ app/
   globals.css          the whole design system
   opengraph-image.tsx  share card
 components/
-  Header.tsx       sticky nav; the mark is a square of the accent material
+  Header.tsx       sticky nav; cycling wordmark, four-pointed-star mark
   Hero.tsx         statement, deck, actions, roles
   Work.tsx         four hairline rows
   Writing.tsx      four hairline rows, tighter

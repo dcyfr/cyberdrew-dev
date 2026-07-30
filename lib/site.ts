@@ -30,7 +30,7 @@ export const hero = {
   deck:
     "I'm Drew, a security architect. I build autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet.",
   roles: [
-    { role: "Founding Architect", org: "DCYFR Labs", href: "https://www.dcyfr.ai" },
+    { role: "Founder", org: "DCYFR Labs", href: "https://www.dcyfr.ai" },
     { role: "Head of AI", org: "GameShark Labs", href: "https://gamesharklabs.com" },
     { role: "Principal Security Engineer", org: "Monks", href: "https://www.monks.com/" },
   ],
@@ -64,9 +64,9 @@ export const work = {
     },
     {
       num: "02",
-      title: "The agent fleet",
-      href: "https://github.com/dcyfr-labs",
-      desc: "Thirty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs unsupervised on a local-first model stack under a hard budget.",
+      title: "The agentic fleet",
+      href: "https://www.dcyfr.ai/open-source",
+      desc: "Thirty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs autonomously on a local-first model stack under a hard budget.",
       tags: ["Multi-agent", "Local-first", "Self-healing"],
       status: "Running",
     },

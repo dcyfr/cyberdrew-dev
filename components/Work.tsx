@@ -1,4 +1,5 @@
 import { work } from "@/lib/site";
+import { StarMark } from "./StarMark";
 
 export function Work() {
   return (
@@ -23,7 +24,7 @@ export function Work() {
               <div className="row-meta">
                 <span className="num">{w.num}</span>
                 <span className="status">
-                  <i aria-hidden="true" />
+                  <StarMark size={9} />
                   {w.status}
                 </span>
               </div>
