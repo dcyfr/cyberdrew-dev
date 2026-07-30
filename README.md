@@ -119,6 +119,14 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   `public/llms.txt` silently drifted until it advertised a project the site no
   longer listed. Do not reintroduce a file in `public/`: it would shadow the
   route and drift again.
+- **Never hand-write `-webkit-backdrop-filter`.** Lightning CSS dedupes the
+  pair down to whichever prefix you wrote and drops the standard property.
+  Chrome no longer supports the `-webkit-` alias, so writing it by hand
+  silently killed the blur everywhere while `CSS.supports` still said yes.
+  Declare the standard property only; the build adds prefixes.
+- **Glass needs something behind it.** `body::before` paints three very
+  low-alpha blooms into the ground; without them a blurred panel over a flat
+  field is just a slightly different flat field.
 - **A hidden dock must repeat `translateX(-50%)`.** That is the centring
   transform; omit it from the hidden state and the dock slides to the left
   edge the moment it animates.
