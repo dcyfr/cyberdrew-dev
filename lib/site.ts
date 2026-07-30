@@ -50,7 +50,7 @@ export type WorkItem = {
   href: string;
   desc: string;
   tags: string[];
-  status: string;
+  status: { label: string; kind: "open" | "running" | "live" };
 };
 
 export const work = {
@@ -63,7 +63,7 @@ export const work = {
       href: "https://www.dcyfr.ai/ai",
       desc: "The portable TypeScript runtime the fleet thinks in: model routing across local and frontier tiers, tool-use, and MCP wiring you drop into an existing project.",
       tags: ["Agent runtime", "TypeScript", "MCP"],
-      status: "Open source",
+      status: { label: "Open source", kind: "open" },
     },
     {
       num: "02",
@@ -71,7 +71,7 @@ export const work = {
       href: "https://www.dcyfr.ai/about",
       desc: "Thirty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs autonomously on a local-first model stack under a hard budget.",
       tags: ["Multi-agent", "Local-first", "Self-healing"],
-      status: "Running",
+      status: { label: "Running", kind: "running" },
     },
     {
       num: "03",
@@ -79,7 +79,7 @@ export const work = {
       href: "https://sharkvault.gamesharklabs.com",
       desc: "Proof the fleet ships product and not just diffs: a backer-funded consumer app taken end to end, from auth to payments to content pipeline, largely by agents.",
       tags: ["Autonomous delivery", "Next.js", "Product"],
-      status: "Live",
+      status: { label: "Live", kind: "live" },
     },
   ] as WorkItem[],
 };

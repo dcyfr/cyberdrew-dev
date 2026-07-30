@@ -2,8 +2,10 @@ import { footer, person, socials } from "@/lib/site";
 import { SocialIcon } from "./SocialIcon";
 
 export function SiteFooter() {
-  // Static prerender: the year stamps at build time, which tracks deploys.
+  // Static prerender: these stamp at build time, which tracks deploys.
   const year = new Date().getFullYear();
+  const builtAt = process.env.NEXT_PUBLIC_BUILT_AT;
+  const commit = process.env.NEXT_PUBLIC_COMMIT;
 
   return (
     <footer className="site-footer">
@@ -33,6 +35,15 @@ export function SiteFooter() {
           <span>
             © {year} {person.name} ({person.handle})
           </span>
+          {/* The log is the interface: real machine state, stamped at build,
+              not a slogan. Both halves degrade independently if absent. */}
+          {(builtAt || commit) && (
+            <span className="build">
+              {builtAt ? `build ${builtAt}` : null}
+              {builtAt && commit ? " · " : null}
+              {commit || null}
+            </span>
+          )}
         </div>
       </div>
     </footer>

@@ -26,9 +26,11 @@ export function Work() {
                   as one unit instead of straddling the row */}
               <div className="row-meta">
                 <span className="num">{w.num}</span>
-                <span className="status">
+                {/* The marker's motion states what the status means: open
+                    turns, running steps, live pulses. */}
+                <span className="status" data-kind={w.status.kind}>
                   <StarMark size={9} />
-                  {w.status}
+                  {w.status.label}
                 </span>
               </div>
 

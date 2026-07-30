@@ -4,7 +4,6 @@ import { Work } from "@/components/Work";
 import { Writing } from "@/components/Writing";
 import { Contact } from "@/components/Contact";
 import { SiteFooter } from "@/components/SiteFooter";
-import { Reveal } from "@/components/Reveal";
 
 export default function Page() {
   return (
@@ -12,8 +11,6 @@ export default function Page() {
       <a className="skip" href="#main">
         Skip to content
       </a>
-      <Reveal />
-
       {/* Scroll readout: CSS scroll-driven, no listener on the main thread. */}
       <div className="progress" aria-hidden="true" />
 

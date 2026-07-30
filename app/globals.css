@@ -397,7 +397,24 @@ h1, h2, h3 {
   letter-spacing: .11em; text-transform: uppercase;
   color: var(--ink-mut); white-space: nowrap;
 }
-.status svg { color: var(--accent); flex: none; }
+.status svg { color: var(--accent); flex: none; transform-origin: 50% 50%; }
+
+/* Each status animates to its own meaning, so the motion is information and
+   not decoration. All three collapse under reduced-motion, where the word
+   alone still carries the state. */
+@media (prefers-reduced-motion: no-preference) {
+  /* open source: a slow, even turn — freely in circulation, nothing running */
+  .status[data-kind="open"] svg { animation: star-turn 22s linear infinite; }
+  /* running: the same turn, stepped — agents move in discrete decisions */
+  .status[data-kind="running"] svg { animation: star-turn 6s steps(8, end) infinite; }
+  /* live: a broadcast beat */
+  .status[data-kind="live"] svg { animation: star-live 2.4s ease-in-out infinite; }
+}
+@keyframes star-turn { to { transform: rotate(360deg); } }
+@keyframes star-live {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(.72); opacity: .5; }
+}
 
 /* writing row */
 .row-post {
@@ -488,6 +505,7 @@ h1, h2, h3 {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem;
   font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
 }
+.footer-bar .build { font-variant-numeric: tabular-nums; letter-spacing: .04em; }
 
 /* ----------------------------------------------------------- theme toggle -- */
 
@@ -500,12 +518,15 @@ h1, h2, h3 {
 }
 .theme-toggle:hover { color: var(--ink); border-color: var(--accent); }
 
-/* ---------------------------------------------------------------- reveal -- */
+/* ----------------------------------------------------------------- caret -- */
+/* Present only while a phrase is generating, absent at rest. A caret that
+   blinks forever is a typewriter; a caret that appears only while working is
+   a model emitting tokens. */
 
-@media (prefers-reduced-motion: no-preference) {
-  .reveal { opacity: 0; transform: translateY(12px); }
-  .reveal.in {
-    opacity: 1; transform: none;
-    transition: opacity 400ms var(--ease), transform 400ms cubic-bezier(.2,0,0,1);
-  }
+.caret {
+  display: inline-block;
+  width: .5em; height: 1em;
+  margin-left: .28em;
+  vertical-align: -.14em;
+  background: var(--accent);
 }
