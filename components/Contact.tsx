@@ -7,8 +7,9 @@ import { contact } from "@/lib/site";
  */
 export function Contact() {
   return (
-    <section className="contact" id="contact" data-reveal>
+    <section className="bay" id="contact">
       <div className="wide">
+        <div className="contact" data-reveal>
         <p className="eyebrow">
           <span className="idx">{contact.index}</span>
           {contact.eyebrow}
@@ -28,6 +29,7 @@ export function Contact() {
           <a className="btn btn-ghost" href={contact.secondary.href}>
             {contact.secondary.label}
           </a>
+          </div>
         </div>
       </div>
     </section>

@@ -129,6 +129,13 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   `public/llms.txt` silently drifted until it advertised a project the site no
   longer listed. Do not reintroduce a file in `public/`: it would shadow the
   route and drift again.
+- **One `--row-pad` governs every floating edge.** Cards and the contact slab
+  both bleed by it, and it is capped at `--gutter - --edge-inset` so a card
+  can never come closer to the viewport edge than the slab. Uncapped, the
+  17.6px bleed ate a 20px gutter and put cards 2px from the edge while the
+  slab sat at 12px.
+- **The row's 1px border sits between the bleed and the padding,** so the
+  padding subtracts it or content lands 1px off the rail.
 - **The dock collapses on a CONTAINER query, not a viewport breakpoint.** A
   guessed 640px viewport hid links that still had 100px of room; the content
   needs 488px of dock, so the query fires at 500px of dock.

@@ -113,6 +113,16 @@
   --rail: 1180px;
   --bay: clamp(3.5rem, 8vh, 6.5rem);
   --gutter: clamp(1.25rem, 5vw, 4.5rem);
+  /* How close any floating object may come to the viewport edge. One token,
+     so the contact slab and the work/writing cards cannot disagree. */
+  --edge-inset: clamp(.75rem, 3vw, 1.25rem);
+  /* How far a floating object bleeds outside the text rail. Capped at
+     whatever the gutter can spare above --edge-inset, so a card can never
+     come closer to the viewport edge than the slab does. Shared by the
+     work/writing cards and the contact slab, which is the only way those
+     two can be guaranteed to line up. */
+  --row-pad: min(clamp(1.1rem, 2.4vw, 1.75rem),
+                 calc(var(--gutter) - var(--edge-inset)));
   --header-h: 3.75rem;
 }
 
@@ -383,6 +393,29 @@ h1, h2, h3 {
 }
 .sect-head { margin-bottom: clamp(1.75rem, 4vh, 2.75rem); }
 
+/* -------------------------------------------------------------- top fade -- */
+/* Content dissolves into the ground before it reaches the dock, rather than
+   sliding under a translucent pill and colliding with it. Fixed, so it stays
+   put while the page scrolls; below the dock (z 40) and above the content,
+   so the dock itself stays crisp.
+   The ramp is opaque through the dock's whole band and only then falls off,
+   which is what makes the meeting point invisible. */
+.top-fade {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: calc(env(safe-area-inset-top, 0px) + var(--header-h) + 3.25rem);
+  z-index: 30;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    var(--bg) 52%,
+    color-mix(in oklab, var(--bg) 55%, transparent) 76%,
+    transparent 100%
+  );
+}
+@media (forced-colors: active) { .top-fade { display: none; } }
+
 /* -------------------------------------------------------------- progress -- */
 /* Position in a document is information, so scroll drives a real readout
    rather than parallax decoration. Scroll-driven CSS: no scroll listener, no
@@ -640,7 +673,6 @@ h1, h2, h3 {
    old model stacked hairlines edge to edge; this one gives each item its own
    plate, spaced apart, so the ground shows between them. */
 .rows {
-  --row-pad: clamp(1.1rem, 2.4vw, 1.75rem);
   display: flex; flex-direction: column; gap: .6rem;
   margin-inline: calc(-1 * var(--row-pad));
 }
@@ -650,7 +682,9 @@ h1, h2, h3 {
 .row {
   position: relative; isolation: isolate;
   display: grid; gap: .75rem clamp(1rem, 2.5vw, 2rem);
-  padding: clamp(1.25rem, 2.2vw, 1.85rem) var(--row-pad);
+  /* minus the 1px border, which sits between the negative margin and the
+     padding and would otherwise push content 1px off the section rail */
+  padding: clamp(1.25rem, 2.2vw, 1.85rem) calc(var(--row-pad) - 1px);
   border: 1px solid transparent;
   border-radius: var(--radius);
   text-decoration: none; color: inherit;
@@ -785,6 +819,10 @@ h1, h2, h3 {
 /* Floats as an inset slab rather than spanning edge to edge. Full-bleed made
    it a band across the page; inset and rounded, it reads as the one object
    sitting on top of everything else. */
+/* Sits inside .wide and bleeds by exactly --row-pad, the same as the cards,
+   so all three sections share one outer edge at every width. Previously it
+   was margined off the viewport instead, which made it wider than the cards
+   at 1280 and narrower at 768. */
 .contact {
   background: var(--accent); color: var(--on-accent);
   border-radius: var(--radius);
@@ -792,14 +830,9 @@ h1, h2, h3 {
     inset 0 1px 0 rgb(255 255 255 / .10),
     inset 0 -1px 0 rgb(0 0 0 / .12),
     var(--shadow-lift);
-  padding-block: clamp(3.5rem, 9vh, 6.5rem);
-  margin-inline: var(--gutter);
-  margin-block: var(--bay);
-}
-/* The slab already provides the inset, so its rail must not add another. */
-.contact > .wide { padding-inline: clamp(1.5rem, 4vw, 3.5rem); }
-@media (max-width: 560px) {
-  .contact { margin-inline: clamp(.75rem, 3vw, 1.25rem); }
+  margin-inline: calc(-1 * var(--row-pad));
+  padding-block: clamp(3rem, 8vh, 5.5rem);
+  padding-inline: calc(var(--row-pad) + clamp(.5rem, 2.5vw, 2rem));
 }
 .contact .eyebrow { color: color-mix(in srgb, var(--on-accent) 62%, transparent); }
 .contact h2 { font-size: var(--t-h2); letter-spacing: -0.05em; margin-block: .7rem 0; }
