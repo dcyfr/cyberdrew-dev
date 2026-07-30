@@ -1,10 +1,17 @@
 import { hero } from "@/lib/site";
+import { TextCycler } from "./TextCycler";
 
 export function Hero() {
   return (
     <section className="hero" id="top">
       <div className="wide">
-        <p className="eyebrow">{hero.eyebrow}</p>
+        <p className="eyebrow">
+          {hero.eyebrowPrefix}{" "}
+          <TextCycler
+            items={hero.eyebrowCycle}
+            label={`${hero.eyebrowCycle[0]}, artificial intelligence, and agentic design`}
+          />
+        </p>
 
         <h1>
           {hero.headline.map((line) => (

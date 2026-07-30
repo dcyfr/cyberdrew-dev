@@ -25,7 +25,10 @@ export const nav = [
 // Hero. Silhouette test: this has to work as one shape on one ground.
 // ---------------------------------------------------------------------------
 export const hero = {
-  eyebrow: "Secure architecture for autonomous systems",
+  // The eyebrow's tail cycles; the first entry is the resting state and the
+  // one the static surfaces (meta description, OG card) use.
+  eyebrowPrefix: "Secure architecture for",
+  eyebrowCycle: ["autonomous systems", "artificial intelligence", "agentic design"],
   headline: ["Agents that act", "Rails that hold"],
   deck:
     "I'm Drew, a security architect. I build autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet.",
@@ -148,11 +151,3 @@ export const socials: Social[] = [
 export const footer = {
   signoff: "Think freely, build securely, ship boldly",
 };
-
-// Header wordmark cycle. First entry is the resting/reduced-motion state.
-export const wordmarkCycle = [
-  "cyberdrew.dev",
-  "secure architecture",
-  "agentic design",
-  "autonomous workflows",
-] as const;
