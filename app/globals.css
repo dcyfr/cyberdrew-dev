@@ -36,14 +36,15 @@
   --radius-sm: 0px;
   --shadow: none;
 
-  /* Agentic type system: one engineered grotesk for statements AND running
-     text, mono strictly for machine labels. The old-style serif body read as
-     an editorial essay; a product built of autonomous systems should read as
-     a product surface. Weight, not family, now separates display from body.
+  /* Agentic type system: one engineered grotesk (Archivo Variable, self-
+     hosted via next/font/local) for statements AND running text, mono
+     strictly for machine labels. Weight, not family, separates display from
+     body. --font-archivo carries the metric-matched fallback, so the stack
+     degrades cleanly if the file never arrives.
      (Former body stack, if the humanist voice comes back:
       "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif) */
-  --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-body: var(--font-archivo), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 
   --snap: 90ms steps(4, end);
@@ -123,6 +124,21 @@
   transition: none !important;
 }
 
+/* Forced colours (Windows High Contrast). The palette is already two
+   materials, so most of it maps cleanly; the exceptions are the places that
+   carry meaning in a FILL, which the OS repaints. Keep the inverted contact
+   block and the identity mark legible, and make the borders that define the
+   row grid follow the user's chosen text colour. */
+@media (forced-colors: active) {
+  .contact { forced-color-adjust: none; background: Canvas; color: CanvasText; }
+  .contact .btn-solid { background: ButtonText; color: ButtonFace; }
+  .wordmark svg, .status svg, .caret { forced-color-adjust: auto; fill: CanvasText; }
+  .caret { background: CanvasText; }
+  .progress { background: Highlight; }
+  .rows, .row, .header, .site-footer, .footer-bar, .tag { border-color: CanvasText; }
+  .nav-link[aria-current] { border-bottom-color: Highlight; }
+}
+
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
@@ -180,12 +196,9 @@ a { color: inherit; text-underline-offset: 3px; }
   overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 
-.skip {
-  position: absolute; left: -9999px; top: 0; z-index: 100;
-  background: var(--accent); color: var(--on-accent);
-  padding: .75rem 1.1rem; font-family: var(--font-mono); font-size: var(--t-mono);
-}
-.skip:focus { left: var(--gutter); top: .6rem; }
+/* No skip link: only five focusable elements precede <main>, so the bypass
+   burden WCAG 2.4.1 targets does not really exist here. #main stays as the
+   landmark. */
 
 /* ------------------------------------------------------------ typography -- */
 
@@ -278,6 +291,9 @@ h1, h2, h3 {
   transition: color var(--ease), border-color var(--ease);
 }
 .nav-link:hover { color: var(--ink); border-bottom-color: var(--accent); }
+/* Position readout. aria-current is both the hook and the accessible signal,
+   so the state is never carried by colour alone. */
+.nav-link[aria-current] { color: var(--ink); border-bottom-color: var(--accent); }
 /* Narrow: keep the nav, drop the wordmark's text. Three short links are worth
    more than the name — the mark still identifies the site. */
 @media (max-width: 560px) {

@@ -1,14 +1,19 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import { STAR_PATH } from "@/lib/mark";
 
 export const alt = "Drew's Agentic Architecture and Design";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Same Archivo the page uses, so the share card and the site are one face.
+// Satori parses TTF/OTF only (it rejects woff2 with "Unsupported OpenType
+// signature wOF2"), so the card gets static TTF cuts while the page gets the
+// variable woff2.
 const dir = join(process.cwd(), "app/og");
-const serif = readFileSync(join(dir, "PTSerif-Regular.ttf"));
-const serifItalic = readFileSync(join(dir, "PTSerif-Italic.ttf"));
+const displayBold = readFileSync(join(dir, "Archivo_700Bold.ttf"));
+const displayRegular = readFileSync(join(dir, "Archivo_400Regular.ttf"));
 const mono = readFileSync(join(dir, "PTMono-Regular.ttf"));
 
 // Obsidian / bone. Satori resolves neither custom properties nor color-mix,
@@ -32,7 +37,7 @@ export default function OpengraphImage() {
           padding: "72px 78px",
           backgroundColor: OBSIDIAN,
           color: INK,
-          fontFamily: "PTSerif",
+          fontFamily: "Archivo",
         }}
       >
         <div
@@ -49,7 +54,7 @@ export default function OpengraphImage() {
         >
           {/* the mark is the material: a solid four-pointed star */}
           <svg width="18" height="18" viewBox="0 0 24 24" fill={BONE}>
-            <path d="M12 0 Q13.8 10.2 24 12 Q13.8 13.8 12 24 Q10.2 13.8 0 12 Q10.2 10.2 12 0 Z" />
+            <path d={STAR_PATH} />
           </svg>
           <span style={{ display: "flex", color: BONE }}>cyberdrew.dev</span>
         </div>
@@ -59,8 +64,9 @@ export default function OpengraphImage() {
             display: "flex",
             flexDirection: "column",
             fontSize: 92,
+            fontWeight: 700,
             lineHeight: 1.04,
-            letterSpacing: -3,
+            letterSpacing: -3.5,
             color: INK,
           }}
         >
@@ -88,8 +94,8 @@ export default function OpengraphImage() {
     {
       ...size,
       fonts: [
-        { name: "PTSerif", data: serif, style: "normal", weight: 400 },
-        { name: "PTSerif", data: serifItalic, style: "italic", weight: 400 },
+        { name: "Archivo", data: displayRegular, style: "normal", weight: 400 },
+        { name: "Archivo", data: displayBold, style: "normal", weight: 700 },
         { name: "PTMono", data: mono, style: "normal", weight: 400 },
       ],
     },

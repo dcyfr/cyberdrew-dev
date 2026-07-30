@@ -1,6 +1,25 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import localFont from "next/font/local";
 import "./globals.css";
+
+/**
+ * The display face, self-hosted. On the system stack the hero measured 448px
+ * on macOS, 412px on Windows/Android and 462px on the Arial fallback: a 13%
+ * swing on the most important line of the site, in three different
+ * letterforms. One variable Latin subset (36KB) locks the identity.
+ *
+ * next/font/local self-hosts, preloads, and generates a size-adjusted
+ * fallback so the swap does not shift layout.
+ */
+const archivo = localFont({
+  src: "./fonts/archivo-latin-wght-normal.woff2",
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
+  variable: "--font-archivo",
+  fallback: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"],
+});
 
 const SITE = "https://www.cyberdrew.dev";
 const TITLE = "Drew's Agentic Architecture and Design";
@@ -83,7 +102,7 @@ const THEME_BOOT = `(function(){try{var t=localStorage.getItem("theme");if(t==="
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={archivo.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>

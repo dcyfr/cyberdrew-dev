@@ -4,15 +4,14 @@ import { Work } from "@/components/Work";
 import { Writing } from "@/components/Writing";
 import { Contact } from "@/components/Contact";
 import { SiteFooter } from "@/components/SiteFooter";
+import { NavSpy } from "@/components/NavSpy";
 
 export default function Page() {
   return (
     <>
-      <a className="skip" href="#main">
-        Skip to content
-      </a>
       {/* Scroll readout: CSS scroll-driven, no listener on the main thread. */}
       <div className="progress" aria-hidden="true" />
+      <NavSpy />
 
       <Header />
 
