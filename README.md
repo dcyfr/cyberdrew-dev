@@ -129,6 +129,12 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   `public/llms.txt` silently drifted until it advertised a project the site no
   longer listed. Do not reintroduce a file in `public/`: it would shadow the
   route and drift again.
+- **The dock collapses on a CONTAINER query, not a viewport breakpoint.** A
+  guessed 640px viewport hid links that still had 100px of room; the content
+  needs 488px of dock, so the query fires at 500px of dock.
+- **The eyebrow reserves its tallest state.** A hidden sizer holding the
+  longest phrase shares one grid cell with the live text; without it the
+  cycle wrapped to two lines at narrow widths and walked the hero up and down.
 - **`hidden` loses to an author `display` declaration.** `.nav-panel` set
   `display: grid`, so `hidden={!open}` never hid it and the close button
   looked dead. Drive visibility from a data attribute, and keep `hidden`

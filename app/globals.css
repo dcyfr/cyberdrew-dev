@@ -361,6 +361,12 @@ h1, h2, h3 {
   letter-spacing: .19em; text-transform: uppercase;
   color: var(--ink-mut); margin: 0;
 }
+/* Sizer and live text share one grid cell, so the box is always as tall as
+   the longest phrase and the cycle cannot move the hero. */
+.eyebrow-cycle { display: grid; }
+.eyebrow-cycle > * { grid-area: 1 / 1; }
+.eyebrow-cycle .sizer { visibility: hidden; pointer-events: none; }
+
 /* Sections carry an index, like the rows do: the page reads as one addressed
    system rather than a stack of unrelated blocks. */
 .eyebrow .idx { color: var(--accent); margin-right: .7rem; }
@@ -416,6 +422,12 @@ h1, h2, h3 {
   z-index: 40;
   width: min(calc(100% - 2 * clamp(.75rem, 3vw, 1.5rem)), 62rem);
   height: var(--header-h);
+  /* The dock measures itself. Collapsing on a viewport breakpoint guessed
+     wrong by ~100px; the links need 488px of dock and were being hidden at
+     640px of viewport. A container query collapses them exactly when the
+     dock actually runs out of room. */
+  container-type: inline-size;
+  container-name: dock;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   /* Strong glass: opaque enough that display type passing behind it cannot
@@ -456,19 +468,27 @@ h1, h2, h3 {
 }
 .wordmark svg { color: var(--accent); flex: none; }
 
-.nav { display: flex; align-items: center; gap: clamp(.75rem, 2.5vw, 2rem); }
+.nav { display: flex; align-items: center; gap: .15rem; }
+.nav .theme-toggle { margin-left: .5rem; }
 .nav-link {
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--ink-mut); text-decoration: none;
-  padding: .5rem 0; min-height: 24px;
-  border-bottom: 1px solid transparent;
-  transition: color var(--ease), border-color var(--ease);
+  /* A pill, not a rule: underlines read as links in body copy and fight the
+     dock's rounded language. */
+  padding: .5rem .7rem; min-height: 32px;
+  display: inline-flex; align-items: center;
+  border-radius: var(--radius-pill);
+  transition: color var(--ease), background var(--ease);
 }
-.nav-link:hover { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link:hover { color: var(--ink); background: var(--surface-2); }
 /* Position readout. aria-current is both the hook and the accessible signal,
    so the state is never carried by colour alone. */
-.nav-link[aria-current] { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link[aria-current] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--surface-2) 90%, transparent);
+  box-shadow: inset 0 1px 0 var(--edge-top);
+}
 /* ---- disclosure -------------------------------------------------------
    Wide: links inline. Narrow: one trigger, everything behind it. Five
    targets do not fit a 336px dock without becoming a toolbar.
@@ -532,13 +552,18 @@ h1, h2, h3 {
   margin-top: .25rem; border-top: 1px solid var(--line);
 }
 
-@media (max-width: 640px) {
+@container dock (max-width: 500px) {
   .nav { display: none; }
   .nav-trigger { display: grid; }
 }
-/* Above the breakpoint the panel must stay shut even if state says open. */
-@media (min-width: 641px) {
+/* With room for the links the panel must stay shut even if state says open. */
+@container dock (min-width: 500.01px) {
   .nav-panel, .nav-panel[data-open] { display: none; }
+}
+/* No container-query support: fall back to the measured viewport threshold. */
+@supports not (container-type: inline-size) {
+  @media (max-width: 548px) { .nav { display: none; } .nav-trigger { display: grid; } }
+  @media (min-width: 549px) { .nav-panel, .nav-panel[data-open] { display: none; } }
 }
 
 /* --------------------------------------------------------------- buttons -- */
@@ -851,6 +876,54 @@ h1, h2, h3 {
   transition: color var(--ease), border-color var(--ease), background var(--ease);
 }
 .theme-toggle:hover { color: var(--ink); border-color: var(--line-2); }
+
+/* ----------------------------------------------------------------- touch -- */
+/* Everything below assumes no hover and a finger, not a cursor. */
+
+/* Tap targets. WCAG 2.2 AA wants 24x24 minimum; controls go to 44 where
+   there is room. Inline links take vertical padding, which enlarges the hit
+   box without changing the line box, so nothing reflows.
+   Measured before: role links were 15px tall, `.more` 23px, icons 28px. */
+@media (pointer: coarse) {
+  .footer-links .icon-link { padding: .8rem; }
+  .footer-links a { padding-block: .5rem; }
+  .hero-roles a { padding-block: .4rem; }
+  .more { padding-block: .35rem; }
+  .row-post { padding-block: 1.3rem; }
+  .nav-link { min-height: 44px; }
+  .theme-toggle, .nav-trigger { width: 44px; height: 44px; }
+  .wordmark .mark { width: 38px; height: 38px; }
+}
+
+/* Hover never fires on touch, so a hover-only card would sit in its faint
+   resting state forever. Give it the real surface up front and use :active
+   for the press instead. */
+@media (hover: none) {
+  .row {
+    background: color-mix(in srgb, var(--surface) 55%, transparent);
+    box-shadow:
+      inset 0 1px 0 var(--edge-top),
+      inset 0 0 0 1px var(--glass-ring),
+      var(--shadow);
+  }
+  .row:active { transform: scale(.995); background: var(--glass); }
+  .btn:active { transform: scale(.97); }
+  .row .arrow { color: var(--accent); }
+}
+
+/* The grey flash Safari/Chrome paint on tap fights the glass. */
+a, button { -webkit-tap-highlight-color: transparent; }
+
+/* Notches and home indicators. */
+.header { top: max(clamp(.6rem, 1.6vh, 1.1rem), env(safe-area-inset-top)); }
+.site-footer { padding-bottom: env(safe-area-inset-bottom); }
+.wide { padding-inline: max(var(--gutter), env(safe-area-inset-left)); }
+
+/* Short viewports: the hero reserved so much headroom that the deck and
+   buttons fell below the fold on a landscape phone. */
+@media (max-height: 620px) {
+  .hero { min-height: auto; padding-block: calc(var(--header-h) + 2.5rem) 3rem; }
+}
 
 /* ---------------------------------------------------------------- reveal -- */
 /* Elements rise into place as they enter the viewport.
