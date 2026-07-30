@@ -300,17 +300,20 @@ h1, h2, h3 {
 /* Work and writing are the same object at two densities: a hairline row with
    an ordinal, a title, and a trailing label. */
 
-.rows { border-top: 1px solid var(--line); }
-/* Rows carry inline padding cancelled by an equal negative margin: the text
-   stays exactly on the section rail, but the surface that appears on hover
-   (and the row's hit area) extends past it, so content never sits flush
-   against the card edge. The negative margin stays inside .wide's gutter
-   (1rem pad vs 1.25rem+ gutter), so it cannot cause viewport overflow. */
-.row {
+/* The bleed lives on the CONTAINER, not the row. Both carried it before, so
+   the container's top rule stopped at the rail while every row rule ran
+   24px wider — a visible notch at the first border. Now .rows extends past
+   the rail once and each row pads back in, so all four rules share one width
+   and the text still lands exactly on the section rail. The 1rem floor stays
+   inside .wide's 1.25rem+ gutter, so this cannot overflow the viewport. */
+.rows {
   --row-pad: clamp(1rem, 2.5vw, 1.5rem);
+  margin-inline: calc(-1 * var(--row-pad));
+  border-top: 1px solid var(--line);
+}
+.row {
   display: grid; gap: .75rem clamp(1rem, 2.5vw, 2rem);
   padding: clamp(1.25rem, 2.2vw, 1.85rem) var(--row-pad);
-  margin-inline: calc(-1 * var(--row-pad));
   border-bottom: 1px solid var(--line);
   text-decoration: none; color: inherit;
   transition: background var(--ease);
