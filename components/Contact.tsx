@@ -13,7 +13,7 @@ export function Contact() {
           <span className="idx">{contact.index}</span>
           {contact.eyebrow}
         </p>
-        <h2>{contact.headline}</h2>
+        <h2 data-glow>{contact.headline}</h2>
         <p>{contact.deck}</p>
 
         <div className="contact-actions">

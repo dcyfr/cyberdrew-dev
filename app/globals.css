@@ -34,6 +34,9 @@
   /* Chip text sits on --surface-2, not on the page ground, which costs
      contrast: --ink-mut measured 4.34:1 there in light. Dedicated value. */
   --chip-ink:  #9a9aa1;
+  /* the temperature poles the cursor glow travels between */
+  --warm: #fff0dc;
+  --cool: #d3e4ff;
 
   /* Radius and elevation are back. The skeleton's `--radius: 0` came from the
      graphic language ("a hard cut, not a soft card"), but that rule governs
@@ -126,6 +129,8 @@
     --accent:    #0b0b0d;
     --on-accent: #f4f3f0;
     --chip-ink:  #5a5a61;
+    --warm: #6b4a1c;
+    --cool: #163a6b;
     --edge-top:    rgb(255 255 255 / .85);
     --edge-bottom: rgb(40 32 24 / .07);
     --glass-ring:  rgb(255 255 255 / .6);
@@ -148,6 +153,8 @@
   --accent:    #0b0b0d;
   --on-accent: #f4f3f0;
   --chip-ink:  #5a5a61;
+  --warm: #6b4a1c;
+  --cool: #163a6b;
   --edge-top:  rgb(255 255 255 / .85);
   --edge-bottom: rgb(40 32 24 / .07);
   --glass-ring:  rgb(255 255 255 / .6);
@@ -169,6 +176,8 @@
   --accent:    #dcdad5;
   --on-accent: #0b0b0d;
   --chip-ink:  #9a9aa1;
+  --warm: #fff0dc;
+  --cool: #d3e4ff;
   --edge-top:    rgb(255 255 255 / .09);
   --edge-bottom: rgb(0 0 0 / .28);
   --glass-ring:  rgb(255 255 255 / .06);
@@ -201,6 +210,8 @@
     box-shadow: none;
   }
   .row::before { display: none; }
+  body::after { display: none; }
+  [data-glow] { background-image: none; color: CanvasText; }
   .contact { forced-color-adjust: none; background: Canvas; color: CanvasText; }
   .contact .btn-solid { background: ButtonText; color: ButtonFace; }
   .wordmark svg, .status svg, .caret { forced-color-adjust: auto; fill: CanvasText; }
@@ -238,11 +249,35 @@ body::before {
   inset: -20vmax;
   z-index: -1;
   pointer-events: none;
+  /* `in oklab` interpolates perceptually, so the ramp steps evenly instead of
+     bunching in the middle where banding is most visible. */
   background:
-    radial-gradient(42vmax 42vmax at 18% 8%,  var(--bloom)   0%, transparent 62%),
-    radial-gradient(38vmax 38vmax at 88% 32%, var(--bloom-2) 0%, transparent 60%),
-    radial-gradient(46vmax 46vmax at 62% 92%, var(--bloom-2) 0%, transparent 64%);
+    radial-gradient(42vmax 42vmax at 18% 8%,  in oklab, var(--bloom)   0%, transparent 62%),
+    radial-gradient(38vmax 38vmax at 88% 32%, in oklab, var(--bloom-2) 0%, transparent 60%),
+    radial-gradient(46vmax 46vmax at 62% 92%, in oklab, var(--bloom-2) 0%, transparent 64%);
 }
+
+/* Dither. A gradient this large with this small a luminance delta cannot be
+   represented in 8-bit sRGB: neighbouring bands quantise to the same value
+   and you see contours. Low-amplitude noise straddles the quantisation
+   boundary so the eye integrates a smooth ramp.
+   Animation is NOT the fix for this — it only makes the bands crawl.
+   Fixed, so it never shimmers while scrolling; tiled 160px SVG turbulence,
+   rasterised once. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) body::after { opacity: .028; }
+}
+:root[data-theme="light"] body::after { opacity: .028; }
 
 /* ----------------------------------------------------------------- glass -- */
 /* One stack, applied by composition: fill + blur + bevel + thickness. */
@@ -392,22 +427,9 @@ h1, h2, h3 {
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
     var(--shadow);
-  transition: transform 340ms cubic-bezier(.16, 1, .3, 1),
-              opacity 240ms cubic-bezier(.16, 1, .3, 1);
 }
 @supports not (backdrop-filter: blur(1px)) {
   .header { background: var(--surface); }
-}
-/* Retracts on the way down, returns on the way up. translateX(-50%) is the
-   centring transform and must be repeated in both states, or the dock jumps
-   to the left edge the moment it animates. */
-.header[data-dock="hidden"] {
-  transform: translateX(-50%) translateY(calc(-100% - 1.25rem));
-  opacity: 0;
-  pointer-events: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .header { transition: none; }
 }
 /* No .wide inside the dock: it carries its own padding, and the rail's
    gutter would push the contents far off the pill's edges. */
@@ -421,9 +443,17 @@ h1, h2, h3 {
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .12em; text-transform: lowercase;
   text-decoration: none; color: var(--ink);
-  display: inline-flex; align-items: center; gap: .55rem;
+  display: inline-flex; align-items: center; gap: .6rem;
 }
-/* The mark is the material itself: a bone star on obsidian, and inverted. */
+/* The mark rides in a filled disc, same treatment as the theme toggle, so
+   the two ends of the dock rhyme. */
+.wordmark .mark {
+  width: 32px; height: 32px; flex: none;
+  display: grid; place-items: center;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface-2) 80%, transparent);
+  box-shadow: inset 0 1px 0 var(--edge-top);
+}
 .wordmark svg { color: var(--accent); flex: none; }
 
 .nav { display: flex; align-items: center; gap: clamp(.75rem, 2.5vw, 2rem); }
@@ -439,11 +469,63 @@ h1, h2, h3 {
 /* Position readout. aria-current is both the hook and the accessible signal,
    so the state is never carried by colour alone. */
 .nav-link[aria-current] { color: var(--ink); border-bottom-color: var(--accent); }
-/* Narrow: keep the nav, drop the wordmark's text. Three short links are worth
-   more than the name — the mark still identifies the site. */
-@media (max-width: 560px) {
+/* ---- disclosure -------------------------------------------------------
+   Wide: links inline. Narrow: one trigger, everything behind it. Five
+   targets do not fit a 336px dock without becoming a toolbar.
+   ---------------------------------------------------------------------- */
+.nav-wrap { position: relative; display: flex; align-items: center; }
+.nav-trigger {
+  display: none;
+  width: 32px; height: 32px; place-items: center;
+  border: 1px solid transparent; border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface-2) 80%, transparent);
+  box-shadow: inset 0 1px 0 var(--edge-top);
+  color: var(--ink-2); cursor: pointer;
+  transition: color var(--ease), border-color var(--ease);
+}
+.nav-trigger:hover { color: var(--ink); border-color: var(--line-2); }
+.bars { display: grid; gap: 4px; width: 14px; }
+.bars i {
+  display: block; height: 1.5px; width: 100%; background: currentColor;
+  border-radius: 2px; transition: transform var(--ease), opacity var(--ease);
+}
+.bars[data-open] i:first-child { transform: translateY(2.75px) rotate(45deg); }
+.bars[data-open] i:last-child  { transform: translateY(-2.75px) rotate(-45deg); }
+@media (prefers-reduced-motion: reduce) { .bars i { transition: none; } }
+
+.nav-panel {
+  position: absolute; top: calc(100% + .85rem); right: 0;
+  min-width: 12rem; padding: .5rem;
+  display: grid; gap: .15rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--glass-strong);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 0 0 1px var(--glass-ring),
+    var(--shadow-lift);
+}
+.nav-panel-link {
+  font-family: var(--font-mono); font-size: var(--t-mono);
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-2); text-decoration: none;
+  padding: .7rem .8rem; border-radius: var(--radius-sm);
+  min-height: 44px; display: flex; align-items: center;
+}
+.nav-panel-link:hover { color: var(--ink); background: var(--surface-2); }
+.nav-panel-foot {
+  display: flex; justify-content: flex-end;
+  padding: .45rem .4rem .15rem;
+  margin-top: .25rem; border-top: 1px solid var(--line);
+}
+
+@media (max-width: 640px) {
   .wordmark span { display: none; }
-  .nav-link { font-size: var(--t-mono-xs); letter-spacing: .06em; }
+  .nav { display: none; }
+  .nav-trigger { display: grid; }
+}
+@media (min-width: 641px) {
+  .nav-panel { display: none; }
 }
 
 /* --------------------------------------------------------------- buttons -- */
@@ -694,11 +776,21 @@ h1, h2, h3 {
 .contact .btn { border-color: var(--on-accent); }
 .contact .btn-solid { background: var(--on-accent); color: var(--accent); }
 .contact .btn-solid:hover { background: transparent; color: var(--on-accent); }
+/* Inside the slab the ground is the accent material, so glass must be mixed
+   from the LOCAL ink. The generic .btn-ghost fill is --surface, which over
+   the inverted slab landed as mid-grey under light text: the email read at
+   roughly 2:1. Tint with --on-accent instead and it stays legible. */
 .contact .btn-ghost {
   color: var(--on-accent);
-  border-color: color-mix(in srgb, var(--on-accent) 40%, transparent);
+  border-color: color-mix(in srgb, var(--on-accent) 45%, transparent);
+  background: color-mix(in srgb, var(--on-accent) 8%, transparent);
+  box-shadow: none;
 }
-.contact .btn-ghost:hover { border-color: var(--on-accent); }
+.contact .btn-ghost:hover {
+  border-color: var(--on-accent);
+  background: color-mix(in srgb, var(--on-accent) 15%, transparent);
+  box-shadow: none;
+}
 
 /* ---------------------------------------------------------------- footer -- */
 
@@ -767,6 +859,37 @@ h1, h2, h3 {
       opacity 620ms cubic-bezier(.16, 1, .3, 1) calc(var(--i, 0) * 70ms),
       transform 620ms cubic-bezier(.16, 1, .3, 1) calc(var(--i, 0) * 70ms);
     will-change: auto;
+  }
+}
+
+/* ------------------------------------------------------------ glow text -- */
+/* A warm-to-cool light under the pointer, clipped to the glyphs.
+   The temperature axis already exists in this identity (bone warm, obsidian
+   cool); this amplifies it rather than introducing hue.
+   The gradient's outermost stop is currentColor, so with --ga at 0 the text
+   renders as plain ink and nothing is lost if the script never runs. */
+@supports (background-clip: text) {
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    /* --glow-base, NOT currentColor: the rule sets `color: transparent` to
+       reveal the clipped background, so currentColor would resolve to
+       transparent and the text would disappear everywhere the glow is not. */
+    [data-glow] {
+      --gx: 50%; --gy: -100%; --ga: 0;
+      --glow-base: var(--ink);
+      background-image:
+        radial-gradient(
+          34ch 16ch at var(--gx) var(--gy),
+          color-mix(in oklab, var(--warm) calc(var(--ga) * 92%), var(--glow-base)) 0%,
+          color-mix(in oklab, var(--cool) calc(var(--ga) * 70%), var(--glow-base)) 38%,
+          var(--glow-base) 72%
+        );
+      background-clip: text;
+      color: transparent;
+    }
+    /* The muted second hero line keeps its own base so it stays the quieter
+       of the two while still catching the light. */
+    .hero h1 span + span { color: transparent; --glow-base: var(--ink-mut); }
+    .contact [data-glow] { --glow-base: var(--on-accent); }
   }
 }
 

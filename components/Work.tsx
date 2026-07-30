@@ -11,7 +11,7 @@ export function Work() {
             <span className="idx">{work.index}</span>
             {work.eyebrow}
           </p>
-          <h2 className="sect-h">{work.headline}</h2>
+          <h2 className="sect-h" data-glow>{work.headline}</h2>
         </div>
 
         <div className="rows">

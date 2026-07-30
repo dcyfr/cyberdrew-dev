@@ -1,26 +1,23 @@
-import { nav, person } from "@/lib/site";
+import { person } from "@/lib/site";
 import { StarMark } from "./StarMark";
-import { ThemeToggle } from "./ThemeToggle";
+import { NavMenu } from "./NavMenu";
 
 export function Header() {
   return (
     <header className="header">
-      <div className="wide header-in">
+      <div className="header-in">
         {/* aria-label survives the narrow breakpoint, where the text is
             display:none and would otherwise leave the link unnamed. */}
         <a className="wordmark" href="#top" aria-label={`${person.domain}, home`}>
-          <StarMark />
+          {/* The mark rides in its own filled disc, same treatment as the
+              theme toggle, so the two ends of the dock rhyme. */}
+          <span className="mark">
+            <StarMark size={13} />
+          </span>
           <span>{person.domain}</span>
         </a>
 
-        <nav className="nav" aria-label="Primary">
-          {nav.map((n) => (
-            <a className="nav-link" key={n.href} href={n.href}>
-              {n.label}
-            </a>
-          ))}
-          <ThemeToggle />
-        </nav>
+        <NavMenu />
       </div>
     </header>
   );

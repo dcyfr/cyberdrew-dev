@@ -13,7 +13,7 @@ export function Hero() {
           />
         </p>
 
-        <h1>
+        <h1 data-glow>
           {hero.headline.map((line) => (
             <span key={line}>{line}</span>
           ))}

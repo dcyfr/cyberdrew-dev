@@ -49,6 +49,15 @@ and elevation, because affordance beats purity.
 Sections rise into place on scroll (`[data-reveal]`, staggered via `--i`),
 transform and opacity only.
 
+Surfaces are glass: translucent fill, a blur sampling what is behind, a bright
+top bevel, a dark bottom edge, a soft bloom outside. Glass needs something to
+refract, so `body::before` paints three very low-alpha blooms into the ground
+and `body::after` dithers them — a gradient that large cannot be represented
+in 8-bit sRGB without banding, and noise is the fix, not animation.
+
+Key display text carries a warm-to-cool light under the pointer
+(`[data-glow]`), amplifying the temperature axis the palette already has.
+
 ## Stack
 
 - **Next.js 16** (App Router) · **React 19** · **TypeScript**
@@ -103,7 +112,8 @@ components/
   TextCycler.tsx   token-streaming hero eyebrow (client)
   NavSpy.tsx       marks the nav link owning the viewport (client)
   ScrollReveal.tsx reveals [data-reveal] on entry (client)
-  DockAutoHide.tsx retracts the dock on scroll-down (client)
+  NavMenu.tsx      inline links wide, disclosure narrow (client)
+  CursorGlow.tsx   warm-to-cool light under the pointer (client)
   StarMark.tsx     renders lib/mark.ts
 lib/
   site.ts          ALL copy and links — edit here
@@ -119,6 +129,16 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   `public/llms.txt` silently drifted until it advertised a project the site no
   longer listed. Do not reintroduce a file in `public/`: it would shadow the
   route and drift again.
+- **Glass inside the inverted slab must be mixed from `--on-accent`,** not
+  `--surface`. The generic ghost-button fill put mid-grey under light text
+  and the email read 3.93:1 in light.
+- **Audit translucent layers by COMPOSITING them,** not by skipping to the
+  first opaque ancestor. Skipping is precisely what hid that failure: the
+  45%-alpha overlay was ignored and the opaque slab underneath scored fine.
+- **Any contrast measurement must suppress transitions first** (`.theme-swap`).
+  Reading a colour within 160ms of a theme swap returns a mid-transition
+  value; it reported the email button at 1.00:1 and sent me chasing a
+  non-existent bug.
 - **Never hand-write `-webkit-backdrop-filter`.** Lightning CSS dedupes the
   pair down to whichever prefix you wrote and drops the standard property.
   Chrome no longer supports the `-webkit-` alias, so writing it by hand
@@ -127,9 +147,6 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
 - **Glass needs something behind it.** `body::before` paints three very
   low-alpha blooms into the ground; without them a blurred panel over a flat
   field is just a slightly different flat field.
-- **A hidden dock must repeat `translateX(-50%)`.** That is the centring
-  transform; omit it from the hidden state and the dock slides to the left
-  edge the moment it animates.
 - **The reveal's hidden state is gated on `.js-reveal`,** set pre-paint in
   layout.tsx. Without that gate a JS failure strands every section at
   opacity 0; setting it after hydration flashes instead.
