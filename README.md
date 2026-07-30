@@ -129,6 +129,10 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   `public/llms.txt` silently drifted until it advertised a project the site no
   longer listed. Do not reintroduce a file in `public/`: it would shadow the
   route and drift again.
+- **`hidden` loses to an author `display` declaration.** `.nav-panel` set
+  `display: grid`, so `hidden={!open}` never hid it and the close button
+  looked dead. Drive visibility from a data attribute, and keep `hidden`
+  only for semantics.
 - **Glass inside the inverted slab must be mixed from `--on-accent`,** not
   `--surface`. The generic ghost-button fill put mid-grey under light text
   and the email read 3.93:1 in light.

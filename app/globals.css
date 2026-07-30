@@ -473,7 +473,11 @@ h1, h2, h3 {
    Wide: links inline. Narrow: one trigger, everything behind it. Five
    targets do not fit a 336px dock without becoming a toolbar.
    ---------------------------------------------------------------------- */
-.nav-wrap { position: relative; display: flex; align-items: center; }
+/* The panel hangs off the DOCK, not off .nav-wrap: the wrap is only 32px
+   tall and centred in a 60px dock, so anchoring to it tucked the panel up
+   inside the dock's own bottom edge. .header is fixed, so it is already a
+   positioning context. */
+.nav-wrap { display: flex; align-items: center; }
 .nav-trigger {
   display: none;
   width: 32px; height: 32px; place-items: center;
@@ -493,12 +497,21 @@ h1, h2, h3 {
 .bars[data-open] i:last-child  { transform: translateY(-2.75px) rotate(-45deg); }
 @media (prefers-reduced-motion: reduce) { .bars i { transition: none; } }
 
-.nav-panel {
-  position: absolute; top: calc(100% + .85rem); right: 0;
-  min-width: 12rem; padding: .5rem;
-  display: grid; gap: .15rem;
+/* display is driven by [data-open], NOT by the hidden attribute: an author
+   `display` declaration beats [hidden]'s UA rule, so `hidden` alone left the
+   panel permanently on screen and the close button appeared to do nothing. */
+.nav-panel { display: none; }
+.nav-panel[data-open] {
+  display: grid;
+  /* right offset matches .header-in's padding so the panel lines up under
+     the trigger rather than under the pill's outer edge */
+  position: absolute; top: calc(100% + .7rem); right: .9rem;
+  min-width: 12.5rem; padding: .5rem;
+  gap: .15rem;
   border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--glass-strong);
+  /* Near-opaque: this floats over body copy, and at 78% the text beneath
+     read straight through it. */
+  background: color-mix(in srgb, var(--surface) 97%, transparent);
   backdrop-filter: var(--glass-blur);
   box-shadow:
     inset 0 1px 0 var(--edge-top),
@@ -514,18 +527,18 @@ h1, h2, h3 {
 }
 .nav-panel-link:hover { color: var(--ink); background: var(--surface-2); }
 .nav-panel-foot {
-  display: flex; justify-content: flex-end;
+  display: flex; justify-content: flex-start;
   padding: .45rem .4rem .15rem;
   margin-top: .25rem; border-top: 1px solid var(--line);
 }
 
 @media (max-width: 640px) {
-  .wordmark span { display: none; }
   .nav { display: none; }
   .nav-trigger { display: grid; }
 }
+/* Above the breakpoint the panel must stay shut even if state says open. */
 @media (min-width: 641px) {
-  .nav-panel { display: none; }
+  .nav-panel, .nav-panel[data-open] { display: none; }
 }
 
 /* --------------------------------------------------------------- buttons -- */
