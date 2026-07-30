@@ -3,31 +3,59 @@
 Personal landing page for Drew. Positioned as a **security architect who builds
 autonomous AI systems** — the differentiator is the guardrails, not the agents.
 
-Built to the **PHOSPHOR** visual identity (`nexus/context/user/visual-identity.md`),
-which designates cyberdrew.dev as the *full expression*: one black field, one bone
-silhouette, one red sun, on a 60/30/10 ratio.
+## The theme: obsidian / bone
+
+Two materials. No third colour and no hue anywhere.
+
+```
+--obsidian  #0b0b0d
+--bone      #dcdad5
+```
+
+The consequence is the whole design idea: **`--accent` is not a colour, it is
+whichever material is not the ground.** Obsidian ground → bone accent; bone
+ground → obsidian accent. So emphasis cannot be signalled by hue — it is
+signalled by **inversion**, weight, rule, and space. A "filled" element swaps
+ground and ink (`--accent` / `--on-accent`).
+
+Two consequences worth keeping:
+
+- **The contact block is the only full inversion on the page.** It is the
+  strongest move the system has, so it is spent exactly once, on the conversion.
+- **State can't lean on hue**, so it never does: status markers are a filled
+  square plus a word. That is automatically colour-blind- and greyscale-safe.
+
+Materials are not dead grey — bone carries a warm cast (R>G>B), obsidian a cool
+one (B>R). That residual temperature is what keeps two neutrals reading as two
+materials instead of two greys.
+
+Type keeps three non-overlapping roles: grotesk display, old-style serif body,
+mono for labels and data.
 
 ## Stack
 
 - **Next.js 16** (App Router) · **React 19** · **TypeScript**
-- No Tailwind — hand-tuned CSS in [`app/globals.css`](app/globals.css) driven by
-  design tokens. Dark is the default; light applies via `prefers-color-scheme`
-  and an explicit `data-theme` toggle.
-- System font stacks only (display: grotesk · body: Iowan/Palatino serif ·
-  mono: SF Mono) — no webfonts, so no loading cost and no layout shift.
+- No Tailwind here — hand-tuned CSS in [`app/globals.css`](app/globals.css)
+  driven by tokens. Dark is default; light via `prefers-color-scheme` and an
+  explicit `data-theme` toggle.
+- System font stacks only — no webfonts, no loading cost, no layout shift.
 
 ## Develop
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # production build
-npm run start    # serve the production build
+WATCHPACK_POLLING=true npm run dev   # http://localhost:3000
+npm run build
 npm run lint
 ```
 
-If a second dev server is already running against this repo, give yours its own
-build dir so the two don't race on the route manifest and serve phantom 404s:
+**`WATCHPACK_POLLING=true` is required on this machine.** Without it Turbopack's
+watcher dies with `EMFILE: too many open files`, finds no routes, and serves a
+404 for `/` — which reads exactly like a missing-page bug rather than a watcher
+failure. Raising `ulimit -n` does not help.
+
+To run a second server against this repo, give it its own build dir so the two
+don't race on the route manifest:
 
 ```bash
 NEXT_DIST_DIR=.next-preview npx next dev --port 4321
@@ -39,71 +67,54 @@ NEXT_DIST_DIR=.next-preview npx next dev --port 4321
 app/
   layout.tsx           metadata, JSON-LD, pre-paint theme boot
   page.tsx             page composition
-  globals.css          the whole design system (tokens + components)
-  opengraph-image.tsx  share card, PHOSPHOR palette
+  globals.css          the whole design system
+  opengraph-image.tsx  share card
 components/
-  Hero.tsx         split hero — text left, the one dramatic field right  (server)
-  Ledger.tsx       full-bleed proof band                                 (server)
-  Loop.tsx         sticky sequence: pinned dial + five scrolling states  (client)
-  Envelope.tsx     the guardrails, as a log                              (server)
-  Work.tsx         selected work                                         (server)
-  Offer.tsx        work-with-me                                          (server)
-  Writing.tsx      posts (canonical home is dcyfr.ai/blog)               (server)
-  SiteFooter.tsx   sign-off, nav, elsewhere                              (server)
-  ThemeToggle.tsx  light/dark, with the one-frame transition guard       (client)
-  Reveal.tsx       scroll reveal via IntersectionObserver                (client)
+  Header.tsx       sticky nav; the mark is a square of the accent material
+  Hero.tsx         statement, deck, actions, roles
+  Work.tsx         four hairline rows
+  Writing.tsx      four hairline rows, tighter
+  Contact.tsx      the single inverted block
+  SiteFooter.tsx   sign-off + elsewhere
+  ThemeToggle.tsx  light/dark, with the one-frame transition guard
+  Reveal.tsx       scroll reveal
 lib/
-  site.ts          ALL copy, links, figures — edit here
+  site.ts          ALL copy and links — edit here
 ```
 
-**All copy lives in [`lib/site.ts`](lib/site.ts).** Edit content there, not in
-the components.
+Sections: **header · hero · work · writing · contact · footer**. The earlier
+loop / envelope / ledger sections are recoverable from git at `59f959e`.
 
-## Page structure
+## Invariants (learned the hard way — don't regress these)
 
-1. **Hero** — `Agents that act. Rails that hold.`
-2. **Ledger** — four figures, full-bleed
-3. **The loop** — the 30-minute cycle as a sticky sequence; each state names
-   what stops it
-4. **The envelope** — the six controls, as data rows
-5. **Selected work** — @dcyfr/ai, the rails, the fleet, SharkVault
-6. **Work with me** — fractional builds / safe-autonomy audits / advisory
-7. **Writing** — four posts
-8. **Footer**
-
-## Design invariants (learned the hard way — don't regress these)
-
-- The accent is a **ramp, not a value**. One vermilion cannot clear 4.5:1 against
-  both the ground and the raised surfaces. Filled controls use `--accent-600`
-  (white on `--accent-500` is 4.25:1 and fails).
-- **Ordinals are text** — colour them with an ink token. `--line-2` is a border
-  value and lands at ~1.8:1.
+- **`.wide` needs `width: 100%`.** As a grid or flex item, `margin-inline: auto`
+  suppresses stretch and the rail collapses to max-content — which silently
+  mis-aligned the hero against every other section by 227px.
 - A **stepped transition strands on the previous theme's value** across a swap.
-  The toggle adds `.theme-swap` for one frame to suppress transitions.
-- **Semantic colour stays separate from the accent.** Green means verified;
-  vermilion is identity, never "success".
+  The toggle adds `.theme-swap` for one frame to suppress transitions. Any
+  contrast audit must do the same or it measures mid-transition colours and
+  reports phantom failures.
+- **Ordinals are text** — colour them with an ink token, never a `--line-*`
+  border value (that lands at ~1.8:1).
 - Mono needs `font-variant-ligatures: none`, or `--accent` renders as `—accent`.
+- Hiding the wordmark text at narrow widths removes the link's accessible name;
+  the `aria-label` on the anchor is load-bearing.
 
 ## Verification
 
 Audited on the rendered page with a canvas-backed colour parser (`getComputedStyle`
-returns `oklch()`, which an `rgb()` regex silently misreads):
+returns `oklch()` / `color()` for wide-gamut values, which an `rgb()` regex
+silently misreads):
 
-- **0 WCAG AA failures** across 162 text nodes, in **both** themes
-- **No horizontal scroll at 360px**
-- Sticky sequence advances correctly; progress bar exposed via `role="progressbar"`
+- **0 WCAG AA failures** across 74 text nodes, in **both** themes
+- **No horizontal scroll at 360px**; nav survives the narrow breakpoint
+- `next build` + TypeScript + `eslint .` all clean
 
-Re-run the audit against a running build before shipping visual changes.
+## Before launch
 
-## Before launch — confirm these
-
-- [ ] **Handles**: `github.com/dcyfr` and `dev.to/dcyfr` carried over from the
-      previous site — confirm they're right.
-- [ ] **Figures** in `lib/site.ts` (30+ agents, $100/mo ceiling, 6-cycle breaker,
-      3 restarts/hr) are drawn from the real daemon config. Confirm each is still
-      accurate and that you want it public.
-- [ ] **Fleet visibility** — decide how much daemon detail should be public.
-- [ ] **Domain** — point `cyberdrew.dev` at the Vercel deployment.
+- [ ] Confirm handles: `github.com/dcyfr`, `dev.to/dcyfr`.
+- [ ] Decide how much agent-fleet detail should be public.
+- [ ] Point `cyberdrew.dev` at the Vercel deployment.
 
 ## Deploy
 

@@ -9,11 +9,22 @@ export function Writing() {
           <h2 className="sect-h">{writing.headline}</h2>
         </div>
 
-        <div className="post-list">
+        <div className="rows">
           {writing.posts.map((p) => (
-            <a className="post" key={p.num} href={p.href} target="_blank" rel="noreferrer">
-              <span className="n">{p.num}</span>
-              <h3>{p.title}</h3>
+            <a
+              className="row row-post"
+              key={p.num}
+              href={p.href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="num">{p.num}</span>
+              <h3>
+                {p.title}
+                <span className="arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </h3>
               <span className="meta">
                 {p.kind} · {p.date}
               </span>
@@ -21,7 +32,7 @@ export function Writing() {
           ))}
         </div>
 
-        <a className="more-link" href={writing.more.href} target="_blank" rel="noreferrer">
+        <a className="more" href={writing.more.href} target="_blank" rel="noreferrer">
           {writing.more.label} ↗
         </a>
       </div>

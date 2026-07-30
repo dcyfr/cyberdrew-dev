@@ -11,14 +11,13 @@ const serif = readFileSync(join(dir, "PTSerif-Regular.ttf"));
 const serifItalic = readFileSync(join(dir, "PTSerif-Italic.ttf"));
 const mono = readFileSync(join(dir, "PTMono-Regular.ttf"));
 
-// PHOSPHOR, sRGB fallbacks — satori resolves neither oklch() nor custom
-// properties, so the hex ladder from the token file is inlined here.
-const SUMI = "#050505";
-const INK = "#f2f1ef";
-const BONE = "#d9dada";
-const MUT = "#8e8e95";
-const ACCENT = "#de3a22";
-const ACCENT_400 = "#f0563a";
+// Obsidian / bone. Satori resolves neither custom properties nor color-mix,
+// so the two materials and their derived steps are inlined.
+const OBSIDIAN = "#0b0b0d";
+const BONE = "#dcdad5";
+const INK = "#edece8";
+const MUT = "#86868d";
+const LINE = "#26262b";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -28,88 +27,58 @@ export default function OpengraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          backgroundColor: SUMI,
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "72px 78px",
+          backgroundColor: OBSIDIAN,
           color: INK,
           fontFamily: "PTSerif",
-          position: "relative",
         }}
       >
-        {/* The one dramatic field: a vermilion sun bleeding off the right edge.
-            Flat layers, no gradient standing in for depth. */}
         <div
           style={{
-            position: "absolute",
             display: "flex",
-            right: -150,
-            top: 150,
-            width: 460,
-            height: 460,
-            borderRadius: 230,
-            backgroundColor: ACCENT,
+            alignItems: "center",
+            gap: 14,
+            fontFamily: "PTMono",
+            fontSize: 22,
+            letterSpacing: 4,
+            textTransform: "lowercase",
+            color: MUT,
           }}
-        />
+        >
+          {/* the mark is the material */}
+          <div style={{ display: "flex", width: 14, height: 14, backgroundColor: BONE }} />
+          <span style={{ display: "flex", color: BONE }}>cyberdrew.dev</span>
+        </div>
 
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
-            padding: "74px 78px",
-            width: 880,
+            fontSize: 92,
+            lineHeight: 1.04,
+            letterSpacing: -3,
+            color: INK,
           }}
         >
+          <span style={{ display: "flex" }}>Agents that act.</span>
+          <span style={{ display: "flex", color: MUT }}>Rails that hold.</span>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+          <div style={{ display: "flex", height: 1, backgroundColor: LINE }} />
           <div
             style={{
               display: "flex",
-              alignItems: "center",
-              gap: 14,
+              justifyContent: "space-between",
               fontFamily: "PTMono",
-              fontSize: 23,
-              letterSpacing: 4,
-              textTransform: "uppercase",
+              fontSize: 20,
               color: MUT,
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                width: 11,
-                height: 11,
-                borderRadius: 6,
-                backgroundColor: ACCENT_400,
-              }}
-            />
-            <span style={{ display: "flex", color: BONE }}>cyberdrew.dev</span>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              fontSize: 86,
-              lineHeight: 1.04,
-              letterSpacing: -2.5,
-              color: INK,
-            }}
-          >
-            <span style={{ display: "flex" }}>Agents that act.</span>
-            <span style={{ display: "flex", color: BONE }}>Rails that hold.</span>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-              fontFamily: "PTMono",
-              fontSize: 21,
-              color: MUT,
-            }}
-          >
-            <div style={{ display: "flex", width: 90, height: 3, backgroundColor: ACCENT }} />
-            <span style={{ display: "flex" }}>
-              Security architecture for autonomous AI
-            </span>
+            <span style={{ display: "flex" }}>Security architecture for autonomous AI</span>
+            <span style={{ display: "flex" }}>DCYFR Labs · GameShark Labs</span>
           </div>
         </div>
       </div>

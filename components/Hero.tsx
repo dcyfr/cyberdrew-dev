@@ -1,13 +1,10 @@
-import { hero, person } from "@/lib/site";
+import { hero } from "@/lib/site";
 
 export function Hero() {
   return (
-    <header className="hero">
-      <div className="hero-text">
-        <p className="status">
-          <i aria-hidden="true" />
-          {hero.status}
-        </p>
+    <section className="hero" id="top">
+      <div className="wide">
+        <p className="eyebrow">{hero.eyebrow}</p>
 
         <h1>
           {hero.headline.map((line) => (
@@ -18,7 +15,7 @@ export function Hero() {
         <p className="hero-deck">{hero.deck}</p>
 
         <div className="hero-actions">
-          <a className="btn btn-primary" href={hero.primary.href}>
+          <a className="btn btn-solid" href={hero.primary.href}>
             {hero.primary.label}
           </a>
           <a className="btn btn-ghost" href={hero.secondary.href}>
@@ -27,7 +24,7 @@ export function Hero() {
         </div>
 
         <p className="hero-roles">
-          {person.roles.map((r) => (
+          {hero.roles.map((r) => (
             <span key={r.org}>
               {r.role},{" "}
               {r.href ? (
@@ -41,12 +38,6 @@ export function Hero() {
           ))}
         </p>
       </div>
-
-      {/* The one dramatic field: flat layers, hard edges, no gradient-as-depth. */}
-      <div className="hero-field" aria-hidden="true">
-        <div className="sun" />
-        <div className="ridge" />
-      </div>
-    </header>
+    </section>
   );
 }

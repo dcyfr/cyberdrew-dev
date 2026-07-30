@@ -9,18 +9,18 @@ export function Work() {
           <h2 className="sect-h">{work.headline}</h2>
         </div>
 
-        <div className="work-list">
+        <div className="rows">
           {work.items.map((w) => (
             <a
-              className="work-item"
+              className="row row-work"
               key={w.num}
               href={w.href}
               target="_blank"
               rel="noreferrer"
             >
-              <div className="work-num">{w.num}</div>
+              <span className="num">{w.num}</span>
 
-              <div className="work-body">
+              <div>
                 <h3>
                   {w.title}
                   <span className="arrow" aria-hidden="true">
@@ -37,12 +37,10 @@ export function Work() {
                 </div>
               </div>
 
-              <div className="work-status">
-                <span className="pill" data-kind={w.status.kind}>
-                  <i aria-hidden="true" />
-                  {w.status.label}
-                </span>
-              </div>
+              <span className="status">
+                <i aria-hidden="true" />
+                {w.status}
+              </span>
             </a>
           ))}
         </div>
