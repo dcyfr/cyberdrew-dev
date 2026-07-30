@@ -43,9 +43,33 @@
   --snap: 90ms steps(4, end);
   --ease: 160ms cubic-bezier(.2, 0, 0, 1);
 
-  --bay: clamp(5rem, 12vh, 9.5rem);
+  /* ---- type scale -------------------------------------------------------
+     Two tiers with a deliberate gap between them, not one smooth ramp.
+     DISPLAY steps by ~1.6–1.8 (hero → h2 → h3); TEXT steps by ~1.25
+     (title → deck → body). Sizes cluster inside a tier and jump between
+     them, which is what makes hierarchy legible at a glance.
+     Base is 17px. Ratios at the top of each clamp:
+       hero 78 · h2 43.5 · h3 27 · title 22 · deck 21 · body 17
+     ---------------------------------------------------------------------- */
+  --t-hero:  clamp(2.55rem, 6.1vw, 4.875rem);
+  --t-h2:    clamp(1.8rem, 3.4vw, 2.72rem);
+  --t-h3:    clamp(1.25rem, 2.1vw, 1.7rem);
+  --t-title: clamp(1.2rem, 1.8vw, 1.45rem);
+  /* Body is a FIXED size, so any fluid step above it must clear it at BOTH
+     ends of the clamp — check the floor as well as the vw term. Earlier
+     versions of this line collapsed to 1.04 at 1280px (vw below the floor)
+     and then to 1.05 at 360px (floor too low). Floor is now 20px / 1.18x. */
+  --t-deck:  clamp(1.25rem, 1.65vw, 1.32rem);
+  --t-body:  1.0625rem;
+  /* Mono is a label system: exactly two steps. The previous four sizes
+     (10.7/10.7/11/11.2px) read as one size while behaving as four. */
+  --t-mono:    0.75rem;
+  --t-mono-xs: 0.6875rem;
+
+  --rail: 1180px;
+  --bay: clamp(3.5rem, 8vh, 6.5rem);
   --gutter: clamp(1.25rem, 5vw, 4.5rem);
-  --header-h: 4rem;
+  --header-h: 3.75rem;
 }
 
 @media (prefers-color-scheme: light) {
@@ -103,8 +127,8 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.62;
+  font-size: var(--t-body);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -124,7 +148,7 @@ code, th, td, button {
    suppresses stretch and the rail collapses to max-content — which silently
    mis-aligns the hero against every other section. A definite width fills the
    track, and the auto margins only kick in past the 1400px cap. */
-.wide { width: 100%; max-width: 1400px; margin-inline: auto; padding-inline: var(--gutter); }
+.wide { width: 100%; max-width: var(--rail); margin-inline: auto; padding-inline: var(--gutter); }
 .bay { padding-block: var(--bay); }
 
 a { color: inherit; text-underline-offset: 3px; }
@@ -133,7 +157,7 @@ a { color: inherit; text-underline-offset: 3px; }
 .skip {
   position: absolute; left: -9999px; top: 0; z-index: 100;
   background: var(--accent); color: var(--on-accent);
-  padding: .75rem 1.1rem; font-family: var(--font-mono); font-size: .8rem;
+  padding: .75rem 1.1rem; font-family: var(--font-mono); font-size: var(--t-mono);
 }
 .skip:focus { left: var(--gutter); top: .6rem; }
 
@@ -149,21 +173,21 @@ h1, h2, h3 {
 }
 
 .eyebrow {
-  font-family: var(--font-mono); font-size: .69rem;
-  letter-spacing: .2em; text-transform: uppercase;
+  font-family: var(--font-mono); font-size: var(--t-mono);
+  letter-spacing: .19em; text-transform: uppercase;
   color: var(--ink-mut); margin: 0;
 }
 
 .sect-h {
-  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-size: var(--t-h2);
   letter-spacing: -0.045em;
-  margin-block: .8rem 0;
+  margin-block: .7rem 0;
 }
 .sect-deck {
-  color: var(--ink-2); font-size: 1.05rem;
-  margin-block: 1.1rem 0; max-width: 46ch;
+  color: var(--ink-2); font-size: var(--t-deck); line-height: 1.5;
+  margin-block: 1rem 0; max-width: 46ch;
 }
-.sect-head { margin-bottom: clamp(2.25rem, 5vh, 3.75rem); }
+.sect-head { margin-bottom: clamp(1.75rem, 4vh, 2.75rem); }
 
 /* ---------------------------------------------------------------- header -- */
 
@@ -179,7 +203,7 @@ h1, h2, h3 {
   gap: 1rem;
 }
 .wordmark {
-  font-family: var(--font-mono); font-size: .82rem;
+  font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .12em; text-transform: lowercase;
   text-decoration: none; color: var(--ink);
   display: inline-flex; align-items: center; gap: .55rem;
@@ -189,7 +213,7 @@ h1, h2, h3 {
 
 .nav { display: flex; align-items: center; gap: clamp(.75rem, 2.5vw, 2rem); }
 .nav-link {
-  font-family: var(--font-mono); font-size: .74rem;
+  font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--ink-mut); text-decoration: none;
   padding: .5rem 0; min-height: 24px;
@@ -201,7 +225,7 @@ h1, h2, h3 {
    more than the name — the mark still identifies the site. */
 @media (max-width: 560px) {
   .wordmark span { display: none; }
-  .nav-link { font-size: .68rem; letter-spacing: .06em; }
+  .nav-link { font-size: var(--t-mono-xs); letter-spacing: .06em; }
 }
 
 /* --------------------------------------------------------------- buttons -- */
@@ -209,9 +233,9 @@ h1, h2, h3 {
    ground and the page ground as its ink. */
 
 .btn {
-  font-family: var(--font-mono); font-size: .74rem;
+  font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .13em; text-transform: uppercase;
-  padding: .9rem 1.4rem; text-decoration: none; cursor: pointer;
+  padding: .85rem 1.35rem; text-decoration: none; cursor: pointer;
   min-height: 44px; display: inline-flex; align-items: center;
   border: 1px solid var(--accent);
   transition: background var(--ease), color var(--ease), border-color var(--ease);
@@ -234,23 +258,23 @@ h1, h2, h3 {
   border-bottom: 1px solid var(--line);
 }
 .hero h1 {
-  font-size: clamp(2.6rem, 8.2vw, 6.6rem);
+  font-size: var(--t-hero);
   letter-spacing: -0.055em;
-  margin-block: 1.5rem 0;
+  margin-block: 1.15rem 0;
 }
 .hero h1 span { display: block; }
 .hero h1 span + span { color: var(--ink-mut); }
 .hero-deck {
   color: var(--ink-2);
-  font-size: clamp(1.02rem, 1.4vw, 1.18rem);
-  max-width: 52ch; margin-block: 1.9rem 0;
+  font-size: var(--t-deck); line-height: 1.5;
+  max-width: 50ch; margin-block: 1.5rem 0;
 }
-.hero-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2.5rem; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2rem; }
 .hero-roles {
-  margin-top: clamp(3rem, 8vh, 5rem); padding-top: 1.4rem;
+  margin-top: clamp(2.25rem, 6vh, 3.5rem); padding-top: 1.2rem;
   border-top: 1px solid var(--line);
-  display: flex; flex-wrap: wrap; gap: .5rem 2rem;
-  font-family: var(--font-mono); font-size: .73rem; color: var(--ink-mut);
+  display: flex; flex-wrap: wrap; gap: .45rem 1.75rem;
+  font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
 }
 .hero-roles b { color: var(--ink-2); font-weight: 400; }
 .hero-roles a {
@@ -265,64 +289,68 @@ h1, h2, h3 {
 
 .rows { border-top: 1px solid var(--line); }
 .row {
-  display: grid; gap: .9rem clamp(1rem, 3vw, 2.5rem);
-  padding: clamp(1.5rem, 3vw, 2.4rem) 0;
+  display: grid; gap: .75rem clamp(1rem, 2.5vw, 2rem);
+  padding: clamp(1.25rem, 2.2vw, 1.85rem) 0;
   border-bottom: 1px solid var(--line);
   text-decoration: none; color: inherit;
-  position: relative;
   transition: background var(--ease);
 }
 .row:hover { background: var(--surface); }
 .row .num {
-  font-family: var(--font-mono); font-size: .76rem; color: var(--ink-mut);
+  font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
+  line-height: 1.35;
 }
 .row h3 {
-  display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap;
-  font-size: clamp(1.3rem, 2.4vw, 1.9rem); letter-spacing: -0.035em;
+  display: flex; align-items: baseline; gap: .45rem; flex-wrap: wrap;
+  font-size: var(--t-h3); letter-spacing: -0.032em; line-height: 1.14;
 }
 .row .arrow {
-  font-family: var(--font-mono); font-size: .78rem; color: var(--ink-mut);
+  font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
   transition: transform var(--snap), color var(--ease);
 }
 .row:hover .arrow { color: var(--accent); transform: translate(3px, -3px); }
-.row p { color: var(--ink-2); margin-block: .75rem 0; max-width: 62ch; }
+.row p { color: var(--ink-2); margin-block: .55rem 0; max-width: 58ch; }
 
-/* work row */
-.row-work { grid-template-columns: 3.25rem 1fr 8.5rem; }
-.tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+/* Work row. The ordinal and the status share one left rail: the status used
+   to sit in a third column at the far right, which opened a measured 339px
+   of dead space between the description and the label in every row. Stacking
+   it under the number keeps the metadata together and closes the gap. */
+.row-work { grid-template-columns: 7rem minmax(0, 1fr); }
+.row-meta { display: flex; flex-direction: column; gap: .5rem; }
+.tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .8rem; }
 .tag {
-  font-family: var(--font-mono); font-size: .67rem; letter-spacing: .05em;
-  color: var(--ink-mut); border: 1px solid var(--line); padding: .26rem .62rem;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs); letter-spacing: .05em;
+  color: var(--ink-mut); border: 1px solid var(--line); padding: .24rem .55rem;
 }
 /* State is named, and the marker is a shape — there is no hue to lean on. */
 .status {
-  display: inline-flex; align-items: center; gap: .45rem;
-  font-family: var(--font-mono); font-size: .67rem;
-  letter-spacing: .12em; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: .42rem;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .11em; text-transform: uppercase;
   color: var(--ink-mut); white-space: nowrap;
 }
 .status i { width: 6px; height: 6px; background: var(--accent); flex: none; }
 
 /* writing row */
-.row-post { grid-template-columns: 3.25rem 1fr auto; align-items: baseline; padding-block: 1.4rem; }
-.row-post h3 { font-size: clamp(1.05rem, 1.9vw, 1.35rem); font-weight: 700; }
+.row-post {
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
+  align-items: baseline; padding-block: 1.05rem;
+}
+.row-post h3 { font-size: var(--t-title); font-weight: 700; letter-spacing: -0.022em; }
 .row-post .meta {
-  font-family: var(--font-mono); font-size: .7rem; color: var(--ink-mut);
-  letter-spacing: .05em; white-space: nowrap;
+  font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
+  letter-spacing: .04em; white-space: nowrap;
 }
 .more {
-  display: inline-block; margin-top: 1.6rem;
-  font-family: var(--font-mono); font-size: .74rem; letter-spacing: .1em;
+  display: inline-block; margin-top: 1.4rem;
+  font-family: var(--font-mono); font-size: var(--t-mono); letter-spacing: .1em;
   color: var(--ink); text-decoration: none;
   border-bottom: 1px solid var(--accent); padding-bottom: .2rem;
 }
 
-@media (max-width: 820px) {
-  .row-work { grid-template-columns: 2.25rem 1fr; }
-  .row-work .status { grid-column: 2; }
-}
-@media (max-width: 640px) {
-  .row-post { grid-template-columns: 2.25rem 1fr; }
+@media (max-width: 760px) {
+  .row-work, .row-post { grid-template-columns: 2.5rem minmax(0, 1fr); }
+  .row-work .row-meta { flex-direction: row; align-items: center; gap: .9rem; }
   .row-post .meta { grid-column: 2; }
 }
 
@@ -335,12 +363,15 @@ h1, h2, h3 {
   padding-block: clamp(4rem, 11vh, 8rem);
 }
 .contact .eyebrow { color: color-mix(in srgb, var(--on-accent) 62%, transparent); }
-.contact h2 { font-size: clamp(2.1rem, 5.6vw, 4.2rem); letter-spacing: -0.05em; margin-block: .8rem 0; }
-.contact p {
+.contact h2 { font-size: var(--t-h2); letter-spacing: -0.05em; margin-block: .7rem 0; }
+/* :not(.eyebrow) is load-bearing — a bare `.contact p` outranks `.eyebrow`
+   (0,1,1 vs 0,1,0) and silently re-sizes the label to deck size. */
+.contact p:not(.eyebrow) {
   color: color-mix(in srgb, var(--on-accent) 80%, transparent);
-  max-width: 46ch; margin-block: 1.2rem 0; font-size: 1.05rem;
+  max-width: 46ch; margin-block: 1rem 0;
+  font-size: var(--t-deck); line-height: 1.5;
 }
-.contact-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2.4rem; }
+.contact-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2rem; }
 .contact .btn { border-color: var(--on-accent); }
 .contact .btn-solid { background: var(--on-accent); color: var(--accent); }
 .contact .btn-solid:hover { background: transparent; color: var(--on-accent); }
@@ -365,7 +396,7 @@ h1, h2, h3 {
 }
 .footer-links { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; align-items: flex-start; }
 .footer-links a {
-  font-family: var(--font-mono); font-size: .75rem;
+  font-family: var(--font-mono); font-size: var(--t-mono);
   color: var(--ink-mut); text-decoration: none;
   border-bottom: 1px solid transparent;
 }
@@ -373,7 +404,7 @@ h1, h2, h3 {
 .footer-bar {
   border-top: 1px solid var(--line); padding-block: 1.25rem;
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem;
-  font-family: var(--font-mono); font-size: .71rem; color: var(--ink-mut);
+  font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
 }
 
 /* ----------------------------------------------------------- theme toggle -- */
@@ -382,7 +413,7 @@ h1, h2, h3 {
   width: 34px; height: 34px; display: grid; place-items: center;
   background: transparent; border: 1px solid var(--line-2);
   color: var(--ink-2); cursor: pointer;
-  font-family: var(--font-mono); font-size: .8rem; line-height: 1;
+  font-family: var(--font-mono); font-size: var(--t-mono); line-height: 1;
   transition: color var(--ease), border-color var(--ease);
 }
 .theme-toggle:hover { color: var(--ink); border-color: var(--accent); }

@@ -18,7 +18,15 @@ export function Work() {
               target="_blank"
               rel="noreferrer"
             >
-              <span className="num">{w.num}</span>
+              {/* ordinal + status share the left rail so the metadata reads
+                  as one unit instead of straddling the row */}
+              <div className="row-meta">
+                <span className="num">{w.num}</span>
+                <span className="status">
+                  <i aria-hidden="true" />
+                  {w.status}
+                </span>
+              </div>
 
               <div>
                 <h3>
@@ -36,11 +44,6 @@ export function Work() {
                   ))}
                 </div>
               </div>
-
-              <span className="status">
-                <i aria-hidden="true" />
-                {w.status}
-              </span>
             </a>
           ))}
         </div>
