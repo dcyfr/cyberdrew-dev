@@ -3,7 +3,6 @@ import { SocialIcon } from "./SocialIcon";
 
 export function SiteFooter() {
   // Static prerender: these stamp at build time, which tracks deploys.
-  const year = new Date().getFullYear();
   const builtAt = process.env.NEXT_PUBLIC_BUILT_AT;
   const commit = process.env.NEXT_PUBLIC_COMMIT;
 
@@ -32,8 +31,10 @@ export function SiteFooter() {
         </div>
 
         <div className="footer-bar">
+          {/* No year: the build stamp to the right already dates the page,
+              and a hardcoded year is one more thing that can go stale. */}
           <span>
-            © {year} {person.name} ({person.handle})
+            (c) {person.name} ({person.handle})
           </span>
           {/* The log is the interface: real machine state, stamped at build,
               not a slogan. Both halves degrade independently if absent. */}
