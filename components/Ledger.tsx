@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { ledger } from "@/lib/site";
+import { getLedger } from "@/lib/site";
 
 /**
  * Four figures beside the hero.
@@ -13,6 +13,10 @@ import { ledger } from "@/lib/site";
  * width read as four unrelated facts rather than one ledger.
  */
 export function Ledger() {
+  // Server component, so the derived years figure resolves at build and on
+  // each hourly revalidation rather than against a visitor's clock.
+  const ledger = getLedger();
+
   return (
     <dl className="ledger" aria-label="By the numbers">
       {ledger.map((s, i) => (
