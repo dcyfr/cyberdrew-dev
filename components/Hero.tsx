@@ -1,5 +1,6 @@
 import { hero } from "@/lib/site";
 import { TextCycler } from "./TextCycler";
+import { Ledger } from "./Ledger";
 
 const longestPhrase = [...hero.eyebrowCycle].sort((a, b) => b.length - a.length)[0];
 
@@ -31,15 +32,26 @@ export function Hero() {
           ))}
         </h1>
 
-        <p className="hero-deck">{hero.deck}</p>
+        {/* Deck and ledger share a row: the headline stays full-bleed above
+            them, and the figures fill the right half that the deck's measure
+            leaves empty. Below the stacking point the ledger drops under the
+            actions, where it reads as a footer to the hero rather than a
+            column with nothing beside it. */}
+        <div className="hero-body">
+          <div className="hero-say">
+            <p className="hero-deck">{hero.deck}</p>
 
-        <div className="hero-actions">
-          <a className="btn btn-solid" href={hero.primary.href}>
-            {hero.primary.label}
-          </a>
-          <a className="btn btn-ghost" href={hero.secondary.href}>
-            {hero.secondary.label}
-          </a>
+            <div className="hero-actions">
+              <a className="btn btn-solid" href={hero.primary.href}>
+                {hero.primary.label}
+              </a>
+              <a className="btn btn-ghost" href={hero.secondary.href}>
+                {hero.secondary.label}
+              </a>
+            </div>
+          </div>
+
+          <Ledger />
         </div>
 
         <p className="hero-roles">

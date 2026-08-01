@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { contact } from "@/lib/site";
 
 /**
@@ -6,6 +7,11 @@ import { contact } from "@/lib/site";
  * the cards above it. It now wears the same glass panel as the header and a
  * settled row, and leans on scale, the shadow lift, and the solid button for
  * emphasis instead of a full material swap.
+ *
+ * The three engagement shapes were one sentence of prose. Naming them as rows
+ * lets a visitor recognise their own situation before they decide whether to
+ * book anything, and gives the "what do I actually get" line somewhere to
+ * live — which the sentence had no room for.
  */
 export function Contact() {
   return (
@@ -18,6 +24,19 @@ export function Contact() {
         </p>
         <h2 data-glow>{contact.headline}</h2>
         <p>{contact.deck}</p>
+
+        <ul className="engagements">
+          {contact.engagements.map((e, i) => (
+            <li className="engagement" key={e.num} style={{ "--i": i } as CSSProperties}>
+              <span className="num">{e.num}</span>
+              <div>
+                <h3 className="engagement-name">{e.name}</h3>
+                <p className="engagement-desc">{e.desc}</p>
+                <p className="engagement-out">{e.outcome}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
 
         <div className="contact-actions">
           <a

@@ -732,6 +732,68 @@ h1, h2, h3 {
 }
 .hero-roles a:hover { color: var(--ink); border-color: var(--accent); }
 
+/* The deck's measure is ~50ch, which left the right half of an 1180px rail
+   empty at every width above the stack point. The ledger fills it. `auto` on
+   the second track lets the figures size to their content instead of taking a
+   fixed half the row — the deck keeps its measure and the numbers sit against
+   the rail's right edge. */
+.hero-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(var(--s-10), 7vh, var(--s-16));
+  align-items: start;
+}
+@media (min-width: 60rem) {
+  .hero-body {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(var(--s-12), 6vw, var(--s-24));
+    /* start, not end: the ledger is the taller column, and bottom-aligning
+       both dropped the deck ~95px clear of the headline it belongs to. */
+    align-items: start;
+  }
+}
+.hero-say { min-width: 0; }
+
+/* -------------------------------------------------------------- ledger -- */
+/* Four figures as a description list: value is the term, the gloss is the
+   description. Not a table — there is one column, and a table would promise
+   a grid that is not there. */
+.ledger {
+  display: grid; gap: var(--s-6);
+  margin: 0; padding: 0;
+}
+@media (min-width: 60rem) {
+  /* On the wide layout the ledger sits in a rule-led column, which gives the
+     hero's right half an edge to align to instead of floating. */
+  .ledger {
+    border-left: 1px solid var(--line);
+    padding-left: clamp(var(--s-6), 2.5vw, var(--s-10));
+  }
+}
+/* Below that, four stacked figures ran the hero past a phone viewport. Two up
+   keeps it to one band under the actions. */
+@media (max-width: 59.99rem) {
+  .ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-7) var(--s-6); }
+}
+.ledger-row { display: grid; gap: var(--s-1); }
+.ledger-val {
+  font-family: var(--font-mono);
+  font-size: var(--t-title);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  line-height: 1;
+}
+/* The unit rides at the value's weight but the label's colour, so "60+" reads
+   as one figure while the "+" stays subordinate to the digits. */
+.ledger-unit { color: var(--ink-mut); margin-left: .1em; }
+.ledger-label {
+  margin: 0;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-mut); line-height: 1.4;
+}
+
 /* --------------------------------------------------------- rows (shared) -- */
 /* Work and writing are the same object at two densities: a hairline row with
    an ordinal, a title, and a trailing label. */
@@ -900,6 +962,54 @@ h1, h2, h3 {
   }
 }
 
+/* ------------------------------------------------------------ guardrails -- */
+/* Deliberately not the .row card. Work items are things you click; these are
+   claims you check, so they take the shape of a log: a hairline rule, a name,
+   a hard value pinned right, and one sentence under it. Two columns once
+   there is room, because six stacked rows is a lot of scroll for content
+   whose job is to be scanned. */
+.guards {
+  display: grid; gap: 0;
+  margin: 0; padding: 0;
+  border-top: 1px solid var(--line);
+}
+@media (min-width: 48rem) {
+  .guards { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(var(--s-8), 4vw, var(--s-16)); }
+  /* With two columns the top border above already draws the first row's rule;
+     the second item would otherwise double it. */
+  .guards > :nth-child(2) { border-top: 0; }
+}
+.guard {
+  border-bottom: 1px solid var(--line);
+  padding-block: clamp(var(--s-5), 2vw, var(--s-7));
+}
+@media (min-width: 48rem) {
+  .guard:nth-child(odd) { border-top: 0; }
+}
+.guard-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s-4);
+}
+.guard-name {
+  font-size: var(--t-body); color: var(--ink);
+  letter-spacing: -0.01em;
+}
+/* The value carries the emphasis: it is the checkable part. Mono and tabular
+   so the column of numbers lines up as a column. */
+.guard-val {
+  flex: none;
+  font-family: var(--font-mono); font-size: var(--t-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .06em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.guard-desc {
+  margin: var(--s-2) 0 0;
+  color: var(--ink-mut); font-size: var(--t-body); line-height: 1.55;
+  max-width: 52ch;
+}
+
 /* --------------------------------------------------------------- contact -- */
 /* Was the one inverted block on the page: it wore --accent as its ground and
    swapped every child colour to match. That made it the loudest object here by
@@ -942,12 +1052,61 @@ h1, h2, h3 {
   margin-block: var(--s-head-gap) 0;
 }
 /* :not(.eyebrow) is load-bearing — a bare `.contact p` outranks `.eyebrow`
-   (0,1,1 vs 0,1,0) and silently re-sizes the label to deck size. */
-.contact p:not(.eyebrow) {
+   (0,1,1 vs 0,1,0) and silently re-sizes the label to deck size.
+   `>` is load-bearing for the same reason one level down: this rule is for the
+   block's own deck, but as a descendant selector it also caught the paragraphs
+   inside .engagements and beat them on specificity (0,2,1 vs 0,2,0), setting
+   them to deck size and deck colour. Direct-child scopes it to what it means. */
+.contact > p:not(.eyebrow) {
   color: var(--ink-2);
   max-width: 46ch; margin-block: var(--s-4) 0;
   font-size: var(--t-deck); line-height: 1.5;
 }
+/* The three engagement shapes. Not links and not buttons — they are here so a
+   visitor can recognise their own situation before deciding to book anything,
+   and the two real actions stay below, undiluted. */
+.engagements {
+  list-style: none; margin: clamp(var(--s-9), 5vh, var(--s-12)) 0 0; padding: 0;
+  display: grid; gap: 0;
+  border-top: 1px solid var(--line);
+}
+@media (min-width: 56rem) {
+  .engagements { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(var(--s-7), 3vw, var(--s-12)); }
+}
+.engagement {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-4);
+  border-bottom: 1px solid var(--line);
+  padding-block: var(--s-6);
+}
+@media (min-width: 56rem) {
+  /* One rule under the whole band rather than three stacked ones. */
+  .engagement { border-bottom: 0; padding-bottom: 0; }
+}
+.engagement .num {
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent); letter-spacing: .12em;
+  line-height: 1.7;
+}
+.engagement-name {
+  margin: 0; font-size: var(--t-body); color: var(--ink);
+  letter-spacing: -0.01em; line-height: 1.4;
+}
+.engagement-desc {
+  margin-block: var(--s-2) 0; max-width: 40ch;
+  font-size: var(--t-body); line-height: 1.55; color: var(--ink-mut);
+}
+/* What you actually walk away with, set apart from the description so it can
+   be found without reading the paragraph. */
+.engagement-out {
+  margin-block: var(--s-3) 0; max-width: 40ch;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .06em; line-height: 1.5;
+  color: var(--ink-2);
+}
+
 .contact-actions {
   display: flex; flex-wrap: wrap;
   gap: var(--s-2); margin-top: var(--s-8);
@@ -1046,6 +1205,69 @@ a, button { -webkit-tap-highlight-color: transparent; }
    buttons fell below the fold on a landscape phone. */
 @media (max-height: 620px) {
   .hero { min-height: auto; padding-block: calc(var(--header-h) + 2.5rem) 3rem; }
+}
+
+/* --------------------------------------------------- dock (bottom, narrow) -- */
+/* The dock moves to the bottom edge on narrow viewports.
+
+   Why: collapsed, the dock puts every link behind one trigger in the
+   top-right corner — the furthest point from a thumb on a phone held in one
+   hand, and the only navigation on the page. At the bottom it lands in the
+   easiest reach instead of the hardest.
+
+   Why only here: on desktop, bottom-anchored site nav reads as a cookie
+   banner or a support widget and gets tuned out, and the top-left wordmark is
+   doing identity work on first paint. The pointer is equally happy anywhere on
+   a desktop screen, so there is nothing to win.
+
+   Everything below is a reflection of the top-dock rules — same pill, same
+   glass, same fade, measured from the other edge. Placed after the safe-area
+   block above so it wins on source order rather than specificity. */
+@media (max-width: 47.99rem) {
+  .header {
+    top: auto;
+    bottom: max(var(--header-top), env(safe-area-inset-bottom));
+  }
+
+  /* The fade flips with it, so content still dissolves into the ground before
+     it reaches the pill instead of sliding under translucent glass. */
+  .top-fade {
+    inset: auto 0 0 0;
+    height: calc(env(safe-area-inset-bottom, 0px) + var(--header-h) + var(--s-13));
+    background: linear-gradient(
+      to top,
+      var(--bg) 0%,
+      var(--bg) 52%,
+      color-mix(in oklab, var(--bg) 55%, transparent) 76%,
+      transparent 100%
+    );
+  }
+
+  /* The disclosure opens upward. `.header` is the positioning context, so
+     this is the same offset measured from its top edge. */
+  .nav-panel[data-open] {
+    top: auto;
+    bottom: calc(100% + var(--s-3));
+  }
+
+  /* The hero's dock clearance swaps ends: without this the roles line sits
+     under the pill instead of the eyebrow sitting under nothing. */
+  .hero {
+    padding-block: clamp(var(--s-12), 8vh, var(--s-20))
+                   calc(var(--header-h) + clamp(var(--s-14), 9vh, var(--s-24)));
+  }
+  @media (max-height: 620px) {
+    .hero { padding-block: 2.5rem calc(var(--header-h) + 3rem); }
+  }
+
+  /* A fixed bottom dock would otherwise sit on top of the footer forever —
+     the one place on the page where content reaches the bottom edge. Reserve
+     the band so the build stamp clears it. */
+  .site-footer {
+    padding-bottom: calc(
+      var(--header-h) + var(--s-10) + max(var(--header-top), env(safe-area-inset-bottom))
+    );
+  }
 }
 
 /* ---------------------------------------------------------------- reveal -- */
