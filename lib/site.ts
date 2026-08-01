@@ -31,7 +31,7 @@ export const hero = {
   eyebrowCycle: ["autonomous systems", "artificial intelligence", "agentic design"],
   headline: ["Agents that act", "Rails that hold"],
   deck:
-    "I'm Drew, a security architect. I build autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet.",
+    "I'm Drew, a cyber architect. I build autonomous systems that take real actions in production and the guardrails that make that a safe bet.",
   roles: [
     { role: "Founder", org: "DCYFR Labs", href: "https://www.dcyfr.ai" },
     { role: "Head of AI", org: "GameShark Labs", href: "https://gamesharklabs.com" },
@@ -86,6 +86,13 @@ export const work = {
 
 // ---------------------------------------------------------------------------
 // Writing. Canonical home is dcyfr.ai/blog.
+//
+// The live list is fetched from that blog's JSON feed, filtered to posts
+// flagged `featured` — see lib/feed.ts. The `posts` array below is the
+// fallback the section renders when the feed is unreachable at build time,
+// so it is a snapshot rather than the source of truth. It only needs to be
+// touched if the feed is going to be down long enough for a stale entry to
+// matter.
 // ---------------------------------------------------------------------------
 export type Post = { num: string; title: string; kind: string; date: string; href: string };
 
@@ -132,7 +139,7 @@ export const contact = {
   eyebrow: "Contact", index: "03",
   headline: "Ship autonomy you can defend",
   deck:
-    "I work with teams putting agents into production: a first safe agent, a governed fleet, or a hard look at what you already run.",
+    "I work with teams putting agents into production: your first secure autonomous agent, a governed fleet, or a hard look at what you already run.",
   primary: { label: "Book an intro call", href: person.cal },
   secondary: { label: person.email, href: `mailto:${person.email}` },
 };
