@@ -1,6 +1,7 @@
 import { hero } from "@/lib/site";
 import { TextCycler } from "./TextCycler";
 import { Ledger } from "./Ledger";
+import { Credentials } from "./Credentials";
 
 const longestPhrase = [...hero.eyebrowCycle].sort((a, b) => b.length - a.length)[0];
 
@@ -54,6 +55,7 @@ export function Hero() {
           <Ledger />
         </div>
 
+        {/* Who I am, in two mono lines: what I do, and what backs it. */}
         <p className="hero-roles">
           {hero.roles.map((r) => (
             <span key={r.org}>
@@ -64,6 +66,7 @@ export function Hero() {
             </span>
           ))}
         </p>
+        <Credentials />
       </div>
     </section>
   );

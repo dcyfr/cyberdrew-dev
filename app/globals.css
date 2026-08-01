@@ -732,6 +732,29 @@ h1, h2, h3 {
 }
 .hero-roles a:hover { color: var(--ink); border-color: var(--accent); }
 
+/* Second line of the same band as the roles, one step quieter: the roles say
+   what I do, these say what backs it. Tighter top margin than .hero-roles
+   takes so the two read as one block rather than two stacked claims. */
+.creds {
+  margin-top: var(--s-3);
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--s-2) var(--s-5);
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .12em;
+}
+/* Kill the dotted underline UAs put on abbr[title] — at this size it reads as
+   a rendering fault rather than an affordance, and .sr-only in the markup is
+   what actually carries the expansion. */
+.cred {
+  color: var(--ink-2);
+  text-decoration: none; border-bottom: 0; cursor: help;
+}
+.cred-more {
+  color: var(--ink-mut); text-decoration: none;
+  border-bottom: 1px solid var(--line-2);
+}
+.cred-more:hover { color: var(--ink); border-color: var(--accent); }
+
 /* The deck's measure is ~50ch, which left the right half of an 1180px rail
    empty at every width above the stack point. The ledger fills it. `auto` on
    the second track lets the figures size to their content instead of taking a
@@ -960,6 +983,104 @@ h1, h2, h3 {
   .row-work .row-meta {
     flex-direction: column; align-items: stretch; gap: var(--s-2);
   }
+}
+
+/* ------------------------------------------------------------------ loop -- */
+/* An ordered spine. The rule runs behind the ordinals rather than between the
+   rows, so the sequence reads as one continuous thing that the steps hang off
+   — which is the difference between a cycle and a list of six paragraphs. */
+/* Scoped to the section rather than :root — the ordinal disc is the only
+   thing that uses it, and .loop-close needs it too but is a sibling of
+   .loop, not a descendant. */
+#loop { --step-dot: 2rem; }
+.loop {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 0;
+}
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(var(--s-4), 2.5vw, var(--s-8));
+  padding-block: clamp(var(--s-6), 2.6vw, var(--s-9));
+}
+/* The spine: drawn from the ordinal's centre downward, and stopped on the
+   last step so the line does not dangle past the final state. */
+.step::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--step-dot) / 2);
+  top: calc(clamp(var(--s-6), 2.6vw, var(--s-9)) + var(--step-dot));
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+.step:last-child::before { display: none; }
+.step-num {
+  position: relative; z-index: 1;
+  width: var(--step-dot); height: var(--step-dot);
+  display: grid; place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  font-variant-numeric: tabular-nums; letter-spacing: .06em;
+  color: var(--ink-mut);
+}
+.step-body { min-width: 0; padding-top: calc((var(--step-dot) - 1.4em) / 2); }
+/* Wide: what it does and what stops it sit side by side, which is the pair
+   the section is actually about — and it uses the right half of the rail that
+   a single reading column leaves empty, halving the section's height. */
+@media (min-width: 60rem) {
+  .step-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
+    column-gap: clamp(var(--s-8), 4vw, var(--s-14));
+    align-items: start;
+  }
+  .step-head { grid-column: 1 / -1; }
+  .step-desc { margin-top: var(--s-3); }
+  /* Aligns with the description's first line instead of hanging off the
+     head's baseline. */
+  .step-guard { margin-top: var(--s-3); }
+}
+.step-head {
+  display: flex; align-items: baseline; flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  margin: 0;
+}
+.step-name {
+  font-size: var(--t-title); letter-spacing: -0.02em; color: var(--ink);
+}
+/* Which tier the state runs on — the local/frontier split is the cost story,
+   so it travels with the step rather than being explained separately. */
+.step-tier {
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-mut);
+}
+.step-desc {
+  margin: var(--s-3) 0 0; max-width: 58ch;
+  color: var(--ink-2); font-size: var(--t-body); line-height: 1.55;
+}
+/* The stop condition. Indented behind its own rule so it reads as a note on
+   the step rather than a second sentence of it. */
+.step-guard {
+  margin: var(--s-4) 0 0; max-width: 58ch;
+  padding-left: var(--s-4);
+  border-left: 1px solid var(--line-2);
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .04em; line-height: 1.6;
+  color: var(--ink-mut);
+}
+/* The line that makes it a loop. Sits on the spine's axis, continuing the
+   column the ordinals established. */
+.loop-close {
+  margin: var(--s-6) 0 0;
+  padding-left: calc(var(--step-dot) + clamp(var(--s-4), 2.5vw, var(--s-8)));
+  font-family: var(--font-mono); font-size: var(--t-mono);
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-mut);
 }
 
 /* ------------------------------------------------------------ guardrails -- */

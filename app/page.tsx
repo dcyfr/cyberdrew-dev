@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Work } from "@/components/Work";
+import { Loop } from "@/components/Loop";
 import { Guardrails } from "@/components/Guardrails";
 import { Writing } from "@/components/Writing";
 import { Contact } from "@/components/Contact";
@@ -24,9 +25,12 @@ export default function Page() {
 
       <main id="main">
         {/* Work answers "agents that act", Guardrails answers "rails that
-            hold" — the two halves of the headline, in the headline's order. */}
+            hold" — the two halves of the headline, in the headline's order.
+            The loop sits between them: it is how the acting happens, and each
+            of its states names the guard that the next section then measures. */}
         <Hero />
         <Work />
+        <Loop />
         <Guardrails />
         <Writing />
         <Contact />

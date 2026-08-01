@@ -17,10 +17,37 @@ export const person = {
 
 export const nav = [
   { label: "Work", href: "#work" },
+  { label: "The loop", href: "#loop" },
   { label: "Guardrails", href: "#guardrails" },
   { label: "Writing", href: "#writing" },
   { label: "Contact", href: "#contact" },
 ];
+
+// ---------------------------------------------------------------------------
+// Credentials. The page claims "cyber architect" and then asks to be trusted
+// on guardrails; two of these are literally certifications in architecture and
+// in security governance, and all of them are third-party verifiable.
+//
+// Four of twenty-five, chosen for relevance rather than recency — the CompTIA
+// stack is real but reads as a ladder, and the page only has room for the top
+// of it. Everything links to the public profile so the claim is checkable,
+// which is the same argument the guardrails section makes.
+// SOURCING: credly.com/users/dcyfr, re-checked 2026-07-31.
+// ---------------------------------------------------------------------------
+export type Credential = { abbr: string; name: string; issuer: string };
+
+export const credentials = {
+  href: "https://www.credly.com/users/dcyfr/badges",
+  items: [
+    { abbr: "GDSA", name: "Defensible Security Architecture", issuer: "GIAC" },
+    { abbr: "GSTRT", name: "Strategic Planning, Policy & Leadership", issuer: "GIAC" },
+    { abbr: "GCIH", name: "Certified Incident Handler", issuer: "GIAC" },
+    // Expanded to the name it held for a decade — CompTIA renamed CASP+ to
+    // SecurityX, and "SecurityX (CompTIA SecurityX)" is not an expansion.
+    { abbr: "SecurityX", name: "Advanced Security Practitioner, CASP+", issuer: "CompTIA" },
+  ] as Credential[],
+  more: "25 verified on Credly",
+};
 
 // ---------------------------------------------------------------------------
 // Hero. Silhouette test: this has to work as one shape on one ground.
@@ -113,6 +140,75 @@ export const work = {
 };
 
 // ---------------------------------------------------------------------------
+// The loop. Work says what got built; this says how it runs when nobody is
+// watching, and hands off to Guardrails by naming what stops each state.
+//
+// Restored from 59f959e alongside the guardrails section, and re-verified
+// against scripts/rei-daemon/think.sh on 2026-07-31: the five states, the
+// tier each runs on, and each state's stop condition all still hold —
+// Observe -> Triage (local) -> Think (frontier) -> Act -> Record, writes
+// confined to two directories, restricted paths never entering context.
+//
+// The original was a pinned dial with the states scrolling past it. This is
+// the same content as an ordered spine: the sequence is the point, and a
+// sticky centrepiece is a lot of machinery to say "these happen in order".
+// ---------------------------------------------------------------------------
+export type LoopStep = {
+  num: string;
+  name: string;
+  tier: string;
+  desc: string;
+  guard: string;
+};
+
+export const loop = {
+  eyebrow: "The loop", index: "02",
+  headline: "The fleet doesn't wait to be asked",
+  deck:
+    "Every thirty minutes it wakes, reads its own state, picks work off the queue, and writes down what it learned. Five states, each with something that can stop it.",
+  steps: [
+    {
+      num: "01",
+      name: "Observe",
+      tier: "no model",
+      desc: "Reads the workspace as it actually is — services, queues, git state, what the last cycle left behind.",
+      guard: "Restricted paths never enter context: message stores, journals, backups.",
+    },
+    {
+      num: "02",
+      name: "Triage",
+      tier: "tier-0 · local",
+      desc: "Sorts signal from noise on a local model. Most cycles end here, and that is the point.",
+      guard: "Local-first routing. Frontier tiers cost money, so they have to be earned.",
+    },
+    {
+      num: "03",
+      name: "Think",
+      tier: "tier-3 · frontier",
+      desc: "Only what survived triage gets a frontier model. It plans, decomposes, and commits to an action.",
+      guard: "A metacognition breaker halts any agent spinning past six unproductive cycles.",
+    },
+    {
+      num: "04",
+      name: "Act",
+      tier: "sandboxed",
+      desc: "Takes the action for real — opens the PR, restores the service, publishes the brief.",
+      guard: "Allowlisted binaries only. No metacharacters, no pipe to rm, no private-IP fetches.",
+    },
+    {
+      num: "05",
+      name: "Record",
+      tier: "append-only",
+      desc: "Writes the outcome to a ledger it will read next cycle. The log is the memory.",
+      guard: "Writes confined to two directories. Everything else is read-only to the daemon.",
+    },
+  ] as LoopStep[],
+  // The thing that makes it a loop rather than a list, said in type instead
+  // of built as a pinned animation.
+  close: "and thirty minutes later, 01 again",
+};
+
+// ---------------------------------------------------------------------------
 // Guardrails. The hero promises "the guardrails that make that a safe bet",
 // and before this section the page never showed one — the differentiator was
 // asserted in the deck and then dropped.
@@ -129,7 +225,7 @@ export const work = {
 export type Guard = { name: string; value: string; desc: string };
 
 export const guardrails = {
-  eyebrow: "Guardrails", index: "02",
+  eyebrow: "Guardrails", index: "03",
   headline: "Anything that can act can be stopped",
   deck:
     "Autonomy is a claim about what happens when nobody is watching. These are the controls that make the claim checkable.",
@@ -180,7 +276,7 @@ export const guardrails = {
 export type Post = { num: string; title: string; kind: string; date: string; href: string };
 
 export const writing = {
-  eyebrow: "Writing", index: "03",
+  eyebrow: "Writing", index: "04",
   headline: "Notes from the build",
   posts: [
     {
@@ -224,7 +320,7 @@ export const writing = {
 export type Engagement = { num: string; name: string; desc: string; outcome: string };
 
 export const contact = {
-  eyebrow: "Contact", index: "04",
+  eyebrow: "Contact", index: "05",
   headline: "Ship autonomy you can defend",
   deck: "I work with teams putting agents into production. That usually looks like one of three things.",
   engagements: [
