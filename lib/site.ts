@@ -133,15 +133,27 @@ export function getLedger(): Stat[] {
 // The image is a generated piece (imagegen brand lane, neutral profile, strict
 // greyscale prompt) kept at public/img/field.webp. It is not decoration: the
 // swarm is the agents and the ring is the limit they cannot leave, which is
-// the headline drawn rather than written. The caption says so plainly, because
-// an unexplained picture on a page about checkable claims is just mood.
+// the headline drawn rather than written.
+//
+// The alt does the describing, and has to — it is the only route to the
+// picture for anyone who cannot see it. That frees the caption to do the one
+// thing a caption is for: say why the picture is on the page. Naming the parts
+// a second time in smaller type ("agents", "envelope") only restated the
+// section above it. The claim underneath the render is the more useful line,
+// and it is the argument the whole page is making — what an agent is free to
+// do is decided by what it is running inside, so the rails are not a tax on
+// autonomy, they are what gives it a shape at all.
 // ---------------------------------------------------------------------------
 export const field = {
   alt: "Thousands of fine points swarming inside a single thin circular boundary, drawn in bone on obsidian.",
-  caption: "Agents inside an envelope they cannot leave",
+  caption: "Autonomy takes the shape of its surroundings",
   // Split out because it is only true where there is a cursor to move. Hidden
   // on touch and under reduced motion, where nothing reacts.
-  hint: "move across it",
+  //
+  // NBSP before the last word: at 32ch the two strings together run to three
+  // lines on a wide plate, and the natural break strands "it" alone on the
+  // third. Binding the last two words moves the break one word earlier.
+  hint: "move across\u00A0it",
 };
 
 // ---------------------------------------------------------------------------

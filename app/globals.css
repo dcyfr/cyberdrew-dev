@@ -43,8 +43,17 @@
      rule the rest of the page follows — the accent is whichever material is
      not the ground — and it is what makes the canvas layer work at all: the
      canvas draws in --ink, which in light IS obsidian, and was previously
-     invisible against an un-inverted dark plate. */
+     invisible against an un-inverted dark plate.
+
+     --plate-ground is the render's OWN ground, sampled off the asset and
+     flipped by hand for light rather than derived, because a filter cannot
+     reach a background. It matters only where the card is taller than the
+     artwork — on narrow viewports, where the art is padded — and there it is
+     the difference between a plate the swarm sits in and a letterbox strip
+     pasted into a card: the page ground is 5 levels lighter than the render's,
+     which is faint but lands as a hard horizontal seam across the full width. */
   --plate-invert: 0;
+  --plate-ground: #060607;
   --plate-halo: var(--shadow);
   /* the temperature poles the cursor glow travels between */
   --warm: #fff0dc;
@@ -221,6 +230,7 @@
     --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
     --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
     --plate-invert: 1;
+    --plate-ground: #f9f9f8;
     --plate-halo: 0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
   }
 }
@@ -247,6 +257,7 @@
   --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
   --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
   --plate-invert: 1;
+  --plate-ground: #f9f9f8;
   --plate-halo: 0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
 }
 :root[data-theme="dark"] {
@@ -272,6 +283,7 @@
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
   --plate-invert: 0;
+  --plate-ground: #060607;
   --plate-halo: var(--shadow);
 }
 
@@ -508,10 +520,16 @@ h1, h2, h3 {
    rather than parallax decoration. Scroll-driven CSS: no scroll listener, no
    JS, nothing running on the main thread. Hidden entirely where the feature
    is unsupported (it would otherwise sit at scaleX(0) forever) and under
-   reduced-motion. */
+   reduced-motion.
+
+   And hidden below 48rem, where the dock moves to the bottom edge. A 2px rule
+   pinned to the top of the viewport reads as a readout attached to chrome, and
+   on a phone there is no chrome up there to attach to — it runs under the
+   status bar, hard against the clock, and looks like a stray artefact or a
+   loading bar that never finishes. The scrollbar is the native readout there. */
 .progress { display: none; }
 @supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
     .progress {
       display: block;
       position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 60;
@@ -1036,19 +1054,21 @@ h1, h2, h3 {
 }
 
 /* ----------------------------------------------------------------- field -- */
-/* The plate is pinned to the asset's own aspect so the canvas ring can be
-   placed by geometry and land on the rendered one. object-fit: cover at the
-   same ratio therefore crops nothing. */
+/* Two boxes, not one. The card is the frame; .plate-art inside it is pinned to
+   the asset's own aspect so the canvas ring can be placed by geometry and land
+   on the rendered one (object-fit: cover at the same ratio therefore crops
+   nothing). At desktop width the card is exactly the artwork and the split
+   costs nothing; on a phone the card grows past it, which is the only way the
+   artwork can be padded without dragging the drawn ring out of register. */
 .plate {
   position: relative;
   /* Same bleed the work cards and the contact panel take, so the plate's
      edges land on the section rail rather than inside the gutter. */
   margin: 0 calc(-1 * var(--row-pad));
-  aspect-ratio: 1536 / 640;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  background: var(--bg);
+  background: var(--plate-ground);
   box-shadow:
     inset 0 1px 0 var(--edge-top),
     inset 0 0 0 1px var(--glass-ring),
@@ -1121,6 +1141,10 @@ h1, h2, h3 {
   from { --plate-exit: 0; }
   to   { --plate-exit: .5; }
 }
+.plate-art {
+  position: relative;
+  aspect-ratio: 1536 / 640;
+}
 .plate-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
@@ -1165,6 +1189,23 @@ h1, h2, h3 {
    canvas is allowed to run. */
 @media (hover: none), (prefers-reduced-motion: reduce) {
   .plate-hint { display: none; }
+}
+
+/* Narrow viewports: pad the artwork instead of letting it fill the card.
+   At 2.4:1 the plate collapses to a ~145px letterbox on a phone — a thin band
+   floating in a screen's worth of empty ground, with the ring pressed against
+   both edges and the caption printed straight across the swarm, where it is
+   barely readable. Padding the art buys back both: the ring gets room to read
+   as a boundary rather than a crop, the card fills the space it was already
+   sitting in, and the caption drops into clear ground below the image instead
+   of competing with it. Bottom padding is the larger of the two because it is
+   carrying the caption; the artwork still sits above centre, which is where a
+   plate with a label under it belongs. */
+@media (max-width: 47.99rem) {
+  .plate {
+    padding-block: clamp(var(--s-10), 14vw, var(--s-16))
+                   clamp(var(--s-16), 24vw, var(--s-24));
+  }
 }
 
 /* ------------------------------------------------------------------ loop -- */
