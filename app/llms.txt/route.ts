@@ -1,4 +1,15 @@
-import { contact, guardrails, hero, ledger, person, socials, work, writing } from "@/lib/site";
+import {
+  contact,
+  credentials,
+  guardrails,
+  hero,
+  ledger,
+  loop,
+  person,
+  socials,
+  work,
+  writing,
+} from "@/lib/site";
 import { getFeaturedPosts } from "@/lib/feed";
 import type { Post } from "@/lib/site";
 
@@ -51,9 +62,20 @@ function render(posts: readonly Post[]): string {
     `## ${work.headline}`,
     ...work.items.map((w) => `- ${w.title} (${w.status.label}): ${w.desc} ${w.href}`),
     "",
+    `## ${loop.headline}`,
+    `> ${loop.deck}`,
+    ...loop.steps.map(
+      (s) => `- ${s.num} ${s.name} (${s.tier}): ${s.desc} Stops on: ${s.guard}`
+    ),
+    `- ${loop.close}`,
+    "",
     `## ${guardrails.headline}`,
     `> ${guardrails.deck}`,
     ...guardrails.items.map((g) => `- ${g.name} (${g.value}): ${g.desc}`),
+    "",
+    "## Certifications",
+    ...credentials.items.map((c) => `- ${c.abbr}: ${c.name} (${c.issuer})`),
+    `- ${credentials.more}: ${credentials.href}`,
     "",
     `## ${writing.headline}`,
     ...posts.map((p) => `- ${p.title} (${p.kind}, ${p.date}): ${p.href}`),
