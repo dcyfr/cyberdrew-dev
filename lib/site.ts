@@ -220,7 +220,11 @@ export const loop = {
 //
 // SOURCING — all six re-verified against the workspace on 2026-07-31. Rendered
 // as hairline data rows, not marketing cards: the point is that each one is a
-// number somebody could check.
+// claim somebody could check.
+//
+// Values stay generic where a figure would describe my workspace rather than
+// the control — these are meant to read as mechanisms a client gets, not as a
+// spec sheet for one deployment.
 // ---------------------------------------------------------------------------
 export type Guard = { name: string; value: string; desc: string };
 
@@ -232,8 +236,12 @@ export const guardrails = {
   items: [
     {
       name: "Spend ceiling",
-      value: "$100 / mo",
-      desc: "A hard monthly gate on model spend. Trip it and the kill switch fires — the fleet stops, it does not degrade quietly.",
+      // Deliberately not a figure. The number this runs at is my own
+      // workspace's, and printing it invites a reader to price the engagement
+      // off it — or to read the mechanism as only working at that scale. What
+      // is being sold is the gate, which sizes to whatever it is pointed at.
+      value: "enforced",
+      desc: "A hard monthly ceiling on model spend, sized to the deployment. Trip it and the kill switch fires — the fleet stops, it does not degrade quietly.",
     },
     {
       name: "Sender kill switch",
