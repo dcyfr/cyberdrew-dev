@@ -140,12 +140,13 @@ export function getLedger(): Stat[] {
 // thing a caption is for: say why the picture is on the page. Naming the parts
 // a second time in smaller type ("agents", "envelope") only restated the
 // section above it. The claim underneath the render is the more useful line,
-// and it is the argument the whole page is making — containment is not the
-// price of autonomy, it is the thing that makes autonomy legible at all.
+// and it is the argument the whole page is making — what an agent is free to
+// do is decided by what it is running inside, so the rails are not a tax on
+// autonomy, they are what gives it a shape at all.
 // ---------------------------------------------------------------------------
 export const field = {
   alt: "Thousands of fine points swarming inside a single thin circular boundary, drawn in bone on obsidian.",
-  caption: "Autonomy is the shape of its boundary",
+  caption: "Autonomy takes the shape of its surroundings",
   // Split out because it is only true where there is a cursor to move. Hidden
   // on touch and under reduced motion, where nothing reacts.
   //
