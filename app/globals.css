@@ -39,6 +39,10 @@
      once, outside the theme blocks, and lifted off --ink-mut for headroom
      against the plate's own grain. */
   --on-plate:  #9d9da4;
+  /* The field plate against the page ground. Dark: the plate IS the ground, so
+     both are no-ops. Light: see the .plate rules. */
+  --plate-lift: 0;
+  --plate-halo: var(--shadow);
   /* the temperature poles the cursor glow travels between */
   --warm: #fff0dc;
   --cool: #d3e4ff;
@@ -213,6 +217,8 @@
     --glow: 0 0 44px -14px rgb(40 32 24 / .18);
     --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
     --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
+    --plate-lift: .07;
+    --plate-halo: 0 2px 10px rgb(11 11 13 / .10), 0 18px 60px -12px rgb(11 11 13 / .22);
   }
 }
 :root[data-theme="light"] {
@@ -237,6 +243,8 @@
   --glow: 0 0 44px -14px rgb(40 32 24 / .18);
   --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
   --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
+  --plate-lift: .07;
+  --plate-halo: 0 2px 10px rgb(11 11 13 / .10), 0 18px 60px -12px rgb(11 11 13 / .22);
 }
 :root[data-theme="dark"] {
   --bg:        #0b0b0d;
@@ -260,6 +268,8 @@
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
+  --plate-lift: 0;
+  --plate-halo: var(--shadow);
 }
 
 /* A stepped transition strands on the previous theme's value across a swap
@@ -471,11 +481,20 @@ h1, h2, h3 {
   height: calc(env(safe-area-inset-top, 0px) + var(--header-h) + var(--s-13));
   z-index: 30;
   pointer-events: none;
+  /* Opaque through the dock's whole band, then a multi-stop falloff rather
+     than the two-stop ramp this used to be. Three stops make two corners in
+     the curve, at 52% and 76%, and a corner in a gradient is a visible line
+     once anything with real contrast passes behind it — most obviously the
+     field plate, whose scheme opposes the page. The extra stops approximate an
+     ease-out so the derivative never jumps. Same band, same endpoints. */
   background: linear-gradient(
     to bottom,
     var(--bg) 0%,
     var(--bg) 52%,
-    color-mix(in oklab, var(--bg) 55%, transparent) 76%,
+    color-mix(in oklab, var(--bg) 92%, transparent) 62%,
+    color-mix(in oklab, var(--bg) 72%, transparent) 71%,
+    color-mix(in oklab, var(--bg) 45%, transparent) 80%,
+    color-mix(in oklab, var(--bg) 20%, transparent) 89%,
     transparent 100%
   );
 }
@@ -1030,7 +1049,77 @@ h1, h2, h3 {
   box-shadow:
     inset 0 1px 0 var(--edge-top),
     inset 0 0 0 1px var(--glass-ring),
-    var(--shadow);
+    var(--plate-halo);
+}
+
+/* The plate is the only element on the page whose scheme opposes the ground,
+   so it is the only one that needs help meeting it. On bone it was a pure
+   obsidian slab against the biggest contrast step the palette can make, which
+   reads as a hole punched in the page rather than an object resting on it.
+   --plate-halo gives the edge somewhere to go and --plate-lift closes a little
+   of the gap from the other side. Both resolve to nothing in dark, where the
+   plate and the ground are already the same material. */
+.plate::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: var(--bg);
+  opacity: var(--plate-lift);
+}
+
+/* The top fade dissolves content into the ground before it reaches the dock,
+   and it does that by painting the ground OVER whatever is passing. For type
+   that is a dissolve, because the ground already shows between the glyphs. For
+   an opaque slab it is a scrim: on bone you get a wide pale haze dragged
+   across the artwork, which is the exact opposite of the effect intended.
+
+   So let the plate dissolve itself. Its own top edge feathers to transparent
+   as it slides under the dock, which means the real ground shows through
+   rather than a wash sitting on top, and the fade lands on something already
+   going transparent. Driven off a view() timeline, matching the progress
+   readout's approach: no listener on the main thread.
+
+   --plate-exit is registered so it interpolates as a number; an unregistered
+   custom property would jump between keyframes instead of easing. At 0 the
+   mask is fully opaque, so every non-supporting browser and every
+   reduced-motion visitor keeps exactly today's rendering. */
+@property --plate-exit {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .plate {
+      --plate-exit: 0;
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 calc(var(--plate-exit) * 100%)
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 calc(var(--plate-exit) * 100%)
+      );
+      /* Longhands and `auto` duration, for the reason documented on the
+         progress readout: the shorthand pins duration to 0s and the timeline
+         then has no range to map onto. */
+      animation-name: plate-dissolve;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view(block);
+      /* Only the exit at the top matters. Entry at the bottom has no dock to
+         collide with, and feathering there would just look like a fault. */
+      animation-range: exit 0% exit 34%;
+    }
+  }
+}
+@keyframes plate-dissolve {
+  from { --plate-exit: 0; }
+  to   { --plate-exit: .5; }
 }
 .plate-img {
   position: absolute; inset: 0;
@@ -1437,7 +1526,10 @@ a, button { -webkit-tap-highlight-color: transparent; }
       to top,
       var(--bg) 0%,
       var(--bg) 52%,
-      color-mix(in oklab, var(--bg) 55%, transparent) 76%,
+      color-mix(in oklab, var(--bg) 92%, transparent) 62%,
+      color-mix(in oklab, var(--bg) 72%, transparent) 71%,
+      color-mix(in oklab, var(--bg) 45%, transparent) 80%,
+      color-mix(in oklab, var(--bg) 20%, transparent) 89%,
       transparent 100%
     );
   }
