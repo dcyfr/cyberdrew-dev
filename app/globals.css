@@ -38,10 +38,13 @@
      label sitting on it cannot invert with the page. Deliberately declared
      once, outside the theme blocks, and lifted off --ink-mut for headroom
      against the plate's own grain. */
-  --on-plate:  #9d9da4;
-  /* The field plate against the page ground. Dark: the plate IS the ground, so
-     both are no-ops. Light: see the .plate rules. */
-  --plate-lift: 0;
+  /* The render is bone marks on an obsidian field. Dark leaves it alone; light
+     inverts it, so the plate becomes obsidian marks on bone. That is the same
+     rule the rest of the page follows — the accent is whichever material is
+     not the ground — and it is what makes the canvas layer work at all: the
+     canvas draws in --ink, which in light IS obsidian, and was previously
+     invisible against an un-inverted dark plate. */
+  --plate-invert: 0;
   --plate-halo: var(--shadow);
   /* the temperature poles the cursor glow travels between */
   --warm: #fff0dc;
@@ -217,8 +220,8 @@
     --glow: 0 0 44px -14px rgb(40 32 24 / .18);
     --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
     --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
-    --plate-lift: .07;
-    --plate-halo: 0 2px 10px rgb(11 11 13 / .10), 0 18px 60px -12px rgb(11 11 13 / .22);
+    --plate-invert: 1;
+    --plate-halo: 0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
   }
 }
 :root[data-theme="light"] {
@@ -243,8 +246,8 @@
   --glow: 0 0 44px -14px rgb(40 32 24 / .18);
   --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
   --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
-  --plate-lift: .07;
-  --plate-halo: 0 2px 10px rgb(11 11 13 / .10), 0 18px 60px -12px rgb(11 11 13 / .22);
+  --plate-invert: 1;
+  --plate-halo: 0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
 }
 :root[data-theme="dark"] {
   --bg:        #0b0b0d;
@@ -268,7 +271,7 @@
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
-  --plate-lift: 0;
+  --plate-invert: 0;
   --plate-halo: var(--shadow);
 }
 
@@ -1052,20 +1055,17 @@ h1, h2, h3 {
     var(--plate-halo);
 }
 
-/* The plate is the only element on the page whose scheme opposes the ground,
-   so it is the only one that needs help meeting it. On bone it was a pure
-   obsidian slab against the biggest contrast step the palette can make, which
-   reads as a hole punched in the page rather than an object resting on it.
-   --plate-halo gives the edge somewhere to go and --plate-lift closes a little
-   of the gap from the other side. Both resolve to nothing in dark, where the
-   plate and the ground are already the same material. */
-.plate::after {
-  content: "";
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background: var(--bg);
-  opacity: var(--plate-lift);
-}
+/* The plate used to be a fixed obsidian slab, which meant light mode showed
+   the same dark rectangle as dark mode and the only thing that changed was the
+   page around it. Inverting it in light makes the plate obey the same rule as
+   everything else — the marks are whichever material is not the ground — so
+   the two themes now read as genuinely different renderings of one idea
+   rather than one rendering on two backgrounds.
+
+   It also fixes the canvas: that layer draws in --ink, which in light is
+   obsidian, and obsidian on an un-inverted dark plate was invisible. The live
+   agents simply never showed in light mode. Inverting the plate gives them the
+   bone ground they need. The declaration itself lives on .plate-img below. */
 
 /* The top fade dissolves content into the ground before it reaches the dock,
    and it does that by painting the ground OVER whatever is passing. For type
@@ -1125,9 +1125,10 @@ h1, h2, h3 {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  /* The render is already greyscale; this only guarantees it against a model
-     that slipped a tint in, and costs nothing when there is none. */
-  filter: grayscale(1);
+  /* grayscale() guarantees chroma zero against a model that slipped a tint in,
+     and costs nothing when there is none. invert() is the theme swap: 0 in
+     dark, 1 in light. See the note above .plate-exit. */
+  filter: grayscale(1) invert(var(--plate-invert));
 }
 .field-canvas-wrap { position: absolute; inset: 0; }
 .field-canvas { display: block; width: 100%; height: 100%; }
@@ -1142,9 +1143,11 @@ h1, h2, h3 {
   max-width: 32ch;
   font-family: var(--font-mono); font-size: var(--t-mono-xs);
   letter-spacing: .1em; text-transform: uppercase;
-  /* The plate is obsidian in BOTH themes, so this one label cannot follow the
-     ground the way everything else does. --on-plate is fixed for that reason. */
-  color: var(--on-plate);
+  /* Was pinned to a fixed --on-plate, because the plate was obsidian in both
+     themes and this was the one label that could not follow the ground. Now
+     that the plate inverts, its polarity matches the page again and the
+     ordinary muted ink is correct in both. */
+  color: var(--ink-mut);
 }
 /* The invitation is only true where there is a cursor, and only where the
    canvas is allowed to run. */
