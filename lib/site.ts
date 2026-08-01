@@ -128,6 +128,23 @@ export function getLedger(): Stat[] {
 }
 
 // ---------------------------------------------------------------------------
+// Field. The plate between the claim and the evidence.
+//
+// The image is a generated piece (imagegen brand lane, neutral profile, strict
+// greyscale prompt) kept at public/img/field.webp. It is not decoration: the
+// swarm is the agents and the ring is the limit they cannot leave, which is
+// the headline drawn rather than written. The caption says so plainly, because
+// an unexplained picture on a page about checkable claims is just mood.
+// ---------------------------------------------------------------------------
+export const field = {
+  alt: "Thousands of fine points swarming inside a single thin circular boundary, drawn in bone on obsidian.",
+  caption: "Agents inside an envelope they cannot leave",
+  // Split out because it is only true where there is a cursor to move. Hidden
+  // on touch and under reduced motion, where nothing reacts.
+  hint: "move across it",
+};
+
+// ---------------------------------------------------------------------------
 // Work.
 // ---------------------------------------------------------------------------
 export type WorkItem = {

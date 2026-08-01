@@ -34,6 +34,11 @@
   /* Chip text sits on --surface-2, not on the page ground, which costs
      contrast: --ink-mut measured 4.34:1 there in light. Dedicated value. */
   --chip-ink:  #9a9aa1;
+  /* The field plate is an obsidian photograph in BOTH themes, so the one
+     label sitting on it cannot invert with the page. Deliberately declared
+     once, outside the theme blocks, and lifted off --ink-mut for headroom
+     against the plate's own grain. */
+  --on-plate:  #9d9da4;
   /* the temperature poles the cursor glow travels between */
   --warm: #fff0dc;
   --cool: #d3e4ff;
@@ -785,13 +790,36 @@ h1, h2, h3 {
   display: grid; gap: var(--s-6);
   margin: 0; padding: 0;
 }
+/* Portrait and ledger stack as one column: who, then what backs it. */
+.hero-aside { display: grid; gap: clamp(var(--s-7), 3vh, var(--s-10)); }
 @media (min-width: 60rem) {
-  /* On the wide layout the ledger sits in a rule-led column, which gives the
-     hero's right half an edge to align to instead of floating. */
-  .ledger {
+  /* On the wide layout the aside sits in a rule-led column, which gives the
+     hero's right half an edge to align to instead of floating. The rule is on
+     the aside rather than the ledger so the portrait shares it. */
+  .hero-aside {
     border-left: 1px solid var(--line);
     padding-left: clamp(var(--s-6), 2.5vw, var(--s-10));
   }
+}
+
+/* ------------------------------------------------------------- portrait -- */
+/* The only photograph on the site. It takes the disc the wordmark's mark and
+   the theme toggle already use, so it reads as part of the system rather than
+   as a new shape arriving.
+   Greyscaled in CSS rather than baked into the asset: the page has two
+   materials and no hue, and a full-colour face would be the single hue on it.
+   Doing it here also means one asset serves both grounds. */
+.portrait {
+  width: clamp(4.5rem, 7vw, 7rem); height: auto;
+  aspect-ratio: 1;
+  border-radius: var(--radius-pill);
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.06);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 var(--edge-top), var(--shadow);
+  /* The photograph is lit against near-black, so on the bone ground it lands
+     as an obsidian disc: the same two materials, just arranged the other way. */
+  background: var(--surface);
 }
 /* Below that, four stacked figures ran the hero past a phone viewport. Two up
    keeps it to one band under the actions. */
@@ -983,6 +1011,56 @@ h1, h2, h3 {
   .row-work .row-meta {
     flex-direction: column; align-items: stretch; gap: var(--s-2);
   }
+}
+
+/* ----------------------------------------------------------------- field -- */
+/* The plate is pinned to the asset's own aspect so the canvas ring can be
+   placed by geometry and land on the rendered one. object-fit: cover at the
+   same ratio therefore crops nothing. */
+.plate {
+  position: relative;
+  /* Same bleed the work cards and the contact panel take, so the plate's
+     edges land on the section rail rather than inside the gutter. */
+  margin: 0 calc(-1 * var(--row-pad));
+  aspect-ratio: 1536 / 640;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 0 0 1px var(--glass-ring),
+    var(--shadow);
+}
+.plate-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* The render is already greyscale; this only guarantees it against a model
+     that slipped a tint in, and costs nothing when there is none. */
+  filter: grayscale(1);
+}
+.field-canvas-wrap { position: absolute; inset: 0; }
+.field-canvas { display: block; width: 100%; height: 100%; }
+
+/* Sits on the plate rather than under it: the band is already tall, and a
+   caption below would push the work section a whole line further down. */
+.plate-cap {
+  position: absolute;
+  left: clamp(var(--s-4), 2vw, var(--s-7));
+  bottom: clamp(var(--s-3), 1.6vw, var(--s-5));
+  margin: 0;
+  max-width: 32ch;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .1em; text-transform: uppercase;
+  /* The plate is obsidian in BOTH themes, so this one label cannot follow the
+     ground the way everything else does. --on-plate is fixed for that reason. */
+  color: var(--on-plate);
+}
+/* The invitation is only true where there is a cursor, and only where the
+   canvas is allowed to run. */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .plate-hint { display: none; }
 }
 
 /* ------------------------------------------------------------------ loop -- */
