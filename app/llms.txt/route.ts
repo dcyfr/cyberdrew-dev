@@ -1,4 +1,4 @@
-import { contact, hero, person, socials, work, writing } from "@/lib/site";
+import { contact, guardrails, hero, ledger, person, socials, work, writing } from "@/lib/site";
 import { getFeaturedPosts } from "@/lib/feed";
 import type { Post } from "@/lib/site";
 
@@ -40,8 +40,20 @@ function render(posts: readonly Post[]): string {
       .filter((r) => r.href)
       .map((r) => `- [${r.org}](${r.href}): ${r.role}.`),
     "",
+    "## By the numbers",
+    // The page sets the unit off with a margin; plain text has to earn the
+    // gap explicitly, and only for word units — "60+" must not become "60 +".
+    ...ledger.map((s) => {
+      const unit = s.unit ? (/^[a-z]/i.test(s.unit) ? ` ${s.unit}` : s.unit) : "";
+      return `- ${s.value}${unit}: ${s.label}`;
+    }),
+    "",
     `## ${work.headline}`,
     ...work.items.map((w) => `- ${w.title} (${w.status.label}): ${w.desc} ${w.href}`),
+    "",
+    `## ${guardrails.headline}`,
+    `> ${guardrails.deck}`,
+    ...guardrails.items.map((g) => `- ${g.name} (${g.value}): ${g.desc}`),
     "",
     `## ${writing.headline}`,
     ...posts.map((p) => `- ${p.title} (${p.kind}, ${p.date}): ${p.href}`),
@@ -49,6 +61,7 @@ function render(posts: readonly Post[]): string {
     "",
     "## Contact",
     `- ${contact.deck}`,
+    ...contact.engagements.map((e) => `- ${e.name}: ${e.desc} You get: ${e.outcome}.`),
     `- Email: ${person.email}`,
     `- Book a call: ${person.cal}`,
     ...socials.map((s) => `- ${s.label}: ${s.href}`),

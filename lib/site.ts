@@ -17,6 +17,7 @@ export const person = {
 
 export const nav = [
   { label: "Work", href: "#work" },
+  { label: "Guardrails", href: "#guardrails" },
   { label: "Writing", href: "#writing" },
   { label: "Contact", href: "#contact" },
 ];
@@ -40,6 +41,30 @@ export const hero = {
   primary: { label: "See my work", href: "#work" },
   secondary: { label: "Work with me", href: "#contact" },
 } as const;
+
+// ---------------------------------------------------------------------------
+// Ledger. Four figures beside the hero, so the claim above has something
+// standing next to it before the reader has scrolled anywhere.
+//
+// SOURCING — every figure is drawn from the live workspace, and re-checked on
+// 2026-07-31. If one changes in the system, change it here. A stale number on
+// a page whose whole argument is "these claims are checkable" costs more than
+// the number is worth.
+//   60+     69 ai.rei.* jobs loaded in launchd; 66 enabled plists, 81 daemon
+//           contracts under usr/daemons/. "60+" is the durable floor.
+//   30 min  the daemon think-loop, StartInterval=1800.
+//   $0      the default model tier is local (Tier 0/1). Frontier tiers exist
+//           and cost money — they are escalation, not the default.
+//   6+ yrs  nexus/context/user/about-me.md.
+// ---------------------------------------------------------------------------
+export type Stat = { value: string; unit?: string; label: string };
+
+export const ledger: Stat[] = [
+  { value: "60", unit: "+", label: "agents on one substrate" },
+  { value: "30", unit: "min", label: "autonomous cycle" },
+  { value: "$0", label: "default model tier, local" },
+  { value: "6", unit: "+ yrs", label: "security engineering" },
+];
 
 // ---------------------------------------------------------------------------
 // Work.
@@ -69,7 +94,10 @@ export const work = {
       num: "02",
       title: "The agentic fleet",
       href: "https://www.dcyfr.ai/about",
-      desc: "Thirty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs autonomously on a local-first model stack under a hard budget.",
+      // Count tracks the ledger above — 69 ai.rei.* jobs loaded at the last
+      // check. Two different numbers for the same fleet on one page is the
+      // drift this file exists to prevent.
+      desc: "Sixty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs autonomously on a local-first model stack under a hard budget.",
       tags: ["Multi-agent", "Local-first", "Self-healing"],
       status: { label: "Running", kind: "running" },
     },
@@ -85,6 +113,61 @@ export const work = {
 };
 
 // ---------------------------------------------------------------------------
+// Guardrails. The hero promises "the guardrails that make that a safe bet",
+// and before this section the page never showed one — the differentiator was
+// asserted in the deck and then dropped.
+//
+// Restored from 59f959e, where it was cut as collateral of the obsidian/bone
+// theme rewrite rather than for anything editorial. Named "Guardrails" instead
+// of the original "The envelope": flight-envelope is a good metaphor and bad
+// wayfinding, and this label echoes the hero's own promise.
+//
+// SOURCING — all six re-verified against the workspace on 2026-07-31. Rendered
+// as hairline data rows, not marketing cards: the point is that each one is a
+// number somebody could check.
+// ---------------------------------------------------------------------------
+export type Guard = { name: string; value: string; desc: string };
+
+export const guardrails = {
+  eyebrow: "Guardrails", index: "02",
+  headline: "Anything that can act can be stopped",
+  deck:
+    "Autonomy is a claim about what happens when nobody is watching. These are the controls that make the claim checkable.",
+  items: [
+    {
+      name: "Spend ceiling",
+      value: "$100 / mo",
+      desc: "A hard monthly gate on model spend. Trip it and the kill switch fires — the fleet stops, it does not degrade quietly.",
+    },
+    {
+      name: "Sender kill switch",
+      value: "< 1 s",
+      desc: "Every outbound path — mail, chat, webhooks — honours one pause flag. No sends within a second of it being set.",
+    },
+    {
+      name: "Credential isolation",
+      value: "per-process",
+      desc: "Secrets resolve at exec time from the OS keychain. Nothing lands in an environment dump, a plist, or a prompt.",
+    },
+    {
+      name: "Tool sandbox",
+      value: "allowlist",
+      desc: "The shell an agent gets is not your shell: fixed binaries, no metacharacters, no SSRF to localhost or private ranges.",
+    },
+    {
+      name: "Metacognition breaker",
+      value: "6 cycles",
+      desc: "An agent that keeps picking the same task without shipping is quarantined. Persistence is a failure mode too.",
+    },
+    {
+      name: "Self-heal watchdog",
+      value: "3 / hr",
+      desc: "Downed services restart on graduated trust — dry-run first, and never more than three times an hour before escalation.",
+    },
+  ] as Guard[],
+};
+
+// ---------------------------------------------------------------------------
 // Writing. Canonical home is dcyfr.ai/blog.
 //
 // The live list is fetched from that blog's JSON feed, filtered to posts
@@ -97,7 +180,7 @@ export const work = {
 export type Post = { num: string; title: string; kind: string; date: string; href: string };
 
 export const writing = {
-  eyebrow: "Writing", index: "02",
+  eyebrow: "Writing", index: "03",
   headline: "Notes from the build",
   posts: [
     {
@@ -135,11 +218,35 @@ export const writing = {
 // ---------------------------------------------------------------------------
 // Contact.
 // ---------------------------------------------------------------------------
+// The deck used to name three engagement shapes in one sentence. As prose it
+// reads as a list of adjectives; as three rows it is a thing a visitor can
+// point at and say "that one". Same three shapes, same order.
+export type Engagement = { num: string; name: string; desc: string; outcome: string };
+
 export const contact = {
-  eyebrow: "Contact", index: "03",
+  eyebrow: "Contact", index: "04",
   headline: "Ship autonomy you can defend",
-  deck:
-    "I work with teams putting agents into production: your first secure autonomous agent, a governed fleet, or a hard look at what you already run.",
+  deck: "I work with teams putting agents into production. That usually looks like one of three things.",
+  engagements: [
+    {
+      num: "01",
+      name: "Your first secure agent",
+      desc: "You have a use case and nothing in production yet. We scope the smallest agent that earns its keep and ship it with the controls already in place.",
+      outcome: "A running agent, and the envelope it runs inside",
+    },
+    {
+      num: "02",
+      name: "A governed fleet",
+      desc: "Agents already run. The open question is what stops them — spend, sends, credentials, the blast radius of a bad tool call.",
+      outcome: "Kill switches, ceilings, and an audit trail that holds up",
+    },
+    {
+      num: "03",
+      name: "A hard look at what you run",
+      desc: "An audit of the system you already have: where an agent can act, what it can reach, and what happens on the day one goes wrong.",
+      outcome: "Findings, ranked, with the order to fix them in",
+    },
+  ] as Engagement[],
   primary: { label: "Book an intro call", href: person.cal },
   secondary: { label: person.email, href: `mailto:${person.email}` },
 };
