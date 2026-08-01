@@ -34,7 +34,7 @@ export function SiteFooter() {
           {/* No year: the build stamp to the right already dates the page,
               and a hardcoded year is one more thing that can go stale. */}
           <span>
-            (c) {person.name} ({person.handle})
+            &copy; {person.name} ({person.handle})
           </span>
           {/* The log is the interface: real machine state, stamped at build,
               not a slogan. Both halves degrade independently if absent. */}

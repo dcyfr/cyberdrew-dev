@@ -1,4 +1,6 @@
 import { contact, hero, person, socials, work, writing } from "@/lib/site";
+import { getFeaturedPosts } from "@/lib/feed";
+import type { Post } from "@/lib/site";
 
 /**
  * The machine-readable face of the site, GENERATED from lib/site.ts.
@@ -11,12 +13,20 @@ import { contact, hero, person, socials, work, writing } from "@/lib/site";
  *
  * Keep this route as the only source. Do not reintroduce public/llms.txt:
  * a static file in public/ would win over this route and drift again.
+ *
+ * The writing list is read from the same dcyfr.ai feed the page renders, for
+ * the same reason: deriving it from the checked-in fallback would reintroduce
+ * exactly the drift this route exists to prevent.
  */
 export const dynamic = "force-static";
 
+// force-static still permits revalidation, so the generated file tracks the
+// feed on the same hourly cadence as the page.
+export const revalidate = 3600;
+
 const SITE = "https://www.cyberdrew.dev";
 
-function render(): string {
+function render(posts: readonly Post[]): string {
   const roles = hero.roles.map((r) => `${r.role} at ${r.org}`).join(", ");
 
   const lines: string[] = [
@@ -34,7 +44,7 @@ function render(): string {
     ...work.items.map((w) => `- ${w.title} (${w.status.label}): ${w.desc} ${w.href}`),
     "",
     `## ${writing.headline}`,
-    ...writing.posts.map((p) => `- ${p.title} (${p.kind}, ${p.date}): ${p.href}`),
+    ...posts.map((p) => `- ${p.title} (${p.kind}, ${p.date}): ${p.href}`),
     `- All writing: ${writing.more.href}`,
     "",
     "## Contact",
@@ -48,8 +58,9 @@ function render(): string {
   return lines.join("\n");
 }
 
-export function GET() {
-  return new Response(render(), {
+export async function GET() {
+  const posts = await getFeaturedPosts();
+  return new Response(render(posts), {
     headers: {
       "content-type": "text/plain; charset=utf-8",
       "cache-control": "public, max-age=0, must-revalidate",

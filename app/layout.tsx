@@ -24,16 +24,18 @@ const archivo = localFont({
 });
 
 const SITE = "https://www.cyberdrew.dev";
-const TITLE = "Drew's Agentic Architecture and Design";
+const TITLE = "Drew Gowan, Cyber Architect";
+// Tracks the hero deck in lib/site.ts — this is the same claim, written for a
+// SERP snippet rather than a page. Change both or neither.
 const DESC =
-  "Security architect building autonomous AI systems that take real actions in production, and the guardrails that make that a safe bet. Founder at DCYFR Labs, Head of AI at GameShark Labs.";
+  "Cyber architect building autonomous systems that take real actions in production and the guardrails that make that a safe bet. Founder at DCYFR Labs, Head of AI at GameShark Labs.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: TITLE,
   description: DESC,
   applicationName: "cyberdrew.dev",
-  authors: [{ name: "Drew", url: SITE }],
+  authors: [{ name: "Drew Gowan", url: SITE }],
   keywords: [
     "autonomous agents",
     "agentic AI security",
@@ -71,10 +73,10 @@ export const viewport: Viewport = {
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Drew",
-  alternateName: "cyberdrew",
+  name: "Drew Gowan",
+  alternateName: ["cyberdrew", "dcyfr"],
   url: SITE,
-  jobTitle: "Security Architect & AI Engineer",
+  jobTitle: "Cyber Architect",
   description: DESC,
   email: "mailto:hello@cyberdrew.dev",
   knowsAbout: [

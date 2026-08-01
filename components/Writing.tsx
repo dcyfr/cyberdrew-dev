@@ -1,8 +1,15 @@
 import type { CSSProperties } from "react";
 import { writing } from "@/lib/site";
+import { getFeaturedPosts } from "@/lib/feed";
 import { ArrowIcon } from "./ArrowIcon";
 
-export function Writing() {
+// Server component: the feed is read at build and revalidated hourly, so the
+// list costs the visitor nothing and dcyfr.ai's `featured:` flags decide what
+// appears here. getFeaturedPosts never throws — it falls back to the snapshot
+// in lib/site.ts — so this section renders either way.
+export async function Writing() {
+  const posts = await getFeaturedPosts();
+
   return (
     <section className="bay" id="writing">
       <div className="wide">
@@ -15,10 +22,10 @@ export function Writing() {
         </div>
 
         <div className="rows">
-          {writing.posts.map((p, i) => (
+          {posts.map((p, i) => (
             <a
               className="row row-post"
-              key={p.num}
+              key={p.href}
               data-reveal
               style={{ "--i": i } as CSSProperties}
               href={p.href}

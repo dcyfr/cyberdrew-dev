@@ -1,7 +1,7 @@
 # cyberdrew.dev
 
-Personal landing page for Drew. Positioned as a **security architect who builds
-autonomous AI systems** — the differentiator is the guardrails, not the agents.
+Personal landing page for Drew. Positioned as a **cyber architect who builds
+autonomous systems** — the differentiator is the guardrails, not the agents.
 
 ## The theme: obsidian / bone
 
