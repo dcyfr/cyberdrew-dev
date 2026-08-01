@@ -1130,6 +1130,18 @@ h1, h2, h3 {
      dark, 1 in light. See the note above .plate-exit. */
   filter: grayscale(1) invert(var(--plate-invert));
 }
+/* The warped render, over the still one. Inherits the same theme inversion as
+   .plate-img, because it is the same pixels: the shader samples the raw asset,
+   which is bone-on-obsidian, so light needs the same flip. */
+.plate-morph {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  filter: grayscale(1) invert(var(--plate-invert));
+  /* --ease is a duration+curve shorthand and 160ms is too quick to hand over
+     a whole plate; same curve, longer. */
+  transition: opacity 420ms cubic-bezier(.2, 0, 0, 1);
+}
 .field-canvas-wrap { position: absolute; inset: 0; }
 .field-canvas { display: block; width: 100%; height: 100%; }
 

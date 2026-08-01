@@ -1,7 +1,7 @@
 # cyberdrew.dev
 
 Personal landing page for Drew. Positioned as a **cyber architect who builds
-autonomous systems** — the differentiator is the guardrails, not the agents.
+autonomous systems**. The differentiator is the guardrails, not the agents.
 
 ## The theme: obsidian / bone
 
@@ -14,7 +14,7 @@ Two materials. No third colour and no hue anywhere.
 
 The consequence is the whole design idea: **`--accent` is not a colour, it is
 whichever material is not the ground.** Obsidian ground → bone accent; bone
-ground → obsidian accent. So emphasis cannot be signalled by hue — it is
+ground → obsidian accent. So emphasis cannot be signalled by hue. It is
 signalled by **inversion**, weight, rule, and space. A "filled" element swaps
 ground and ink (`--accent` / `--on-accent`).
 
@@ -25,7 +25,7 @@ Two consequences worth keeping:
 - **State can't lean on hue**, so it never does: status markers are a filled
   identity star plus a word. That is automatically colour-blind- and greyscale-safe.
 
-Materials are not dead grey — bone carries a warm cast (R>G>B), obsidian a cool
+Materials are not dead grey: bone carries a warm cast (R>G>B), obsidian a cool
 one (B>R). That residual temperature is what keeps two neutrals reading as two
 materials instead of two greys.
 
@@ -52,7 +52,7 @@ transform and opacity only.
 Surfaces are glass: translucent fill, a blur sampling what is behind, a bright
 top bevel, a dark bottom edge, a soft bloom outside. Glass needs something to
 refract, so `body::before` paints three very low-alpha blooms into the ground
-and `body::after` dithers them — a gradient that large cannot be represented
+and `body::after` dithers them, because a gradient that large cannot be represented
 in 8-bit sRGB without banding, and noise is the fix, not animation.
 
 Key display text carries a warm-to-cool light under the pointer
@@ -61,7 +61,7 @@ Key display text carries a warm-to-cool light under the pointer
 ## Stack
 
 - **Next.js 16** (App Router) · **React 19** · **TypeScript**
-- No Tailwind here — hand-tuned CSS in [`app/globals.css`](app/globals.css)
+- No Tailwind here. Hand-tuned CSS in [`app/globals.css`](app/globals.css)
   driven by tokens. Dark is default; light via `prefers-color-scheme` and an
   explicit `data-theme` toggle.
 - One self-hosted variable grotesk (Archivo, 36KB Latin subset) via
@@ -79,7 +79,7 @@ npm run lint
 
 **`WATCHPACK_POLLING=true` is required on this machine.** Without it Turbopack's
 watcher dies with `EMFILE: too many open files`, finds no routes, and serves a
-404 for `/` — which reads exactly like a missing-page bug rather than a watcher
+404 for `/`, which reads exactly like a missing-page bug rather than a watcher
 failure. Raising `ulimit -n` does not help.
 
 To run a second server against this repo, give it its own build dir so the two
@@ -187,7 +187,7 @@ loop / envelope / ledger sections are recoverable from git at `59f959e`.
   because the animation is composited off the main thread.
 
 - **`.wide` needs `width: 100%`.** As a grid or flex item, `margin-inline: auto`
-  suppresses stretch and the rail collapses to max-content — which silently
+  suppresses stretch and the rail collapses to max-content, which silently
   mis-aligned the hero against every other section by 227px.
 - A **stepped transition strands on the previous theme's value** across a swap.
   The toggle adds `.theme-swap` for one frame to suppress transitions. Any

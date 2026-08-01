@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { field } from "@/lib/site";
 import { AgentField } from "./AgentField";
+import { FieldMorph } from "./FieldMorph";
 import plate from "@/public/img/field.webp";
 
 /**
@@ -27,6 +28,12 @@ export function Field() {
             sizes="(min-width: 64rem) 62rem, 100vw"
             placeholder="blur"
           />
+          {/* Warps the render so the mass at the centre actually changes
+              shape. Sits over the <img> and only becomes visible once it has
+              the texture uploaded, so the still plate is what shows on no
+              WebGL, no motion, or a lost context. `plate.src` rather than the
+              optimised URL: this is a texture upload, not a layout image. */}
+          <FieldMorph src={plate.src} />
           <AgentField />
           <figcaption className="plate-cap" id="field-cap">
             {field.caption}
