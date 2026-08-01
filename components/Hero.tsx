@@ -1,7 +1,9 @@
-import { hero } from "@/lib/site";
+import Image from "next/image";
+import { hero, person } from "@/lib/site";
 import { TextCycler } from "./TextCycler";
 import { Ledger } from "./Ledger";
 import { Credentials } from "./Credentials";
+import portrait from "@/public/img/drew.webp";
 
 const longestPhrase = [...hero.eyebrowCycle].sort((a, b) => b.length - a.length)[0];
 
@@ -52,7 +54,23 @@ export function Hero() {
             </div>
           </div>
 
-          <Ledger />
+          {/* Right column: who, then what backs it. The portrait is the only
+              photograph on the site, so it takes the same disc treatment as
+              the wordmark's mark and the theme toggle rather than arriving as
+              a new shape. Greyscaled in CSS, not in the asset, so it follows
+              the theme instead of fighting whichever ground it lands on. */}
+          <div className="hero-aside">
+            <Image
+              className="portrait"
+              src={portrait}
+              alt={`${person.name}, ${person.callsign}`}
+              width={112}
+              height={112}
+              sizes="112px"
+              priority
+            />
+            <Ledger />
+          </div>
         </div>
 
         {/* Who I am, in two mono lines: what I do, and what backs it. */}
