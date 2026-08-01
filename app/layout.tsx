@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 /**
@@ -114,6 +116,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
         {children}
+        {/* Both are first-party: the scripts and their beacons are proxied
+            under /_vercel/*, so no third-party origin enters the page and the
+            CSP stays at 'self'. Analytics needs its dashboard toggle flipped
+            on before it records anything. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

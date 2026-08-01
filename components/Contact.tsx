@@ -1,9 +1,11 @@
 import { contact } from "@/lib/site";
 
 /**
- * The one inverted block on the page. With no accent hue available, a full
- * material swap is the strongest emphasis the system has — so it is spent
- * exactly once, on the conversion.
+ * The conversion block. It used to invert — accent ground, swapped ink — which
+ * made it the loudest thing on the page and read as a different material from
+ * the cards above it. It now wears the same glass panel as the header and a
+ * settled row, and leans on scale, the shadow lift, and the solid button for
+ * emphasis instead of a full material swap.
  */
 export function Contact() {
   return (

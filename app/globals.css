@@ -111,21 +111,78 @@
   --t-mono-xs: 0.6875rem;
 
   --rail: 1180px;
-  --bay: clamp(3.5rem, 8vh, 6.5rem);
-  --gutter: clamp(1.25rem, 5vw, 4.5rem);
+  /* Fluid, but both ends of every clamp land on the spacing scale, so the
+     layout is on-grid at the extremes and interpolates between them. */
+  --bay: clamp(var(--s-14), 8vh, var(--s-26));
+  --gutter: clamp(var(--s-5), 5vw, var(--s-18));
   /* How close any floating object may come to the viewport edge. One token,
      so the contact slab and the work/writing cards cannot disagree. */
-  --edge-inset: clamp(.75rem, 3vw, 1.25rem);
+  --edge-inset: clamp(var(--s-3), 3vw, var(--s-5));
   /* How far a floating object bleeds outside the text rail. Capped at
      whatever the gutter can spare above --edge-inset, so a card can never
      come closer to the viewport edge than the slab does. Shared by the
      work/writing cards and the contact slab, which is the only way those
      two can be guaranteed to line up. */
-  --row-pad: min(clamp(1.1rem, 2.4vw, 1.75rem),
+  --row-pad: min(clamp(var(--s-4), 2.4vw, var(--s-7)),
                  calc(var(--gutter) - var(--edge-inset)));
   /* Floor for a card's internal padding, independent of the bleed. */
-  --card-pad-min: 1.15rem;
+  --card-pad-min: var(--s-5);
   --header-h: 3.75rem;
+
+  /* ---- spacing scale ----------------------------------------------------
+     Tailwind's scale, same numbering: --s-N == N * 0.25rem (N * 4px). The
+     page previously carried 38 distinct spacing values, 22 of them off any
+     regular step (.15, .26, .42, .55, .66, .85, 1.05, 1.15, 1.85 …). None of
+     those were derived from anything — they were nudged by eye, one at a
+     time, and the result was that no two components agreed on what "a small
+     gap" meant. Every one of them sat within 1.6px of a 4px step, so snapping
+     to the scale is visually a no-op and removes the drift.
+
+     Use a token for any fixed spacing. The exceptions, which stay literal
+     because they are DERIVED rather than chosen: --row-pad and friends
+     (computed off the gutter), optical nudges under 4px (.bars transforms,
+     hover translate), and hairline/radius values.
+     ---------------------------------------------------------------------- */
+  --s-1:  0.25rem;   /*  4px */
+  --s-2:  0.5rem;    /*  8px */
+  --s-3:  0.75rem;   /* 12px */
+  --s-4:  1rem;      /* 16px */
+  --s-5:  1.25rem;   /* 20px */
+  --s-6:  1.5rem;    /* 24px */
+  --s-7:  1.75rem;   /* 28px */
+  --s-8:  2rem;      /* 32px */
+  --s-9:  2.25rem;   /* 36px */
+  --s-10: 2.5rem;    /* 40px */
+  --s-11: 2.75rem;   /* 44px */
+  --s-12: 3rem;      /* 48px */
+  --s-13: 3.25rem;   /* 52px */
+  --s-14: 3.5rem;    /* 56px */
+  --s-16: 4rem;      /* 64px */
+  --s-18: 4.5rem;    /* 72px */
+  --s-20: 5rem;      /* 80px */
+  --s-22: 5.5rem;    /* 88px */
+  --s-24: 6rem;      /* 96px */
+  --s-26: 6.5rem;    /* 104px */
+
+  /* Semantic spacing, so the components that must agree cannot drift apart.
+     Each resolves to a scale step. */
+  --s-head-gap:      var(--s-3);   /* eyebrow -> heading, and the idx offset */
+  --s-deck-gap:      var(--s-4);   /* heading -> deck */
+  --s-action-gap:    var(--s-2);   /* between buttons in a row */
+  --s-actions-top:   var(--s-8);   /* copy -> button row */
+  --s-card-gap:      var(--s-2);   /* between stacked cards */
+  --s-contact-block: clamp(var(--s-12), 8vh, var(--s-22));
+  /* One value for how far the dock floats off the top. The safe-area override
+     further down re-states this inside a max(), and when the two were written
+     out separately they were free to disagree. */
+  --header-top:      clamp(var(--s-2), 1.6vh, var(--s-4));
+
+  /* ---- breakpoints ------------------------------------------------------
+     Tailwind's, and used mobile-first (min-width only). The layout is fluid
+     via clamp() almost everywhere, so these exist only where a grid has to
+     actually change shape.
+     sm 40rem/640 · md 48rem/768 · lg 64rem/1024 · xl 80rem/1280
+     ---------------------------------------------------------------------- */
 }
 
 @media (prefers-color-scheme: light) {
@@ -208,15 +265,16 @@
 
 /* Forced colours (Windows High Contrast). The palette is already two
    materials, so most of it maps cleanly; the exceptions are the places that
-   carry meaning in a FILL, which the OS repaints. Keep the inverted contact
-   block and the identity mark legible, and make the borders that define the
-   row grid follow the user's chosen text colour. */
+   carry meaning in a FILL, which the OS repaints. Keep the identity mark
+   legible and make the borders that define the row grid follow the user's
+   chosen text colour. */
 @media (forced-colors: active) {
   /* Glass has no meaning here: the OS owns the palette, so translucent fills
      and blur only muddy it. Flatten to Canvas and let the borders carry the
      structure. The ambient bloom goes entirely. */
   body::before { display: none; }
-  .glass, .header, .row, .row:hover, .btn-ghost, .theme-toggle, .tag {
+  .glass, .header, .row, .row:hover, .btn-ghost, .theme-toggle, .tag,
+  .contact {
     background: Canvas;
     backdrop-filter: none;
     box-shadow: none;
@@ -224,8 +282,9 @@
   .row::before { display: none; }
   body::after { display: none; }
   [data-glow] { background-image: none; color: CanvasText; }
-  .contact { forced-color-adjust: none; background: Canvas; color: CanvasText; }
-  .contact .btn-solid { background: ButtonText; color: ButtonFace; }
+  /* The slab is ordinary glass now, so it needs no forced-color-adjust escape
+     hatch — it maps to Canvas with every other panel. */
+  .contact { border-color: CanvasText; }
   .wordmark svg, .status svg, .caret { forced-color-adjust: auto; fill: CanvasText; }
   .caret { background: CanvasText; }
   .progress { background: Highlight; }
@@ -235,7 +294,7 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 1.75rem); }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + var(--s-7)); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
@@ -341,10 +400,10 @@ a { color: inherit; text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* Text selection is the theme's own move: inversion. Selecting swaps the
-   materials, exactly like a filled control. Inside the contact block the
-   ground already IS the accent, so selection inverts back the other way. */
+   materials, exactly like a filled control. The contact block used to need a
+   counter-rule here because its ground WAS the accent; it is glass now, so the
+   one global rule covers the whole page. */
 ::selection { background: var(--accent); color: var(--on-accent); }
-.contact ::selection { background: var(--on-accent); color: var(--accent); }
 
 /* Exposes a stable string to assistive tech where the visible text mutates
    (see TextCycler). Not display:none, which would drop it from the a11y tree. */
@@ -381,19 +440,18 @@ h1, h2, h3 {
 
 /* Sections carry an index, like the rows do: the page reads as one addressed
    system rather than a stack of unrelated blocks. */
-.eyebrow .idx { color: var(--accent); margin-right: .7rem; }
-.contact .eyebrow .idx { color: var(--on-accent); }
+.eyebrow .idx { color: var(--accent); margin-right: var(--s-head-gap); }
 
 .sect-h {
   font-size: var(--t-h2);
   letter-spacing: -0.045em;
-  margin-block: .7rem 0;
+  margin-block: var(--s-head-gap) 0;
 }
 .sect-deck {
   color: var(--ink-2); font-size: var(--t-deck); line-height: 1.5;
-  margin-block: 1rem 0; max-width: 46ch;
+  margin-block: var(--s-deck-gap) 0; max-width: 46ch;
 }
-.sect-head { margin-bottom: clamp(1.75rem, 4vh, 2.75rem); }
+.sect-head { margin-bottom: clamp(var(--s-7), 4vh, var(--s-11)); }
 
 /* -------------------------------------------------------------- top fade -- */
 /* Content dissolves into the ground before it reaches the dock, rather than
@@ -405,7 +463,7 @@ h1, h2, h3 {
 .top-fade {
   position: fixed;
   inset: 0 0 auto 0;
-  height: calc(env(safe-area-inset-top, 0px) + var(--header-h) + 3.25rem);
+  height: calc(env(safe-area-inset-top, 0px) + var(--header-h) + var(--s-13));
   z-index: 30;
   pointer-events: none;
   background: linear-gradient(
@@ -452,10 +510,10 @@ h1, h2, h3 {
    nothing is fenced off, the dock just hovers. */
 .header {
   position: fixed;
-  top: clamp(.6rem, 1.6vh, 1.1rem);
+  top: var(--header-top);
   left: 50%; transform: translateX(-50%);
   z-index: 40;
-  width: min(calc(100% - 2 * clamp(.75rem, 3vw, 1.5rem)), 62rem);
+  width: min(calc(100% - 2 * clamp(var(--s-3), 3vw, var(--s-6))), 62rem);
   height: var(--header-h);
   /* The dock measures itself. Collapsing on a viewport breakpoint guessed
      wrong by ~100px; the links need 488px of dock and were being hidden at
@@ -481,16 +539,19 @@ h1, h2, h3 {
 /* No .wide inside the dock: it carries its own padding, and the rail's
    gutter would push the contents far off the pill's edges. */
 .header-in {
-  height: 100%; max-width: none; padding-inline: 1.15rem;
+  height: 100%; max-width: none;
   display: flex; align-items: center; justify-content: space-between;
-  gap: 1rem;
+  gap: var(--s-4);
+  /* Mobile-first: the tighter inline padding is the base, and the dock only
+     earns the wider one once there is room for it (Tailwind sm). */
+  padding-inline: var(--s-4);
 }
-@media (max-width: 560px) { .header-in { padding-inline: .9rem; } }
+@media (min-width: 40rem) { .header-in { padding-inline: var(--s-5); } }
 .wordmark {
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .12em; text-transform: lowercase;
   text-decoration: none; color: var(--ink);
-  display: inline-flex; align-items: center; gap: .6rem;
+  display: inline-flex; align-items: center; gap: var(--s-2);
 }
 /* The mark rides in a filled disc, same treatment as the theme toggle, so
    the two ends of the dock rhyme. */
@@ -503,15 +564,15 @@ h1, h2, h3 {
 }
 .wordmark svg { color: var(--accent); flex: none; }
 
-.nav { display: flex; align-items: center; gap: .15rem; }
-.nav .theme-toggle { margin-left: .5rem; }
+.nav { display: flex; align-items: center; gap: var(--s-1); }
+.nav .theme-toggle { margin-left: var(--s-2); }
 .nav-link {
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--ink-mut); text-decoration: none;
   /* A pill, not a rule: underlines read as links in body copy and fight the
      dock's rounded language. */
-  padding: .5rem .7rem; min-height: 32px;
+  padding: var(--s-2) var(--s-3); min-height: 32px;
   display: inline-flex; align-items: center;
   border-radius: var(--radius-pill);
   transition: color var(--ease), background var(--ease);
@@ -560,9 +621,9 @@ h1, h2, h3 {
   display: grid;
   /* right offset matches .header-in's padding so the panel lines up under
      the trigger rather than under the pill's outer edge */
-  position: absolute; top: calc(100% + .7rem); right: .9rem;
-  min-width: 12.5rem; padding: .5rem;
-  gap: .15rem;
+  position: absolute; top: calc(100% + var(--s-3)); right: var(--s-4);
+  min-width: 12.5rem; padding: var(--s-2);
+  gap: var(--s-1);
   border: 1px solid var(--line); border-radius: var(--radius);
   /* Near-opaque: this floats over body copy, and at 78% the text beneath
      read straight through it. */
@@ -577,14 +638,14 @@ h1, h2, h3 {
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--ink-2); text-decoration: none;
-  padding: .7rem .8rem; border-radius: var(--radius-sm);
+  padding: var(--s-3); border-radius: var(--radius-sm);
   min-height: 44px; display: flex; align-items: center;
 }
 .nav-panel-link:hover { color: var(--ink); background: var(--surface-2); }
 .nav-panel-foot {
   display: flex; justify-content: flex-start;
-  padding: .45rem .4rem .15rem;
-  margin-top: .25rem; border-top: 1px solid var(--line);
+  padding: var(--s-2) var(--s-2) var(--s-1);
+  margin-top: var(--s-1); border-top: 1px solid var(--line);
 }
 
 @container dock (max-width: 500px) {
@@ -608,7 +669,7 @@ h1, h2, h3 {
 .btn {
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .13em; text-transform: uppercase;
-  padding: .85rem 1.5rem; text-decoration: none; cursor: pointer;
+  padding: var(--s-3) var(--s-6); text-decoration: none; cursor: pointer;
   min-height: 44px; display: inline-flex; align-items: center;
   border: 1px solid var(--accent);
   border-radius: var(--radius-pill);
@@ -640,24 +701,28 @@ h1, h2, h3 {
   display: grid; grid-template-columns: minmax(0, 1fr);
   align-content: center; justify-content: normal;
   /* clears the floating dock rather than sitting below a bar */
-  padding-block: calc(var(--header-h) + clamp(3rem, 8vh, 5rem)) clamp(3.5rem, 9vh, 6rem);
+  padding-block: calc(var(--header-h) + clamp(var(--s-12), 8vh, var(--s-20)))
+                 clamp(var(--s-14), 9vh, var(--s-24));
 }
 .hero h1 {
   font-size: var(--t-hero);
   letter-spacing: -0.055em;
-  margin-block: 1.15rem 0;
+  margin-block: var(--s-5) 0;
 }
 .hero h1 span { display: block; }
 .hero h1 span + span { color: var(--ink-mut); }
 .hero-deck {
   color: var(--ink-2);
   font-size: var(--t-deck); line-height: 1.5;
-  max-width: 50ch; margin-block: 1.5rem 0;
+  max-width: 50ch; margin-block: var(--s-6) 0;
 }
-.hero-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2rem; }
+.hero-actions {
+  display: flex; flex-wrap: wrap;
+  gap: var(--s-action-gap); margin-top: var(--s-actions-top);
+}
 .hero-roles {
-  margin-top: clamp(2.25rem, 6vh, 3.5rem); padding-top: 1.2rem;
-  display: flex; flex-wrap: wrap; gap: .45rem 1.75rem;
+  margin-top: clamp(var(--s-9), 6vh, var(--s-14)); padding-top: var(--s-5);
+  display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-7);
   font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
 }
 .hero-roles b { color: var(--ink-2); font-weight: 400; }
@@ -675,7 +740,7 @@ h1, h2, h3 {
    old model stacked hairlines edge to edge; this one gives each item its own
    plate, spaced apart, so the ground shows between them. */
 .rows {
-  display: flex; flex-direction: column; gap: .6rem;
+  display: flex; flex-direction: column; gap: var(--s-card-gap);
   margin-inline: calc(-1 * var(--row-pad));
 }
 /* Cards sit as faint glass at rest and firm up on hover, rather than
@@ -683,13 +748,13 @@ h1, h2, h3 {
    transform, and the two shadow stacks. */
 .row {
   position: relative; isolation: isolate;
-  display: grid; gap: .75rem clamp(1rem, 2.5vw, 2rem);
+  display: grid; gap: var(--s-3) clamp(var(--s-4), 2.5vw, var(--s-8));
   /* Inline padding is the bleed (minus the 1px border, which sits between
      the negative margin and the padding) so content lands on the section
      rail — but never less than --card-pad-min, or a narrow viewport leaves
      text jammed against the plate: at 393px the bleed is only 8px.
      Above ~700px the bleed wins and rail alignment is exact. */
-  padding: clamp(1.25rem, 2.2vw, 1.85rem)
+  padding: clamp(var(--s-5), 2.2vw, var(--s-7))
            max(calc(var(--row-pad) - 1px), var(--card-pad-min));
   border: 1px solid transparent;
   border-radius: var(--radius);
@@ -753,26 +818,26 @@ h1, h2, h3 {
 @media (prefers-reduced-motion: reduce) {
   .row:hover .arrow, .more:hover .arrow { transform: none; }
 }
-.row p { color: var(--ink-2); margin-block: .55rem 0; max-width: 58ch; }
+.row p { color: var(--ink-2); margin-block: var(--s-2) 0; max-width: 58ch; }
 
-/* Work row. The ordinal and the status share one left rail: the status used
-   to sit in a third column at the far right, which opened a measured 339px
-   of dead space between the description and the label in every row. Stacking
-   it under the number keeps the metadata together and closes the gap. */
-.row-work { grid-template-columns: 7rem minmax(0, 1fr); }
-.row-meta { display: flex; flex-direction: column; gap: .5rem; }
-.tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .8rem; }
+/* Work row. From md up the ordinal and the status share one left rail: the
+   status used to sit in a third column at the far right, which opened a
+   measured 339px of dead space between the description and the label in every
+   row. Stacking it under the number keeps the metadata together and closes the
+   gap. The grid itself is declared mobile-first further down. */
+.row-meta { display: flex; }
+.tags { display: flex; flex-wrap: wrap; gap: var(--s-1); margin-top: var(--s-3); }
 /* Soft chips, not outlined boxes: fills read as floating, borders as fencing. */
 .tag {
   font-family: var(--font-mono); font-size: var(--t-mono-xs); letter-spacing: .05em;
   color: var(--chip-ink); background: var(--surface-2);
-  border-radius: var(--radius-pill); padding: .26rem .66rem;
+  border-radius: var(--radius-pill); padding: var(--s-1) var(--s-3);
   box-shadow: inset 0 1px 0 var(--edge-top);
 }
 /* State is named, and the marker is a shape — there is no hue to lean on.
    The shape is the identity star, same as the wordmark. */
 .status {
-  display: inline-flex; align-items: center; gap: .42rem;
+  display: inline-flex; align-items: center; gap: var(--s-2);
   font-family: var(--font-mono); font-size: var(--t-mono-xs);
   letter-spacing: .11em; text-transform: uppercase;
   color: var(--ink-mut); white-space: nowrap;
@@ -796,104 +861,112 @@ h1, h2, h3 {
   50%      { transform: scale(.72); opacity: .5; }
 }
 
-/* writing row */
-.row-post {
-  grid-template-columns: 7rem minmax(0, 1fr) auto;
-  align-items: baseline; padding-block: 1.05rem;
-}
+/* writing row. Grid declared mobile-first below. */
+.row-post { align-items: baseline; padding-block: var(--s-4); }
 .row-post h3 { font-size: var(--t-title); font-weight: 700; letter-spacing: -0.022em; }
 .row-post .meta {
   font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
   letter-spacing: .04em; white-space: nowrap;
 }
 .more {
-  display: inline-block; margin-top: 1.4rem;
+  display: inline-block; margin-top: var(--s-6);
   font-family: var(--font-mono); font-size: var(--t-mono); letter-spacing: .1em;
   color: var(--ink); text-decoration: none;
-  border-bottom: 1px solid var(--accent); padding-bottom: .2rem;
+  border-bottom: 1px solid var(--accent); padding-bottom: var(--s-1);
 }
 
-@media (max-width: 760px) {
-  /* A post's left rail is just an ordinal, so it still fits a 2.5rem track. */
-  .row-post { grid-template-columns: 2.5rem minmax(0, 1fr); }
-  .row-post .meta { grid-column: 2; }
-  /* A work row's left rail carries the ordinal AND the status, which cannot
-     fit 2.5rem: the track stayed fixed while the flex content ran on, so the
-     status overflowed its column and printed on top of the description.
-     Stack the row instead and let the meta be a full-width strip on top. */
-  .row-work { grid-template-columns: minmax(0, 1fr); }
+/* Mobile-first. The stacked forms below are the BASE, and the two-column rails
+   are added back at Tailwind's md (48rem/768px) — previously this was a
+   max-width block, so the wide layout was the default and narrow screens were
+   the exception being patched. Same result at every width, stated the other
+   way round: measured, a work row's left rail carries the ordinal AND the
+   status and cannot fit a 2.5rem track, so below md it stacks and the meta
+   becomes a full-width strip; a post's rail is just an ordinal, so it keeps a
+   narrow track. */
+.row-post { grid-template-columns: 2.5rem minmax(0, 1fr); }
+.row-post .meta { grid-column: 2; }
+.row-work { grid-template-columns: minmax(0, 1fr); }
+.row-work .row-meta {
+  flex-direction: row; align-items: center; gap: var(--s-3);
+  flex-wrap: wrap;
+}
+
+@media (min-width: 48rem) {
+  .row-post { grid-template-columns: 7rem minmax(0, 1fr) auto; }
+  .row-post .meta { grid-column: auto; }
+  .row-work { grid-template-columns: 7rem minmax(0, 1fr); }
   .row-work .row-meta {
-    flex-direction: row; align-items: center; gap: .75rem;
-    flex-wrap: wrap;
+    flex-direction: column; align-items: stretch; gap: var(--s-2);
   }
 }
 
 /* --------------------------------------------------------------- contact -- */
-/* The one inverted block on the page. With no accent hue, a full material
-   swap is the strongest emphasis available — so it is spent exactly once. */
+/* Was the one inverted block on the page: it wore --accent as its ground and
+   swapped every child colour to match. That made it the loudest object here by
+   a wide margin, and against the glass cards above it read as a different
+   material system rather than the same one at more weight.
+   It now wears the SAME glass panel as the header and as a settled .row — dark
+   on dark, light on light. Emphasis comes from size, the shadow lift, and the
+   solid button, not from a material swap. Because the ground is now the normal
+   ground, every child override below could go: the eyebrow, deck, and both
+   button variants inherit their standard treatment and stay legible without a
+   single local colour rule.
 
-/* Floats as an inset slab rather than spanning edge to edge. Full-bleed made
-   it a band across the page; inset and rounded, it reads as the one object
-   sitting on top of everything else. */
-/* Sits inside .wide and bleeds by exactly --row-pad, the same as the cards,
-   so all three sections share one outer edge at every width. Previously it
-   was margined off the viewport instead, which made it wider than the cards
-   at 1280 and narrower at 768. */
+   Floats as an inset slab rather than spanning edge to edge. Full-bleed made
+   it a band across the page; inset and rounded, it reads as one object sitting
+   on top of everything else.
+   Sits inside .wide and bleeds by exactly --row-pad, the same as the cards,
+   so all three sections share one outer edge at every width. */
 .contact {
-  background: var(--accent); color: var(--on-accent);
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid transparent;
   border-radius: var(--radius);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / .10),
-    inset 0 -1px 0 rgb(0 0 0 / .12),
+    inset 0 1px 0 var(--edge-top),
+    inset 0 -1px 0 var(--edge-bottom),
+    inset 0 0 0 1px var(--glass-ring),
     var(--shadow-lift);
   margin-inline: calc(-1 * var(--row-pad));
-  padding-block: clamp(3rem, 8vh, 5.5rem);
-  padding-inline: max(calc(var(--row-pad) + clamp(.5rem, 2.5vw, 2rem)),
-                      calc(var(--card-pad-min) + .35rem));
+  padding-block: var(--s-contact-block);
+  padding-inline: max(calc(var(--row-pad) + clamp(var(--s-2), 2.5vw, var(--s-8))),
+                      calc(var(--card-pad-min) + var(--s-1)));
 }
-.contact .eyebrow { color: color-mix(in srgb, var(--on-accent) 62%, transparent); }
-.contact h2 { font-size: var(--t-h2); letter-spacing: -0.05em; margin-block: .7rem 0; }
+/* Same fallback the other glass surfaces take: without backdrop-filter the
+   translucent fill alone reads as a barely-there tint. */
+@supports not (backdrop-filter: blur(1px)) {
+  .contact { background: var(--surface); }
+}
+.contact h2 {
+  font-size: var(--t-h2); letter-spacing: -0.05em;
+  margin-block: var(--s-head-gap) 0;
+}
 /* :not(.eyebrow) is load-bearing — a bare `.contact p` outranks `.eyebrow`
    (0,1,1 vs 0,1,0) and silently re-sizes the label to deck size. */
 .contact p:not(.eyebrow) {
-  color: color-mix(in srgb, var(--on-accent) 80%, transparent);
-  max-width: 46ch; margin-block: 1rem 0;
+  color: var(--ink-2);
+  max-width: 46ch; margin-block: var(--s-4) 0;
   font-size: var(--t-deck); line-height: 1.5;
 }
-.contact-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2rem; }
-.contact .btn { border-color: var(--on-accent); }
-.contact .btn-solid { background: var(--on-accent); color: var(--accent); }
-.contact .btn-solid:hover { background: transparent; color: var(--on-accent); }
-/* Inside the slab the ground is the accent material, so glass must be mixed
-   from the LOCAL ink. The generic .btn-ghost fill is --surface, which over
-   the inverted slab landed as mid-grey under light text: the email read at
-   roughly 2:1. Tint with --on-accent instead and it stays legible. */
-.contact .btn-ghost {
-  color: var(--on-accent);
-  border-color: color-mix(in srgb, var(--on-accent) 45%, transparent);
-  background: color-mix(in srgb, var(--on-accent) 8%, transparent);
-  box-shadow: none;
-}
-.contact .btn-ghost:hover {
-  border-color: var(--on-accent);
-  background: color-mix(in srgb, var(--on-accent) 15%, transparent);
-  box-shadow: none;
+.contact-actions {
+  display: flex; flex-wrap: wrap;
+  gap: var(--s-2); margin-top: var(--s-8);
 }
 
 /* ---------------------------------------------------------------- footer -- */
 
-.site-footer { padding-top: clamp(1rem, 3vh, 2rem); }
+.site-footer { padding-top: clamp(var(--s-4), 3vh, var(--s-8)); }
 .footer-in {
-  padding-block: clamp(2.5rem, 6vh, 4rem);
+  padding-block: clamp(var(--s-10), 6vh, var(--s-16));
   display: flex; flex-wrap: wrap; justify-content: space-between;
-  gap: 2rem clamp(1rem, 4vw, 3rem);
+  gap: var(--s-8) clamp(var(--s-4), 4vw, var(--s-12));
 }
 .footer-sign {
   font-family: var(--font-display); font-weight: 760;
   font-size: clamp(1.2rem, 2.2vw, 1.7rem); letter-spacing: -0.04em;
   max-width: 16ch;
 }
-.footer-links { display: flex; flex-wrap: wrap; gap: .6rem 1.1rem; align-items: center; }
+.footer-links { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); align-items: center; }
 .footer-links a {
   font-family: var(--font-mono); font-size: var(--t-mono);
   color: var(--ink-mut); text-decoration: none;
@@ -902,12 +975,12 @@ h1, h2, h3 {
 .footer-links a:hover { color: var(--ink); border-bottom-color: var(--accent); }
 /* Icon links: colour shift only (an underline under a glyph reads as clutter),
    and padding brings the 18px mark up to a >=24px hit target. */
-.footer-links .icon-link { display: inline-flex; padding: .3rem; border-bottom: 0; }
+.footer-links .icon-link { display: inline-flex; padding: var(--s-1); border-bottom: 0; }
 .footer-links .icon-link:hover { color: var(--ink); border-bottom: 0; }
 .footer-links .icon-link svg { display: block; }
 .footer-bar {
-  padding-block: 1.25rem;
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem;
+  padding-block: var(--s-5);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3);
   font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
 }
 .footer-bar .build { font-variant-numeric: tabular-nums; letter-spacing: .04em; }
@@ -935,11 +1008,11 @@ h1, h2, h3 {
    box without changing the line box, so nothing reflows.
    Measured before: role links were 15px tall, `.more` 23px, icons 28px. */
 @media (pointer: coarse) {
-  .footer-links .icon-link { padding: .8rem; }
-  .footer-links a { padding-block: .5rem; }
-  .hero-roles a { padding-block: .4rem; }
-  .more { padding-block: .35rem; }
-  .row-post { padding-block: 1.3rem; }
+  .footer-links .icon-link { padding: var(--s-3); }
+  .footer-links a { padding-block: var(--s-2); }
+  .hero-roles a { padding-block: var(--s-2); }
+  .more { padding-block: var(--s-1); }
+  .row-post { padding-block: var(--s-5); }
   .nav-link { min-height: 44px; }
   .theme-toggle, .nav-trigger { width: 44px; height: 44px; }
   .wordmark .mark { width: 38px; height: 38px; }
@@ -965,7 +1038,7 @@ h1, h2, h3 {
 a, button { -webkit-tap-highlight-color: transparent; }
 
 /* Notches and home indicators. */
-.header { top: max(clamp(.6rem, 1.6vh, 1.1rem), env(safe-area-inset-top)); }
+.header { top: max(var(--header-top), env(safe-area-inset-top)); }
 .site-footer { padding-bottom: env(safe-area-inset-bottom); }
 .wide { padding-inline: max(var(--gutter), env(safe-area-inset-left)); }
 
@@ -1025,7 +1098,10 @@ a, button { -webkit-tap-highlight-color: transparent; }
     /* The muted second hero line keeps its own base so it stays the quieter
        of the two while still catching the light. */
     .hero h1 span + span { color: transparent; --glow-base: var(--ink-mut); }
-    .contact [data-glow] { --glow-base: var(--on-accent); }
+    /* The contact heading used to need `--glow-base: var(--on-accent)` because
+       it sat on the inverted slab. On glass it takes the normal --ink base
+       like every other glow heading — left in place it painted the h2
+       obsidian-on-obsidian and the headline all but vanished. */
   }
 }
 
