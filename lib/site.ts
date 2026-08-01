@@ -79,17 +79,21 @@ export const hero = {
 // the number is worth.
 //   60+     69 ai.rei.* jobs loaded in launchd; 66 enabled plists, 81 daemon
 //           contracts under usr/daemons/. "60+" is the durable floor.
-//   30 min  the daemon think-loop, StartInterval=1800.
-//   $0      the default model tier is local (Tier 0/1). Frontier tiers exist
-//           and cost money — they are escalation, not the default.
-//   6+ yrs  nexus/context/user/about-me.md.
+//   30 min      the daemon think-loop, StartInterval=1800.
+//   local-first Tier 0/1 is the default route; frontier tiers are escalation,
+//               not the baseline. Was "$0", which was true of the default tier
+//               but read as a claim about the size of the budget — see the
+//               spend ceiling note in §Guardrails for the same reasoning.
+//   6+ yrs      nexus/context/user/about-me.md.
 // ---------------------------------------------------------------------------
 export type Stat = { value: string; unit?: string; label: string };
 
 export const ledger: Stat[] = [
   { value: "60", unit: "+", label: "agents on one substrate" },
   { value: "30", unit: "min", label: "autonomous cycle" },
-  { value: "$0", label: "default model tier, local" },
+  // Label drops the trailing ", local" the figure used to need — the value
+  // says it now, and "local ... local" read as a stutter.
+  { value: "local-first", label: "default model tier" },
   { value: "6", unit: "+ yrs", label: "security engineering" },
 ];
 
@@ -220,7 +224,11 @@ export const loop = {
 //
 // SOURCING — all six re-verified against the workspace on 2026-07-31. Rendered
 // as hairline data rows, not marketing cards: the point is that each one is a
-// number somebody could check.
+// claim somebody could check.
+//
+// Values stay generic where a figure would describe my workspace rather than
+// the control — these are meant to read as mechanisms a client gets, not as a
+// spec sheet for one deployment.
 // ---------------------------------------------------------------------------
 export type Guard = { name: string; value: string; desc: string };
 
@@ -232,8 +240,12 @@ export const guardrails = {
   items: [
     {
       name: "Spend ceiling",
-      value: "$100 / mo",
-      desc: "A hard monthly gate on model spend. Trip it and the kill switch fires — the fleet stops, it does not degrade quietly.",
+      // Deliberately not a figure. The number this runs at is my own
+      // workspace's, and printing it invites a reader to price the engagement
+      // off it — or to read the mechanism as only working at that scale. What
+      // is being sold is the gate, which sizes to whatever it is pointed at.
+      value: "enforced",
+      desc: "A hard monthly ceiling on model spend, sized to the deployment. Trip it and the kill switch fires — the fleet stops, it does not degrade quietly.",
     },
     {
       name: "Sender kill switch",
