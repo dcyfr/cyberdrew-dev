@@ -21,20 +21,26 @@ export function Field() {
     <section className="bay field" aria-labelledby="field-cap">
       <div className="wide">
         <figure className="plate" data-reveal>
-          <Image
-            className="plate-img"
-            src={plate}
-            alt={field.alt}
-            sizes="(min-width: 64rem) 62rem, 100vw"
-            placeholder="blur"
-          />
-          {/* Warps the render so the mass at the centre actually changes
-              shape. Sits over the <img> and only becomes visible once it has
-              the texture uploaded, so the still plate is what shows on no
-              WebGL, no motion, or a lost context. `plate.src` rather than the
-              optimised URL: this is a texture upload, not a layout image. */}
-          <FieldMorph src={plate.src} />
-          <AgentField />
+          {/* The three layers share one box, and that box — not the card —
+              carries the asset's aspect. It is what lets the card grow taller
+              than the artwork on a phone without the drawn ring sliding off
+              the rendered one: every layer is measured from here. */}
+          <div className="plate-art">
+            <Image
+              className="plate-img"
+              src={plate}
+              alt={field.alt}
+              sizes="(min-width: 64rem) 62rem, 100vw"
+              placeholder="blur"
+            />
+            {/* Warps the render so the mass at the centre actually changes
+                shape. Sits over the <img> and only becomes visible once it has
+                the texture uploaded, so the still plate is what shows on no
+                WebGL, no motion, or a lost context. `plate.src` rather than the
+                optimised URL: this is a texture upload, not a layout image. */}
+            <FieldMorph src={plate.src} />
+            <AgentField />
+          </div>
           <figcaption className="plate-cap" id="field-cap">
             {field.caption}
             {/* Middot, not a comma: the hint is an imperative after a
