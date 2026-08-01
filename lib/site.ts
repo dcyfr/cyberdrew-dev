@@ -79,17 +79,21 @@ export const hero = {
 // the number is worth.
 //   60+     69 ai.rei.* jobs loaded in launchd; 66 enabled plists, 81 daemon
 //           contracts under usr/daemons/. "60+" is the durable floor.
-//   30 min  the daemon think-loop, StartInterval=1800.
-//   $0      the default model tier is local (Tier 0/1). Frontier tiers exist
-//           and cost money — they are escalation, not the default.
-//   6+ yrs  nexus/context/user/about-me.md.
+//   30 min      the daemon think-loop, StartInterval=1800.
+//   local-first Tier 0/1 is the default route; frontier tiers are escalation,
+//               not the baseline. Was "$0", which was true of the default tier
+//               but read as a claim about the size of the budget — see the
+//               spend ceiling note in §Guardrails for the same reasoning.
+//   6+ yrs      nexus/context/user/about-me.md.
 // ---------------------------------------------------------------------------
 export type Stat = { value: string; unit?: string; label: string };
 
 export const ledger: Stat[] = [
   { value: "60", unit: "+", label: "agents on one substrate" },
   { value: "30", unit: "min", label: "autonomous cycle" },
-  { value: "$0", label: "default model tier, local" },
+  // Label drops the trailing ", local" the figure used to need — the value
+  // says it now, and "local ... local" read as a stutter.
+  { value: "local-first", label: "default model tier" },
   { value: "6", unit: "+ yrs", label: "security engineering" },
 ];
 
