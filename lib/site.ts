@@ -158,7 +158,7 @@ export const work = {
       // Count tracks the ledger above — 69 ai.rei.* jobs loaded at the last
       // check. Two different numbers for the same fleet on one page is the
       // drift this file exists to prevent.
-      desc: "Sixty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. Runs autonomously on a local-first model stack under a hard budget.",
+      desc: "Sixty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. They run autonomously on a local-first model stack under a hard budget.",
       tags: ["Multi-agent", "Local-first", "Self-healing"],
       status: { label: "Running", kind: "running" },
     },
@@ -199,13 +199,13 @@ export const loop = {
   eyebrow: "The loop", index: "02",
   headline: "The fleet doesn't wait to be asked",
   deck:
-    "It wakes on a schedule, reads its own state, picks work off the queue, and writes down what it learned — then does it again, without being asked. Five states, each with something that can stop it.",
+    "It wakes on a schedule, reads its own state, picks work off the queue, and writes down what it learned. Then it starts over. Five states, each with something that can stop it.",
   steps: [
     {
       num: "01",
       name: "Observe",
       tier: "no model",
-      desc: "Reads the workspace as it actually is — services, queues, git state, what the last cycle left behind.",
+      desc: "Reads the workspace as it actually is: services, queues, git state, what the last cycle left behind.",
       guard: "Restricted paths never enter context: message stores, journals, backups.",
     },
     {
@@ -226,7 +226,7 @@ export const loop = {
       num: "04",
       name: "Act",
       tier: "sandboxed",
-      desc: "Takes the action for real — opens the PR, restores the service, publishes the brief.",
+      desc: "Takes the action for real. Opens the PR, restores the service, publishes the brief.",
       guard: "Allowlisted binaries only. No metacharacters, no pipe to rm, no private-IP fetches.",
     },
     {
@@ -275,12 +275,12 @@ export const guardrails = {
       // off it — or to read the mechanism as only working at that scale. What
       // is being sold is the gate, which sizes to whatever it is pointed at.
       value: "enforced",
-      desc: "A hard monthly ceiling on model spend, sized to the deployment. Trip it and the kill switch fires — the fleet stops, it does not degrade quietly.",
+      desc: "A hard monthly ceiling on model spend, sized to the deployment. Trip it and the kill switch fires. The fleet stops rather than degrading quietly.",
     },
     {
       name: "Sender kill switch",
       value: "< 1 s",
-      desc: "Every outbound path — mail, chat, webhooks — honours one pause flag. No sends within a second of it being set.",
+      desc: "Every outbound path (mail, chat, webhooks) honours one pause flag. No sends within a second of it being set.",
     },
     {
       name: "Credential isolation",
@@ -300,7 +300,7 @@ export const guardrails = {
     {
       name: "Self-heal watchdog",
       value: "3 / hr",
-      desc: "Downed services restart on graduated trust — dry-run first, and never more than three times an hour before escalation.",
+      desc: "Downed services restart on graduated trust. Dry-run first, and never more than three times an hour before escalation.",
     },
   ] as Guard[],
 };
@@ -375,14 +375,14 @@ export const contact = {
     {
       num: "02",
       name: "A governed fleet",
-      desc: "Agents already run. The open question is what stops them — spend, sends, credentials, the blast radius of a bad tool call.",
+      desc: "Agents already run. The open question is what stops them: spend, sends, credentials, the blast radius of a bad tool call.",
       outcome: "Kill switches, ceilings, and an audit trail that holds up",
     },
     {
       num: "03",
       name: "A hard look at what you run",
-      desc: "An audit of the system you already have: where an agent can act, what it can reach, and what happens on the day one goes wrong.",
-      outcome: "Findings, ranked, with the order to fix them in",
+      desc: "An audit of the system you already have: where an agent can act, what it can reach, and what happens when one of them goes wrong.",
+      outcome: "Ranked findings, and the order to fix them in",
     },
   ] as Engagement[],
   primary: { label: "Book an intro call", href: person.cal },

@@ -17,8 +17,10 @@ import { credentials } from "@/lib/site";
 export function Credentials() {
   return (
     <p className="creds">
+      {/* title and the .sr-only expansion carry the same string, so the hover
+          text and the announced text read identically. */}
       {credentials.items.map((c) => (
-        <abbr className="cred" key={c.abbr} title={`${c.name} — ${c.issuer}`}>
+        <abbr className="cred" key={c.abbr} title={`${c.name}, ${c.issuer}`}>
           {c.abbr}
           <span className="sr-only">{` (${c.name}, ${c.issuer})`}</span>
         </abbr>
