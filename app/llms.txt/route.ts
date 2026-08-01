@@ -1,9 +1,9 @@
 import {
   contact,
   credentials,
+  getLedger,
   guardrails,
   hero,
-  ledger,
   loop,
   person,
   socials,
@@ -54,7 +54,7 @@ function render(posts: readonly Post[]): string {
     "## By the numbers",
     // The page sets the unit off with a margin; plain text has to earn the
     // gap explicitly, and only for word units — "60+" must not become "60 +".
-    ...ledger.map((s) => {
+    ...getLedger().map((s) => {
       const unit = s.unit ? (/^[a-z]/i.test(s.unit) ? ` ${s.unit}` : s.unit) : "";
       return `- ${s.value}${unit}: ${s.label}`;
     }),

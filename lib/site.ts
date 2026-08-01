@@ -77,25 +77,55 @@ export const hero = {
 // 2026-07-31. If one changes in the system, change it here. A stale number on
 // a page whose whole argument is "these claims are checkable" costs more than
 // the number is worth.
-//   60+     69 ai.rei.* jobs loaded in launchd; 66 enabled plists, 81 daemon
-//           contracts under usr/daemons/. "60+" is the durable floor.
-//   30 min      the daemon think-loop, StartInterval=1800.
+//
+// The rule these follow: a figure earns its place only if it is either
+// self-maintaining or coarse enough to stay true for a long time. An exact
+// number that nobody remembers to update is the failure mode.
+//
+//   60+         69 ai.rei.* jobs loaded in launchd; 66 enabled plists, 81
+//               daemon contracts under usr/daemons/. "60+" is the durable
+//               floor, and the value/unit split scales without any layout
+//               work — "100"/"+" and "1000"/"+" set on one line in the same
+//               column. Raise the floor when the fleet clears the next order
+//               of magnitude; do not soften it to "dozens", which reads as
+//               fewer than the real number.
+//   continuous  the daemon runs unattended on a fixed schedule. The interval
+//               itself is deliberately not published: it is an operational
+//               detail of my workspace, it would date the moment it is tuned,
+//               and what a reader needs is that it runs without being asked.
 //   local-first Tier 0/1 is the default route; frontier tiers are escalation,
 //               not the baseline. Was "$0", which was true of the default tier
 //               but read as a claim about the size of the budget — see the
 //               spend ceiling note in §Guardrails for the same reasoning.
-//   6+ yrs      nexus/context/user/about-me.md.
+//   N+ yrs      DERIVED, so it cannot go stale. Counts from the first security
+//               role in nexus/context/user/about-me.md (IT Security
+//               Specialist, Escambia County, 2020), which is what that file's
+//               own "6+ years" resolves to. Change the constant, not the copy.
 // ---------------------------------------------------------------------------
 export type Stat = { value: string; unit?: string; label: string };
 
-export const ledger: Stat[] = [
-  { value: "60", unit: "+", label: "agents on one substrate" },
-  { value: "30", unit: "min", label: "autonomous cycle" },
-  // Label drops the trailing ", local" the figure used to need — the value
-  // says it now, and "local ... local" read as a stutter.
-  { value: "local-first", label: "default model tier" },
-  { value: "6", unit: "+ yrs", label: "security engineering" },
-];
+/** First security role — see the sourcing note above. */
+export const SECURITY_START_YEAR = 2020;
+
+/**
+ * The ledger is a function rather than a constant because one of its figures
+ * is derived from the current year. Keeping the clock read here — called from
+ * server components at render — leaves this module free of module-scope
+ * non-determinism, which matters because `lib/site.ts` is also pulled into the
+ * client bundle by NavMenu.
+ */
+export function getLedger(): Stat[] {
+  const years = new Date().getUTCFullYear() - SECURITY_START_YEAR;
+
+  return [
+    { value: "60", unit: "+", label: "agents on one substrate" },
+    { value: "continuous", label: "autonomous cycle" },
+    // Label drops the trailing ", local" the figure used to need — the value
+    // says it now, and "local ... local" read as a stutter.
+    { value: "local-first", label: "default model tier" },
+    { value: String(years), unit: "+ yrs", label: "security engineering" },
+  ];
+}
 
 // ---------------------------------------------------------------------------
 // Work.
@@ -169,7 +199,7 @@ export const loop = {
   eyebrow: "The loop", index: "02",
   headline: "The fleet doesn't wait to be asked",
   deck:
-    "Every thirty minutes it wakes, reads its own state, picks work off the queue, and writes down what it learned. Five states, each with something that can stop it.",
+    "It wakes on a schedule, reads its own state, picks work off the queue, and writes down what it learned — then does it again, without being asked. Five states, each with something that can stop it.",
   steps: [
     {
       num: "01",
@@ -209,7 +239,7 @@ export const loop = {
   ] as LoopStep[],
   // The thing that makes it a loop rather than a list, said in type instead
   // of built as a pinned animation.
-  close: "and thirty minutes later, 01 again",
+  close: "and on the next cycle, 01 again",
 };
 
 // ---------------------------------------------------------------------------
