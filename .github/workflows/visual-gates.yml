@@ -54,7 +54,15 @@ jobs:
       #
       # Tripwire if it ever regresses: `grep -c @emnapi package-lock.json`
       # should be 19. It was 9 while broken.
-      - run: npm ci --no-audit --no-fund
+      #
+      # --ignore-scripts: this job builds and renders the site, it never needs
+      # a package's install hooks. The two that declare them (sharp,
+      # unrs-resolver) ship prebuilt binaries as ordinary optional deps, so the
+      # build is unaffected — confirmed by comparing gate output with and
+      # without: identical, 0 at-rest failures and 16 intent assertions both
+      # ways. Vercel runs its own install for the real deploy and is not
+      # touched by this flag.
+      - run: npm ci --no-audit --no-fund --ignore-scripts
 
       # Deliberately --no-save, and NOT a devDependency in package.json, so
       # the lockfile situation above is not made worse. Exact version, no
