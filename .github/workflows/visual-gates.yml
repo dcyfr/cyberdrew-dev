@@ -1,0 +1,76 @@
+# Two gates that both need a real browser and a real build.
+#
+# audit:contrast — pixel-truth contrast. The site is built almost entirely out
+#   of backdrop-filter glass, so the effective background behind any glyph is
+#   the blurred page rather than the panel's declared fill. A token-based
+#   checker cannot see that and reports comfortable passes for text that is
+#   genuinely hard to read. This measures composited pixels. It runs everything
+#   under reduced motion so animation cannot make results non-deterministic.
+#
+# audit:intent — design-intent assertions, in the DEFAULT motion state. The
+#   contrast gate answers "is this legible", which is not the same question as
+#   "is this what we meant": a bug that made the hero's second line brighter
+#   than intended passed the contrast gate while collapsing the two-tone
+#   headline. Reduced motion also means the contrast gate never exercises the
+#   [data-glow] path at all. This closes both holes.
+#
+# See the header comments in each script for method.
+name: visual gates
+
+on:
+  pull_request:
+    paths:
+      - "app/**"
+      - "components/**"
+      - "lib/**"
+      - "scripts/a11y-contrast.mjs"
+      - "scripts/design-intent.mjs"
+      - ".github/workflows/visual-gates.yml"
+  workflow_dispatch:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Deliberately --no-save, and NOT a devDependency in package.json.
+      # Regenerating this lockfile on a different platform prunes the
+      # optional @emnapi/* entries and breaks `npm ci` on Vercel, so the
+      # lockfile is left strictly alone and the audit's own dependency is
+      # installed out of band. Version pinned so the rendering engine that
+      # produces the numbers is the same one that produced the thresholds.
+      - run: npm i --no-save playwright@1.61.1
+      - run: npx playwright install --with-deps chromium
+
+      - run: npm run build
+
+      - name: Serve
+        run: |
+          npx next start -p 3000 &
+          curl --retry 30 --retry-delay 2 --retry-all-errors \
+               --fail --silent --output /dev/null http://localhost:3000/
+
+      - name: Contrast
+        run: AUDIT_URL=http://localhost:3000/ AUDIT_JSON=contrast-report.json npm run audit:contrast
+
+      # `if: always()` so a contrast failure does not hide an intent failure —
+      # two separate questions, both worth an answer in one run.
+      - name: Design intent
+        if: always()
+        run: AUDIT_URL=http://localhost:3000/ npm run audit:intent
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contrast-report
+          path: contrast-report.json
+          if-no-files-found: ignore
