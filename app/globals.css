@@ -138,8 +138,15 @@
      border can carry it. Hence a dedicated token rather than reaching for
      --line-2 (1.77:1 in dark, 1.64:1 in light — both short).
      Scoped deliberately: controls get a real edge, panels keep hairlines, so
-     the page does not turn into a wireframe. */
-  --edge-control: #6a6a71;
+     the page does not turn into a wireframe.
+
+     Solved against the BRIGHTEST ground, not against --bg. Once the corona
+     landed the ground behind a control was no longer near-black everywhere,
+     and the old #6a6a71 fell to 2.74:1 where the sky is lit. #7e7e86 holds
+     4.88:1 on bare --bg and 3.51:1 at the corona's peak. The intent gate is
+     what caught it; this value tracks the ground, so re-check it if the sky
+     ever changes. */
+  --edge-control: #7e7e86;
   /* The specular sweep: where the light catches a curved surface. Driven by
      CursorGlow, which already writes --gx/--gy/--ga per frame; at --ga 0 this
      resolves to nothing, so a page with no pointer (or no JS) simply never
@@ -152,8 +159,15 @@
      a panel reads as material rather than as a drop shadow. The brightest
      point lands near --line, so ambient light never outshines the quietest
      structural element on the page. */
-  --bloom:       rgb(220 218 213 / .23);
-  --bloom-2:     rgb(220 218 213 / .145);
+  --bloom:       rgb(220 218 213 / .13);
+  --bloom-2:     rgb(220 218 213 / .085);
+  /* The corona in the page ground. Same event as the section artwork, seen
+     from further away: a thin bright annulus with nothing inside it.
+     Held far lower than the artwork's rim — this sits behind every word on the
+     page, so it is a light you notice having seen rather than one you look at. */
+  --sky-corona-in:  rgb(236 236 232 / .028);
+  --sky-corona:     rgb(236 236 232 / .075);
+  --sky-corona-out: rgb(210 220 255 / .038);
   /* the halo a panel throws when it lifts */
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
 
@@ -293,7 +307,7 @@
     --rule-cool:        rgb(68 108 216 / .45);
     --rule-bleed-warm:  rgb(226 128 70 / .22);
     --rule-bleed-cool:  rgb(80 110 216 / .16);
-    --edge-top:    rgb(255 255 255 / .85);
+    --edge-top:    rgb(255 255 255 / .30);
     --edge-bottom: rgb(40 32 24 / .07);
     --glass-ring:  rgb(255 255 255 / .6);
     /* On paper the rim reads as a darker refracted edge, not a brighter one:
@@ -301,8 +315,14 @@
     --lens-rim:    rgb(40 32 24 / .07);
     --spec:        rgb(255 255 255 / .55);
     --edge-control: #847f76;
-    --bloom:       rgb(255 255 255 / .85);
+    --bloom:       rgb(255 255 255 / .30);
     --bloom-2:     rgb(40 32 24 / .035);
+    /* On paper the corona cannot be brighter than the ground, so it reads the
+       way the artwork's spill does: as the shadow the occluder casts rather than
+       the light escaping past it. Same annulus, opposite sign. */
+    --sky-corona-in:  rgb(40 32 24 / .022);
+    --sky-corona:     rgb(40 32 24 / .055);
+    --sky-corona-out: rgb(40 32 24 / .022);
     --glow: 0 0 44px -14px rgb(40 32 24 / .18);
     --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
     --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
@@ -339,14 +359,20 @@
   --rule-cool:        rgb(68 108 216 / .45);
   --rule-bleed-warm:  rgb(226 128 70 / .22);
   --rule-bleed-cool:  rgb(80 110 216 / .16);
-  --edge-top:  rgb(255 255 255 / .85);
+  --edge-top:  rgb(255 255 255 / .30);
   --edge-bottom: rgb(40 32 24 / .07);
   --glass-ring:  rgb(255 255 255 / .6);
   --lens-rim:    rgb(40 32 24 / .07);
   --spec:        rgb(255 255 255 / .55);
   --edge-control: #847f76;
-  --bloom:     rgb(255 255 255 / .85);
+  --bloom:     rgb(255 255 255 / .30);
   --bloom-2:   rgb(40 32 24 / .035);
+  /* On paper the corona cannot be brighter than the ground, so it reads the
+     way the artwork's spill does: as the shadow the occluder casts rather than
+     the light escaping past it. Same annulus, opposite sign. */
+  --sky-corona-in:  rgb(40 32 24 / .022);
+  --sky-corona:     rgb(40 32 24 / .055);
+  --sky-corona-out: rgb(40 32 24 / .022);
   --glow: 0 0 44px -14px rgb(40 32 24 / .18);
   --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
   --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
@@ -388,9 +414,16 @@
   --glass-ring:  rgb(255 255 255 / .06);
   --lens-rim:    rgb(255 255 255 / .10);
   --spec:        rgb(255 255 255 / .07);
-  --edge-control: #6a6a71;
-  --bloom:       rgb(220 218 213 / .23);
-  --bloom-2:     rgb(220 218 213 / .145);
+  --edge-control: #7e7e86;
+  --bloom:       rgb(220 218 213 / .13);
+  --bloom-2:     rgb(220 218 213 / .085);
+  /* The corona in the page ground. Same event as the section artwork, seen
+     from further away: a thin bright annulus with nothing inside it.
+     Held far lower than the artwork's rim — this sits behind every word on the
+     page, so it is a light you notice having seen rather than one you look at. */
+  --sky-corona-in:  rgb(236 236 232 / .028);
+  --sky-corona:     rgb(236 236 232 / .075);
+  --sky-corona-out: rgb(210 220 255 / .038);
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
@@ -467,7 +500,13 @@ body {
 body::before {
   content: "";
   position: fixed;
-  inset: -20vmax;
+  /* inset 0, not -20vmax. The layer used to be roughly forty times the
+     viewport, which meant a gradient placed at "18% 8%" landed thousands of
+     pixels off screen and what you saw was a nearly uniform slice of its
+     falloff. That was survivable while this was three soft blooms. It is not
+     survivable for a corona, which has to sit at a KNOWN place in the frame.
+     Percentages are viewport percentages now. */
+  inset: 0;
   z-index: -1;
   pointer-events: none;
   /* `in oklab` interpolates perceptually, so the ramp steps evenly instead of
@@ -486,10 +525,46 @@ body::before {
      It matters more than a cosmetic gradient: the glass surfaces exist to
      refract this. Without it a blurred panel over a flat field really is just
      a slightly different flat field, exactly as the note on .glass warns. */
+  /* ---- the eclipse ------------------------------------------------------
+     The page is lit by one source: an eclipse sitting mostly off the top-left
+     corner. It is the same light the glass refracts, the same light the
+     specular sweeps come from, and the same event the section artwork draws
+     close up. Three layers, painted back to front.
+
+     It is deliberately mostly OFF FRAME. A corona centred in the viewport is a
+     logo; a corona cropped by the corner is a light source that happens to be
+     there, and it keeps the brightest part away from the middle of the page
+     where the reading happens.
+
+     --ecl-* tokens are shared with the section artwork, so if the disc's
+     lighting changes the ground follows it. */
   background:
-    radial-gradient(42vmax 42vmax at 18% 8%  in oklab, var(--bloom)   0%, transparent 62%),
-    radial-gradient(38vmax 38vmax at 88% 32% in oklab, var(--bloom-2) 0%, transparent 60%),
-    radial-gradient(46vmax 46vmax at 62% 92% in oklab, var(--bloom-2) 0%, transparent 64%);
+    /* 1. the corona itself: an annulus, transparent through the middle where
+          the disc occludes it. Thin relative to its radius, which is what
+          separates an eclipse from a glow. */
+    radial-gradient(circle 42vmax at 16% 6% in oklab,
+      transparent 0 39%,
+      var(--sky-corona-in) 44%,
+      var(--sky-corona) 47%,
+      var(--sky-corona-out) 52%,
+      transparent 76%),
+    /* 2. the skirt: the ambient light, and the reason this is shaped the way
+          it is. The obvious move is a broad glow centred on the same point,
+          and it does not work — measured, the glow's own peak sets the
+          brightest pixel on the page and swamps the corona completely, so the
+          ring stops being visible at ANY alpha while the ground sails past the
+          contrast ceiling.
+          Light from an eclipse does not come from the middle of the disc; it
+          comes from around it. So the skirt is transparent through the core
+          and peaks at the ring before falling away outward. That drops the
+          maximum (the bright region is now an annulus, not a filled disc) and
+          lets the corona actually read. */
+    radial-gradient(circle 96vmax at 16% 6% in oklab,
+      transparent 0 16%,
+      var(--bloom) 34%,
+      transparent 74%),
+    /* 3. a far counter-light, so the opposite corner is not dead ground */
+    radial-gradient(54vmax 54vmax at 88% 92% in oklab, var(--bloom-2) 0%, transparent 68%);
 }
 
 /* Dither. A gradient this large with this small a luminance delta cannot be
