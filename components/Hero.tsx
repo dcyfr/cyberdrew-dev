@@ -62,6 +62,27 @@ export function Hero() {
                 {hero.secondary.label}
               </a>
             </div>
+
+            {/* Roles and credentials live INSIDE the left column now. They used
+                to sit under the whole two-column body, which left the deck's
+                column ending 175px above the figures beside it — measured, the
+                hero's entire dead zone. Moving them here grows the short column
+                instead of padding the tall one, so the two land together.
+
+                Below the stacking point this puts them before the portrait, so
+                the hero closes on the picture and the figures as one signature
+                block rather than trailing two lines of mono after it. */}
+            <p className="hero-roles">
+              {hero.roles.map((r) => (
+                <span key={r.org}>
+                  {r.role},{" "}
+                  <a href={r.href} target="_blank" rel="noreferrer">
+                    {r.org}
+                  </a>
+                </span>
+              ))}
+            </p>
+            <Credentials />
           </div>
 
           {/* Right column: who, then what backs it. The portrait is the only
@@ -83,18 +104,6 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Who I am, in two mono lines: what I do, and what backs it. */}
-        <p className="hero-roles">
-          {hero.roles.map((r) => (
-            <span key={r.org}>
-              {r.role},{" "}
-              <a href={r.href} target="_blank" rel="noreferrer">
-                {r.org}
-              </a>
-            </span>
-          ))}
-        </p>
-        <Credentials />
       </div>
     </section>
   );
