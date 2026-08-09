@@ -59,11 +59,26 @@ const run = async () => {
       colorScheme: theme,
     });
     const page = await ctx.newPage();
-    await page.goto(URL_, { waitUntil: "networkidle" });
+    const resp = await page.goto(URL_, { waitUntil: "networkidle" });
     await page.evaluate((t) => document.documentElement.setAttribute("data-theme", t), theme);
     await page.waitForTimeout(700);
 
     console.log(`\n${theme}`);
+
+    // Fail loudly on "this is not the site". A Vercel preview behind
+    // deployment protection answers 302 to a login page, and every assertion
+    // below then dies on a null querySelector with a TypeError that says
+    // nothing about the actual problem. Check we are looking at the page.
+    const landed = await page.evaluate(() =>
+      !!document.querySelector(".header") && !!document.querySelector(".hero h1"));
+    if (!landed) {
+      const url = page.url();
+      check("page under test actually loaded", false,
+        `HTTP ${resp?.status() ?? "?"} · landed on ${url} · no .header/.hero found ` +
+        `(deployment protection or a redirect?)`);
+      await ctx.close();
+      continue;
+    }
 
     const dom = await page.evaluate(() => {
       const v = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
