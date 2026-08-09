@@ -84,36 +84,33 @@ const run = async () => {
       const v = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
       const h1 = document.querySelector(".hero h1");
       const spans = h1 ? [...h1.querySelectorAll("span")] : [];
-      const glowNodes = [...document.querySelectorAll("[data-glow]")];
-
-      // Which element actually PAINTS the glow for a given text node: the one
-      // carrying the gradient. If that is an ancestor of the span, the span's
-      // own --glow-base is never read.
-      const painter = (el) => {
-        for (let e = el; e; e = e.parentElement) {
-          const cs = getComputedStyle(e);
-          if (cs.backgroundImage && cs.backgroundImage !== "none" &&
-              (cs.backgroundClip === "text" || cs.webkitBackgroundClip === "text")) return e;
-        }
-        return null;
-      };
-
       const line2 = spans[1] || null;
-      const line2Painter = line2 ? painter(line2) : null;
+
+      // Nothing on this page may light TYPE. A gradient clipped to glyphs makes
+      // the text's own colour a moving target for contrast, and it is how the
+      // two-tone headline silently collapsed once before. Catch any element
+      // that has gone back to painting itself.
+      const clipped = [...document.querySelectorAll("h1, h1 span, h2, h3")].filter((e) => {
+        const cs = getComputedStyle(e);
+        return cs.backgroundClip === "text" || cs.webkitBackgroundClip === "text";
+      });
+
+      // The edges that carry the travelling light. ::after only exists inside
+      // the hover + fine-pointer + no-reduced-motion gate, which is exactly the
+      // state this script runs in.
+      const edges = [...document.querySelectorAll("[data-rule-glow]")];
+      const edgesLit = edges.filter(
+        (e) => getComputedStyle(e, "::after").content !== "none",
+      );
 
       return {
         ambient: getComputedStyle(document.body, "::before").backgroundImage,
-        glowCount: glowNodes.length,
-        glowPainting: glowNodes.filter((e) => {
-          const cs = getComputedStyle(e);
-          return cs.backgroundImage !== "none" &&
-                 (cs.backgroundClip === "text" || cs.webkitBackgroundClip === "text");
-        }).length,
+        clippedCount: clipped.length,
+        edgeCount: edges.length,
+        edgesLit: edgesLit.length,
         headerBlur: getComputedStyle(document.querySelector(".header")).backdropFilter,
-        line2Base: line2Painter
-          ? getComputedStyle(line2Painter).getPropertyValue("--glow-base").trim()
-          : null,
-        line2PainterIsSelf: !!(line2Painter && line2Painter === line2),
+        line2Color: line2 ? getComputedStyle(line2).color : null,
+        line1Color: spans[0] ? getComputedStyle(spans[0]).color : null,
         line2Text: line2 ? line2.textContent.trim().slice(0, 24) : null,
         inkMut: v("--ink-mut"),
         ink: v("--ink"),
@@ -135,19 +132,25 @@ const run = async () => {
     check("header glass is blurring", dom.headerBlur !== "none" && !!dom.headerBlur,
       dom.headerBlur || "(none)");
 
-    // 3. Every [data-glow] element paints its gradient. If the treatment is
-    //    ever moved to a wrapper again, this catches it immediately.
-    check("every [data-glow] paints", dom.glowCount > 0 && dom.glowPainting === dom.glowCount,
-      `${dom.glowPainting}/${dom.glowCount} painting`);
+    // 3. Nothing lights type. See the collector for why this is a rule.
+    check("no text is clipped-gradient lit", dom.clippedCount === 0,
+      dom.clippedCount === 0 ? "0 elements with background-clip:text" : `${dom.clippedCount} clipped`);
 
-    // 4. The hero's two-tone headline. The painter of line 2 must be line 2
-    //    itself, or its --glow-base override is dead and the line renders at
-    //    --ink. Assert both the topology and the resolved value.
-    check("hero line 2 paints its own glow", dom.line2PainterIsSelf,
-      dom.line2PainterIsSelf ? `"${dom.line2Text}"` : "painted by an ancestor — override is dead");
-    check("hero line 2 uses the muted tier",
-      !!dom.line2Base && dom.line2Base.toLowerCase() === dom.inkMut.toLowerCase(),
-      `--glow-base ${dom.line2Base || "(none)"} vs --ink-mut ${dom.inkMut}`);
+    //    And every edge that should carry a light actually generates one.
+    check("every lit edge generates its light", dom.edgeCount > 0 && dom.edgesLit === dom.edgeCount,
+      `${dom.edgesLit}/${dom.edgeCount} edges`);
+
+    // 4. The hero's two-tone headline, asserted on the rendered colour rather
+    //    than on any mechanism. It read as one tone in production for months
+    //    while the mechanism looked correct, so the value is what gets checked.
+    const toHex = (rgb) => {
+      const m = (rgb || "").match(/[\d.]+/g);
+      return m ? "#" + m.slice(0, 3).map((v) => (+v).toString(16).padStart(2, "0")).join("") : "(none)";
+    };
+    check("hero line 1 is full ink", toHex(dom.line1Color) === dom.ink.toLowerCase(),
+      `${toHex(dom.line1Color)} vs --ink ${dom.ink}`);
+    check("hero line 2 is the muted tier", toHex(dom.line2Color) === dom.inkMut.toLowerCase(),
+      `${toHex(dom.line2Color)} vs --ink-mut ${dom.inkMut} · "${dom.line2Text}"`);
 
     // 5. Non-text contrast on the controls whose shape IS their affordance.
     //    Sampled one pixel at a time; see the note at the top of this file.

@@ -69,9 +69,6 @@
   --ecl-rim-glow: rgb(236 236 232 / .18);
   --ecl-spill:    rgb(200 210 255 / .10);
   --plate-halo: var(--shadow);
-  /* the temperature poles the cursor glow travels between */
-  --warm: #fff0dc;
-  --cool: #d3e4ff;
   /* The travelling light on a section rule. Warm through the core, cooling
      outward, which is the sweep the macOS treatment runs. Held to a hairline
      plus a soft bleed so it stays a light source rather than a colour: this is
@@ -289,8 +286,6 @@
     --accent:    #0b0b0d;
     --on-accent: #f4f3f0;
     --chip-ink:  #5a5a61;
-    --warm: #6b4a1c;
-    --cool: #163a6b;
     /* Same sweep, resolved for paper. The dark-theme values are pale tints that
        vanish on bone, so these are deeper and more saturated: on a light ground a
        light source reads by hue and depth rather than by brightness. */
@@ -338,8 +333,6 @@
   --accent:    #0b0b0d;
   --on-accent: #f4f3f0;
   --chip-ink:  #5a5a61;
-  --warm: #6b4a1c;
-  --cool: #163a6b;
   /* Same sweep, resolved for paper. The dark-theme values are pale tints that
      vanish on bone, so these are deeper and more saturated: on a light ground a
      light source reads by hue and depth rather than by brightness. */
@@ -384,8 +377,6 @@
   --accent:    #dcdad5;
   --on-accent: #0b0b0d;
   --chip-ink:  #9a9aa1;
-  --warm: #fff0dc;
-  --cool: #d3e4ff;
   /* The travelling light on a section rule. Warm through the core, cooling
      outward, which is the sweep the macOS treatment runs. Held to a hairline
      plus a soft bleed so it stays a light source rather than a colour: this is
@@ -647,75 +638,69 @@ h1, h2, h3 {
 /* ---- the travelling light ----------------------------------------------
    The macOS reading of a glow: light on the EDGE, never on the type.
 
-   The alternative was to paint hue into the glyphs with background-clip:text,
-   which is what the headline still does. It is the wrong instrument here for
-   two reasons. It reads as coloured text rather than as something being lit,
-   because nothing escapes the letterforms and escape is what makes light look
-   like light. And it makes every hover state a new foreground colour to prove,
-   where this cannot touch legibility at all: the type is untouched, so the
-   contrast numbers are identical lit and unlit, by construction.
+   The alternative is to paint hue into the glyphs with background-clip:text,
+   which is what this replaced. Wrong instrument, for two reasons. It reads as
+   coloured text rather than as something being lit, because nothing escapes
+   the letterforms and escape is what makes light look like light. And it turns
+   every hover state into a new foreground colour that has to be proved, where
+   this cannot touch legibility at all: the type is untouched, so the contrast
+   numbers are identical lit and unlit, by construction.
 
-   Two layers. A hot core exactly on the 1px rule, and a wide soft bleed above
-   and below it. Both ride --gx from the same rAF loop that drives the headline,
-   so the light on a section agrees with the light everywhere else.
+   Two layers on every lit edge. A hot core one pixel high, and a wide soft
+   bleed above and below it. Both ride --gx from the same rAF loop, so every
+   light on the page agrees about where the pointer is.
 
-   --ga is 0 until the pointer is near, so the resting page is the hairline and
-   nothing else. */
+   One rule set, three placements, because they are the same effect and were
+   briefly three near-identical copies:
+     --rule-y     where the light sits, relative to the element's own box
+     --rule-inset how far in from the sides it stops
+
+   --ga is 0 until the pointer is near, so at rest there is nothing to see. */
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .sect-head[data-rule-glow]::before,
-  .sect-head[data-rule-glow]::after {
+  [data-rule-glow] { position: relative; }
+  [data-rule-glow]::before,
+  [data-rule-glow]::after {
     content: "";
     position: absolute;
-    left: 0; right: 0;
+    left: var(--rule-inset, 0); right: var(--rule-inset, 0);
     pointer-events: none;
     opacity: var(--ga, 0);
     transition: opacity 260ms linear;
   }
-  /* the core, sitting on the rule itself */
-  .sect-head[data-rule-glow]::after {
-    top: -1px; height: 1px;
+  /* the core, sitting on the edge itself */
+  [data-rule-glow]::after {
+    top: var(--rule-y, -1px); height: 1px;
     background: radial-gradient(20% 300% at var(--gx, 50%) 50%,
       var(--rule-hot), var(--rule-mid) 42%, var(--rule-cool) 72%, transparent 100%);
     filter: blur(1px);
   }
   /* the bleed, which is the part that actually reads as light */
-  .sect-head[data-rule-glow]::before {
-    top: -15px; height: 30px;
+  [data-rule-glow]::before {
+    top: calc(var(--rule-y, -1px) - 14px); height: 30px;
     background: radial-gradient(16% 220% at var(--gx, 50%) 50%,
       var(--rule-bleed-warm), var(--rule-bleed-cool) 58%, transparent 86%);
     filter: blur(14px);
   }
 
   /* The contact slab has no rule to light because it is a panel, not a header
-     block — so it lights its OWN top edge instead. That is the closer reading
-     of the reference anyway: the Siri treatment glows a window border, and
-     this is the only thing on the page that is actually a window.
-     Inset by the corner radius so a straight bar of light cannot overshoot the
-     rounded corners and hang in the air past them. */
-  .contact[data-rule-glow] {
-    position: relative;
-  }
-  .contact[data-rule-glow]::before,
-  .contact[data-rule-glow]::after {
-    content: "";
-    position: absolute;
-    left: var(--radius); right: var(--radius);
-    pointer-events: none;
-    opacity: var(--ga, 0);
-    transition: opacity 260ms linear;
-  }
-  .contact[data-rule-glow]::after {
-    top: -1px; height: 1px;
-    background: radial-gradient(20% 300% at var(--gx, 50%) 50%,
-      var(--rule-hot), var(--rule-mid) 42%, var(--rule-cool) 72%, transparent 100%);
-    filter: blur(1px);
-  }
-  .contact[data-rule-glow]::before {
-    top: -15px; height: 30px;
-    background: radial-gradient(16% 220% at var(--gx, 50%) 50%,
-      var(--rule-bleed-warm), var(--rule-bleed-cool) 58%, transparent 86%);
-    filter: blur(14px);
-  }
+     block, so it lights its OWN top edge. That is the closer reading of the
+     reference anyway: the Siri treatment glows a window border, and this is the
+     only thing on the page that is actually a window.
+     Inset by the corner radius, or a straight bar of light overshoots the
+     rounded corners and hangs in the air past them. */
+  .contact[data-rule-glow] { --rule-inset: var(--radius); }
+
+  /* The hero is the one lit edge with no rule under it, and that is deliberate.
+     A hairline above the headline would be a fence at the very top of the page,
+     and one below it would cut the statement off from the deck that finishes
+     it. So here the light IS the edge: absolutely positioned in the gap the
+     headline already leaves, present only while lit, contributing nothing to
+     layout and nothing at rest.
+
+     It has to sit near the headline rather than on the roles band at the foot
+     of the hero, because proximity is what triggers it. A light 400px below the
+     thing you are looking at never fires. */
+  .hero h1[data-rule-glow] { --rule-y: calc(100% + var(--s-3)); }
 }
 
 
@@ -2052,47 +2037,27 @@ a, button { -webkit-tap-highlight-color: transparent; }
 }
 
 /* ------------------------------------------------------------ glow text -- */
-/* A warm-to-cool light under the pointer, clipped to the glyphs.
-   The temperature axis already exists in this identity (bone warm, obsidian
-   cool); this amplifies it rather than introducing hue.
-   The gradient's outermost stop is currentColor, so with --ga at 0 the text
-   renders as plain ink and nothing is lost if the script never runs. */
-@supports (background-clip: text) {
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    /* --glow-base, NOT currentColor: the rule sets `color: transparent` to
-       reveal the clipped background, so currentColor would resolve to
-       transparent and the text would disappear everywhere the glow is not. */
-    [data-glow] {
-      --gx: 50%; --gy: -100%; --ga: 0;
-      --glow-base: var(--ink);
-      background-image:
-        radial-gradient(
-          34ch 16ch at var(--gx) var(--gy),
-          color-mix(in oklab, var(--warm) calc(var(--ga) * 92%), var(--glow-base)) 0%,
-          color-mix(in oklab, var(--cool) calc(var(--ga) * 70%), var(--glow-base)) 38%,
-          var(--glow-base) 72%
-        );
-      background-clip: text;
-      color: transparent;
-    }
-    /* The muted second hero line keeps its own base so it stays the quieter
-       of the two while still catching the light.
+/* Removed. The headline used to paint a warm-to-cool gradient into its own
+   glyphs with background-clip:text. It is now lit the same way everything else
+   is, by a travelling light on an edge (see "the travelling light" above).
 
-       This only works because [data-glow] is on the SPANS. A custom property
-       is read by the declaration that USES it, and the gradient is declared on
-       whichever element carries [data-glow] — so while that was the h1, this
-       override sat on an element that painted nothing and the second line
-       silently rendered at --ink. It looked correct in any screenshot taken
-       under reduced motion, where this whole block does not exist and the
-       plain colour rule below applies instead, which is what hid it.
-       Asserted in scripts/design-intent.mjs. */
-    .hero h1 span + span { color: transparent; --glow-base: var(--ink-mut); }
-    /* The contact heading used to need `--glow-base: var(--on-accent)` because
-       it sat on the inverted slab. On glass it takes the normal --ink base
-       like every other glow heading — left in place it painted the h2
-       obsidian-on-obsidian and the headline all but vanished. */
-  }
-}
+   Worth recording why, because the mechanism looked harmless:
+
+   - It read as coloured text, not as light. Nothing escaped the letterforms,
+     and escape is what makes light look like light.
+   - It made the headline's own colour a moving target. Every --ga value was a
+     different foreground to prove against the 4.5:1 floor, where an edge light
+     cannot touch legibility at all.
+   - It failed silently and stayed failed. A custom property is read by the
+     declaration that USES it, and the gradient was declared on the <h1> while
+     the muted override for the second line sat on the <span>. That override
+     painted nothing, so the two-tone headline rendered as one tone for every
+     visitor not in reduced motion. It looked correct in every screenshot
+     taken under reduced motion, where the block did not exist at all.
+
+   --warm and --cool went with it; nothing else referenced them. The second
+   hero line is now plain --ink-mut via the ordinary colour rule, which is
+   asserted directly in scripts/design-intent.mjs. */
 
 /* ----------------------------------------------------------------- caret -- */
 /* Present only while a phrase is generating, absent at rest. A caret that
