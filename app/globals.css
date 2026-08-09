@@ -50,15 +50,15 @@
      canvas draws in --ink, which in light IS obsidian, and was previously
      invisible against an un-inverted dark plate.
 
-     --plate-ground is the render's OWN ground, sampled off the asset and
+     --art-ground is the render's OWN ground, sampled off the asset and
      flipped by hand for light rather than derived, because a filter cannot
      reach a background. It matters only where the card is taller than the
      artwork — on narrow viewports, where the art is padded — and there it is
      the difference between a plate the swarm sits in and a letterbox strip
      pasted into a card: the page ground is 5 levels lighter than the render's,
      which is faint but lands as a hard horizontal seam across the full width. */
-  --plate-invert: 0;
-  --plate-ground: #060607;
+  --art-ground: #060607;
+  --art-halo:   var(--shadow);
   /* eclipse: the disc is the dark material, the rim the light one, in both
      themes. Only the spill flips — on obsidian it is light escaping past the
      occluder; see the light block for what it becomes on bone. */
@@ -68,7 +68,6 @@
   --ecl-rim-hi:   rgb(236 236 232 / .70);
   --ecl-rim-glow: rgb(236 236 232 / .18);
   --ecl-spill:    rgb(200 210 255 / .10);
-  --plate-halo: var(--shadow);
   /* The travelling light on a section rule. Warm through the core, cooling
      outward, which is the sweep the macOS treatment runs. Held to a hairline
      plus a soft bleed so it stays a light source rather than a colour: this is
@@ -307,8 +306,8 @@
     --glow: 0 0 44px -14px rgb(40 32 24 / .18);
     --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
     --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
-    --plate-invert: 1;
-    --plate-ground: #f9f9f8;
+    --art-ground: #f9f9f8;
+    --art-halo:   0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
     /* On bone, light spilling past the disc would be white on white. The spill
        becomes the shadow the object casts instead: same physics read the other
        way round. The disc and rim are unchanged. */
@@ -318,7 +317,6 @@
     --ecl-rim-hi:   rgb(236 236 232 / .72);
     --ecl-rim-glow: rgb(236 236 232 / .22);
     --ecl-spill:    rgb(40 32 24 / .12);
-    --plate-halo: 0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
   }
 }
 :root[data-theme="light"] {
@@ -352,8 +350,8 @@
   --glow: 0 0 44px -14px rgb(40 32 24 / .18);
   --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
   --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
-  --plate-invert: 1;
-  --plate-ground: #f9f9f8;
+  --art-ground: #f9f9f8;
+  --art-halo:   0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
   /* On bone, light spilling past the disc would be white on white. The spill
      becomes the shadow the object casts instead: same physics read the other
      way round. The disc and rim are unchanged. */
@@ -363,7 +361,6 @@
   --ecl-rim-hi:   rgb(236 236 232 / .72);
   --ecl-rim-glow: rgb(236 236 232 / .22);
   --ecl-spill:    rgb(40 32 24 / .12);
-  --plate-halo: 0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
 }
 :root[data-theme="dark"] {
   --bg:        #0b0b0d;
@@ -397,8 +394,8 @@
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
-  --plate-invert: 0;
-  --plate-ground: #060607;
+  --art-ground: #060607;
+  --art-halo:   var(--shadow);
   /* eclipse: the disc is the dark material, the rim the light one, in both
      themes. Only the spill flips — on obsidian it is light escaping past the
      occluder; see the light block for what it becomes on bone. */
@@ -408,7 +405,6 @@
   --ecl-rim-hi:   rgb(236 236 232 / .70);
   --ecl-rim-glow: rgb(236 236 232 / .18);
   --ecl-spill:    rgb(200 210 255 / .10);
-  --plate-halo: var(--shadow);
 }
 
 /* A stepped transition strands on the previous theme's value across a swap
@@ -1140,8 +1136,8 @@ h1, h2, h3 {
        taking all the benefit. Measured: resting edge 1.06 -> 1.47:1 dark,
        1.05 -> 1.11:1 light.
        Light stays quiet on purpose and this is where it stops. Every surface
-       in that theme sits in the same 1.05-1.13:1 band (.tag 1.13, .plate 1.11,
-       .header 1.08) — it is a paper language, not a weak version of the dark
+       in that theme sits in the same 1.05-1.13:1 band (.tag 1.13, .header 1.08,
+       .contact 1.08) — it is a paper language, not a weak version of the dark
        one. Pushing .row alone to read like dark would make it the one card
        shouting on a page of quiet ones. */
     0 1px 2px -1px color-mix(in srgb, var(--edge-bottom) 60%, transparent);
@@ -1306,199 +1302,6 @@ h1, h2, h3 {
   }
 }
 
-/* ----------------------------------------------------------------- field -- */
-/* Two boxes, not one. The card is the frame; .plate-art inside it is pinned to
-   the asset's own aspect so the canvas ring can be placed by geometry and land
-   on the rendered one (object-fit: cover at the same ratio therefore crops
-   nothing). At desktop width the card is exactly the artwork and the split
-   costs nothing; on a phone the card grows past it, which is the only way the
-   artwork can be padded without dragging the drawn ring out of register. */
-.plate {
-  position: relative;
-  /* Same bleed the work cards and the contact panel take, so the plate's
-     edges land on the section rail rather than inside the gutter. */
-  margin: 0 calc(-1 * var(--row-pad));
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--plate-ground);
-  /* No lens ring here either, and for a different reason than .tag: the plate
-     is IMAGERY, not interface chrome, and the identity's carve-out is that
-     radius and elevation belong to chrome while fields stay flat and
-     hard-edged. A refracted rim over the artwork would read as a bezel drawn
-     on the picture. The border and halo already say "framed". */
-  box-shadow:
-    inset 0 1px 0 var(--edge-top),
-    inset 0 0 0 1px var(--glass-ring),
-    var(--plate-halo);
-}
-
-/* The plate used to be a fixed obsidian slab, which meant light mode showed
-   the same dark rectangle as dark mode and the only thing that changed was the
-   page around it. Inverting it in light makes the plate obey the same rule as
-   everything else — the marks are whichever material is not the ground — so
-   the two themes now read as genuinely different renderings of one idea
-   rather than one rendering on two backgrounds.
-
-   It also fixes the canvas: that layer draws in --ink, which in light is
-   obsidian, and obsidian on an un-inverted dark plate was invisible. The live
-   agents simply never showed in light mode. Inverting the plate gives them the
-   bone ground they need. The declaration itself lives on .plate-img below. */
-
-/* The plate feathers its own top edge as it scrolls out.
-
-   This originally existed to cooperate with the page-wide top fade: that fade
-   painted the ground OVER whatever was passing, which reads as a dissolve for
-   type (the ground already shows between glyphs) but as a scrim over an opaque
-   slab — a wide pale haze dragged across the artwork. Letting the plate go
-   transparent first meant the real ground showed through instead.
-
-   The page fade is gone now; content passes under the dock's glass and gets
-   blurred by it, the way a floating panel is supposed to work. This is kept
-   anyway, on its own merits: a hard-edged slab sliding under a translucent
-   pill still reads better feathered than cut. Driven off a view() timeline,
-   matching the progress readout's approach: no listener on the main thread.
-
-   --plate-exit is registered so it interpolates as a number; an unregistered
-   custom property would jump between keyframes instead of easing. At 0 the
-   mask is fully opaque, so every non-supporting browser and every
-   reduced-motion visitor keeps exactly today's rendering. */
-@property --plate-exit {
-  syntax: "<number>";
-  initial-value: 0;
-  inherits: false;
-}
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .plate {
-      --plate-exit: 0;
-      -webkit-mask-image: linear-gradient(
-        to bottom,
-        transparent 0,
-        #000 calc(var(--plate-exit) * 100%)
-      );
-      mask-image: linear-gradient(
-        to bottom,
-        transparent 0,
-        #000 calc(var(--plate-exit) * 100%)
-      );
-      /* Longhands and `auto` duration, for the reason documented on the
-         progress readout: the shorthand pins duration to 0s and the timeline
-         then has no range to map onto. */
-      animation-name: plate-dissolve;
-      animation-duration: auto;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: view(block);
-      /* Only the exit at the top matters. Entry at the bottom has no dock to
-         collide with, and feathering there would just look like a fault. */
-      animation-range: exit 0% exit 34%;
-    }
-  }
-}
-@keyframes plate-dissolve {
-  from { --plate-exit: 0; }
-  to   { --plate-exit: .5; }
-}
-.plate-art {
-  position: relative;
-  aspect-ratio: 1536 / 640;
-}
-.plate-img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  /* grayscale() guarantees chroma zero against a model that slipped a tint in,
-     and costs nothing when there is none. invert() is the theme swap: 0 in
-     dark, 1 in light. See the note above .plate-exit. */
-  filter: grayscale(1) invert(var(--plate-invert));
-}
-/* The warped render, over the still one. Inherits the same theme inversion as
-   .plate-img, because it is the same pixels: the shader samples the raw asset,
-   which is bone-on-obsidian, so light needs the same flip. */
-.plate-morph {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  display: block;
-  filter: grayscale(1) invert(var(--plate-invert));
-  /* --ease is a duration+curve shorthand and 160ms is too quick to hand over
-     a whole plate; same curve, longer. */
-  transition: opacity 420ms cubic-bezier(.2, 0, 0, 1);
-}
-.field-canvas-wrap { position: absolute; inset: 0; }
-.field-canvas { display: block; width: 100%; height: 100%; }
-
-/* Sits on the plate rather than under it: the band is already tall, and a
-   caption below would push the work section a whole line further down. */
-.plate-cap {
-  position: absolute;
-  left: clamp(var(--s-4), 2vw, var(--s-7));
-  bottom: clamp(var(--s-3), 1.6vw, var(--s-5));
-  margin: 0;
-  max-width: 32ch;
-  font-family: var(--font-mono); font-size: var(--t-mono-xs);
-  letter-spacing: .1em; text-transform: uppercase;
-  /* Was pinned to a fixed --on-plate, because the plate was obsidian in both
-     themes and this was the one label that could not follow the ground. Now
-     that the plate inverts, its polarity matches the page again and the
-     ordinary muted ink is correct in both. */
-  color: var(--ink-mut);
-}
-/* The invitation is only true where there is a cursor, and only where the
-   canvas is allowed to run. */
-@media (hover: none), (prefers-reduced-motion: reduce) {
-  .plate-hint { display: none; }
-}
-
-/* Narrow viewports: pad the artwork instead of letting it fill the card.
-   At 2.4:1 the plate collapses to a ~145px letterbox on a phone — a thin band
-   floating in a screen's worth of empty ground, with the ring pressed against
-   both edges and the caption printed straight across the swarm, where it is
-   barely readable. Padding the art buys back both: the ring gets room to read
-   as a boundary rather than a crop, the card fills the space it was already
-   sitting in, and the caption drops into clear ground below the image instead
-   of competing with it. Bottom padding is the larger of the two because it is
-   carrying the caption; the artwork still sits above centre, which is where a
-   plate with a label under it belongs. */
-@media (max-width: 47.99rem) {
-  .plate {
-    padding-block: clamp(var(--s-10), 14vw, var(--s-16))
-                   clamp(var(--s-16), 24vw, var(--s-24));
-  }
-  /* Below this width the caption has its own clear ground, so the scrim it
-     wears on wide viewports would be a visible box around nothing. */
-  .plate-cap { background: none; backdrop-filter: none; padding: 0; }
-}
-
-/* ---- adaptive tint ------------------------------------------------------
-   The native Liquid Glass material samples what is behind it and shifts to
-   stay legible over it. The web has no such API, so the substitute is to
-   decide by knowledge rather than by sampling: a surface that is known to
-   overlap high-variance content takes a stronger local ground, and a surface
-   over the flat page ground stays light.
-
-   The caption is the only text on the site that overlays an image. Above 48rem
-   it sits on the artwork, and the artwork is a particle swarm whose luminance
-   is not knowable in advance — today it happens to land on a dark region of
-   the render, which is luck rather than design and would silently stop being
-   true the next time the asset changes. A scrim makes it deterministic.
-
-   Deliberately narrow: it hugs the text rather than banding the plate, so the
-   artwork is still the thing you look at. */
-@media (min-width: 48rem) {
-  .plate-cap {
-    padding: var(--s-2) var(--s-3);
-    border-radius: var(--radius-sm);
-    background: color-mix(in srgb, var(--plate-ground) 72%, transparent);
-    backdrop-filter: blur(10px) saturate(120%);
-    box-shadow: inset 0 0 0 1px var(--glass-ring);
-  }
-  @supports not (backdrop-filter: blur(1px)) {
-    .plate-cap { background: color-mix(in srgb, var(--plate-ground) 92%, transparent); }
-  }
-}
-
 /* --------------------------------------------------------------- eclipse -- */
 /* An occluded disc with a rim of light. It took the field plate's slot and
    does the same job with no asset, no canvas and no shader: everything below
@@ -1512,7 +1315,7 @@ h1, h2, h3 {
    instead. Same object, different lighting, which is the same rule the rest of
    the page follows.
 
-   Reuses --plate-ground, already defined per theme as "the render's own
+   Reuses --art-ground, already defined per theme as "the render's own
    ground", rather than minting a second token that means the same thing. */
 .eclipse {
   position: relative;
@@ -1526,11 +1329,11 @@ h1, h2, h3 {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  background: var(--plate-ground);
+  background: var(--art-ground);
   box-shadow:
     inset 0 1px 0 var(--edge-top),
     inset 0 0 0 1px var(--glass-ring),
-    var(--plate-halo);
+    var(--art-halo);
 }
 /* A wide plate collapses to a letterbox on a phone and the disc has nowhere to
    sit. Same reasoning, and the same fix, as the plate before it. */

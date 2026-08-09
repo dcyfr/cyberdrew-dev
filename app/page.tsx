@@ -29,9 +29,7 @@ export default function Page() {
             of its states names the guard that the next section then measures. */}
         <Hero />
         {/* Between the claim and the evidence, buying the page a breath before
-            the lists start. <Field /> held this slot with a particle swarm over
-            a WebGL warp; the eclipse says the same thing with two divs. Field
-            is parked rather than deleted, so swapping back is one import. */}
+            the lists start. */}
         <Eclipse />
         <Work />
         <Loop />
