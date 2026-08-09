@@ -35,7 +35,13 @@ export function CursorGlow() {
     const panels = [...document.querySelectorAll<HTMLElement>(".row")].map(
       (el) => ({ el, reach: 90 }),
     );
-    const targets = [...text, ...panels];
+    // Section rules light from further away than a card does. The light is a
+    // 1px line, so it has to start arriving before the pointer is on top of it
+    // or it only ever appears after you have stopped looking for it.
+    const rules = [
+      ...document.querySelectorAll<HTMLElement>("[data-rule-glow]"),
+    ].map((el) => ({ el, reach: 260 }));
+    const targets = [...text, ...panels, ...rules];
     if (targets.length === 0) return;
 
     let frame = 0;

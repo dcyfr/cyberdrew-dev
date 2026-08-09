@@ -17,12 +17,12 @@ export function Contact() {
   return (
     <section className="bay" id="contact">
       <div className="wide">
-        <div className="contact" data-reveal>
+        <div className="contact" data-reveal data-rule-glow>
         <p className="eyebrow">
           <span className="idx">{contact.index}</span>
           {contact.eyebrow}
         </p>
-        <h2 data-glow>{contact.headline}</h2>
+        <h2>{contact.headline}</h2>
         <p>{contact.deck}</p>
 
         <ul className="engagements">

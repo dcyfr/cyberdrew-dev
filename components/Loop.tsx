@@ -18,12 +18,12 @@ export function Loop() {
   return (
     <section className="bay" id="loop">
       <div className="wide">
-        <div className="sect-head" data-reveal>
+        <div className="sect-head" data-reveal data-rule-glow>
           <p className="eyebrow">
             <span className="idx">{loop.index}</span>
             {loop.eyebrow}
           </p>
-          <h2 className="sect-h" data-glow>{loop.headline}</h2>
+          <h2 className="sect-h">{loop.headline}</h2>
           <p className="sect-deck">{loop.deck}</p>
         </div>
 

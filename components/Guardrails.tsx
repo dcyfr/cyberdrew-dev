@@ -15,12 +15,12 @@ export function Guardrails() {
   return (
     <section className="bay" id="guardrails">
       <div className="wide">
-        <div className="sect-head" data-reveal>
+        <div className="sect-head" data-reveal data-rule-glow>
           <p className="eyebrow">
             <span className="idx">{guardrails.index}</span>
             {guardrails.eyebrow}
           </p>
-          <h2 className="sect-h" data-glow>{guardrails.headline}</h2>
+          <h2 className="sect-h">{guardrails.headline}</h2>
           <p className="sect-deck">{guardrails.deck}</p>
         </div>
 
