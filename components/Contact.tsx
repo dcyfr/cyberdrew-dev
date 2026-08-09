@@ -17,7 +17,10 @@ export function Contact() {
   return (
     <section className="bay" id="contact">
       <div className="wide">
-        <div className="contact" data-reveal data-rule-glow>
+        {/* data-ring-glow, not data-rule-glow: this is a window, so the light
+            goes round the whole frame rather than along the top hairline of
+            it. See §the ring in globals.css. */}
+        <div className="contact" data-reveal data-ring-glow>
         <p className="eyebrow">
           <span className="idx">{contact.index}</span>
           {contact.eyebrow}
