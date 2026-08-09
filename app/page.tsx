@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { Field } from "@/components/Field";
 import { Work } from "@/components/Work";
 import { Loop } from "@/components/Loop";
 import { Guardrails } from "@/components/Guardrails";
@@ -28,10 +27,11 @@ export default function Page() {
             The loop sits between them: it is how the acting happens, and each
             of its states names the guard that the next section then measures. */}
         <Hero />
-        {/* The plate sits between the claim and the evidence: it is the
-            headline drawn, and it buys the page a breath before the lists
-            start. */}
-        <Field />
+        {/* <Field /> is parked, not deleted. The plate sat between the claim
+            and the evidence and bought the page a breath before the lists
+            start, but the particle swarm is more machinery than the moment
+            needs. A simpler piece will take the slot; the component, its
+            asset, its shader and its styles all stay put until that lands. */}
         <Work />
         <Loop />
         <Guardrails />
