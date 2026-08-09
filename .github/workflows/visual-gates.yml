@@ -40,31 +40,29 @@ jobs:
           node-version: 24
           cache: npm
 
-      # `npm install`, not `npm ci`, and that is NOT the usual laziness.
+      # `npm ci`, restored. It failed here for one run because the lockfile was
+      # out of sync with the transitive optional @emnapi/* graph — pre-existing,
+      # on every platform, and invisible until this workflow became the first
+      # thing in the repo to actually run `npm ci`.
       #
-      # `npm ci` currently fails in this repo on every platform:
+      # The lockfile is now regenerated on Linux, which is the only place it can
+      # be done: macOS npm prunes the platform-specific optional entries and the
+      # result breaks the Vercel install.
       #
-      #   npm error Missing: @emnapi/runtime@1.11.3 from lock file
-      #   npm error Invalid: lock file's @emnapi/wasi-threads@1.2.1
-      #             does not satisfy @emnapi/wasi-threads@1.2.3
+      #   docker run --rm --platform linux/amd64 -v "$PWD":/w -w /w \
+      #     node:24-bookworm-slim npm install --package-lock-only
       #
-      # package-lock.json is out of sync with the transitive optional
-      # @emnapi/* graph. That is pre-existing and unrelated to these gates —
-      # this workflow is simply the first thing in the repo to run `npm ci`,
-      # which is why it went unnoticed. Vercel builds fine, so nothing is
-      # broken in production.
+      # Tripwire if it ever regresses: `grep -c @emnapi package-lock.json`
+      # should be 19. It was 9 while broken.
       #
-      # The real fix is to regenerate the lockfile on Linux (regenerating it
-      # on macOS prunes platform-specific optional entries and breaks the
-      # Vercel install), which is a change with deploy blast radius and does
-      # not belong in a PR about contrast. Until then this gate resolves
-      # dependencies itself. It only ever renders the site and reads pixels,
-      # so exact dependency pinning is not what makes its numbers meaningful.
-      #
-      # Switch this back to `npm ci` the moment the lockfile is regenerated —
-      # that also restores locked resolution, which is the one supply-chain
-      # property this step genuinely gives up in the meantime.
-      - run: npm install --no-audit --no-fund --ignore-scripts
+      # --ignore-scripts: this job builds and renders the site, it never needs
+      # a package's install hooks. The two that declare them (sharp,
+      # unrs-resolver) ship prebuilt binaries as ordinary optional deps, so the
+      # build is unaffected — confirmed by comparing gate output with and
+      # without: identical, 0 at-rest failures and 16 intent assertions both
+      # ways. Vercel runs its own install for the real deploy and is not
+      # touched by this flag.
+      - run: npm ci --no-audit --no-fund --ignore-scripts
 
       # Deliberately --no-save, and NOT a devDependency in package.json, so
       # the lockfile situation above is not made worse. Exact version, no

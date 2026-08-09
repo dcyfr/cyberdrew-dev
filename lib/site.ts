@@ -430,5 +430,6 @@ export const socials: Social[] = [
 ];
 
 export const footer = {
-  signoff: "Think freely, build securely, ship boldly",
+  // The full stop is deliberate. It is a statement, not a list.
+  signoff: "Think freely, build securely, ship boldly.",
 };
