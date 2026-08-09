@@ -1817,7 +1817,16 @@ a, button { -webkit-tap-highlight-color: transparent; }
       color: transparent;
     }
     /* The muted second hero line keeps its own base so it stays the quieter
-       of the two while still catching the light. */
+       of the two while still catching the light.
+
+       This only works because [data-glow] is on the SPANS. A custom property
+       is read by the declaration that USES it, and the gradient is declared on
+       whichever element carries [data-glow] — so while that was the h1, this
+       override sat on an element that painted nothing and the second line
+       silently rendered at --ink. It looked correct in any screenshot taken
+       under reduced motion, where this whole block does not exist and the
+       plain colour rule below applies instead, which is what hid it.
+       Asserted in scripts/design-intent.mjs. */
     .hero h1 span + span { color: transparent; --glow-base: var(--ink-mut); }
     /* The contact heading used to need `--glow-base: var(--on-accent)` because
        it sat on the inverted slab. On glass it takes the normal --ink base
