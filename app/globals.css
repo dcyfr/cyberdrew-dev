@@ -100,13 +100,19 @@
   --glass-ring:  rgb(255 255 255 / .06);
   /* ---- lensing ----------------------------------------------------------
      Real glass does not blur uniformly; it bends hardest where the surface
-     curves, which is at the rim. --lens-rim is that second, brighter ring
-     just inside the edge, and --lens-depth is how far in the bend reads
-     before the panel goes flat. Two tokens rather than a literal per
-     component, so a control and a card cannot disagree about how thick the
-     glass is. */
-  --lens-rim:   rgb(255 255 255 / .10);
-  --lens-depth: 6px;
+     curves, which is at the rim.
+
+     The first version of this was WRONG in a way worth recording: it used
+     `inset 0 0 0 6px`, i.e. a six-pixel SPREAD with no blur radius. A spread
+     with no blur paints a flat, hard-edged band — so every panel on the site
+     grew a thick pale border, which is the opposite of refraction. It read as
+     a frame drawn around the glass rather than light bending through it.
+
+     The rim has to FALL OFF. Blur radius, no spread, so the brightness decays
+     inward from the edge and has no second contour of its own. --lens-depth
+     is now how far that decay reaches, not how wide a ring is. */
+  --lens-rim:   rgb(255 255 255 / .14);
+  --lens-depth: 10px;
   /* ---- control edge -----------------------------------------------------
      WCAG 1.4.11 wants 3:1 for the visual information that identifies a
      control. A card is exempt in practice — its title identifies it — but a
@@ -461,10 +467,10 @@ body::after {
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
-    /* the lens: a second ring set --lens-depth in from the edge, so the rim
-       reads as thickness the light bends through rather than as a drawn
-       border. Spread, not blur, keeps it crisp at 1px on every DPR. */
-    inset 0 0 0 var(--lens-depth) var(--lens-rim),
+    /* the lens: brightness decaying inward from the rim, so the edge reads as
+       thickness light bends through. Blur radius, no spread — a spread would
+       give it a hard outer contour and turn it back into a drawn border. */
+    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
     var(--shadow);
 }
 /* Where backdrop-filter is unsupported the fill alone would look thin and
@@ -558,37 +564,6 @@ h1, h2, h3 {
 }
 .sect-head { margin-bottom: clamp(var(--s-7), 4vh, var(--s-11)); }
 
-/* -------------------------------------------------------------- top fade -- */
-/* Content dissolves into the ground before it reaches the dock, rather than
-   sliding under a translucent pill and colliding with it. Fixed, so it stays
-   put while the page scrolls; below the dock (z 40) and above the content,
-   so the dock itself stays crisp.
-   The ramp is opaque through the dock's whole band and only then falls off,
-   which is what makes the meeting point invisible. */
-.top-fade {
-  position: fixed;
-  inset: 0 0 auto 0;
-  height: calc(env(safe-area-inset-top, 0px) + var(--header-h) + var(--s-13));
-  z-index: 30;
-  pointer-events: none;
-  /* Opaque through the dock's whole band, then a multi-stop falloff rather
-     than the two-stop ramp this used to be. Three stops make two corners in
-     the curve, at 52% and 76%, and a corner in a gradient is a visible line
-     once anything with real contrast passes behind it — most obviously the
-     field plate, whose scheme opposes the page. The extra stops approximate an
-     ease-out so the derivative never jumps. Same band, same endpoints. */
-  background: linear-gradient(
-    to bottom,
-    var(--bg) 0%,
-    var(--bg) 52%,
-    color-mix(in oklab, var(--bg) 92%, transparent) 62%,
-    color-mix(in oklab, var(--bg) 72%, transparent) 71%,
-    color-mix(in oklab, var(--bg) 45%, transparent) 80%,
-    color-mix(in oklab, var(--bg) 20%, transparent) 89%,
-    transparent 100%
-  );
-}
-@media (forced-colors: active) { .top-fade { display: none; } }
 
 /* -------------------------------------------------------------- progress -- */
 /* Position in a document is information, so scroll drives a real readout
@@ -651,7 +626,7 @@ h1, h2, h3 {
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 0 var(--lens-depth) var(--lens-rim),
+    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
     var(--shadow);
 }
 @supports not (backdrop-filter: blur(1px)) {
@@ -755,7 +730,7 @@ h1, h2, h3 {
   box-shadow:
     inset 0 1px 0 var(--edge-top),
     inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 0 var(--lens-depth) var(--lens-rim),
+    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
     var(--shadow-lift);
 }
 .nav-panel-link {
@@ -1072,7 +1047,7 @@ h1, h2, h3 {
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 0 var(--lens-depth) var(--lens-rim),
+    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
     var(--shadow),
     var(--glow);
 }
@@ -1231,17 +1206,19 @@ h1, h2, h3 {
    agents simply never showed in light mode. Inverting the plate gives them the
    bone ground they need. The declaration itself lives on .plate-img below. */
 
-/* The top fade dissolves content into the ground before it reaches the dock,
-   and it does that by painting the ground OVER whatever is passing. For type
-   that is a dissolve, because the ground already shows between the glyphs. For
-   an opaque slab it is a scrim: on bone you get a wide pale haze dragged
-   across the artwork, which is the exact opposite of the effect intended.
+/* The plate feathers its own top edge as it scrolls out.
 
-   So let the plate dissolve itself. Its own top edge feathers to transparent
-   as it slides under the dock, which means the real ground shows through
-   rather than a wash sitting on top, and the fade lands on something already
-   going transparent. Driven off a view() timeline, matching the progress
-   readout's approach: no listener on the main thread.
+   This originally existed to cooperate with the page-wide top fade: that fade
+   painted the ground OVER whatever was passing, which reads as a dissolve for
+   type (the ground already shows between glyphs) but as a scrim over an opaque
+   slab — a wide pale haze dragged across the artwork. Letting the plate go
+   transparent first meant the real ground showed through instead.
+
+   The page fade is gone now; content passes under the dock's glass and gets
+   blurred by it, the way a floating panel is supposed to work. This is kept
+   anyway, on its own merits: a hard-edged slab sliding under a translucent
+   pill still reads better feathered than cut. Driven off a view() timeline,
+   matching the progress readout's approach: no listener on the main thread.
 
    --plate-exit is registered so it interpolates as a number; an unregistered
    custom property would jump between keyframes instead of easing. At 0 the
@@ -1559,7 +1536,7 @@ h1, h2, h3 {
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 0 var(--lens-depth) var(--lens-rim),
+    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
     var(--shadow-lift);
   margin-inline: calc(-1 * var(--row-pad));
   padding-block: var(--s-contact-block);
@@ -1754,23 +1731,6 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .header {
     top: auto;
     bottom: max(var(--header-top), env(safe-area-inset-bottom));
-  }
-
-  /* The fade flips with it, so content still dissolves into the ground before
-     it reaches the pill instead of sliding under translucent glass. */
-  .top-fade {
-    inset: auto 0 0 0;
-    height: calc(env(safe-area-inset-bottom, 0px) + var(--header-h) + var(--s-13));
-    background: linear-gradient(
-      to top,
-      var(--bg) 0%,
-      var(--bg) 52%,
-      color-mix(in oklab, var(--bg) 92%, transparent) 62%,
-      color-mix(in oklab, var(--bg) 72%, transparent) 71%,
-      color-mix(in oklab, var(--bg) 45%, transparent) 80%,
-      color-mix(in oklab, var(--bg) 20%, transparent) 89%,
-      transparent 100%
-    );
   }
 
   /* The disclosure opens upward. `.header` is the positioning context, so
