@@ -1,0 +1,109 @@
+# Two gates that both need a real browser and a real build.
+#
+# audit:contrast — pixel-truth contrast. The site is built almost entirely out
+#   of backdrop-filter glass, so the effective background behind any glyph is
+#   the blurred page rather than the panel's declared fill. A token-based
+#   checker cannot see that and reports comfortable passes for text that is
+#   genuinely hard to read. This measures composited pixels. It runs everything
+#   under reduced motion so animation cannot make results non-deterministic.
+#
+# audit:intent — design-intent assertions, in the DEFAULT motion state. The
+#   contrast gate answers "is this legible", which is not the same question as
+#   "is this what we meant": a bug that made the hero's second line brighter
+#   than intended passed the contrast gate while collapsing the two-tone
+#   headline. Reduced motion also means the contrast gate never exercises the
+#   [data-glow] path at all. This closes both holes.
+#
+# See the header comments in each script for method.
+name: visual gates
+
+on:
+  pull_request:
+    paths:
+      - "app/**"
+      - "components/**"
+      - "lib/**"
+      - "scripts/a11y-contrast.mjs"
+      - "scripts/design-intent.mjs"
+      - ".github/workflows/visual-gates.yml"
+  workflow_dispatch:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      # `npm install`, not `npm ci`, and that is NOT the usual laziness.
+      #
+      # `npm ci` currently fails in this repo on every platform:
+      #
+      #   npm error Missing: @emnapi/runtime@1.11.3 from lock file
+      #   npm error Invalid: lock file's @emnapi/wasi-threads@1.2.1
+      #             does not satisfy @emnapi/wasi-threads@1.2.3
+      #
+      # package-lock.json is out of sync with the transitive optional
+      # @emnapi/* graph. That is pre-existing and unrelated to these gates —
+      # this workflow is simply the first thing in the repo to run `npm ci`,
+      # which is why it went unnoticed. Vercel builds fine, so nothing is
+      # broken in production.
+      #
+      # The real fix is to regenerate the lockfile on Linux (regenerating it
+      # on macOS prunes platform-specific optional entries and breaks the
+      # Vercel install), which is a change with deploy blast radius and does
+      # not belong in a PR about contrast. Until then this gate resolves
+      # dependencies itself. It only ever renders the site and reads pixels,
+      # so exact dependency pinning is not what makes its numbers meaningful.
+      #
+      # Switch this back to `npm ci` the moment the lockfile is regenerated —
+      # that also restores locked resolution, which is the one supply-chain
+      # property this step genuinely gives up in the meantime.
+      - run: npm install --no-audit --no-fund --ignore-scripts
+
+      # Deliberately --no-save, and NOT a devDependency in package.json, so
+      # the lockfile situation above is not made worse. Exact version, no
+      # range: the rendering engine producing the numbers has to be the one
+      # that produced the thresholds. --ignore-scripts because the browser
+      # download is invoked explicitly on the next line rather than left to a
+      # postinstall hook.
+      - run: npm i --no-save --ignore-scripts playwright@1.61.1
+
+      # Local binaries, not npx. npx will fetch and execute a package on
+      # demand if the name is not already present, which is a package the
+      # workflow never declared and never pinned. These two are installed
+      # above, so address them directly.
+      - run: ./node_modules/.bin/playwright install --with-deps chromium
+
+      - run: npm run build
+
+      - name: Serve
+        id: serve
+        run: |
+          ./node_modules/.bin/next start -p 3000 &
+          curl --retry 30 --retry-delay 2 --retry-all-errors \
+               --fail --silent --output /dev/null http://localhost:3000/
+
+      - name: Contrast
+        run: AUDIT_URL=http://localhost:3000/ AUDIT_JSON=contrast-report.json npm run audit:contrast
+
+      # Runs even when the contrast gate fails — they answer different
+      # questions and both are worth an answer in one run. Gated on the server
+      # actually being up, though: `if: always()` alone made a failed install
+      # produce a second, meaningless "cannot find package 'playwright'" error
+      # that buried the real one.
+      - name: Design intent
+        if: always() && steps.serve.outcome == 'success'
+        run: AUDIT_URL=http://localhost:3000/ npm run audit:intent
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contrast-report
+          path: contrast-report.json
+          if-no-files-found: ignore

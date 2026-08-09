@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "audit:contrast": "node scripts/a11y-contrast.mjs"
+    "audit:contrast": "node scripts/a11y-contrast.mjs",
+    "audit:intent": "node scripts/design-intent.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

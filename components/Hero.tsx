@@ -29,9 +29,19 @@ export function Hero() {
           </span>
         </p>
 
-        <h1 data-glow>
+        {/* data-glow rides the SPANS, not the h1. The glow paints a gradient
+            clipped to text, and a gradient declared on the h1 resolves
+            --glow-base in the h1's own context — so the second line's muted
+            base was read from the h1 (--ink) and the deliberate two-tone
+            headline rendered as one tone for everyone whose browser is not in
+            reduced-motion. Per-span, each line resolves its own base.
+            CursorGlow already computes --gx/--gy per element, so the light
+            stays correct with more, smaller targets. */}
+        <h1>
           {hero.headline.map((line) => (
-            <span key={line}>{line}</span>
+            <span key={line} data-glow>
+              {line}
+            </span>
           ))}
         </h1>
 
