@@ -25,11 +25,16 @@
  *
  * TRANSIENT vs AT REST
  * --------------------
- * `.top-fade` paints the ground over content as it slides under the floating
- * dock — content there is DESIGNED to wash out, and any text will pass through
- * that band at some scroll offset. Judging contrast mid-dissolve is like
+ * Content passing under the floating dock is obscured by the dock's own glass
+ * — that is what a translucent panel over scrolling content does, and any text
+ * will be behind it at some scroll offset. Judging contrast there is like
  * judging it mid-fade-in. Those boxes are labelled and reported separately
  * rather than dropped, so the exclusion stays visible and arguable.
+ *
+ * (A page-wide `.top-fade` used to dissolve content before it reached the dock
+ * and was also excluded here. It has been removed — the dock's blur does the
+ * job — so the fade-band arm below is now inert and kept only so the harness
+ * survives against an older deployment.)
  *
  * Only AT-REST failures fail the build.
  *
