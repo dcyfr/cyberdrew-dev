@@ -59,6 +59,15 @@
      which is faint but lands as a hard horizontal seam across the full width. */
   --plate-invert: 0;
   --plate-ground: #060607;
+  /* eclipse: the disc is the dark material, the rim the light one, in both
+     themes. Only the spill flips — on obsidian it is light escaping past the
+     occluder; see the light block for what it becomes on bone. */
+  --ecl-disc:     #050506;
+  --ecl-rim:      rgb(236 236 232 / .55);
+  --ecl-rim-in:   transparent;
+  --ecl-rim-hi:   rgb(236 236 232 / .70);
+  --ecl-rim-glow: rgb(236 236 232 / .18);
+  --ecl-spill:    rgb(200 210 255 / .10);
   --plate-halo: var(--shadow);
   /* the temperature poles the cursor glow travels between */
   --warm: #fff0dc;
@@ -288,6 +297,15 @@
     --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
     --plate-invert: 1;
     --plate-ground: #f9f9f8;
+    /* On bone, light spilling past the disc would be white on white. The spill
+       becomes the shadow the object casts instead: same physics read the other
+       way round. The disc and rim are unchanged. */
+    --ecl-disc:     #0b0b0d;
+    --ecl-rim:      rgb(236 236 232 / .55);
+    --ecl-rim-in:   rgb(244 243 240 / .58);
+    --ecl-rim-hi:   rgb(236 236 232 / .72);
+    --ecl-rim-glow: rgb(236 236 232 / .22);
+    --ecl-spill:    rgb(40 32 24 / .12);
     --plate-halo: 0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
   }
 }
@@ -318,6 +336,15 @@
   --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
   --plate-invert: 1;
   --plate-ground: #f9f9f8;
+  /* On bone, light spilling past the disc would be white on white. The spill
+     becomes the shadow the object casts instead: same physics read the other
+     way round. The disc and rim are unchanged. */
+  --ecl-disc:     #0b0b0d;
+  --ecl-rim:      rgb(236 236 232 / .55);
+  --ecl-rim-in:   rgb(244 243 240 / .58);
+  --ecl-rim-hi:   rgb(236 236 232 / .72);
+  --ecl-rim-glow: rgb(236 236 232 / .22);
+  --ecl-spill:    rgb(40 32 24 / .12);
   --plate-halo: 0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
 }
 :root[data-theme="dark"] {
@@ -347,6 +374,15 @@
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
   --plate-invert: 0;
   --plate-ground: #060607;
+  /* eclipse: the disc is the dark material, the rim the light one, in both
+     themes. Only the spill flips — on obsidian it is light escaping past the
+     occluder; see the light block for what it becomes on bone. */
+  --ecl-disc:     #050506;
+  --ecl-rim:      rgb(236 236 232 / .55);
+  --ecl-rim-in:   transparent;
+  --ecl-rim-hi:   rgb(236 236 232 / .70);
+  --ecl-rim-glow: rgb(236 236 232 / .18);
+  --ecl-spill:    rgb(200 210 255 / .10);
   --plate-halo: var(--shadow);
 }
 
@@ -1358,6 +1394,120 @@ h1, h2, h3 {
   @supports not (backdrop-filter: blur(1px)) {
     .plate-cap { background: color-mix(in srgb, var(--plate-ground) 92%, transparent); }
   }
+}
+
+/* --------------------------------------------------------------- eclipse -- */
+/* An occluded disc with a rim of light. It took the field plate's slot and
+   does the same job with no asset, no canvas and no shader: everything below
+   is gradients and box-shadows on empty divs.
+
+   What stays constant across themes is the OBJECT: the disc is always the dark
+   material and the rim is always the light one, because an eclipse where the
+   occluder glows is not an eclipse. What flips is the ground and the spill.
+   On obsidian the light escaping past the disc reads as a bloom; on bone that
+   bloom would be white on white, so it becomes the shadow the object casts
+   instead. Same object, different lighting, which is the same rule the rest of
+   the page follows.
+
+   Reuses --plate-ground, already defined per theme as "the render's own
+   ground", rather than minting a second token that means the same thing. */
+.eclipse {
+  position: relative;
+  margin: 0 calc(-1 * var(--row-pad));
+  display: grid;
+  gap: clamp(var(--s-4), 2vw, var(--s-6));
+}
+.eclipse-art {
+  position: relative;
+  aspect-ratio: 1536 / 640;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--plate-ground);
+  box-shadow:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 0 0 1px var(--glass-ring),
+    var(--plate-halo);
+}
+/* A wide plate collapses to a letterbox on a phone and the disc has nowhere to
+   sit. Same reasoning, and the same fix, as the plate before it. */
+@media (max-width: 47.99rem) {
+  .eclipse-art { aspect-ratio: 4 / 3; }
+}
+
+/* The disc. Three shadows doing three jobs: the rim itself, the near glow that
+   makes the rim read as an edge rather than a drawn circle, and the far spill.
+   Spread on the first (it must stay exactly 1px at any DPR), blur on the other
+   two (they are light, and light has no contour). */
+.eclipse-disc {
+  position: absolute; left: 50%; top: 50%;
+  width: min(38%, 250px); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--ecl-disc);
+  box-shadow:
+    /* --ecl-rim-in is the same rim seen from the other side. On obsidian the
+       corona sits OUTSIDE the occluder and reads immediately; on bone that
+       same bone-coloured ring is white on white and simply does not exist, so
+       light moves it just inside the disc's edge, where it has something dark
+       to be bright against. One ring, drawn on whichever side can show it. */
+    inset 0 0 0 1px var(--ecl-rim-in),
+    0 0 0 1px var(--ecl-rim),
+    0 0 30px 2px var(--ecl-rim-glow),
+    0 0 120px 20px var(--ecl-spill);
+}
+.eclipse-halo {
+  position: absolute; inset: 0;
+  background: radial-gradient(40% 62% at 50% 50%, var(--ecl-spill), transparent 68%);
+}
+/* A gradient this large with this small a luminance delta cannot be held in
+   8-bit sRGB, and the plate has an opaque background so the page's own dither
+   (fixed, z-index -1) is painted over rather than showing through. It needs
+   its own. Same 160px turbulence tile the body uses, so the two agree. */
+.eclipse-art::after {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The rim brightens and settles rather than pulsing on a beat: this is the one
+   still object on the page and a heartbeat would make it a status indicator.
+   Off entirely under reduced motion, where the disc is already complete. */
+@media (prefers-reduced-motion: no-preference) {
+  .eclipse-disc { animation: ecl-breathe 9s ease-in-out infinite; }
+  @keyframes ecl-breathe {
+    0%, 100% {
+      box-shadow:
+        inset 0 0 0 1px var(--ecl-rim-in),
+        0 0 0 1px var(--ecl-rim),
+        0 0 30px 2px var(--ecl-rim-glow),
+        0 0 120px 20px var(--ecl-spill);
+    }
+    50% {
+      box-shadow:
+        inset 0 0 0 1px var(--ecl-rim-in),
+        0 0 0 1px var(--ecl-rim-hi),
+        0 0 40px 4px var(--ecl-rim-glow),
+        0 0 150px 26px var(--ecl-spill);
+    }
+  }
+}
+
+.eclipse-cap {
+  margin: 0;
+  padding-inline: max(calc(var(--row-pad) - 1px), var(--card-pad-min));
+  max-width: 44ch;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-mut);
+}
+
+/* Forced colours own the palette, and an eclipse drawn in system colours is a
+   grey circle. Drop the artwork and keep the caption, which carries the claim
+   the picture was making anyway. */
+@media (forced-colors: active) {
+  .eclipse-art { display: none; }
 }
 
 /* ------------------------------------------------------------------ loop -- */

@@ -157,6 +157,27 @@ export const field = {
 };
 
 // ---------------------------------------------------------------------------
+// The picture that took the field's slot.
+//
+// An occluded disc with a rim of light. It keeps the circle the page already
+// uses (the plate had one, the wordmark is a star inside one) and throws away
+// everything inside it, which is the whole reason it is here instead of the
+// swarm: the swarm was a lot of machinery to say one thing.
+//
+// It reads two ways on purpose. An eclipse is nature at a scale nobody
+// negotiates with. An aperture is a machine deciding how much gets through.
+// The page is about both of those at once.
+//
+// Same division of labour as the field: the description is the route to the
+// picture for anyone who cannot see it, which frees the caption to say why the
+// picture is on the page rather than what is in it.
+// ---------------------------------------------------------------------------
+export const eclipse = {
+  alt: "A dark disc on a black field, ringed by a thin bright edge of light, with a soft halo beyond it.",
+  caption: "A boundary is only visible where something presses on it",
+};
+
+// ---------------------------------------------------------------------------
 // Work.
 // ---------------------------------------------------------------------------
 export type WorkItem = {
