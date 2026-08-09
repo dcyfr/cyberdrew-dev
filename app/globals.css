@@ -1045,8 +1045,12 @@ h1, h2, h3 {
   display: flex; flex-wrap: wrap;
   gap: var(--s-action-gap); margin-top: var(--s-actions-top);
 }
+/* The top margin used to be sized to clear the whole two-column body, because
+   this sat underneath it. It sits inside the left column now, directly under
+   the buttons, so that much air reads as a hole rather than a division. Enough
+   to separate the band, not enough to strand it. */
 .hero-roles {
-  margin-top: clamp(var(--s-9), 6vh, var(--s-14)); padding-top: var(--s-5);
+  margin-top: clamp(var(--s-7), 3.5vh, var(--s-10)); padding-top: var(--s-4);
   display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-7);
   font-family: var(--font-mono); font-size: var(--t-mono); color: var(--ink-mut);
 }
@@ -1095,9 +1099,14 @@ h1, h2, h3 {
   .hero-body {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: clamp(var(--s-12), 6vw, var(--s-24));
-    /* start, not end: the ledger is the taller column, and bottom-aligning
-       both dropped the deck ~95px clear of the headline it belongs to. */
-    align-items: start;
+    /* stretch, not start. This used to be `start` because the ledger was the
+       taller column and bottom-aligning both dropped the deck clear of its own
+       headline. That is no longer the shape: with the figures two-up and the
+       roles moved into the left column, the LEFT side is now the taller one,
+       and `start` left the ruled column ending 118px short in mid-air.
+       Stretching gives the rule the full height of the row, and the aside
+       distributes its own content against it. */
+    align-items: stretch;
   }
 }
 .hero-say { min-width: 0; }
@@ -1106,8 +1115,15 @@ h1, h2, h3 {
 /* Four figures as a description list: value is the term, the gloss is the
    description. Not a table — there is one column, and a table would promise
    a grid that is not there. */
+/* Two up, at every width. It used to be a single tall column on wide screens
+   and two up only below 60rem, which is backwards: the wide layout is where
+   there is horizontal room to spend, and stacking four figures there made the
+   right column 242px tall against a 196px left one. Measured, that was the
+   whole of the hero's 175px dead zone. Two by two is 105px and the columns
+   land together. */
 .ledger {
-  display: grid; gap: var(--s-6);
+  display: grid; gap: var(--s-6) var(--s-5);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 0; padding: 0;
 }
 /* Portrait and ledger stack as one column: who, then what backs it. */
@@ -1119,6 +1135,11 @@ h1, h2, h3 {
   .hero-aside {
     border-left: 1px solid var(--line);
     padding-left: clamp(var(--s-6), 2.5vw, var(--s-10));
+    /* The face at the top of the rule, the figures at the foot of it. The
+       aside now spans the whole row, so its two pieces mark the ends of the
+       column rather than clustering at the top and leaving the rule to trail
+       off. Face, then the space, then what backs it. */
+    align-content: space-between;
   }
 }
 
@@ -1141,10 +1162,10 @@ h1, h2, h3 {
      as an obsidian disc: the same two materials, just arranged the other way. */
   background: var(--surface);
 }
-/* Below that, four stacked figures ran the hero past a phone viewport. Two up
-   keeps it to one band under the actions. */
+/* Narrow gets a little more air between the rows, since the figures are the
+   last thing before the fold rather than a column beside the deck. */
 @media (max-width: 59.99rem) {
-  .ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-7) var(--s-6); }
+  .ledger { gap: var(--s-7) var(--s-6); }
 }
 .ledger-row { display: grid; gap: var(--s-1); }
 .ledger-val {
