@@ -29,19 +29,19 @@ export function Hero() {
           </span>
         </p>
 
-        {/* data-glow rides the SPANS, not the h1. The glow paints a gradient
-            clipped to text, and a gradient declared on the h1 resolves
-            --glow-base in the h1's own context — so the second line's muted
-            base was read from the h1 (--ink) and the deliberate two-tone
-            headline rendered as one tone for everyone whose browser is not in
-            reduced-motion. Per-span, each line resolves its own base.
-            CursorGlow already computes --gx/--gy per element, so the light
-            stays correct with more, smaller targets. */}
-        <h1>
+        {/* The headline is lit from its edge now, not through its glyphs, so
+            data-rule-glow goes on the h1 and the spans carry nothing. They are
+            plain ink again: line one --ink, line two --ink-mut, straight
+            colour with no gradient in the middle of it.
+
+            That also retires the bug this markup used to work around. The old
+            treatment clipped a gradient to the text, and a custom property is
+            read by the declaration that USES it, so the second line's muted
+            base had to live on whichever element painted. Nothing paints the
+            type now, so there is nothing left to get wrong. */}
+        <h1 data-rule-glow>
           {hero.headline.map((line) => (
-            <span key={line} data-glow>
-              {line}
-            </span>
+            <span key={line}>{line}</span>
           ))}
         </h1>
 

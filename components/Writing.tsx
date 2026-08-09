@@ -13,12 +13,12 @@ export async function Writing() {
   return (
     <section className="bay" id="writing">
       <div className="wide">
-        <div className="sect-head" data-reveal>
+        <div className="sect-head" data-reveal data-rule-glow>
           <p className="eyebrow">
             <span className="idx">{writing.index}</span>
             {writing.eyebrow}
           </p>
-          <h2 className="sect-h" data-glow>{writing.headline}</h2>
+          <h2 className="sect-h">{writing.headline}</h2>
         </div>
 
         <div className="rows">

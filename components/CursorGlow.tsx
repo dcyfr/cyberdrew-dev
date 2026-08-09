@@ -3,19 +3,19 @@
 import { useEffect } from "react";
 
 /**
- * One light source, two materials.
+ * One light source, two things it falls on.
  *
- * Display type takes a warm-to-cool glow clipped to the glyphs. The temperature
- * axis is already in the identity: bone is warm (R>G>B), obsidian is cool
- * (B>R). This amplifies that existing axis rather than introducing hue, so the
- * page stays monochrome in the sense that matters.
+ * Edges take a travelling light: a hot core on the rule with a soft bleed
+ * around it. Glass panels take a specular sweep. Both from the SAME pointer
+ * position, which is the point of driving them from one loop — a highlight
+ * pinned to a card's corner reads as the card lighting up, while a highlight
+ * that moves, and that agrees with the light on the heading above it, reads as
+ * one surface catching one source.
  *
- * Glass panels take a specular sweep from the SAME pointer position. That is
- * the point of driving both from one loop: a highlight pinned to a card's
- * top-left corner reads as the card lighting up, while a highlight that moves
- * with the pointer — and agrees with the light on the headline above it —
- * reads as a curved surface catching a light source. It is the cheapest of the
- * Liquid Glass cues and the most characteristic.
+ * Nothing here lights TYPE. The headline used to take a gradient clipped to its
+ * own glyphs; that read as coloured text rather than as something lit, and it
+ * made the type's colour a moving target for contrast. Lighting edges instead
+ * means the numbers are the same lit and unlit.
  *
  * Writes three custom properties per frame and nothing else; every gradient
  * lives in CSS. Pointer-only, and skipped entirely under reduced motion or on
@@ -27,15 +27,17 @@ export function CursorGlow() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
-    // Text glows only when the pointer is roughly on the same band of the page.
-    // A panel is a bounded object, so its highlight fades over a shorter reach.
-    const text = [...document.querySelectorAll<HTMLElement>("[data-glow]")].map(
-      (el) => ({ el, reach: 220 }),
-    );
+    // A panel is a bounded object you are already pointing at, so its
+    // highlight fades over a short reach. An edge is one pixel tall and has to
+    // start arriving before the pointer is on top of it, or it only ever
+    // appears after you have stopped looking for it.
     const panels = [...document.querySelectorAll<HTMLElement>(".row")].map(
       (el) => ({ el, reach: 90 }),
     );
-    const targets = [...text, ...panels];
+    const edges = [
+      ...document.querySelectorAll<HTMLElement>("[data-rule-glow]"),
+    ].map((el) => ({ el, reach: 260 }));
+    const targets = [...panels, ...edges];
     if (targets.length === 0) return;
 
     let frame = 0;

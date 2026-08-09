@@ -7,12 +7,12 @@ export function Work() {
   return (
     <section className="bay" id="work">
       <div className="wide">
-        <div className="sect-head" data-reveal>
+        <div className="sect-head" data-reveal data-rule-glow>
           <p className="eyebrow">
             <span className="idx">{work.index}</span>
             {work.eyebrow}
           </p>
-          <h2 className="sect-h" data-glow>{work.headline}</h2>
+          <h2 className="sect-h">{work.headline}</h2>
         </div>
 
         <div className="rows">
