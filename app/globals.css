@@ -24,7 +24,12 @@
   --surface-2: #1d1d21;
   --ink:       #edece8;
   --ink-2:     #c9c8c4;
-  --ink-mut:   #86868d;
+  /* Solved against --line, the darkest surface muted ink ever lands on, rather
+     than against the page ground. The old #86868d cleared 5.44:1 on --bg but
+     only 4.17:1 on --line, and muted ink lands on raised surfaces constantly —
+     measured on the rendered page it was the single root cause of every text
+     contrast finding in both themes. See scripts/a11y-contrast.mjs. */
+  --ink-mut:   #94949b;
   --line:      #26262b;
   --line-2:    #3b3b42;
 
@@ -68,6 +73,13 @@
   --radius: 18px;
   --radius-sm: 12px;
   --radius-pill: 999px;
+  /* Concentric radii. A rounded box nested inside another only looks machined
+     when the inner radius is the outer radius MINUS the gap between them —
+     otherwise the two curves run at different rates and the gap visibly
+     pinches at the corners. Derived, not chosen, so the pair cannot drift:
+     any nested surface uses --radius-inner and states its own inset. */
+  --radius-inset: var(--s-2);
+  --radius-inner: calc(var(--radius) - var(--radius-inset));
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
 
@@ -86,8 +98,42 @@
   --edge-top:    rgb(255 255 255 / .09);
   --edge-bottom: rgb(0 0 0 / .28);
   --glass-ring:  rgb(255 255 255 / .06);
-  --bloom:       rgb(220 218 213 / .07);
-  --bloom-2:     rgb(220 218 213 / .045);
+  /* ---- lensing ----------------------------------------------------------
+     Real glass does not blur uniformly; it bends hardest where the surface
+     curves, which is at the rim. --lens-rim is that second, brighter ring
+     just inside the edge, and --lens-depth is how far in the bend reads
+     before the panel goes flat. Two tokens rather than a literal per
+     component, so a control and a card cannot disagree about how thick the
+     glass is. */
+  --lens-rim:   rgb(255 255 255 / .10);
+  --lens-depth: 6px;
+  /* ---- control edge -----------------------------------------------------
+     WCAG 1.4.11 wants 3:1 for the visual information that identifies a
+     control. A card is exempt in practice — its title identifies it — but a
+     button's pill IS its affordance, and the icon-only controls have no label
+     at all.
+     This cannot be solved with fill opacity: --surface sits 1.07:1 from --bg
+     in dark, so a translucent panel is within 7% of the ground at ANY alpha,
+     and measured, .btn-ghost separated from the ground by 1.02:1. Only a
+     border can carry it. Hence a dedicated token rather than reaching for
+     --line-2 (1.77:1 in dark, 1.64:1 in light — both short).
+     Scoped deliberately: controls get a real edge, panels keep hairlines, so
+     the page does not turn into a wireframe. */
+  --edge-control: #6a6a71;
+  /* The specular sweep: where the light catches a curved surface. Driven by
+     CursorGlow, which already writes --gx/--gy/--ga per frame; at --ga 0 this
+     resolves to nothing, so a page with no pointer (or no JS) simply never
+     sees it. */
+  --spec: rgb(255 255 255 / .07);
+  /* Amplitude is set by measurement, not by eye: with the gradient syntax
+     fixed these render for the first time, and .07/.045 put the ground at
+     1.12:1 darkest-to-brightest — visible, but still too flat for a 22px blur
+     to have anything to say. .23/.145 measures 1.37:1, which is the band where
+     a panel reads as material rather than as a drop shadow. The brightest
+     point lands near --line, so ambient light never outshines the quietest
+     structural element on the page. */
+  --bloom:       rgb(220 218 213 / .23);
+  --bloom-2:     rgb(220 218 213 / .145);
   /* the halo a panel throws when it lifts */
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
 
@@ -213,7 +259,7 @@
     --surface-2: #e9e7e2;
     --ink:       #0b0b0d;
     --ink-2:     #33333a;
-    --ink-mut:   #6a6a72;
+    --ink-mut:   #5c5c64;
     --line:      #dfddd7;
     --line-2:    #c3c0b9;
     --accent:    #0b0b0d;
@@ -224,6 +270,11 @@
     --edge-top:    rgb(255 255 255 / .85);
     --edge-bottom: rgb(40 32 24 / .07);
     --glass-ring:  rgb(255 255 255 / .6);
+    /* On paper the rim reads as a darker refracted edge, not a brighter one:
+       the ground is lighter than the glass, so light bends the other way. */
+    --lens-rim:    rgb(40 32 24 / .07);
+    --spec:        rgb(255 255 255 / .55);
+    --edge-control: #847f76;
     --bloom:       rgb(255 255 255 / .85);
     --bloom-2:     rgb(40 32 24 / .035);
     --glow: 0 0 44px -14px rgb(40 32 24 / .18);
@@ -240,7 +291,7 @@
   --surface-2: #e9e7e2;
   --ink:       #0b0b0d;
   --ink-2:     #33333a;
-  --ink-mut:   #6a6a72;
+  --ink-mut:   #5c5c64;
   --line:      #dfddd7;
   --line-2:    #c3c0b9;
   --accent:    #0b0b0d;
@@ -251,6 +302,9 @@
   --edge-top:  rgb(255 255 255 / .85);
   --edge-bottom: rgb(40 32 24 / .07);
   --glass-ring:  rgb(255 255 255 / .6);
+  --lens-rim:    rgb(40 32 24 / .07);
+  --spec:        rgb(255 255 255 / .55);
+  --edge-control: #847f76;
   --bloom:     rgb(255 255 255 / .85);
   --bloom-2:   rgb(40 32 24 / .035);
   --glow: 0 0 44px -14px rgb(40 32 24 / .18);
@@ -266,7 +320,7 @@
   --surface-2: #1d1d21;
   --ink:       #edece8;
   --ink-2:     #c9c8c4;
-  --ink-mut:   #86868d;
+  --ink-mut:   #94949b;
   --line:      #26262b;
   --line-2:    #3b3b42;
   --accent:    #dcdad5;
@@ -277,8 +331,11 @@
   --edge-top:    rgb(255 255 255 / .09);
   --edge-bottom: rgb(0 0 0 / .28);
   --glass-ring:  rgb(255 255 255 / .06);
-  --bloom:       rgb(220 218 213 / .07);
-  --bloom-2:     rgb(220 218 213 / .045);
+  --lens-rim:    rgb(255 255 255 / .10);
+  --spec:        rgb(255 255 255 / .07);
+  --edge-control: #6a6a71;
+  --bloom:       rgb(220 218 213 / .23);
+  --bloom-2:     rgb(220 218 213 / .145);
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
@@ -351,11 +408,25 @@ body::before {
   z-index: -1;
   pointer-events: none;
   /* `in oklab` interpolates perceptually, so the ramp steps evenly instead of
-     bunching in the middle where banding is most visible. */
+     bunching in the middle where banding is most visible.
+
+     The interpolation method belongs INSIDE the first clause, directly after
+     the position, with NO comma before it:
+         radial-gradient(<size> at <position> in oklab, <stops>)
+     Written as `at 18% 8%, in oklab, …` the browser parses `in oklab` as a
+     colour stop, fails, and throws away the whole background declaration.
+     That is what shipped, so `getComputedStyle(body, "::before")
+     .backgroundImage` returned `none` in production and this layer had never
+     rendered once — measured, the page ground was perfectly flat at 1.000:1
+     and every bit of apparent variation was the dither below.
+
+     It matters more than a cosmetic gradient: the glass surfaces exist to
+     refract this. Without it a blurred panel over a flat field really is just
+     a slightly different flat field, exactly as the note on .glass warns. */
   background:
-    radial-gradient(42vmax 42vmax at 18% 8%,  in oklab, var(--bloom)   0%, transparent 62%),
-    radial-gradient(38vmax 38vmax at 88% 32%, in oklab, var(--bloom-2) 0%, transparent 60%),
-    radial-gradient(46vmax 46vmax at 62% 92%, in oklab, var(--bloom-2) 0%, transparent 64%);
+    radial-gradient(42vmax 42vmax at 18% 8%  in oklab, var(--bloom)   0%, transparent 62%),
+    radial-gradient(38vmax 38vmax at 88% 32% in oklab, var(--bloom-2) 0%, transparent 60%),
+    radial-gradient(46vmax 46vmax at 62% 92% in oklab, var(--bloom-2) 0%, transparent 64%);
 }
 
 /* Dither. A gradient this large with this small a luminance delta cannot be
@@ -390,6 +461,10 @@ body::after {
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
+    /* the lens: a second ring set --lens-depth in from the edge, so the rim
+       reads as thickness the light bends through rather than as a drawn
+       border. Spread, not blur, keeps it crisp at 1px on every DPR. */
+    inset 0 0 0 var(--lens-depth) var(--lens-rim),
     var(--shadow);
 }
 /* Where backdrop-filter is unsupported the fill alone would look thin and
@@ -576,6 +651,7 @@ h1, h2, h3 {
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
+    inset 0 0 0 var(--lens-depth) var(--lens-rim),
     var(--shadow);
 }
 @supports not (backdrop-filter: blur(1px)) {
@@ -639,16 +715,18 @@ h1, h2, h3 {
    inside the dock's own bottom edge. .header is fixed, so it is already a
    positioning context. */
 .nav-wrap { display: flex; align-items: center; }
+/* Icon-only, and on a phone it is the ONLY navigation on the page — same
+   reasoning as .theme-toggle, more so. */
 .nav-trigger {
   display: none;
   width: 32px; height: 32px; place-items: center;
-  border: 1px solid transparent; border-radius: var(--radius-pill);
+  border: 1px solid var(--edge-control); border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--surface-2) 80%, transparent);
   box-shadow: inset 0 1px 0 var(--edge-top);
   color: var(--ink-2); cursor: pointer;
   transition: color var(--ease), border-color var(--ease);
 }
-.nav-trigger:hover { color: var(--ink); border-color: var(--line-2); }
+.nav-trigger:hover { color: var(--ink); border-color: var(--accent); }
 .bars { display: grid; gap: 4px; width: 14px; }
 .bars i {
   display: block; height: 1.5px; width: 100%; background: currentColor;
@@ -683,7 +761,11 @@ h1, h2, h3 {
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--ink-2); text-decoration: none;
-  padding: var(--s-3); border-radius: var(--radius-sm);
+  /* Concentric with the panel: the panel's --s-2 padding is exactly the inset
+     these sit at, so --radius-inner is the radius that keeps the two curves
+     parallel. Was --radius-sm (12px) against a 10px ideal — close enough to
+     look almost right, which is the worst kind of almost. */
+  padding: var(--s-3); border-radius: var(--radius-inner);
   min-height: 44px; display: flex; align-items: center;
 }
 .nav-panel-link:hover { color: var(--ink); background: var(--surface-2); }
@@ -725,14 +807,26 @@ h1, h2, h3 {
 @media (prefers-reduced-motion: reduce) { .btn:hover { transform: none; } }
 .btn-solid { background: var(--accent); color: var(--on-accent); }
 .btn-solid:hover { background: transparent; color: var(--ink); }
+/* A control's pill IS its affordance, so this is the one glass surface that
+   cannot be allowed to dissolve into the ground. Measured on the rendered page
+   the old fill separated from the ground by 1.02:1 and its border by 1.25:1,
+   which is a button you can read but not see. --line-2 was already the
+   intent; the translucent fill was washing it out. Raising the fill and
+   pinning the border to --line-2 at full strength gets the edge to a real
+   boundary while keeping the material — this is emphatically NOT a solid
+   button, it just stops pretending a hairline is enough.
+   The 3:1 target for non-text contrast is WCAG 1.4.11. */
 .btn-ghost {
-  color: var(--ink); border-color: var(--line-2);
-  background: color-mix(in srgb, var(--surface) 45%, transparent);
-  backdrop-filter: blur(10px);  box-shadow: inset 0 1px 0 var(--edge-top);
+  color: var(--ink); border-color: var(--edge-control);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 0 0 1px var(--glass-ring);
 }
 .btn-ghost:hover {
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
   box-shadow: inset 0 1px 0 var(--edge-top), var(--glow);
 }
 
@@ -921,15 +1015,31 @@ h1, h2, h3 {
     transform var(--ease-glass),
     backdrop-filter var(--ease-glass);
 }
-/* The specular sheen: a soft highlight raking across the top-left, faded in
-   only on hover. Sits behind the content via z-index on an isolated stack. */
+/* The specular sheen: a highlight where the light catches the curve. Sits
+   behind the content via z-index on an isolated stack.
+
+   It used to be pinned to the top-left corner and cross-faded on hover, which
+   reads as a card lighting up rather than as a surface catching light — the
+   highlight never moved, so nothing about it said "curved". It now tracks the
+   pointer through --gx/--gy, the same two properties CursorGlow already writes
+   for the display type, so one rAF loop drives both and the light on a panel
+   agrees with the light on the headline above it.
+
+   --ga gates the whole thing and is 0 until the pointer is near, so a page
+   with no pointer, no JS, or reduced motion never sees it and the resting
+   card is exactly what it was. The fallbacks in var() are what make that
+   true — without them an unset --gx would invalidate the gradient. */
 .row::before {
   content: "";
   position: absolute; inset: 0; z-index: -1;
   border-radius: inherit;
   opacity: 0;
   background:
-    radial-gradient(60% 130% at 12% -10%, var(--edge-top) 0%, transparent 60%);
+    radial-gradient(
+      42% 140% at var(--gx, 12%) var(--gy, -10%),
+      var(--spec) 0%,
+      transparent 62%
+    );
   transition: opacity var(--ease-glass);
 }
 .row:hover {
@@ -940,10 +1050,13 @@ h1, h2, h3 {
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
+    inset 0 0 0 var(--lens-depth) var(--lens-rim),
     var(--shadow),
     var(--glow);
 }
-.row:hover::before { opacity: 1; }
+/* --ga carries the pointer's proximity, so the sheen arrives with the light
+   rather than snapping on at the hover boundary. */
+.row:hover::before { opacity: var(--ga, 1); }
 @media (prefers-reduced-motion: reduce) {
   .row, .row::before { transition: none; }
   .row:hover { transform: none; }
@@ -1206,6 +1319,37 @@ h1, h2, h3 {
     padding-block: clamp(var(--s-10), 14vw, var(--s-16))
                    clamp(var(--s-16), 24vw, var(--s-24));
   }
+  /* Below this width the caption has its own clear ground, so the scrim it
+     wears on wide viewports would be a visible box around nothing. */
+  .plate-cap { background: none; backdrop-filter: none; padding: 0; }
+}
+
+/* ---- adaptive tint ------------------------------------------------------
+   The native Liquid Glass material samples what is behind it and shifts to
+   stay legible over it. The web has no such API, so the substitute is to
+   decide by knowledge rather than by sampling: a surface that is known to
+   overlap high-variance content takes a stronger local ground, and a surface
+   over the flat page ground stays light.
+
+   The caption is the only text on the site that overlays an image. Above 48rem
+   it sits on the artwork, and the artwork is a particle swarm whose luminance
+   is not knowable in advance — today it happens to land on a dark region of
+   the render, which is luck rather than design and would silently stop being
+   true the next time the asset changes. A scrim makes it deterministic.
+
+   Deliberately narrow: it hugs the text rather than banding the plate, so the
+   artwork is still the thing you look at. */
+@media (min-width: 48rem) {
+  .plate-cap {
+    padding: var(--s-2) var(--s-3);
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--plate-ground) 72%, transparent);
+    backdrop-filter: blur(10px) saturate(120%);
+    box-shadow: inset 0 0 0 1px var(--glass-ring);
+  }
+  @supports not (backdrop-filter: blur(1px)) {
+    .plate-cap { background: color-mix(in srgb, var(--plate-ground) 92%, transparent); }
+  }
 }
 
 /* ------------------------------------------------------------------ loop -- */
@@ -1348,9 +1492,13 @@ h1, h2, h3 {
   color: var(--accent);
   white-space: nowrap;
 }
+/* --ink-2, not --ink-mut: this is a full-size running paragraph, and the muted
+   tier is for labels and machine text. At --t-body it was the largest text on
+   the page wearing the quietest ink, which is the wrong way round and left it
+   with the least headroom of any running copy once it sat on glass. */
 .guard-desc {
   margin: var(--s-2) 0 0;
-  color: var(--ink-mut); font-size: var(--t-body); line-height: 1.55;
+  color: var(--ink-2); font-size: var(--t-body); line-height: 1.55;
   max-width: 52ch;
 }
 
@@ -1380,6 +1528,7 @@ h1, h2, h3 {
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
+    inset 0 0 0 var(--lens-depth) var(--lens-rim),
     var(--shadow-lift);
   margin-inline: calc(-1 * var(--row-pad));
   padding-block: var(--s-contact-block);
@@ -1438,9 +1587,10 @@ h1, h2, h3 {
   margin: 0; font-size: var(--t-body); color: var(--ink);
   letter-spacing: -0.01em; line-height: 1.4;
 }
+/* Same reasoning as .guard-desc: running copy takes --ink-2. */
 .engagement-desc {
   margin-block: var(--s-2) 0; max-width: 40ch;
-  font-size: var(--t-body); line-height: 1.55; color: var(--ink-mut);
+  font-size: var(--t-body); line-height: 1.55; color: var(--ink-2);
 }
 /* What you actually walk away with, set apart from the description so it can
    be found without reading the paragraph. */
@@ -1491,17 +1641,19 @@ h1, h2, h3 {
 /* ----------------------------------------------------------- theme toggle -- */
 
 /* Round, to sit inside the pill rather than fight it. */
+/* Icon-only, so there is no label to identify it and the disc has to do that
+   job on its own — the strongest case on the page for a real 3:1 boundary. */
 .theme-toggle {
   width: 32px; height: 32px; display: grid; place-items: center;
   background: color-mix(in srgb, var(--surface-2) 80%, transparent);
-  border: 1px solid transparent;
+  border: 1px solid var(--edge-control);
   border-radius: var(--radius-pill);
   box-shadow: inset 0 1px 0 var(--edge-top);
   color: var(--ink-2); cursor: pointer;
   font-family: var(--font-mono); font-size: var(--t-mono); line-height: 1;
   transition: color var(--ease), border-color var(--ease), background var(--ease);
 }
-.theme-toggle:hover { color: var(--ink); border-color: var(--line-2); }
+.theme-toggle:hover { color: var(--ink); border-color: var(--accent); }
 
 /* ----------------------------------------------------------------- touch -- */
 /* Everything below assumes no hover and a finger, not a cursor. */
@@ -1685,4 +1837,78 @@ a, button { -webkit-tap-highlight-color: transparent; }
   margin-left: .28em;
   vertical-align: -.14em;
   background: var(--accent);
+}
+
+/* ------------------------------------------------ transparency preferences -- */
+/* Last in the file on purpose. Most of the glass is token-driven and could be
+   flattened by redefining --glass* alone, but a handful of components carry
+   their own literal color-mix() fill and blur, and those only lose to a rule
+   that comes later in source order.
+   Reset --edge-* too: a bevel highlight is a lighting cue for a translucent
+   material, and on an opaque panel it just reads as a stray bright hairline.
+
+   IMPORTANT — this cannot be the whole accessibility story.
+   prefers-reduced-transparency is unsupported in Safari (desktop AND iOS) and
+   is behind a flag in Firefox; it is Chrome/Edge 118+ and Samsung 25+. The
+   users most likely to have "Reduce Transparency" switched on are exactly the
+   macOS/iOS users whose browser never reports it. So the glass has to be
+   legible on its own, and this block is a bonus tier rather than the floor. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass:        var(--surface);
+    --glass-strong: var(--surface);
+    --glass-blur:   none;
+    --edge-top:     transparent;
+    --edge-bottom:  transparent;
+    --glass-ring:   var(--line);
+  }
+  /* The ambient blooms exist to give the blur something to sample. With no
+     blur they are just a gradient over the ground, so they go. */
+  body::before { display: none; }
+
+  .glass, .header, .contact, .nav-panel[data-open], .row, .row:hover,
+  .btn-ghost, .btn-ghost:hover, .theme-toggle, .nav-trigger, .wordmark .mark,
+  .nav-link[aria-current] {
+    background: var(--surface);
+    backdrop-filter: none;
+  }
+  /* The sheen is a specular cue for glass; without the material it is noise. */
+  .row::before { display: none; }
+  /* Borders now carry the whole job of saying where a panel ends. */
+  .glass, .header, .contact, .row, .nav-panel[data-open] {
+    border-color: var(--line-2);
+  }
+  /* Controls are NOT in the list above on purpose. Sweeping them into the
+     panel rule set their border to --line-2 (1.77:1 in dark) and so actually
+     DOWNGRADED the control edge from its 3:1 default for the exact users who
+     asked for less transparency. Keep --edge-control here. */
+  .btn-ghost, .theme-toggle, .nav-trigger { border-color: var(--edge-control); }
+}
+
+/* Windows/macOS "increase contrast". Distinct from reduced transparency: the
+   ask here is legibility headroom, not opacity per se — so panels go opaque
+   AND every boundary is lifted to a real, visible edge. This is also what
+   settles the .btn-ghost affordance: a control whose pill is its only
+   affordance should not be a 1.25:1 hairline for someone who asked for more
+   contrast. */
+@media (prefers-contrast: more) {
+  :root {
+    --glass:        var(--surface);
+    --glass-strong: var(--surface);
+    --glass-blur:   none;
+    --ink-mut:      var(--ink-2);
+  }
+  body::before { display: none; }
+
+  .glass, .header, .contact, .nav-panel[data-open], .row, .row:hover,
+  .btn-ghost, .btn-ghost:hover, .theme-toggle, .nav-trigger, .wordmark .mark {
+    background: var(--surface);
+    backdrop-filter: none;
+    border-color: var(--ink-2);
+  }
+  .row::before { display: none; }
+  .tag { border: 1px solid var(--ink-2); }
+  /* A focus ring at 2px is adequate against glass; against a hard-edged
+     high-contrast panel it should be unmistakable. */
+  :focus-visible { outline-width: 3px; }
 }
