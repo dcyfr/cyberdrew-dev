@@ -463,6 +463,8 @@
     box-shadow: none;
   }
   .row::before { display: none; }
+  /* The ring is hue on a border, and the OS owns both. */
+  [data-ring-glow]::before, [data-ring-glow]::after { display: none; }
   body::after { display: none; }
   [data-glow] { background-image: none; color: CanvasText; }
   /* The slab is ordinary glass now, so it needs no forced-color-adjust escape
@@ -753,13 +755,85 @@ h1, h2, h3 {
     filter: blur(14px);
   }
 
-  /* The contact slab has no rule to light because it is a panel, not a header
-     block, so it lights its OWN top edge. That is the closer reading of the
-     reference anyway: the Siri treatment glows a window border, and this is the
-     only thing on the page that is actually a window.
-     Inset by the corner radius, or a straight bar of light overshoots the
-     rounded corners and hangs in the air past them. */
-  .contact[data-rule-glow] { --rule-inset: var(--radius); }
+  /* ---- the ring -------------------------------------------------------
+     The same light, wrapped.
+
+     A panel is not a header block, so it has no rule to run along. The slab
+     used to answer that by lighting its own TOP EDGE — a straight bar inset by
+     the corner radius so it would not overshoot the curve. Which is to say it
+     was still a rule: it stopped dead at two invisible points, the corners
+     stayed dark, and the other three sides of a four-sided object never lit at
+     all. Against a reference whose whole subject is a window border catching
+     light, that is the wrong three quarters.
+
+     This lights the border itself, the entire way round. Two things make it
+     work, and neither is the gradient:
+
+     1. THE MASK. Paint a box that inherits the panel's own border-radius, then
+        punch its content box out of it, and what survives is exactly the
+        border — corners included, at exactly the curve the panel already has.
+        The ring cannot disagree with the corner it rides, because it never
+        gets told what the corner is.
+     2. THE PROJECTED POINT. --rx/--ry are not the pointer. They are the point
+        on this border nearest the pointer, computed in the same rAF loop that
+        writes --gx (see CursorGlow). The light therefore always sits ON the
+        edge: slide down a side and the arc slides with it, cut a corner and
+        the arc bends round it. Centring on the raw pointer instead would park
+        the light in the middle of a 1100px-wide panel, lighting nothing.
+
+     Radius is in px, not %, so the arc is a fixed LENGTH of lit border rather
+     than a fraction of the panel — the same light on a tall panel and a short
+     one, which is what a light source does. */
+  [data-ring-glow] { position: relative; }
+  [data-ring-glow]::before,
+  [data-ring-glow]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    height: auto;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: var(--ga, 0);
+    transition: opacity 260ms linear;
+    /* Two full-box masks, the inner one clipped to the content box, composited
+       so the inner subtracts from the outer. `padding` is therefore the ring's
+       thickness — the only number that decides it.
+       The -webkit- pair is the pre-2023 Safari syntax and has to stay: the
+       shorthand RESETS the composite, so the composite must follow it. */
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+  }
+  /* The core: one pixel of lit border.
+     The hot stop is HELD to ~7% rather than being a single point, and that is
+     the difference between a light and a smear. The bar this replaced was a
+     20%-wide gradient on a strip the full width of the panel, so its centre
+     stayed saturated across ~200px; a circle whose hot colour decays from the
+     very first pixel spreads the same ink over a 170px radius and lands dim
+     everywhere. Hold the core, then fall off fast. */
+  [data-ring-glow]::after {
+    padding: 1px;
+    background: radial-gradient(circle var(--ring-core, 170px) at var(--rx, 50%) var(--ry, 0%),
+      var(--rule-hot) 0%, var(--rule-hot) 7%,
+      var(--rule-mid) 30%, var(--rule-cool) 62%, transparent 90%);
+    filter: blur(0.5px);
+  }
+  /* The bleed, which is the part that actually reads as light. A thicker ring
+     so the blur has material to work with; the blur is what lets it escape the
+     border and stop looking like a drawn stroke. */
+  [data-ring-glow]::before {
+    padding: 4px;
+    background: radial-gradient(circle var(--ring-bleed, 230px) at var(--rx, 50%) var(--ry, 0%),
+      var(--rule-bleed-warm) 0%, var(--rule-bleed-warm) 10%,
+      var(--rule-bleed-cool) 48%, transparent 82%);
+    filter: blur(12px);
+  }
+  /* Where a ring rides a panel that also holds content, it has to sit above the
+     glass fill and below nothing — it is 1px of border and 11px of haze at the
+     rim, so it never lands on type. */
+  .contact[data-ring-glow]::before,
+  .contact[data-ring-glow]::after { z-index: 1; }
 
   /* The hero is the one lit edge with no rule under it, and that is deliberate.
      A hairline above the headline would be a fence at the very top of the page,
@@ -1084,64 +1158,12 @@ h1, h2, h3 {
 }
 .cred-more:hover { color: var(--ink); border-color: var(--accent); }
 
-/* The deck's measure is ~50ch, which left the right half of an 1180px rail
-   empty at every width above the stack point. The ledger fills it. `auto` on
-   the second track lets the figures size to their content instead of taking a
-   fixed half the row — the deck keeps its measure and the numbers sit against
-   the rail's right edge. */
-.hero-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(var(--s-10), 7vh, var(--s-16));
-  align-items: start;
-}
-@media (min-width: 60rem) {
-  .hero-body {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: clamp(var(--s-12), 6vw, var(--s-24));
-    /* stretch, not start. This used to be `start` because the ledger was the
-       taller column and bottom-aligning both dropped the deck clear of its own
-       headline. That is no longer the shape: with the figures two-up and the
-       roles moved into the left column, the LEFT side is now the taller one,
-       and `start` left the ruled column ending 118px short in mid-air.
-       Stretching gives the rule the full height of the row, and the aside
-       distributes its own content against it. */
-    align-items: stretch;
-  }
-}
-.hero-say { min-width: 0; }
-
-/* -------------------------------------------------------------- ledger -- */
-/* Four figures as a description list: value is the term, the gloss is the
-   description. Not a table — there is one column, and a table would promise
-   a grid that is not there. */
-/* Two up, at every width. It used to be a single tall column on wide screens
-   and two up only below 60rem, which is backwards: the wide layout is where
-   there is horizontal room to spend, and stacking four figures there made the
-   right column 242px tall against a 196px left one. Measured, that was the
-   whole of the hero's 175px dead zone. Two by two is 105px and the columns
-   land together. */
-.ledger {
-  display: grid; gap: var(--s-6) var(--s-5);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0; padding: 0;
-}
-/* Portrait and ledger stack as one column: who, then what backs it. */
-.hero-aside { display: grid; gap: clamp(var(--s-7), 3vh, var(--s-10)); }
-@media (min-width: 60rem) {
-  /* On the wide layout the aside sits in a rule-led column, which gives the
-     hero's right half an edge to align to instead of floating. The rule is on
-     the aside rather than the ledger so the portrait shares it. */
-  .hero-aside {
-    border-left: 1px solid var(--line);
-    padding-left: clamp(var(--s-6), 2.5vw, var(--s-10));
-    /* The face at the top of the rule, the figures at the foot of it. The
-       aside now spans the whole row, so its two pieces mark the ends of the
-       column rather than clustering at the top and leaving the rule to trail
-       off. Face, then the space, then what backs it. */
-    align-content: space-between;
-  }
-}
+/* .hero-body / .hero-say / .hero-aside / .ledger lived here. They belonged to
+   the deck-beside-a-ruled-aside hero, which is gone — every variant under
+   §hero variants builds its own two columns (or refuses to have two), so the
+   shared shell had no shared users left. The FIGURE styles below survive it:
+   .ledger-row/-val/-label/-unit are the atoms, and three of the four variants
+   still set figures with them. */
 
 /* ------------------------------------------------------------- portrait -- */
 /* The only photograph on the site. It takes the disc the wordmark's mark and
@@ -1162,11 +1184,9 @@ h1, h2, h3 {
      as an obsidian disc: the same two materials, just arranged the other way. */
   background: var(--surface);
 }
-/* Narrow gets a little more air between the rows, since the figures are the
-   last thing before the fold rather than a column beside the deck. */
-@media (max-width: 59.99rem) {
-  .ledger { gap: var(--s-7) var(--s-6); }
-}
+/* ---- figures ----------------------------------------------------------
+   The atoms every variant sets its ledger with. The containers differ (a band,
+   a readout, a spec rail, a column against a rule); a figure does not. */
 .ledger-row { display: grid; gap: var(--s-1); }
 .ledger-val {
   font-family: var(--font-mono);
@@ -1185,6 +1205,293 @@ h1, h2, h3 {
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--ink-mut); line-height: 1.4;
 }
+
+/* ------------------------------------------------------- hero variants -- */
+/* Four arrangements of the same content, one of which ships. They share the
+   .hero base above — the 100svh box, the dock clearance, the deck measure, the
+   button row, the roles band — and own only what makes them different, which is
+   where things sit and how large they are.
+   Everything here is namespaced under .hero-<name>, so deleting the three that
+   lose is a matter of deleting their block and their component. */
+
+/* ---- A · statement ----------------------------------------------------
+   One column at full rail width, and the proof as a ruled band beneath it. */
+.hero-statement h1 {
+  /* Larger than the shared --t-hero, because nothing shares the row with it.
+     The two-column hero had to leave 40% of the rail for the aside; this does
+     not, so the same headline can run at the width it was written for. */
+  font-size: clamp(2.85rem, 7.5vw, 5.9rem);
+}
+.hero-statement .hero-deck { max-width: 56ch; }
+
+/* The face at the size of the type it sits with: attribution, not subject. */
+.hero-byline {
+  display: flex; align-items: center;
+  gap: clamp(var(--s-4), 2vw, var(--s-6));
+  margin-top: clamp(var(--s-9), 4.5vh, var(--s-12));
+}
+.hero-statement .portrait { width: 3.5rem; }
+.hero-byline-say { min-width: 0; }
+/* Both lines already carry their own top margin for the stacked layout; in the
+   byline they are a two-line block beside a disc, so the outer gap is the
+   flex gap and the inner one is all that is left. */
+.hero-byline .hero-roles { margin-top: 0; padding-top: 0; }
+.hero-byline .creds { margin-top: var(--s-2); }
+
+/* The band. Four figures divided by hairlines, on the one horizontal rule in
+   this hero — which is also the edge the travelling light runs along, so the
+   lit edge is structure the layout wanted rather than a hairline invented to
+   have something to light. */
+.hero-band {
+  margin: clamp(var(--s-10), 6vh, var(--s-16)) 0 0;
+  padding: clamp(var(--s-6), 3vh, var(--s-9)) 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-7) 0;
+}
+@media (min-width: 56rem) {
+  .hero-band { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; }
+}
+.hero-band-cell {
+  display: grid; gap: var(--s-1);
+  padding-inline: clamp(var(--s-4), 2vw, var(--s-7));
+  border-left: 1px solid var(--line);
+}
+/* The first cell in each ROW loses its divider, or the band grows a rule hard
+   against the rail's left edge. Which cell that is depends on the column
+   count, so the reset is stated per breakpoint rather than on :first-child. */
+.hero-band-cell:nth-child(odd) { border-left: 0; padding-left: 0; }
+@media (min-width: 56rem) {
+  .hero-band-cell:nth-child(odd) { border-left: 1px solid var(--line); padding-left: clamp(var(--s-4), 2vw, var(--s-7)); }
+  .hero-band-cell:first-child { border-left: 0; padding-left: 0; }
+}
+
+/* ---- B · console -----------------------------------------------------
+   The hero as an instrument, in the page's own glass, wearing the ring. */
+.console {
+  position: relative;
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  box-shadow:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 -1px 0 var(--edge-bottom),
+    inset 0 0 0 1px var(--glass-ring),
+    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
+    var(--shadow-lift);
+  /* Bleeds by exactly --row-pad, the same as the cards and the contact slab,
+     so every floating object on the page shares one outer edge. */
+  margin-inline: calc(-1 * var(--row-pad));
+  padding-block: clamp(var(--s-8), 5vh, var(--s-14));
+  padding-inline: max(calc(var(--row-pad) + clamp(var(--s-2), 2.5vw, var(--s-8))),
+                      calc(var(--card-pad-min) + var(--s-1)));
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .console { background: var(--surface); }
+}
+/* Inside a panel the headline has walls to respect, so it runs a step under
+   the full-bleed variants. */
+.hero-console h1 { font-size: clamp(2.3rem, 5.2vw, 4.1rem); }
+.console-body {
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  gap: clamp(var(--s-9), 5vh, var(--s-14));
+  align-items: start;
+}
+@media (min-width: 60rem) {
+  .console-body {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 19rem);
+    gap: clamp(var(--s-10), 4vw, var(--s-18));
+    align-items: stretch;
+  }
+  /* Ruled off the statement rather than floating beside it: two compartments
+     of one device, not two things that happen to be adjacent. */
+  .console-inst {
+    border-left: 1px solid var(--line);
+    padding-left: clamp(var(--s-6), 2.5vw, var(--s-10));
+  }
+}
+.console-say { min-width: 0; }
+.console-inst { display: grid; align-content: start; gap: clamp(var(--s-6), 3vh, var(--s-9)); }
+.console-id { display: flex; align-items: center; gap: var(--s-4); }
+.hero-console .portrait { width: 4.5rem; }
+.console-live {
+  margin: 0; display: flex; align-items: center; gap: var(--s-2);
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mut);
+}
+.console-dot {
+  width: 6px; height: 6px; flex: none;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+  animation: console-pulse 2600ms ease-in-out infinite;
+}
+@keyframes console-pulse { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .console-dot { animation: none; } }
+/* A readout, not a stat block: label left, value right, one hairline per row.
+   A row of four big numerals reads as marketing; a right-aligned column of
+   values reads as the current state of something. */
+.console-read { margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.console-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s-4);
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+.console-key {
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mut);
+  line-height: 1.4;
+}
+/* nowrap is load-bearing: "local-first" broke across two lines in a 264px
+   column and read as two separate values stacked. The row is flex, so the
+   value holding its width pushes the LABEL to wrap instead — which is the
+   right thing to sacrifice, because a wrapped label is still one label. */
+.console-value {
+  margin: 0; text-align: right; white-space: nowrap;
+  font-family: var(--font-mono); font-size: var(--t-title);
+  font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
+  color: var(--ink); line-height: 1.1;
+}
+.console-foot {
+  margin-top: clamp(var(--s-8), 4vh, var(--s-12));
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--line);
+}
+.console-foot .hero-roles { margin-top: 0; padding-top: 0; }
+
+/* ---- C · manifest ----------------------------------------------------
+   A document header on the left, and the claim it certifies on the right. */
+.manifest { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(var(--s-9), 5vh, var(--s-14)); }
+@media (min-width: 64rem) {
+  .manifest {
+    grid-template-columns: 17rem minmax(0, 1fr);
+    gap: clamp(var(--s-10), 4vw, var(--s-16));
+    align-items: start;
+  }
+  .manifest-rail {
+    border-right: 1px solid var(--line);
+    padding-right: clamp(var(--s-6), 2vw, var(--s-10));
+  }
+}
+/* Narrower measure than the full-bleed variants, because it is sharing the
+   rail with a 17rem column. */
+.hero-manifest h1 { font-size: clamp(2.35rem, 5.6vw, 4.4rem); }
+.manifest-say { min-width: 0; }
+.manifest-id { display: flex; align-items: center; gap: var(--s-4); }
+.hero-manifest .portrait { width: 4rem; }
+.manifest-name {
+  margin: 0; display: grid; gap: var(--s-1);
+  font-family: var(--font-mono); font-size: var(--t-mono);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
+}
+.manifest-callsign {
+  color: var(--ink-mut); text-transform: none; letter-spacing: .06em;
+  font-size: var(--t-mono-xs);
+}
+.manifest-spec {
+  margin: clamp(var(--s-7), 3vh, var(--s-9)) 0 0;
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+  display: grid;
+}
+.manifest-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-1) var(--s-4);
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+.manifest-row:last-child { border-bottom: 0; padding-bottom: 0; }
+/* Keyed 01–04, the same way §Work and §Guardrails are addressed, so the rail
+   reads as part of the page's index rather than a list that happens to be
+   numbered. */
+.manifest-idx {
+  grid-row: 1 / span 2;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent); letter-spacing: .12em; line-height: 1.7;
+}
+.manifest-key {
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mut);
+  line-height: 1.4;
+}
+.manifest-val {
+  margin: 0; white-space: nowrap;
+  font-family: var(--font-mono); font-size: var(--t-title);
+  font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
+  color: var(--ink); line-height: 1.1;
+}
+
+/* ---- D · split -------------------------------------------------------
+   One hard vertical division, and a face at a size that makes it a subject. */
+.split { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(var(--s-10), 6vh, var(--s-16)); }
+@media (min-width: 64rem) {
+  .split {
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 21rem);
+    gap: clamp(var(--s-12), 5vw, var(--s-20));
+    align-items: stretch;
+  }
+  /* Stretched, then distributed: the rule runs the full height of the row and
+     the face and the figures mark its two ends, rather than clustering at the
+     top and leaving the rule to trail off into nothing. */
+  .split-face {
+    border-left: 1px solid var(--line);
+    padding-left: clamp(var(--s-8), 3vw, var(--s-12));
+    align-content: space-between;
+  }
+}
+.split-say { min-width: 0; }
+.split-face { display: grid; gap: clamp(var(--s-8), 4vh, var(--s-12)); }
+.split-fig { margin: 0; display: grid; gap: var(--s-4); justify-items: start; }
+.hero-split .portrait { width: clamp(9rem, 15vw, 15rem); }
+/* Says why the picture is on the page rather than what is in it — the same
+   division of labour the alt text and the eclipse caption already use. */
+.split-cap {
+  margin: 0; max-width: 34ch;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .08em; line-height: 1.5; color: var(--ink-mut);
+}
+/* One column, not two. Two-up halves a column that is already the narrow side
+   of the split, and at ~134px "local-first" broke mid-word — the figures ended
+   up less legible than the four-line stack they were meant to compress. Down
+   the rule they also read as what they are: a list of things the person beside
+   them is accountable for. */
+.split-ledger {
+  margin: 0; padding: 0;
+  display: grid; gap: var(--s-6);
+}
+.split-ledger .ledger-val { white-space: nowrap; }
+@media (max-width: 63.99rem) {
+  /* No rule to run down below the split point, so the figures go back to two
+     up rather than making the hero four rows taller on a phone. */
+  .split-ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-6) var(--s-5); }
+}
+
+/* ---- lab chrome (not part of the site) --------------------------------
+   Labels for /lab/hero. Sticky inside each case, so the name of the variant
+   you are looking at stays on screen for the whole screenful it occupies.
+   Goes when the route goes. */
+.lab-case { position: relative; }
+.lab-case + .lab-case { border-top: 1px solid var(--line-2); }
+.lab-tag {
+  position: sticky; top: calc(var(--header-h) + var(--s-6)); z-index: 30;
+  margin: 0; padding-block: var(--s-4);
+  padding-inline: var(--gutter);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2) var(--s-4);
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .12em; color: var(--ink-mut);
+  pointer-events: none;
+}
+.lab-key { color: var(--accent); }
+.lab-name { color: var(--ink); text-transform: uppercase; letter-spacing: .18em; }
+.lab-note { letter-spacing: .04em; text-transform: none; }
+/* The tag and the dock both float over the top of each case, so the hero needs
+   clearance for the pair of them or the eyebrow renders underneath. */
+.lab-case .hero { padding-top: clamp(var(--s-16), 13vh, var(--s-22)); }
 
 /* --------------------------------------------------------- rows (shared) -- */
 /* Work and writing are the same object at two densities: a hairline row with

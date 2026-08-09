@@ -98,9 +98,29 @@ const run = async () => {
       // The edges that carry the travelling light. ::after only exists inside
       // the hover + fine-pointer + no-reduced-motion gate, which is exactly the
       // state this script runs in.
-      const edges = [...document.querySelectorAll("[data-rule-glow]")];
+      const edges = [
+        ...document.querySelectorAll("[data-rule-glow], [data-ring-glow]"),
+      ];
       const edgesLit = edges.filter(
         (e) => getComputedStyle(e, "::after").content !== "none",
+      );
+
+      // A ring is a full-box gradient with its own content box punched out of
+      // it by mask-composite. If that composite ever resolves to the initial
+      // `add`, nothing is subtracted and the "1px border light" paints as a
+      // SOLID plate over the entire panel — the loudest possible regression,
+      // and one that no contrast or layout check would attribute to the ring.
+      // It is a live risk rather than a theoretical one: the -webkit- mask
+      // shorthand RESETS the composite, so any reordering of that pair breaks
+      // it, and Lightning CSS has already deduped one prefixed pair on this
+      // site down to the wrong half (see the backdrop-filter note above).
+      const rings = [...document.querySelectorAll("[data-ring-glow]")];
+      const ringsMasked = rings.filter((e) =>
+        ["::before", "::after"].every((p) => {
+          const cs = getComputedStyle(e, p);
+          const composite = cs.maskComposite || cs.webkitMaskComposite || "";
+          return /exclude|xor|subtract/.test(composite);
+        }),
       );
 
       return {
@@ -108,6 +128,11 @@ const run = async () => {
         clippedCount: clipped.length,
         edgeCount: edges.length,
         edgesLit: edgesLit.length,
+        ringCount: rings.length,
+        ringsMasked: ringsMasked.length,
+        ringComposite: rings[0]
+          ? getComputedStyle(rings[0], "::after").maskComposite || "(unset)"
+          : "(no rings)",
         headerBlur: getComputedStyle(document.querySelector(".header")).backdropFilter,
         line2Color: line2 ? getComputedStyle(line2).color : null,
         line1Color: spans[0] ? getComputedStyle(spans[0]).color : null,
@@ -139,6 +164,11 @@ const run = async () => {
     //    And every edge that should carry a light actually generates one.
     check("every lit edge generates its light", dom.edgeCount > 0 && dom.edgesLit === dom.edgeCount,
       `${dom.edgesLit}/${dom.edgeCount} edges`);
+
+    //    Rings additionally have to be MASKED to their border. See the
+    //    collector for what an unmasked ring does to the page.
+    check("every ring is masked to its border", dom.ringCount > 0 && dom.ringsMasked === dom.ringCount,
+      `${dom.ringsMasked}/${dom.ringCount} rings · mask-composite: ${dom.ringComposite}`);
 
     // 4. The hero's two-tone headline, asserted on the rendered colour rather
     //    than on any mechanism. It read as one tone in production for months
