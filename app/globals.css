@@ -1159,11 +1159,11 @@ h1, h2, h3 {
 .cred-more:hover { color: var(--ink); border-color: var(--accent); }
 
 /* .hero-body / .hero-say / .hero-aside / .ledger lived here. They belonged to
-   the deck-beside-a-ruled-aside hero, which is gone — every variant under
-   §hero variants builds its own two columns (or refuses to have two), so the
-   shared shell had no shared users left. The FIGURE styles below survive it:
-   .ledger-row/-val/-label/-unit are the atoms, and three of the four variants
-   still set figures with them. */
+   the deck-beside-a-ruled-aside hero, and the hero has no second column now —
+   see §hero · the statement — so the shell that existed to make two of them
+   had nothing left to hold. The FIGURE styles below survive it: those were the
+   atoms rather than the arrangement, and the band still sets figures with
+   them. */
 
 /* ------------------------------------------------------------- portrait -- */
 /* The only photograph on the site. It takes the disc the wordmark's mark and
@@ -1185,8 +1185,9 @@ h1, h2, h3 {
   background: var(--surface);
 }
 /* ---- figures ----------------------------------------------------------
-   The atoms every variant sets its ledger with. The containers differ (a band,
-   a readout, a spec rail, a column against a rule); a figure does not. */
+   A figure, independent of what holds it. Kept separate from .hero-band so the
+   container can be rewritten — it has been, twice — without the value/label
+   pair being re-derived each time. */
 .ledger-row { display: grid; gap: var(--s-1); }
 .ledger-val {
   font-family: var(--font-mono);
@@ -1206,16 +1207,16 @@ h1, h2, h3 {
   color: var(--ink-mut); line-height: 1.4;
 }
 
-/* ------------------------------------------------------- hero variants -- */
-/* Four arrangements of the same content, one of which ships. They share the
-   .hero base above — the 100svh box, the dock clearance, the deck measure, the
-   button row, the roles band — and own only what makes them different, which is
-   where things sit and how large they are.
-   Everything here is namespaced under .hero-<name>, so deleting the three that
-   lose is a matter of deleting their block and their component. */
+/* ------------------------------------------------- hero · the statement -- */
+/* One column at full rail width, and the proof as a ruled band beneath it.
+   Everything below rides the .hero base above — the 100svh box, the dock
+   clearance, the deck measure, the button row, the roles band — and states only
+   what this arrangement changes.
 
-/* ---- A · statement ----------------------------------------------------
-   One column at full rail width, and the proof as a ruled band beneath it. */
+   Namespaced under .hero-statement rather than written onto .hero, because the
+   base is the part that survives a rewrite and the arrangement is the part that
+   does not. This block was one of four written to be compared; the other three
+   were deleted whole, which is what the namespace bought. */
 .hero-statement h1 {
   /* Larger than the shared --t-hero, because nothing shares the row with it.
      The two-column hero had to leave 40% of the rail for the aside; this does
@@ -1266,232 +1267,6 @@ h1, h2, h3 {
   .hero-band-cell:nth-child(odd) { border-left: 1px solid var(--line); padding-left: clamp(var(--s-4), 2vw, var(--s-7)); }
   .hero-band-cell:first-child { border-left: 0; padding-left: 0; }
 }
-
-/* ---- B · console -----------------------------------------------------
-   The hero as an instrument, in the page's own glass, wearing the ring. */
-.console {
-  position: relative;
-  background: var(--glass);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid transparent;
-  border-radius: var(--radius);
-  box-shadow:
-    inset 0 1px 0 var(--edge-top),
-    inset 0 -1px 0 var(--edge-bottom),
-    inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
-    var(--shadow-lift);
-  /* Bleeds by exactly --row-pad, the same as the cards and the contact slab,
-     so every floating object on the page shares one outer edge. */
-  margin-inline: calc(-1 * var(--row-pad));
-  padding-block: clamp(var(--s-8), 5vh, var(--s-14));
-  padding-inline: max(calc(var(--row-pad) + clamp(var(--s-2), 2.5vw, var(--s-8))),
-                      calc(var(--card-pad-min) + var(--s-1)));
-}
-@supports not (backdrop-filter: blur(1px)) {
-  .console { background: var(--surface); }
-}
-/* Inside a panel the headline has walls to respect, so it runs a step under
-   the full-bleed variants. */
-.hero-console h1 { font-size: clamp(2.3rem, 5.2vw, 4.1rem); }
-.console-body {
-  display: grid; grid-template-columns: minmax(0, 1fr);
-  gap: clamp(var(--s-9), 5vh, var(--s-14));
-  align-items: start;
-}
-@media (min-width: 60rem) {
-  .console-body {
-    grid-template-columns: minmax(0, 1fr) minmax(14rem, 19rem);
-    gap: clamp(var(--s-10), 4vw, var(--s-18));
-    align-items: stretch;
-  }
-  /* Ruled off the statement rather than floating beside it: two compartments
-     of one device, not two things that happen to be adjacent. */
-  .console-inst {
-    border-left: 1px solid var(--line);
-    padding-left: clamp(var(--s-6), 2.5vw, var(--s-10));
-  }
-}
-.console-say { min-width: 0; }
-.console-inst { display: grid; align-content: start; gap: clamp(var(--s-6), 3vh, var(--s-9)); }
-.console-id { display: flex; align-items: center; gap: var(--s-4); }
-.hero-console .portrait { width: 4.5rem; }
-.console-live {
-  margin: 0; display: flex; align-items: center; gap: var(--s-2);
-  font-family: var(--font-mono); font-size: var(--t-mono-xs);
-  letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mut);
-}
-.console-dot {
-  width: 6px; height: 6px; flex: none;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
-  animation: console-pulse 2600ms ease-in-out infinite;
-}
-@keyframes console-pulse { 50% { opacity: .35; } }
-@media (prefers-reduced-motion: reduce) { .console-dot { animation: none; } }
-/* A readout, not a stat block: label left, value right, one hairline per row.
-   A row of four big numerals reads as marketing; a right-aligned column of
-   values reads as the current state of something. */
-.console-read { margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.console-row {
-  display: flex; align-items: baseline; justify-content: space-between;
-  gap: var(--s-4);
-  padding-block: var(--s-4);
-  border-bottom: 1px solid var(--line);
-}
-.console-key {
-  font-family: var(--font-mono); font-size: var(--t-mono-xs);
-  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mut);
-  line-height: 1.4;
-}
-/* nowrap is load-bearing: "local-first" broke across two lines in a 264px
-   column and read as two separate values stacked. The row is flex, so the
-   value holding its width pushes the LABEL to wrap instead — which is the
-   right thing to sacrifice, because a wrapped label is still one label. */
-.console-value {
-  margin: 0; text-align: right; white-space: nowrap;
-  font-family: var(--font-mono); font-size: var(--t-title);
-  font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
-  color: var(--ink); line-height: 1.1;
-}
-.console-foot {
-  margin-top: clamp(var(--s-8), 4vh, var(--s-12));
-  padding-top: var(--s-6);
-  border-top: 1px solid var(--line);
-}
-.console-foot .hero-roles { margin-top: 0; padding-top: 0; }
-
-/* ---- C · manifest ----------------------------------------------------
-   A document header on the left, and the claim it certifies on the right. */
-.manifest { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(var(--s-9), 5vh, var(--s-14)); }
-@media (min-width: 64rem) {
-  .manifest {
-    grid-template-columns: 17rem minmax(0, 1fr);
-    gap: clamp(var(--s-10), 4vw, var(--s-16));
-    align-items: start;
-  }
-  .manifest-rail {
-    border-right: 1px solid var(--line);
-    padding-right: clamp(var(--s-6), 2vw, var(--s-10));
-  }
-}
-/* Narrower measure than the full-bleed variants, because it is sharing the
-   rail with a 17rem column. */
-.hero-manifest h1 { font-size: clamp(2.35rem, 5.6vw, 4.4rem); }
-.manifest-say { min-width: 0; }
-.manifest-id { display: flex; align-items: center; gap: var(--s-4); }
-.hero-manifest .portrait { width: 4rem; }
-.manifest-name {
-  margin: 0; display: grid; gap: var(--s-1);
-  font-family: var(--font-mono); font-size: var(--t-mono);
-  letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
-}
-.manifest-callsign {
-  color: var(--ink-mut); text-transform: none; letter-spacing: .06em;
-  font-size: var(--t-mono-xs);
-}
-.manifest-spec {
-  margin: clamp(var(--s-7), 3vh, var(--s-9)) 0 0;
-  padding-top: var(--s-5);
-  border-top: 1px solid var(--line);
-  display: grid;
-}
-.manifest-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--s-1) var(--s-4);
-  padding-block: var(--s-4);
-  border-bottom: 1px solid var(--line);
-}
-.manifest-row:last-child { border-bottom: 0; padding-bottom: 0; }
-/* Keyed 01–04, the same way §Work and §Guardrails are addressed, so the rail
-   reads as part of the page's index rather than a list that happens to be
-   numbered. */
-.manifest-idx {
-  grid-row: 1 / span 2;
-  font-family: var(--font-mono); font-size: var(--t-mono-xs);
-  font-variant-numeric: tabular-nums;
-  color: var(--accent); letter-spacing: .12em; line-height: 1.7;
-}
-.manifest-key {
-  font-family: var(--font-mono); font-size: var(--t-mono-xs);
-  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mut);
-  line-height: 1.4;
-}
-.manifest-val {
-  margin: 0; white-space: nowrap;
-  font-family: var(--font-mono); font-size: var(--t-title);
-  font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
-  color: var(--ink); line-height: 1.1;
-}
-
-/* ---- D · split -------------------------------------------------------
-   One hard vertical division, and a face at a size that makes it a subject. */
-.split { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(var(--s-10), 6vh, var(--s-16)); }
-@media (min-width: 64rem) {
-  .split {
-    grid-template-columns: minmax(0, 1fr) minmax(15rem, 21rem);
-    gap: clamp(var(--s-12), 5vw, var(--s-20));
-    align-items: stretch;
-  }
-  /* Stretched, then distributed: the rule runs the full height of the row and
-     the face and the figures mark its two ends, rather than clustering at the
-     top and leaving the rule to trail off into nothing. */
-  .split-face {
-    border-left: 1px solid var(--line);
-    padding-left: clamp(var(--s-8), 3vw, var(--s-12));
-    align-content: space-between;
-  }
-}
-.split-say { min-width: 0; }
-.split-face { display: grid; gap: clamp(var(--s-8), 4vh, var(--s-12)); }
-.split-fig { margin: 0; display: grid; gap: var(--s-4); justify-items: start; }
-.hero-split .portrait { width: clamp(9rem, 15vw, 15rem); }
-/* Says why the picture is on the page rather than what is in it — the same
-   division of labour the alt text and the eclipse caption already use. */
-.split-cap {
-  margin: 0; max-width: 34ch;
-  font-family: var(--font-mono); font-size: var(--t-mono-xs);
-  letter-spacing: .08em; line-height: 1.5; color: var(--ink-mut);
-}
-/* One column, not two. Two-up halves a column that is already the narrow side
-   of the split, and at ~134px "local-first" broke mid-word — the figures ended
-   up less legible than the four-line stack they were meant to compress. Down
-   the rule they also read as what they are: a list of things the person beside
-   them is accountable for. */
-.split-ledger {
-  margin: 0; padding: 0;
-  display: grid; gap: var(--s-6);
-}
-.split-ledger .ledger-val { white-space: nowrap; }
-@media (max-width: 63.99rem) {
-  /* No rule to run down below the split point, so the figures go back to two
-     up rather than making the hero four rows taller on a phone. */
-  .split-ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-6) var(--s-5); }
-}
-
-/* ---- lab chrome (not part of the site) --------------------------------
-   Labels for /lab/hero. Sticky inside each case, so the name of the variant
-   you are looking at stays on screen for the whole screenful it occupies.
-   Goes when the route goes. */
-.lab-case { position: relative; }
-.lab-case + .lab-case { border-top: 1px solid var(--line-2); }
-.lab-tag {
-  position: sticky; top: calc(var(--header-h) + var(--s-6)); z-index: 30;
-  margin: 0; padding-block: var(--s-4);
-  padding-inline: var(--gutter);
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2) var(--s-4);
-  font-family: var(--font-mono); font-size: var(--t-mono-xs);
-  letter-spacing: .12em; color: var(--ink-mut);
-  pointer-events: none;
-}
-.lab-key { color: var(--accent); }
-.lab-name { color: var(--ink); text-transform: uppercase; letter-spacing: .18em; }
-.lab-note { letter-spacing: .04em; text-transform: none; }
-/* The tag and the dock both float over the top of each case, so the hero needs
-   clearance for the pair of them or the eyebrow renders underneath. */
-.lab-case .hero { padding-top: clamp(var(--s-16), 13vh, var(--s-22)); }
 
 /* --------------------------------------------------------- rows (shared) -- */
 /* Work and writing are the same object at two densities: a hairline row with

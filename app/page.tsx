@@ -1,7 +1,4 @@
 import { Header } from "@/components/Header";
-// The hero is one of four arrangements under components/hero/ — swap this
-// import and the tag below to try another. /lab/hero renders all four for
-// comparison. See the header comment on each variant for what it argues.
 import { HeroStatement } from "@/components/hero/HeroStatement";
 import { Eclipse } from "@/components/Eclipse";
 import { Work } from "@/components/Work";

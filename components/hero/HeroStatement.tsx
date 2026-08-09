@@ -9,13 +9,13 @@ import {
 } from "./parts";
 
 /**
- * A · STATEMENT — one column, and a band of figures under it.
+ * The hero: one column, and a band of figures under it.
  *
- * The argument against the two-column hero: a headline that stops at 60% of the
- * rail is not a statement, it is a column of a magazine. This gives the claim
- * the whole width and nothing to share it with, which is the only arrangement
- * where "Agents that act / Rails that hold" lands as a thing being asserted
- * rather than a heading over some content.
+ * The argument against the two-column hero it replaced: a headline that stops
+ * at 60% of the rail is not a statement, it is a column of a magazine. This
+ * gives the claim the whole width and nothing to share it with, which is the
+ * only arrangement where "Agents that act / Rails that hold" lands as a thing
+ * being asserted rather than a heading over some content.
  *
  * The proof does not disappear, it moves under the fold line of the hero and
  * becomes a RULED BAND: four figures in a row, divided by hairlines, sitting on
@@ -26,11 +26,11 @@ import {
  * The portrait drops to byline scale and sits with the roles, because in this
  * arrangement the face is attribution, not subject. Whose claim is this.
  */
-export function HeroStatement({ id = "top" }: { id?: string } = {}) {
+export function HeroStatement() {
   const ledger = getLedger();
 
   return (
-    <section className="hero hero-statement" id={id}>
+    <section className="hero hero-statement" id="top">
       <div className="wide">
         <HeroEyebrow />
 
