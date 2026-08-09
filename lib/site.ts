@@ -128,41 +128,12 @@ export function getLedger(): Stat[] {
 }
 
 // ---------------------------------------------------------------------------
-// Field. The plate between the claim and the evidence.
-//
-// The image is a generated piece (imagegen brand lane, neutral profile, strict
-// greyscale prompt) kept at public/img/field.webp. It is not decoration: the
-// swarm is the agents and the ring is the limit they cannot leave, which is
-// the headline drawn rather than written.
-//
-// The alt does the describing, and has to — it is the only route to the
-// picture for anyone who cannot see it. That frees the caption to do the one
-// thing a caption is for: say why the picture is on the page. Naming the parts
-// a second time in smaller type ("agents", "envelope") only restated the
-// section above it. The claim underneath the render is the more useful line,
-// and it is the argument the whole page is making — what an agent is free to
-// do is decided by what it is running inside, so the rails are not a tax on
-// autonomy, they are what gives it a shape at all.
-// ---------------------------------------------------------------------------
-export const field = {
-  alt: "Thousands of fine points swarming inside a single thin circular boundary, drawn in bone on obsidian.",
-  caption: "Autonomy takes the shape of its surroundings",
-  // Split out because it is only true where there is a cursor to move. Hidden
-  // on touch and under reduced motion, where nothing reacts.
-  //
-  // NBSP before the last word: at 32ch the two strings together run to three
-  // lines on a wide plate, and the natural break strands "it" alone on the
-  // third. Binding the last two words moves the break one word earlier.
-  hint: "move across\u00A0it",
-};
-
-// ---------------------------------------------------------------------------
-// The picture that took the field's slot.
+// The one picture on the page.
 //
 // An occluded disc with a rim of light. It keeps the circle the page already
-// uses (the plate had one, the wordmark is a star inside one) and throws away
-// everything inside it, which is the whole reason it is here instead of the
-// swarm: the swarm was a lot of machinery to say one thing.
+// uses (the wordmark is a star inside one) and throws away everything inside
+// it. It replaced a particle swarm over a WebGL warp, which was a lot of
+// machinery to say one thing.
 //
 // It reads two ways on purpose. An eclipse is nature at a scale nobody
 // negotiates with. An aperture is a machine deciding how much gets through.
