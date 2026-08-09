@@ -40,20 +40,41 @@ jobs:
           node-version: 24
           cache: npm
 
-      - run: npm ci
+      # `npm install`, not `npm ci`, and that is NOT the usual laziness.
+      #
+      # `npm ci` currently fails in this repo on every platform:
+      #
+      #   npm error Missing: @emnapi/runtime@1.11.3 from lock file
+      #   npm error Invalid: lock file's @emnapi/wasi-threads@1.2.1
+      #             does not satisfy @emnapi/wasi-threads@1.2.3
+      #
+      # package-lock.json is out of sync with the transitive optional
+      # @emnapi/* graph. That is pre-existing and unrelated to these gates —
+      # this workflow is simply the first thing in the repo to run `npm ci`,
+      # which is why it went unnoticed. Vercel builds fine, so nothing is
+      # broken in production.
+      #
+      # The real fix is to regenerate the lockfile on Linux (regenerating it
+      # on macOS prunes platform-specific optional entries and breaks the
+      # Vercel install), which is a change with deploy blast radius and does
+      # not belong in a PR about contrast. Until then this gate resolves
+      # dependencies itself. It only ever renders the site and reads pixels,
+      # so exact dependency pinning is not what makes its numbers meaningful.
+      #
+      # Switch this back to `npm ci` the moment the lockfile is regenerated.
+      - run: npm install --no-audit --no-fund
 
-      # Deliberately --no-save, and NOT a devDependency in package.json.
-      # Regenerating this lockfile on a different platform prunes the
-      # optional @emnapi/* entries and breaks `npm ci` on Vercel, so the
-      # lockfile is left strictly alone and the audit's own dependency is
-      # installed out of band. Version pinned so the rendering engine that
-      # produces the numbers is the same one that produced the thresholds.
+      # Deliberately --no-save, and NOT a devDependency in package.json, so
+      # the lockfile situation above is not made worse. Version pinned so the
+      # rendering engine producing the numbers is the one that produced the
+      # thresholds.
       - run: npm i --no-save playwright@1.61.1
       - run: npx playwright install --with-deps chromium
 
       - run: npm run build
 
       - name: Serve
+        id: serve
         run: |
           npx next start -p 3000 &
           curl --retry 30 --retry-delay 2 --retry-all-errors \
@@ -62,10 +83,13 @@ jobs:
       - name: Contrast
         run: AUDIT_URL=http://localhost:3000/ AUDIT_JSON=contrast-report.json npm run audit:contrast
 
-      # `if: always()` so a contrast failure does not hide an intent failure —
-      # two separate questions, both worth an answer in one run.
+      # Runs even when the contrast gate fails — they answer different
+      # questions and both are worth an answer in one run. Gated on the server
+      # actually being up, though: `if: always()` alone made a failed install
+      # produce a second, meaningless "cannot find package 'playwright'" error
+      # that buried the real one.
       - name: Design intent
-        if: always()
+        if: always() && steps.serve.outcome == 'success'
         run: AUDIT_URL=http://localhost:3000/ npm run audit:intent
 
       - if: always()
