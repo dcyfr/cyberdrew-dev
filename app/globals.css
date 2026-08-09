@@ -755,6 +755,7 @@ h1, h2, h3 {
   box-shadow:
     inset 0 1px 0 var(--edge-top),
     inset 0 0 0 1px var(--glass-ring),
+    inset 0 0 0 var(--lens-depth) var(--lens-rim),
     var(--shadow-lift);
 }
 .nav-panel-link {
@@ -1008,7 +1009,28 @@ h1, h2, h3 {
   text-decoration: none; color: inherit;
   background: color-mix(in srgb, var(--surface) 22%, transparent);
   backdrop-filter: blur(6px);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glass-ring) 45%, transparent);
+  /* At rest a card used to separate from the ground by 1.01:1 — measured, it
+     was invisible until hovered, and a pointer is the only thing that ever
+     revealed it. The resting state now carries the full ring plus the top
+     bevel rather than 45% of the ring and nothing else.
+     Deliberately still quiet: the intent is "faint glass that firms up on
+     hover", not a fenced box, so this buys presence rather than a border.
+     The 3:1 rule does not apply here — a card is identified by its title, and
+     unlike .btn-ghost its shape is not the affordance. */
+  box-shadow:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 -1px 0 var(--edge-bottom),
+    inset 0 0 0 1px var(--glass-ring),
+    /* A quarter-strength lift, because both --edge-top and --glass-ring are
+       WHITE and therefore invisible on a bone ground — the dark theme was
+       taking all the benefit. Measured: resting edge 1.06 -> 1.47:1 dark,
+       1.05 -> 1.11:1 light.
+       Light stays quiet on purpose and this is where it stops. Every surface
+       in that theme sits in the same 1.05-1.13:1 band (.tag 1.13, .plate 1.11,
+       .header 1.08) — it is a paper language, not a weak version of the dark
+       one. Pushing .row alone to read like dark would make it the one card
+       shouting on a page of quiet ones. */
+    0 1px 2px -1px color-mix(in srgb, var(--edge-bottom) 60%, transparent);
   transition:
     background var(--ease-glass),
     box-shadow var(--ease-glass),
@@ -1094,6 +1116,10 @@ h1, h2, h3 {
 .row-meta { display: flex; }
 .tags { display: flex; flex-wrap: wrap; gap: var(--s-1); margin-top: var(--s-3); }
 /* Soft chips, not outlined boxes: fills read as floating, borders as fencing. */
+/* No lens ring here, on purpose. --lens-depth is 6px and a chip is about 22px
+   tall, so the rim would eat a quarter of it from each side and read as a
+   double border rather than as thickness. The bevel alone is the right amount
+   of material at this size. */
 .tag {
   font-family: var(--font-mono); font-size: var(--t-mono-xs); letter-spacing: .05em;
   color: var(--chip-ink); background: var(--surface-2);
@@ -1182,6 +1208,11 @@ h1, h2, h3 {
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--plate-ground);
+  /* No lens ring here either, and for a different reason than .tag: the plate
+     is IMAGERY, not interface chrome, and the identity's carve-out is that
+     radius and elevation belong to chrome while fields stay flat and
+     hard-edged. A refracted rim over the artwork would read as a bezel drawn
+     on the picture. The border and halo already say "framed". */
   box-shadow:
     inset 0 1px 0 var(--edge-top),
     inset 0 0 0 1px var(--glass-ring),
