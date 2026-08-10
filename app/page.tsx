@@ -1,5 +1,5 @@
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
+import { HeroStatement } from "@/components/hero/HeroStatement";
 import { Eclipse } from "@/components/Eclipse";
 import { Work } from "@/components/Work";
 import { Loop } from "@/components/Loop";
@@ -27,7 +27,7 @@ export default function Page() {
             hold" — the two halves of the headline, in the headline's order.
             The loop sits between them: it is how the acting happens, and each
             of its states names the guard that the next section then measures. */}
-        <Hero />
+        <HeroStatement />
         {/* Between the claim and the evidence, buying the page a breath before
             the lists start. */}
         <Eclipse />
