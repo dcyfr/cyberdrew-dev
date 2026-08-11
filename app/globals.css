@@ -980,7 +980,13 @@ h1, h2, h3 {
   letter-spacing: .12em; text-transform: lowercase;
   text-decoration: none; color: var(--ink);
   display: inline-flex; align-items: center; gap: var(--s-2);
-  min-width: 0;
+  /* NO min-width: 0 here, deliberately. The outer tracks are 1fr each, so a
+     genuinely centred rail needs 816px of dock — below that the layout is
+     supposed to degrade by letting the rail DRIFT right, which only works
+     because a grid item's automatic minimum size floors its track at
+     min-content. min-width:0 removes that floor, the track collapses to its
+     equal 1fr share, and a nowrap wordmark then overflows straight across the
+     first link: measured at 30px of overlap at 772px wide. */
 }
 /* The mark rides in a filled disc, same treatment as the theme toggle, so
    the two ends of the dock rhyme. */
@@ -1229,6 +1235,16 @@ h1, h2, h3 {
    Each threshold carries ~24px over its measurement, which is the headroom a
    fallback mono needs if the metric-matched face never arrives. Re-measure
    these if a nav label changes — the arithmetic is the whole contract.
+
+   NOTE the two different questions those numbers answer. 696px is what the
+   full tier needs to FIT. Because the outer tracks are 1fr each, and 1fr
+   tracks are equal, the rail is only genuinely CENTRED once BOTH of them
+   clear the wordmark: 153 + 439 + 153 + 40 + 32 = 816px. Between 696 and 816
+   the grid keeps everything apart by widening col 1 past its share, so the
+   rail drifts right and converges back to centre — measured 33px off at
+   800px wide, 0px by 880px. That drift is the designed degradation, and it
+   depends entirely on .wordmark keeping its automatic minimum size (see the
+   note there). Do not "fix" the asymmetry by zeroing that minimum.
    ---------------------------------------------------------------------- */
 @container dock (width <= 45rem) {   /* 720px, needs 696 */
   .nav { gap: 0; }
