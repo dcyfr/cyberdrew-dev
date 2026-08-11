@@ -495,10 +495,14 @@
   .contact { border-color: CanvasText; }
   .wordmark svg, .status svg, .caret { forced-color-adjust: auto; fill: CanvasText; }
   .caret { background: CanvasText; }
+  /* The shorthand, deliberately: it resets background-image, which drops the
+     fade at the head along with the gradient. The OS is repainting this into
+     a flat Highlight bar, and a bar whose end is soft is a bar whose reading
+     is ambiguous — exactly what nobody here asked for. */
   .progress-bar { background: Highlight; }
   /* The OS picks the colours here, so a warm-to-cool bloom is either repainted
      into a solid block or ignored. Either way it is not light any more. */
-  .progress-tip { display: none; }
+  .progress-bar::before, .progress-bar::after { display: none; }
   .rows, .row, .header, .site-footer, .footer-bar, .tag { border-color: CanvasText; }
   /* The OS repaints fills, so a tinted pill carries nothing here. Drop the
      travelling one and let a real edge say where you are, on both tiers.
@@ -928,50 +932,59 @@ h1, h2, h3 {
 .progress { display: none; }
 @supports (animation-timeline: scroll()) {
   @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
-    /* Three elements, not one, and the split is the whole trick. The strip is
-       an untransformed frame; the bar scales inside it; the tip travels inside
-       it. A tip nested in the bar would inherit the bar's scaleX and the light
-       would stretch from a point into a 1200px smear at the far end of the
-       page — the exact failure the ring block describes for gradients under a
-       scale. Two siblings on ONE timeline cannot drift: they read the same
-       scroll range, so the tip is always at the end of the bar. */
+    /* THE BAR TRAVELS, IT DOES NOT GROW.
+
+       Same painted result — the strip is filled from the left edge to the
+       scroll fraction — but reached by translating a full-width bar in from
+       the left rather than scaling a zero-width one up. At progress p a bar
+       translated by -(1-p) of its own width has its head at exactly p, which
+       is where scaleX(p) put it.
+
+       The reason to care is that scaleX is a lie the bar tells its own
+       contents. Everything inside it is scaled too, so nothing measured in px
+       survives: the head's fade would be 3px at the top of the page and 72px
+       at the bottom, and a light parked on the head would stretch from a point
+       into a smear. Translation scales nothing, so px means px at every scroll
+       position, the fade is one length, and the light can ride the bar's own
+       pseudo-elements instead of a sibling kept in step by a shared timeline.
+
+       This is what fixes the hard edge. A scaled bar can only stop square, and
+       a square stop is the brightest discontinuity on the page: solid accent
+       one pixel, ground the next, with the corona straddling the join and
+       pointing straight at it. Now the fill ramps out over the last stretch
+       and the light takes over where it ends, which is a leading edge catching
+       light rather than a bar that was cut off. */
     .progress {
       display: block;
       position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 60;
       pointer-events: none;
     }
-    .progress-bar, .progress-tip {
+    .progress-bar {
       position: absolute; inset: 0;
+      background: linear-gradient(to right,
+        var(--accent) 0, var(--accent) calc(100% - 72px), transparent 100%);
+      transform: translateX(-100%);
       /* Longhands, not the shorthand: `animation: … linear both` sets
          duration to 0s, and a scroll timeline needs `auto` to map progress
-         onto the scroll range. With 0s the bar just sits at scaleX(0). */
+         onto the scroll range. With 0s the bar just sits where it started. */
+      animation-name: progress-grow;
       animation-duration: auto;
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: scroll(root block);
     }
-    .progress-bar {
-      background: var(--accent);
-      transform: scaleX(0); transform-origin: 0 50%;
-      animation-name: progress-grow;
-    }
-    @keyframes progress-grow { to { transform: scaleX(1); } }
+    @keyframes progress-grow { to { transform: translateX(0); } }
 
     /* The readout says where you are; the light says the readout is live.
        Same instrument as every other lit edge on the page — hot core, wide
        cool bleed — so the position indicator reads as the same light source
-       that runs the section rules, caught at the point the bar has reached.
+       that runs the section rules, caught at the head of the bar.
 
-       The tip is the full width of the strip and paints only at its own left
-       edge, so translateX(100%) walks that point from one end to the other.
-       Percentages resolve against the element's own box, which is why this
-       needs no vw: 100vw would include the scrollbar gutter and the light
-       would finish a scrollbar's width past the end of its own bar. */
-    .progress-tip { animation-name: progress-tip; }
-    @keyframes progress-tip { to { transform: translateX(100%); } }
-    .progress-tip::before, .progress-tip::after {
+       left: 100% is the head, and the head is the only place either of these
+       is ever measured from. */
+    .progress-bar::before, .progress-bar::after {
       content: "";
-      position: absolute; left: 0; top: 50%;
+      position: absolute; left: 100%; top: 50%;
       transform: translate(-50%, -50%);
     }
     /* The bleed, which is the part that reads as light. Biased downward: the
@@ -979,19 +992,20 @@ h1, h2, h3 {
        half its light off screen and the readout looks half as lit as every
        other edge on the page. Hanging it below also puts the light where
        there is something to fall on. */
-    .progress-tip::before {
+    .progress-bar::before {
       width: 240px; height: 34px;
       transform: translate(-50%, -22%);
       background: radial-gradient(closest-side,
         var(--rule-bleed-warm), var(--rule-bleed-cool) 56%, transparent 86%);
       filter: blur(12px);
     }
-    /* the core, sitting on the bar itself */
-    .progress-tip::after {
-      width: 96px; height: 4px;
+    /* The core. Wider than the fade it sits on, so the ramp finishes inside
+       the light rather than beside it. */
+    .progress-bar::after {
+      width: 120px; height: 5px;
       background: radial-gradient(closest-side,
         var(--rule-hot), var(--rule-mid) 44%, var(--rule-cool) 74%, transparent 100%);
-      filter: blur(1.5px);
+      filter: blur(2px);
     }
   }
 }
@@ -2441,8 +2455,11 @@ a, button { -webkit-tap-highlight-color: transparent; }
   /* The sheen is a specular cue for glass; without the material it is noise. */
   .row::before { display: none; }
   /* A blurred bloom is transparency by another name, and it is the one part of
-     the position readout that is atmosphere rather than information. */
-  .nav-ind::before, .progress-tip { display: none; }
+     the position readout that is atmosphere rather than information. The head
+     goes hard with it: the fade only existed to hand the eye over to a light
+     that is no longer there. */
+  .nav-ind::before, .progress-bar::before, .progress-bar::after { display: none; }
+  .progress-bar { background: var(--accent); }
   /* Borders now carry the whole job of saying where a panel ends. */
   .glass, .header, .contact, .row, .nav-panel {
     border-color: var(--line-2);
@@ -2483,8 +2500,10 @@ a, button { -webkit-tap-highlight-color: transparent; }
     box-shadow: inset 0 0 0 1px var(--ink-2);
   }
   /* A hard edge is now saying where you are. A haze around it only softens the
-     boundary someone asked to have sharpened. */
-  .nav-ind::before { display: none; }
+     boundary someone asked to have sharpened — which goes for the readout's
+     head as much as for the pill. */
+  .nav-ind::before, .progress-bar::before, .progress-bar::after { display: none; }
+  .progress-bar { background: var(--accent); }
   .row::before { display: none; }
   .tag { border: 1px solid var(--ink-2); }
   /* A focus ring at 2px is adequate against glass; against a hard-edged
