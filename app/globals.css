@@ -172,7 +172,22 @@
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
 
   /* Long, decelerating: glass should settle, not snap. */
-  --ease-glass: 460ms cubic-bezier(.22, 1, .36, 1);
+  --curve-out:  cubic-bezier(.22, 1, .36, 1);
+  --ease-glass: 460ms var(--curve-out);
+  /* The disclosure family, all off the same curve so the panel, its links and
+     the scrim read as one movement rather than three. Opening is unhurried;
+     closing is not, because a dismissal the user already decided on should get
+     out of the way. Durations are separate tokens because the open state
+     re-states only the duration over the closed state's full shorthand. */
+  --dur-panel-in:   300ms;
+  --dur-panel-out:  170ms;
+  --dur-panel-link: 260ms;
+  /* Only the closed state writes a full shorthand; the open state re-states
+     the duration over it, so there is no --ease-panel to pair with this. */
+  --ease-panel-out:  var(--dur-panel-out) var(--curve-out);
+  /* The travelling current-section pill. Slower than a hover (it is carrying
+     meaning between two places) but well inside the scroll that caused it. */
+  --ease-ind: 380ms var(--curve-out);
 
   /* Agentic type system: one engineered grotesk (Archivo Variable, self-
      hosted via next/font/local) for statements AND running text, mono
@@ -229,6 +244,14 @@
   /* Floor for a card's internal padding, independent of the bleed. */
   --card-pad-min: var(--s-5);
   --header-h: 3.75rem;
+  /* The dock's own geometry, factored out because two elements have to agree
+     on it exactly: the dock, and the disclosure panel that has to look like
+     the dock growing. Written once so they cannot drift by a pixel. */
+  --dock-inset: clamp(var(--s-3), 3vw, var(--s-6));
+  --dock-w: min(calc(100% - 2 * var(--dock-inset)), 62rem);
+  /* One height for everything that sits in the dock — link, toggle, trigger,
+     the travelling pill. Bumped for a finger further down. */
+  --dock-item-h: 32px;
 
   /* ---- spacing scale ----------------------------------------------------
      Tailwind's scale, same numbering: --s-N == N * 0.25rem (N * 4px). The
@@ -474,13 +497,28 @@
   .caret { background: CanvasText; }
   .progress { background: Highlight; }
   .rows, .row, .header, .site-footer, .footer-bar, .tag { border-color: CanvasText; }
-  .nav-link[aria-current] { border-bottom-color: Highlight; }
+  /* The OS repaints fills, so a tinted pill carries nothing here. Drop the
+     travelling one and let a real edge say where you are, on both tiers.
+     outline rather than border: a border would add 2px to every current link
+     and shove the rail sideways every time the active section changed. */
+  .nav-ind { display: none; }
+  .nav-link[aria-current], .nav-panel-link[aria-current] {
+    outline: 1px solid Highlight; outline-offset: -1px;
+  }
 }
 
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + var(--s-7)); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Where the dock lives at the BOTTOM (see the dock block at the end of this
+   file), reserving a dock's worth of headroom at the top is 60px of overshoot
+   on every nav tap — the heading lands well below the edge and the section
+   above it stays half in frame. Clear the top; the bottom is already reserved
+   by the footer's own padding. */
+@media (max-width: 47.99rem) {
+  html { scroll-padding-top: var(--s-7); }
+}
 
 body {
   margin: 0;
@@ -892,7 +930,7 @@ h1, h2, h3 {
   top: var(--header-top);
   left: 50%; transform: translateX(-50%);
   z-index: 40;
-  width: min(calc(100% - 2 * clamp(var(--s-3), 3vw, var(--s-6))), 62rem);
+  width: var(--dock-w);
   height: var(--header-h);
   /* The dock measures itself. Collapsing on a viewport breakpoint guessed
      wrong by ~100px; the links need 488px of dock and were being hidden at
@@ -917,10 +955,19 @@ h1, h2, h3 {
   .header { background: var(--surface); }
 }
 /* No .wide inside the dock: it carries its own padding, and the rail's
-   gutter would push the contents far off the pill's edges. */
+   gutter would push the contents far off the pill's edges.
+
+   Three tracks, not space-between. Under space-between the link rail is
+   welded to the right edge, so at the dock's full 992px the pill is ~300px of
+   void with everything huddled at one end. A 1fr/auto/1fr grid centres the
+   rail while there is room and then degrades by DRIFTING — the 1fr tracks
+   are floored at their own min-content, so as the dock tightens the rail
+   slides right instead of the layout breaking. */
 .header-in {
   height: 100%; max-width: none;
-  display: flex; align-items: center; justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
   gap: var(--s-4);
   /* Mobile-first: the tighter inline padding is the base, and the dock only
      earns the wider one once there is room for it (Tailwind sm). */
@@ -928,32 +975,58 @@ h1, h2, h3 {
 }
 @media (min-width: 40rem) { .header-in { padding-inline: var(--s-5); } }
 .wordmark {
+  grid-column: 1; justify-self: start;
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .12em; text-transform: lowercase;
   text-decoration: none; color: var(--ink);
   display: inline-flex; align-items: center; gap: var(--s-2);
+  min-width: 0;
 }
 /* The mark rides in a filled disc, same treatment as the theme toggle, so
    the two ends of the dock rhyme. */
 .wordmark .mark {
-  width: 32px; height: 32px; flex: none;
+  width: var(--dock-item-h); height: var(--dock-item-h); flex: none;
   display: grid; place-items: center;
   border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--surface-2) 80%, transparent);
   box-shadow: inset 0 1px 0 var(--edge-top);
 }
 .wordmark svg { color: var(--accent); flex: none; }
+.wordmark-text { white-space: nowrap; }
 
-.nav { display: flex; align-items: center; gap: var(--s-1); }
-.nav .theme-toggle { margin-left: var(--s-2); }
+/* The end cap. Never collapses: the theme toggle is a page-level control and
+   putting it behind a disclosure means the one thing a passer-by is most
+   likely to reach for is the one thing they have to go looking for. */
+.dock-end {
+  grid-column: 3; justify-self: end;
+  display: flex; align-items: center; gap: var(--s-2);
+}
+
+/* ---- the link rail ---------------------------------------------------- */
+/* position:relative for two reasons at once: it is the offsetParent NavSpy
+   measures the travelling pill against, and the containing block that pill is
+   positioned in. */
+.nav {
+  grid-column: 2; justify-self: center;
+  position: relative;
+  display: flex; align-items: center; gap: var(--s-1);
+  /* The rail is the one thing in the dock that must never be squeezed: a
+     wrapped link row is what turned a 60px pill into a 96px one at the widths
+     between the old collapse point and the width the links actually needed. */
+  flex: none;
+}
 .nav-link {
+  position: relative; z-index: 1;
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--ink-mut); text-decoration: none;
   /* A pill, not a rule: underlines read as links in body copy and fight the
      dock's rounded language. */
-  padding: var(--s-2) var(--s-3); min-height: 32px;
+  padding: var(--s-2) var(--s-3); min-height: var(--dock-item-h);
   display: inline-flex; align-items: center;
+  /* Never wrap. THE LOOP breaking across two lines is what made the dock grow
+     a second row and push the end cap off its own edge. */
+  white-space: nowrap;
   border-radius: var(--radius-pill);
   transition: color var(--ease), background var(--ease);
 }
@@ -965,47 +1038,89 @@ h1, h2, h3 {
   background: color-mix(in srgb, var(--surface-2) 90%, transparent);
   box-shadow: inset 0 1px 0 var(--edge-top);
 }
+
+/* One pill that travels between links, instead of five that blink. NavSpy
+   sets --ind-x/--ind-w and flips [data-ind] once it has a section to point at;
+   until then this is invisible and the per-link fill above is what shows, so a
+   JS failure costs the motion and nothing else. */
+.nav-ind {
+  position: absolute; inset-block: 0; left: 0; z-index: 0;
+  /* Height from the rail, not from --dock-item-h: a link's box is its padding
+     plus a line box, which lands 2.6px above the 32px floor. Matching the
+     token instead of the rail made the pill shrink by that much the moment a
+     hover handed over to the current-section state. */
+  width: var(--ind-w, 0);
+  transform: translateX(var(--ind-x, 0));
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface-2) 90%, transparent);
+  box-shadow: inset 0 1px 0 var(--edge-top);
+  opacity: 0; pointer-events: none;
+  transition: transform var(--ease-ind), width var(--ease-ind), opacity var(--ease);
+}
+.nav[data-ind] .nav-ind { opacity: 1; }
+/* With the travelling pill live, the per-link fill would paint a second one
+   underneath it. Suppress the fallback only once the thing it is a fallback
+   for is actually on screen. */
+.nav[data-ind] .nav-link[aria-current] { background: transparent; box-shadow: none; }
+@media (prefers-reduced-motion: reduce) {
+  /* The pill still marks the place, it just stops travelling to get there. */
+  .nav-ind { transition: opacity var(--ease); }
+}
+
 /* ---- disclosure -------------------------------------------------------
-   Wide: links inline. Narrow: one trigger, everything behind it. Five
-   targets do not fit a 336px dock without becoming a toolbar.
+   Full and condensed: links inline. Collapsed: one trigger, everything
+   behind it. Five targets do not fit a 336px dock without becoming a
+   toolbar.
    ---------------------------------------------------------------------- */
-/* The panel hangs off the DOCK, not off .nav-wrap: the wrap is only 32px
-   tall and centred in a 60px dock, so anchoring to it tucked the panel up
-   inside the dock's own bottom edge. .header is fixed, so it is already a
-   positioning context. */
-.nav-wrap { display: flex; align-items: center; }
 /* Icon-only, and on a phone it is the ONLY navigation on the page — same
    reasoning as .theme-toggle, more so. */
 .nav-trigger {
   display: none;
-  width: 32px; height: 32px; place-items: center;
+  width: var(--dock-item-h); height: var(--dock-item-h); place-items: center;
   border: 1px solid var(--edge-control); border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--surface-2) 80%, transparent);
   box-shadow: inset 0 1px 0 var(--edge-top);
   color: var(--ink-2); cursor: pointer;
-  transition: color var(--ease), border-color var(--ease);
+  transition: color var(--ease), border-color var(--ease), background var(--ease);
 }
 .nav-trigger:hover { color: var(--ink); border-color: var(--accent); }
+/* Open is a state, and the control that holds it should look held. */
+.nav-trigger[aria-expanded="true"] {
+  color: var(--ink); border-color: var(--accent);
+  background: var(--surface-2);
+}
 .bars { display: grid; gap: 4px; width: 14px; }
 .bars i {
   display: block; height: 1.5px; width: 100%; background: currentColor;
-  border-radius: 2px; transition: transform var(--ease), opacity var(--ease);
+  border-radius: 2px;
+  transition: transform var(--ease-panel-out), opacity var(--ease-panel-out);
 }
 .bars[data-open] i:first-child { transform: translateY(2.75px) rotate(45deg); }
 .bars[data-open] i:last-child  { transform: translateY(-2.75px) rotate(-45deg); }
 @media (prefers-reduced-motion: reduce) { .bars i { transition: none; } }
 
-/* display is driven by [data-open], NOT by the hidden attribute: an author
+/* ---- the panel --------------------------------------------------------
+   The dock, grown. Same width, same glass, same corner language, hinged on
+   whichever edge the dock is docked to.
+
+   display is driven by [data-open], NOT by the hidden attribute: an author
    `display` declaration beats [hidden]'s UA rule, so `hidden` alone left the
-   panel permanently on screen and the close button appeared to do nothing. */
-.nav-panel { display: none; }
-.nav-panel[data-open] {
-  display: grid;
-  /* right offset matches .header-in's padding so the panel lines up under
-     the trigger rather than under the pill's outer edge */
-  position: absolute; top: calc(100% + var(--s-3)); right: var(--s-4);
-  min-width: 12.5rem; padding: var(--s-2);
-  gap: var(--s-1);
+   panel permanently on screen and the close button appeared to do nothing.
+   It is animated with allow-discrete + @starting-style, so the discrete
+   none->grid flip no longer costs the transition. Where that pair is
+   unsupported the panel simply appears, which is what it did before.
+   ---------------------------------------------------------------------- */
+/* The panel hangs off the DOCK, not off a wrapper: .header is fixed AND
+   `contain: layout` (a side effect of container-type), so it is already the
+   containing block, and inset-inline against it IS the dock's width — no
+   second copy of the width formula to keep in sync. -1px because that inset
+   is measured from the padding box, and the two borders should line up. */
+.nav-panel {
+  display: none;
+  position: absolute;
+  inset-inline: -1px;
+  top: calc(100% + var(--s-2));
+  padding: var(--s-2);
   border: 1px solid var(--line); border-radius: var(--radius);
   /* Near-opaque: this floats over body copy, and at 78% the text beneath
      read straight through it. */
@@ -1016,7 +1131,25 @@ h1, h2, h3 {
     inset 0 0 0 1px var(--glass-ring),
     inset 0 0 var(--lens-depth) 0 var(--lens-rim),
     var(--shadow-lift);
+  /* Hinged on the edge it grows from. Overridden for the bottom dock. */
+  transform-origin: 50% 0;
+  opacity: 0;
+  transform: translateY(-6px) scaleY(.96);
+  transition:
+    opacity var(--ease-panel-out),
+    transform var(--ease-panel-out),
+    display var(--ease-panel-out) allow-discrete;
 }
+.nav-panel[data-open] {
+  display: grid;
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--dur-panel-in);
+}
+@starting-style {
+  .nav-panel[data-open] { opacity: 0; transform: translateY(-6px) scaleY(.96); }
+}
+.nav-panel > nav { display: grid; gap: 2px; }
 .nav-panel-link {
   font-family: var(--font-mono); font-size: var(--t-mono);
   letter-spacing: .1em; text-transform: uppercase;
@@ -1025,28 +1158,115 @@ h1, h2, h3 {
      these sit at, so --radius-inner is the radius that keeps the two curves
      parallel. Was --radius-sm (12px) against a 10px ideal — close enough to
      look almost right, which is the worst kind of almost. */
-  padding: var(--s-3); border-radius: var(--radius-inner);
-  min-height: 44px; display: flex; align-items: center;
+  padding-inline: var(--s-3); border-radius: var(--radius-inner);
+  min-height: 48px; display: flex; align-items: center;
+  transition: color var(--ease), background var(--ease);
 }
 .nav-panel-link:hover { color: var(--ink); background: var(--surface-2); }
-.nav-panel-foot {
-  display: flex; justify-content: flex-start;
-  padding: var(--s-2) var(--s-2) var(--s-1);
-  margin-top: var(--s-1); border-top: 1px solid var(--line);
+/* The readout the collapsed tier never had. Same fill as the rail's pill, so
+   "you are here" is one idea drawn one way at both sizes. */
+.nav-panel-link[aria-current] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--surface-2) 90%, transparent);
+  box-shadow: inset 0 1px 0 var(--edge-top);
+}
+/* The links arrive in sequence rather than all at once, which is what makes
+   the panel read as unfolding out of the dock. They leave together: a
+   staggered dismissal is a dismissal you have to wait out. */
+@media (prefers-reduced-motion: no-preference) {
+  .nav-panel-link {
+    opacity: 0; transform: translateY(-4px);
+    transition:
+      opacity var(--ease-panel-out), transform var(--ease-panel-out),
+      color var(--ease), background var(--ease);
+  }
+  .nav-panel[data-open] .nav-panel-link {
+    opacity: 1; transform: none;
+    transition-duration: var(--dur-panel-link);
+    transition-delay: calc(var(--i, 0) * 26ms);
+  }
 }
 
-@container dock (max-width: 500px) {
+/* The dismissal surface, and the separation that lets near-opaque glass sit
+   over body copy without the copy fighting it. Portalled to <body>: inside
+   the dock it would be trapped by the same layout containment the panel
+   relies on. z-index sits UNDER .header (40) so the dock itself stays crisp
+   above its own scrim. */
+.dock-scrim {
+  display: none;
+  position: fixed; inset: 0; z-index: 39;
+  background: color-mix(in oklab, var(--bg) 58%, transparent);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity var(--ease-panel-out), display var(--ease-panel-out) allow-discrete;
+}
+.dock-scrim[data-open] { display: block; opacity: 1; transition-duration: var(--dur-panel-in); }
+@starting-style { .dock-scrim[data-open] { opacity: 0; } }
+
+/* Forced colours, stated here rather than in the block near the top of this
+   file: [data-open] outranks a bare class, so the rule that removes the scrim
+   has to be at least as specific AND later. The panel is an opaque Canvas
+   surface once the OS owns the palette, so a scrim behind it is only dimming
+   a palette the user chose. */
+@media (forced-colors: active) {
+  .dock-scrim, .dock-scrim[data-open] { display: none; }
+  .nav-panel, .nav-panel[data-open] {
+    background: Canvas; backdrop-filter: none; border-color: CanvasText;
+  }
+}
+
+/* ---- the three tiers ---------------------------------------------------
+   MEASURED, not estimated — the old 500px collapse point was arithmetic that
+   was never checked against a rendered dock, and it was ~196px short, which
+   is precisely the band where THE LOOP broke onto a second line and shoved
+   the end cap off the pill.
+
+   Rendered at --t-mono, in the dock:
+     rail 439 · wordmark 153 · end cap 32 · padding 40 · gaps 32  =  696px
+   Condensed spends the wordmark's text (121px) and tightens the rail (73px):
+     rail 366 ·  mark      32 · end cap 32 · padding 40 · gaps 32  =  503px
+
+   Each threshold carries ~24px over its measurement, which is the headroom a
+   fallback mono needs if the metric-matched face never arrives. Re-measure
+   these if a nav label changes — the arithmetic is the whole contract.
+   ---------------------------------------------------------------------- */
+@container dock (width <= 45rem) {   /* 720px, needs 696 */
+  .nav { gap: 0; }
+  .nav-link { padding-inline: var(--s-2); letter-spacing: .06em; }
+}
+@container dock (width <= 33rem) {   /* 528px, needs 503 */
   .nav { display: none; }
   .nav-trigger { display: grid; }
 }
-/* With room for the links the panel must stay shut even if state says open. */
-@container dock (min-width: 500.01px) {
+/* The domain is spent only where something is actually competing for the
+   room. That is the CONDENSED band and nowhere else: above it the rail fits
+   spelled out, and below it the rail is gone entirely and the dock is mostly
+   air — hiding the domain there cost identity on every phone and bought
+   nothing. The floor is the one width where the mark, the domain and the end
+   cap genuinely stop fitting: 313px of content at a 44px touch size, so the
+   floor sits just above it. 360px — the most common Android width — clears it
+   with 21px to spare and keeps the domain; a 320px viewport does not. */
+@container dock (width > 33rem) and (width <= 45rem) { .wordmark-text { display: none; } }
+@container dock (width <= 20.5rem) { .wordmark-text { display: none; } }
+/* With room for the links the panel must stay shut even if state says open.
+   NavMenu watches the same signal from the other side — it reads the
+   trigger's computed display and drops the state — so aria-expanded cannot be
+   left asserting a panel that CSS has taken away. */
+@container dock (width > 33rem) {
   .nav-panel, .nav-panel[data-open] { display: none; }
 }
-/* No container-query support: fall back to the measured viewport threshold. */
+/* No container-query support: the same two thresholds measured from outside.
+   The dock is the viewport less 2x --dock-inset, so 720px of dock is ~768px
+   of viewport and 528px of dock is ~562px. */
 @supports not (container-type: inline-size) {
-  @media (max-width: 548px) { .nav { display: none; } .nav-trigger { display: grid; } }
-  @media (min-width: 549px) { .nav-panel, .nav-panel[data-open] { display: none; } }
+  @media (max-width: 48rem) {
+    .nav { gap: 0; }
+    .nav-link { padding-inline: var(--s-2); letter-spacing: .06em; }
+  }
+  @media (min-width: 35.01rem) and (max-width: 48rem) { .wordmark-text { display: none; } }
+  @media (max-width: 22rem) { .wordmark-text { display: none; } }
+  @media (max-width: 35rem) { .nav { display: none; } .nav-trigger { display: grid; } }
+  @media (min-width: 35.01rem) { .nav-panel, .nav-panel[data-open] { display: none; } }
 }
 
 /* --------------------------------------------------------------- buttons -- */
@@ -1886,7 +2106,8 @@ h1, h2, h3 {
 /* Icon-only, so there is no label to identify it and the disc has to do that
    job on its own — the strongest case on the page for a real 3:1 boundary. */
 .theme-toggle {
-  width: 32px; height: 32px; display: grid; place-items: center;
+  width: var(--dock-item-h); height: var(--dock-item-h);
+  flex: none; display: grid; place-items: center;
   background: color-mix(in srgb, var(--surface-2) 80%, transparent);
   border: 1px solid var(--edge-control);
   border-radius: var(--radius-pill);
@@ -1910,8 +2131,11 @@ h1, h2, h3 {
   .hero-roles a { padding-block: var(--s-2); }
   .more { padding-block: var(--s-1); }
   .row-post { padding-block: var(--s-5); }
-  .nav-link { min-height: 44px; }
-  .theme-toggle, .nav-trigger { width: 44px; height: 44px; }
+  /* One token, so the link, the toggle, the trigger and the travelling pill
+     grow together instead of four rules agreeing by coincidence. The mark
+     stays a step smaller: it is identity, not a target. */
+  :root { --dock-item-h: 44px; }
+  .theme-toggle, .nav-trigger { width: var(--dock-item-h); height: var(--dock-item-h); }
   .wordmark .mark { width: 38px; height: 38px; }
 }
 
@@ -1967,11 +2191,27 @@ a, button { -webkit-tap-highlight-color: transparent; }
     bottom: max(var(--header-top), env(safe-area-inset-bottom));
   }
 
-  /* The disclosure opens upward. `.header` is the positioning context, so
-     this is the same offset measured from its top edge. */
-  .nav-panel[data-open] {
+  /* The disclosure opens upward, hinged on the edge it grows from. `.header`
+     is the positioning context, so this is the same offset measured from its
+     top edge. The transform has to flip with it: a panel that grows upward
+     while sliding down from above reads as two objects. */
+  .nav-panel {
     top: auto;
-    bottom: calc(100% + var(--s-3));
+    bottom: calc(100% + var(--s-2));
+    transform-origin: 50% 100%;
+    transform: translateY(6px) scaleY(.96);
+  }
+  @starting-style {
+    .nav-panel[data-open] { opacity: 0; transform: translateY(6px) scaleY(.96); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Same flip for the stagger: the links rise into the panel, and the
+       sequence runs from the dock outward — which is the far end of the list
+       when the dock is underneath it. */
+    .nav-panel-link { transform: translateY(4px); }
+    .nav-panel[data-open] .nav-panel-link {
+      transition-delay: calc((var(--n, 1) - 1 - var(--i, 0)) * 26ms);
+    }
   }
 
   /* The hero's dock clearance swaps ends: without this the roles line sits
@@ -2080,16 +2320,19 @@ a, button { -webkit-tap-highlight-color: transparent; }
      blur they are just a gradient over the ground, so they go. */
   body::before { display: none; }
 
-  .glass, .header, .contact, .nav-panel[data-open], .row, .row:hover,
+  .glass, .header, .contact, .nav-panel, .row, .row:hover,
   .btn-ghost, .btn-ghost:hover, .theme-toggle, .nav-trigger, .wordmark .mark,
-  .nav-link[aria-current] {
+  .nav-link[aria-current], .nav-panel-link[aria-current], .nav-ind {
     background: var(--surface);
     backdrop-filter: none;
   }
+  /* The scrim's blur is the same specular trick and goes with it; the dimming
+     is the part that was doing the work, so that stays and goes opaque. */
+  .dock-scrim { backdrop-filter: none; background: color-mix(in oklab, var(--bg) 82%, transparent); }
   /* The sheen is a specular cue for glass; without the material it is noise. */
   .row::before { display: none; }
   /* Borders now carry the whole job of saying where a panel ends. */
-  .glass, .header, .contact, .row, .nav-panel[data-open] {
+  .glass, .header, .contact, .row, .nav-panel {
     border-color: var(--line-2);
   }
   /* Controls are NOT in the list above on purpose. Sweeping them into the
@@ -2114,11 +2357,18 @@ a, button { -webkit-tap-highlight-color: transparent; }
   }
   body::before { display: none; }
 
-  .glass, .header, .contact, .nav-panel[data-open], .row, .row:hover,
+  .glass, .header, .contact, .nav-panel, .row, .row:hover,
   .btn-ghost, .btn-ghost:hover, .theme-toggle, .nav-trigger, .wordmark .mark {
     background: var(--surface);
     backdrop-filter: none;
     border-color: var(--ink-2);
+  }
+  .dock-scrim { backdrop-filter: none; background: color-mix(in oklab, var(--bg) 88%, transparent); }
+  /* The travelling pill IS the current-section signal here, so it needs a real
+     edge rather than a 6% tint against an opaque panel. */
+  .nav-ind, .nav-panel-link[aria-current] {
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--ink-2);
   }
   .row::before { display: none; }
   .tag { border: 1px solid var(--ink-2); }
