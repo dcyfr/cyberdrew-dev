@@ -15,7 +15,10 @@ export default function Page() {
   return (
     <>
       {/* Scroll readout: CSS scroll-driven, no listener on the main thread. */}
-      <div className="progress" aria-hidden="true" />
+      <div className="progress" aria-hidden="true">
+        <span className="progress-bar" />
+        <span className="progress-tip" />
+      </div>
       <NavSpy />
       <ScrollReveal />
       <CursorGlow />
