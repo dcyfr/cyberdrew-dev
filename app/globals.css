@@ -495,7 +495,10 @@
   .contact { border-color: CanvasText; }
   .wordmark svg, .status svg, .caret { forced-color-adjust: auto; fill: CanvasText; }
   .caret { background: CanvasText; }
-  .progress { background: Highlight; }
+  .progress-bar { background: Highlight; }
+  /* The OS picks the colours here, so a warm-to-cool bloom is either repainted
+     into a solid block or ignored. Either way it is not light any more. */
+  .progress-tip { display: none; }
   .rows, .row, .header, .site-footer, .footer-bar, .tag { border-color: CanvasText; }
   /* The OS repaints fills, so a tinted pill carries nothing here. Drop the
      travelling one and let a real edge say where you are, on both tiers.
@@ -518,6 +521,20 @@ html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + var(-
    by the footer's own padding. */
 @media (max-width: 47.99rem) {
   html { scroll-padding-top: var(--s-7); }
+
+  /* And the same mistake once more, one level down. Clearing scroll-padding
+     fixed the number the BROWSER adds; --bay is a second dock's worth that the
+     SECTION adds, and it is the one you can see. A bay opens with --bay of top
+     padding before its hairline rule. Under a top dock that padding is spent
+     passing behind the pill, so the rule surfaces just below it and the gap
+     never reads as empty. With the dock at the bottom there is nothing up
+     there to pass behind, so the same padding lands as ~68px of bare ground
+     above the rule and the heading arrives a fifth of the way down a phone
+     screen — the section "lands" in the right place and looks like it missed.
+     Cancel the clearance for the landing only: the scroll stops --bay higher,
+     so the rule comes to rest at scroll-padding-top exactly. Nothing about the
+     section's own spacing moves, so scrolling past by hand is unchanged. */
+  .bay { scroll-margin-top: calc(-1 * var(--bay)); }
 }
 
 body {
@@ -766,8 +783,17 @@ h1, h2, h3 {
      --rule-y     where the light sits, relative to the element's own box
      --rule-inset how far in from the sides it stops
 
-   --ga is 0 until the pointer is near, so at rest there is nothing to see. */
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+   --ga is 0 until the pointer is near, so at rest there is nothing to see.
+
+   Not gated on a fine pointer. It used to be, and the effect was simply absent
+   on every phone — the one place the page is most often read. The gate was
+   standing in for "is there something to follow", which is a question the
+   SCRIPT can answer properly: on touch there is no cursor, so CursorGlow moves
+   the light with the scroll instead (see the component). CSS only has to draw
+   it. That leaves --ga as the single switch it already was: it defaults to 0,
+   nothing writes it unless the script runs, and a page with no JS renders
+   exactly as it does today. Reduced motion still takes the whole thing out. */
+@media (prefers-reduced-motion: no-preference) {
   [data-rule-glow] { position: relative; }
   [data-rule-glow]::before,
   [data-rule-glow]::after {
@@ -902,21 +928,71 @@ h1, h2, h3 {
 .progress { display: none; }
 @supports (animation-timeline: scroll()) {
   @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+    /* Three elements, not one, and the split is the whole trick. The strip is
+       an untransformed frame; the bar scales inside it; the tip travels inside
+       it. A tip nested in the bar would inherit the bar's scaleX and the light
+       would stretch from a point into a 1200px smear at the far end of the
+       page — the exact failure the ring block describes for gradients under a
+       scale. Two siblings on ONE timeline cannot drift: they read the same
+       scroll range, so the tip is always at the end of the bar. */
     .progress {
       display: block;
       position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 60;
-      background: var(--accent);
-      transform: scaleX(0); transform-origin: 0 50%;
+      pointer-events: none;
+    }
+    .progress-bar, .progress-tip {
+      position: absolute; inset: 0;
       /* Longhands, not the shorthand: `animation: … linear both` sets
          duration to 0s, and a scroll timeline needs `auto` to map progress
          onto the scroll range. With 0s the bar just sits at scaleX(0). */
-      animation-name: progress-grow;
       animation-duration: auto;
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: scroll(root block);
     }
+    .progress-bar {
+      background: var(--accent);
+      transform: scaleX(0); transform-origin: 0 50%;
+      animation-name: progress-grow;
+    }
     @keyframes progress-grow { to { transform: scaleX(1); } }
+
+    /* The readout says where you are; the light says the readout is live.
+       Same instrument as every other lit edge on the page — hot core, wide
+       cool bleed — so the position indicator reads as the same light source
+       that runs the section rules, caught at the point the bar has reached.
+
+       The tip is the full width of the strip and paints only at its own left
+       edge, so translateX(100%) walks that point from one end to the other.
+       Percentages resolve against the element's own box, which is why this
+       needs no vw: 100vw would include the scrollbar gutter and the light
+       would finish a scrollbar's width past the end of its own bar. */
+    .progress-tip { animation-name: progress-tip; }
+    @keyframes progress-tip { to { transform: translateX(100%); } }
+    .progress-tip::before, .progress-tip::after {
+      content: "";
+      position: absolute; left: 0; top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    /* The bleed, which is the part that reads as light. Biased downward: the
+       bar sits on the viewport's top edge, so a bloom centred on it spends
+       half its light off screen and the readout looks half as lit as every
+       other edge on the page. Hanging it below also puts the light where
+       there is something to fall on. */
+    .progress-tip::before {
+      width: 240px; height: 34px;
+      transform: translate(-50%, -22%);
+      background: radial-gradient(closest-side,
+        var(--rule-bleed-warm), var(--rule-bleed-cool) 56%, transparent 86%);
+      filter: blur(12px);
+    }
+    /* the core, sitting on the bar itself */
+    .progress-tip::after {
+      width: 96px; height: 4px;
+      background: radial-gradient(closest-side,
+        var(--rule-hot), var(--rule-mid) 44%, var(--rule-cool) 74%, transparent 100%);
+      filter: blur(1.5px);
+    }
   }
 }
 
@@ -1062,6 +1138,23 @@ h1, h2, h3 {
   box-shadow: inset 0 1px 0 var(--edge-top);
   opacity: 0; pointer-events: none;
   transition: transform var(--ease-ind), width var(--ease-ind), opacity var(--ease);
+}
+/* The pill's own corona. The tinted fill says which link is current; it does
+   not say the page is still moving under it, and at 90% of --surface-2 against
+   glass it is close to the quietest mark on the dock. A bloom underneath makes
+   the same object read as lit rather than filled, and it is the third place the
+   one light source shows up: the section rule, the progress tip, and here.
+   inset, not a transform: the pseudo follows the pill's box, so it travels and
+   resizes with it instead of being stretched by a scale it cannot see. */
+.nav-ind::before {
+  content: "";
+  position: absolute; inset: -6px -14px;
+  border-radius: inherit;
+  background: radial-gradient(closest-side,
+    var(--rule-bleed-warm), var(--rule-bleed-cool) 58%, transparent 88%);
+  filter: blur(8px);
+  opacity: .8;
+  pointer-events: none;
 }
 .nav[data-ind] .nav-ind { opacity: 1; }
 /* With the travelling pill live, the per-link fill would paint a second one
@@ -2347,6 +2440,9 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .dock-scrim { backdrop-filter: none; background: color-mix(in oklab, var(--bg) 82%, transparent); }
   /* The sheen is a specular cue for glass; without the material it is noise. */
   .row::before { display: none; }
+  /* A blurred bloom is transparency by another name, and it is the one part of
+     the position readout that is atmosphere rather than information. */
+  .nav-ind::before, .progress-tip { display: none; }
   /* Borders now carry the whole job of saying where a panel ends. */
   .glass, .header, .contact, .row, .nav-panel {
     border-color: var(--line-2);
@@ -2386,6 +2482,9 @@ a, button { -webkit-tap-highlight-color: transparent; }
     background: var(--surface-2);
     box-shadow: inset 0 0 0 1px var(--ink-2);
   }
+  /* A hard edge is now saying where you are. A haze around it only softens the
+     boundary someone asked to have sharpened. */
+  .nav-ind::before { display: none; }
   .row::before { display: none; }
   .tag { border: 1px solid var(--ink-2); }
   /* A focus ring at 2px is adequate against glass; against a hard-edged
