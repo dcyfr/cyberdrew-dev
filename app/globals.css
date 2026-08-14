@@ -495,10 +495,6 @@
   .contact { border-color: CanvasText; }
   .wordmark svg, .status svg, .caret { forced-color-adjust: auto; fill: CanvasText; }
   .caret { background: CanvasText; }
-  .progress-bar { background: Highlight; }
-  /* The OS picks the colours here, so a warm-to-cool bloom is either repainted
-     into a solid block or ignored. Either way it is not light any more. */
-  .progress-tip { display: none; }
   .rows, .row, .header, .site-footer, .footer-bar, .tag { border-color: CanvasText; }
   /* The OS repaints fills, so a tinted pill carries nothing here. Drop the
      travelling one and let a real edge say where you are, on both tiers.
@@ -912,90 +908,6 @@ h1, h2, h3 {
   .hero h1[data-rule-glow] { --rule-y: calc(100% + var(--s-3)); }
 }
 
-
-/* -------------------------------------------------------------- progress -- */
-/* Position in a document is information, so scroll drives a real readout
-   rather than parallax decoration. Scroll-driven CSS: no scroll listener, no
-   JS, nothing running on the main thread. Hidden entirely where the feature
-   is unsupported (it would otherwise sit at scaleX(0) forever) and under
-   reduced-motion.
-
-   And hidden below 48rem, where the dock moves to the bottom edge. A 2px rule
-   pinned to the top of the viewport reads as a readout attached to chrome, and
-   on a phone there is no chrome up there to attach to — it runs under the
-   status bar, hard against the clock, and looks like a stray artefact or a
-   loading bar that never finishes. The scrollbar is the native readout there. */
-.progress { display: none; }
-@supports (animation-timeline: scroll()) {
-  @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
-    /* Three elements, not one, and the split is the whole trick. The strip is
-       an untransformed frame; the bar scales inside it; the tip travels inside
-       it. A tip nested in the bar would inherit the bar's scaleX and the light
-       would stretch from a point into a 1200px smear at the far end of the
-       page — the exact failure the ring block describes for gradients under a
-       scale. Two siblings on ONE timeline cannot drift: they read the same
-       scroll range, so the tip is always at the end of the bar. */
-    .progress {
-      display: block;
-      position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 60;
-      pointer-events: none;
-    }
-    .progress-bar, .progress-tip {
-      position: absolute; inset: 0;
-      /* Longhands, not the shorthand: `animation: … linear both` sets
-         duration to 0s, and a scroll timeline needs `auto` to map progress
-         onto the scroll range. With 0s the bar just sits at scaleX(0). */
-      animation-duration: auto;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: scroll(root block);
-    }
-    .progress-bar {
-      background: var(--accent);
-      transform: scaleX(0); transform-origin: 0 50%;
-      animation-name: progress-grow;
-    }
-    @keyframes progress-grow { to { transform: scaleX(1); } }
-
-    /* The readout says where you are; the light says the readout is live.
-       Same instrument as every other lit edge on the page — hot core, wide
-       cool bleed — so the position indicator reads as the same light source
-       that runs the section rules, caught at the point the bar has reached.
-
-       The tip is the full width of the strip and paints only at its own left
-       edge, so translateX(100%) walks that point from one end to the other.
-       Percentages resolve against the element's own box, which is why this
-       needs no vw: 100vw would include the scrollbar gutter and the light
-       would finish a scrollbar's width past the end of its own bar. */
-    .progress-tip { animation-name: progress-tip; }
-    @keyframes progress-tip { to { transform: translateX(100%); } }
-    .progress-tip::before, .progress-tip::after {
-      content: "";
-      position: absolute; left: 0; top: 50%;
-      transform: translate(-50%, -50%);
-    }
-    /* The bleed, which is the part that reads as light. Biased downward: the
-       bar sits on the viewport's top edge, so a bloom centred on it spends
-       half its light off screen and the readout looks half as lit as every
-       other edge on the page. Hanging it below also puts the light where
-       there is something to fall on. */
-    .progress-tip::before {
-      width: 240px; height: 34px;
-      transform: translate(-50%, -22%);
-      background: radial-gradient(closest-side,
-        var(--rule-bleed-warm), var(--rule-bleed-cool) 56%, transparent 86%);
-      filter: blur(12px);
-    }
-    /* the core, sitting on the bar itself */
-    .progress-tip::after {
-      width: 96px; height: 4px;
-      background: radial-gradient(closest-side,
-        var(--rule-hot), var(--rule-mid) 44%, var(--rule-cool) 74%, transparent 100%);
-      filter: blur(1.5px);
-    }
-  }
-}
-
 /* ---------------------------------------------------------------- header -- */
 
 /* A floating dock, not a page-spanning bar. Fixed and inset from every edge
@@ -1142,8 +1054,8 @@ h1, h2, h3 {
 /* The pill's own corona. The tinted fill says which link is current; it does
    not say the page is still moving under it, and at 90% of --surface-2 against
    glass it is close to the quietest mark on the dock. A bloom underneath makes
-   the same object read as lit rather than filled, and it is the third place the
-   one light source shows up: the section rule, the progress tip, and here.
+   the same object read as lit rather than filled, and it is the second place
+   the one light source shows up: the section rule, and here.
    inset, not a transform: the pseudo follows the pill's box, so it travels and
    resizes with it instead of being stretched by a scale it cannot see. */
 .nav-ind::before {
@@ -2442,7 +2354,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .row::before { display: none; }
   /* A blurred bloom is transparency by another name, and it is the one part of
      the position readout that is atmosphere rather than information. */
-  .nav-ind::before, .progress-tip { display: none; }
+  .nav-ind::before { display: none; }
   /* Borders now carry the whole job of saying where a panel ends. */
   .glass, .header, .contact, .row, .nav-panel {
     border-color: var(--line-2);
