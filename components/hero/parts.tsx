@@ -95,13 +95,18 @@ export function HeroCredentials({ className }: { className?: string }) {
 }
 
 /**
- * The only photograph on the site.
+ * The only photograph on the site, and one of the three objects lit from
+ * --ecl-bearing — the eclipse's occluder, this, and the wordmark's mark.
  *
- * It takes the disc the wordmark's mark and the theme toggle already use, so it
- * reads as part of the system rather than as a new shape arriving. Greyscaled
- * in CSS rather than baked into the asset: the page has two materials and no
- * hue, and a full-colour face would be the single hue on it. Doing it here also
- * means one asset serves both grounds.
+ * Greyscaled in CSS rather than baked into the asset: the page has two
+ * materials and no hue, and a full-colour face would be the single hue on it.
+ * Doing it here also means one asset serves both grounds.
+ *
+ * THE WRAPPER IS LOAD-BEARING, and it is the whole reason this does not just
+ * return the <Image>. An <img> is a replaced element, so it generates no
+ * pseudo-elements: `.portrait::before` matches and paints nothing, with no
+ * error and no warning. The limb is a masked ::before, so it has to hang off a
+ * real box. The span carries [data-limb]; the image fills it.
  *
  * `size` is the rendered box in px, and it drives the intrinsic request and the
  * `sizes` hint together. Passing it is not optional dressing: the hero sets the
@@ -117,14 +122,16 @@ export function HeroPortrait({
   className?: string;
 }) {
   return (
-    <Image
-      className={`portrait${className ? ` ${className}` : ""}`}
-      src={portrait}
-      alt={`${person.name}, ${person.callsign}`}
-      width={size}
-      height={size}
-      sizes={`${size}px`}
-      priority
-    />
+    <span className={`portrait-disc${className ? ` ${className}` : ""}`} data-limb>
+      <Image
+        className="portrait"
+        src={portrait}
+        alt={`${person.name}, ${person.callsign}`}
+        width={size}
+        height={size}
+        sizes={`${size}px`}
+        priority
+      />
+    </span>
   );
 }

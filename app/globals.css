@@ -39,26 +39,14 @@
   /* Chip text sits on --surface-2, not on the page ground, which costs
      contrast: --ink-mut measured 4.34:1 there in light. Dedicated value. */
   --chip-ink:  #9a9aa1;
-  /* The field plate is an obsidian photograph in BOTH themes, so the one
-     label sitting on it cannot invert with the page. Deliberately declared
-     once, outside the theme blocks, and lifted off --ink-mut for headroom
-     against the plate's own grain. */
-  /* The render is bone marks on an obsidian field. Dark leaves it alone; light
-     inverts it, so the plate becomes obsidian marks on bone. That is the same
-     rule the rest of the page follows — the accent is whichever material is
-     not the ground — and it is what makes the canvas layer work at all: the
-     canvas draws in --ink, which in light IS obsidian, and was previously
-     invisible against an un-inverted dark plate.
-
-     --art-ground is the render's OWN ground, sampled off the asset and
-     flipped by hand for light rather than derived, because a filter cannot
-     reach a background. It matters only where the card is taller than the
-     artwork — on narrow viewports, where the art is padded — and there it is
-     the difference between a plate the swarm sits in and a letterbox strip
-     pasted into a card: the page ground is 5 levels lighter than the render's,
-     which is faint but lands as a hard horizontal seam across the full width. */
-  --art-ground: #060607;
-  --art-halo:   var(--shadow);
+  /* The block that stood here described the FIELD PLATE — a bitmap of a swarm
+     under a WebGL warp, with a canvas of agents over it, on an opaque ground
+     that had to be flipped by hand per theme because a filter cannot reach a
+     background. All of it is gone: the plate was retired for the eclipse, and
+     the eclipse has since lost its frame too, so there is no second ground on
+     this page to keep in sync with the first. Recorded rather than silently
+     deleted, because "why is there no --art-ground" is a question the eclipse
+     block below answers and nothing else would. */
   /* eclipse: the disc is the dark material, the rim the light one, in both
      themes. Only the spill flips — on obsidian it is light escaping past the
      occluder; see the light block for what it becomes on bone. */
@@ -172,6 +160,30 @@
      is now how far that decay reaches, not how wide a ring is. */
   --lens-rim:   rgb(255 255 255 / .14);
   --lens-depth: 10px;
+  /* ---- the panel edge ---------------------------------------------------
+     The four insets that make a sheet of glass: a bright top bevel where light
+     catches it, a dark bottom for thickness, a hairline ring for the cut edge,
+     and the lens decaying inward from the rim.
+
+     One token, because they were SIX near-copies — .glass, .header,
+     .nav-panel, .contact, .row:hover and .eclipse-art each listed their own,
+     and they had already drifted: the panel and the plate were missing the
+     bottom edge, the plate and .btn-ghost were missing the lens. Nothing chose
+     those omissions; they are what happens when one idea is written out by
+     hand in six places. A panel now states the edge and its own elevation, and
+     nothing else:
+
+         box-shadow: var(--panel-edge), var(--shadow);
+
+     Declared OUTSIDE the theme blocks and composed entirely of tokens that are
+     themselves per-theme, so it inherits the theme through its parts. Adding it
+     to a theme block would be four more copies of the thing this deletes.
+     ---------------------------------------------------------------------- */
+  --panel-edge:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 -1px 0 var(--edge-bottom),
+    inset 0 0 0 1px var(--glass-ring),
+    inset 0 0 var(--lens-depth) 0 var(--lens-rim);
   /* ---- control edge -----------------------------------------------------
      WCAG 1.4.11 wants 3:1 for the visual information that identifies a
      control. A card is exempt in practice — its title identifies it — but a
@@ -230,7 +242,16 @@
   --sky-corona:     rgb(236 236 232 / .075);
   --sky-corona-out: rgb(198 214 255 / .038);
   /* the halo a panel throws when it lifts */
-  --glow: 0 0 44px -12px rgb(220 218 213 / .10);
+  /* The halo a surface throws when it lifts. TWO stops, and coloured, because
+     this is the same light as everything else: it was the last neutral glow on
+     the page, so hovering a button threw a grey halo two inches under a corona
+     that is warm-to-cool, and the two read as different effects.
+     Warm tight, cool wide — the near field is the source, the far field is the
+     air. Alphas are hover-only and transient; the contrast gate cannot hover,
+     so these are held low by judgement rather than by measurement. */
+  --halo-warm: rgb(255 196 146 / .15);
+  --halo-cool: rgb(148 178 255 / .09);
+  --glow: 0 0 30px -10px var(--halo-warm), 0 0 64px -18px var(--halo-cool);
 
   /* Long, decelerating: glass should settle, not snap. */
   --curve-out:  cubic-bezier(.22, 1, .36, 1);
@@ -407,11 +428,16 @@
     --sky-corona-in:  rgb(40 32 24 / .022);
     --sky-corona:     rgb(40 32 24 / .055);
     --sky-corona-out: rgb(40 32 24 / .022);
-    --glow: 0 0 44px -14px rgb(40 32 24 / .18);
+    /* On paper a halo cannot be brighter than the ground, so the lift reads the
+     way every other light in this theme does: as the shadow the object casts.
+     Warm and cool survive as a temperature in that shadow rather than as a
+     glow — the near field is browner, the far field bluer, which is what a
+     shadow on warm paper actually does. */
+  --halo-warm: rgb(60 40 20 / .16);
+  --halo-cool: rgb(30 40 80 / .10);
+  --glow: 0 0 30px -10px var(--halo-warm), 0 0 64px -18px var(--halo-cool);
     --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
     --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
-    --art-ground: #f9f9f8;
-    --art-halo:   0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
     /* On bone, light spilling past the disc would be white on white. The spill
        becomes the shadow the object casts instead: same physics read the other
        way round.
@@ -461,11 +487,16 @@
   --sky-corona-in:  rgb(40 32 24 / .022);
   --sky-corona:     rgb(40 32 24 / .055);
   --sky-corona-out: rgb(40 32 24 / .022);
-  --glow: 0 0 44px -14px rgb(40 32 24 / .18);
+  /* On paper a halo cannot be brighter than the ground, so the lift reads the
+     way every other light in this theme does: as the shadow the object casts.
+     Warm and cool survive as a temperature in that shadow rather than as a
+     glow — the near field is browner, the far field bluer, which is what a
+     shadow on warm paper actually does. */
+  --halo-warm: rgb(60 40 20 / .16);
+  --halo-cool: rgb(30 40 80 / .10);
+  --glow: 0 0 30px -10px var(--halo-warm), 0 0 64px -18px var(--halo-cool);
   --shadow: 0 1px 2px rgb(40 32 24 / .06), 0 18px 40px -24px rgb(40 32 24 / .34);
   --shadow-lift: 0 2px 6px rgb(40 32 24 / .08), 0 28px 60px -28px rgb(40 32 24 / .42);
-  --art-ground: #f9f9f8;
-  --art-halo:   0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
   /* On bone, light spilling past the disc would be white on white. The spill
      becomes the shadow the object casts instead: same physics read the other
      way round. The limb and atmosphere inherit from :root — see the note in
@@ -526,11 +557,18 @@
   --sky-corona-in:  rgb(255 228 200 / .028);
   --sky-corona:     rgb(236 236 232 / .075);
   --sky-corona-out: rgb(198 214 255 / .038);
-  --glow: 0 0 44px -12px rgb(220 218 213 / .10);
+  /* The halo a surface throws when it lifts. TWO stops, and coloured, because
+     this is the same light as everything else: it was the last neutral glow on
+     the page, so hovering a button threw a grey halo two inches under a corona
+     that is warm-to-cool, and the two read as different effects.
+     Warm tight, cool wide — the near field is the source, the far field is the
+     air. Alphas are hover-only and transient; the contrast gate cannot hover,
+     so these are held low by judgement rather than by measurement. */
+  --halo-warm: rgb(255 196 146 / .15);
+  --halo-cool: rgb(148 178 255 / .09);
+  --glow: 0 0 30px -10px var(--halo-warm), 0 0 64px -18px var(--halo-cool);
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
-  --art-ground: #060607;
-  --art-halo:   var(--shadow);
   /* eclipse: the disc is the dark material, the rim the light one, in both
      themes. Only the spill flips — on obsidian it is light escaping past the
      occluder; see the light block for what it becomes on bone. */
@@ -612,6 +650,14 @@
   .row::before { display: none; }
   /* The ring is hue on a border, and the OS owns both. */
   [data-ring-glow]::before, [data-ring-glow]::after { display: none; }
+  /* So is the limb — a conic gradient of warm-to-cool is exactly the kind of
+     decorative colour forced-colors exists to overrule. The objects that wore
+     one still have to keep their outline, though, or the portrait and the mark
+     become shapeless: swap the graded edge for a flat one in the user's own
+     text colour. The eclipse's occluder is exempt because the artwork it
+     belongs to is hidden wholesale further down. */
+  [data-limb]::before { display: none; }
+  .portrait-disc, .wordmark .mark { border: 1px solid CanvasText; }
   body::after { display: none; }
   [data-glow] { background-image: none; color: CanvasText; }
   /* The slab is ordinary glass now, so it needs no forced-color-adjust escape
@@ -772,15 +818,7 @@ body::after {
   background: var(--glass);
   backdrop-filter: var(--glass-blur);
   border: 1px solid transparent;
-  box-shadow:
-    inset 0 1px 0 var(--edge-top),
-    inset 0 -1px 0 var(--edge-bottom),
-    inset 0 0 0 1px var(--glass-ring),
-    /* the lens: brightness decaying inward from the rim, so the edge reads as
-       thickness light bends through. Blur radius, no spread — a spread would
-       give it a hard outer contour and turn it back into a drawn border. */
-    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
-    var(--shadow);
+  box-shadow: var(--panel-edge), var(--shadow);
 }
 /* Where backdrop-filter is unsupported the fill alone would look thin and
    washed out, so fall back to the opaque surface.
@@ -1056,12 +1094,7 @@ h1, h2, h3 {
      read through. At 68% the hero headline showed straight through the blur. */
   background: var(--glass-strong);
   backdrop-filter: var(--glass-blur);
-  box-shadow:
-    inset 0 1px 0 var(--edge-top),
-    inset 0 -1px 0 var(--edge-bottom),
-    inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
-    var(--shadow);
+  box-shadow: var(--panel-edge), var(--shadow);
 }
 @supports not (backdrop-filter: blur(1px)) {
   .header { background: var(--surface); }
@@ -1100,14 +1133,17 @@ h1, h2, h3 {
      equal 1fr share, and a nowrap wordmark then overflows straight across the
      first link: measured at 30px of overlap at 772px wide. */
 }
-/* The mark rides in a filled disc, same treatment as the theme toggle, so
-   the two ends of the dock rhyme. */
+/* The mark rides in a filled disc. Same fill as the theme toggle so the two
+   ends of the dock still rhyme, but it carries the limb instead of a control
+   edge — see the note in Header.tsx and the [data-limb] block. 1.5px, because
+   at 32px a 1px edge is a hairline crack rather than a lit rim. */
 .wordmark .mark {
   width: var(--dock-item-h); height: var(--dock-item-h); flex: none;
   display: grid; place-items: center;
   border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--surface-2) 80%, transparent);
   box-shadow: inset 0 1px 0 var(--edge-top);
+  --limb-w: 1.5px;
 }
 .wordmark svg { color: var(--accent); flex: none; }
 .wordmark-text { white-space: nowrap; }
@@ -1261,11 +1297,8 @@ h1, h2, h3 {
      read straight through it. */
   background: color-mix(in srgb, var(--surface) 97%, transparent);
   backdrop-filter: var(--glass-blur);
-  box-shadow:
-    inset 0 1px 0 var(--edge-top),
-    inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
-    var(--shadow-lift);
+  /* Was missing --edge-bottom, which nothing chose — see --panel-edge. */
+  box-shadow: var(--panel-edge), var(--shadow-lift);
   /* Hinged on the edge it grows from. Overridden for the bottom dock. */
   transform-origin: 50% 0;
   opacity: 0;
@@ -1449,10 +1482,16 @@ h1, h2, h3 {
     inset 0 1px 0 var(--edge-top),
     inset 0 0 0 1px var(--glass-ring);
 }
+/* Keeps the ring. It used to be dropped here — the resting state listed
+   --glass-ring and the hover state did not, so the cut edge blinked off at the
+   exact moment the control was being reached for. */
 .btn-ghost:hover {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--surface) 88%, transparent);
-  box-shadow: inset 0 1px 0 var(--edge-top), var(--glow);
+  box-shadow:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 0 0 1px var(--glass-ring),
+    var(--glow);
 }
 
 /* ------------------------------------------------------------------ hero -- */
@@ -1531,23 +1570,33 @@ h1, h2, h3 {
    them. */
 
 /* ------------------------------------------------------------- portrait -- */
-/* The only photograph on the site. It takes the disc the wordmark's mark and
-   the theme toggle already use, so it reads as part of the system rather than
-   as a new shape arriving.
+/* The only photograph on the site, and — since the limb — the second of the
+   three objects lit from --ecl-bearing.
    Greyscaled in CSS rather than baked into the asset: the page has two
    materials and no hue, and a full-colour face would be the single hue on it.
-   Doing it here also means one asset serves both grounds. */
-.portrait {
-  width: clamp(4.5rem, 7vw, 7rem); height: auto;
+   Doing it here also means one asset serves both grounds.
+
+   WRAPPED, because an <img> is a replaced element and generates no
+   pseudo-elements — `.portrait::before` paints nothing at all, silently. The
+   wrapper is what carries [data-limb]; the image just fills it. That is the
+   only reason HeroPortrait returns a <span> around the <Image> rather than the
+   <Image> alone. */
+.portrait-disc {
+  display: block; flex: none;
+  width: clamp(4.5rem, 7vw, 7rem);
   aspect-ratio: 1;
   border-radius: var(--radius-pill);
-  object-fit: cover;
-  filter: grayscale(1) contrast(1.06);
-  border: 1px solid var(--line);
-  box-shadow: inset 0 1px 0 var(--edge-top), var(--shadow);
   /* The photograph is lit against near-black, so on the bone ground it lands
      as an obsidian disc: the same two materials, just arranged the other way. */
   background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.portrait {
+  display: block;
+  width: 100%; height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.06);
 }
 /* ---- figures ----------------------------------------------------------
    A figure, independent of what holds it. Kept separate from .hero-band so the
@@ -1596,7 +1645,9 @@ h1, h2, h3 {
   gap: clamp(var(--s-4), 2vw, var(--s-6));
   margin-top: clamp(var(--s-9), 4.5vh, var(--s-12));
 }
-.hero-statement .portrait { width: 3.5rem; }
+/* The wrapper is what has a size now, and a small disc needs a proportionate
+   limb — 1px on 56px reads as a hairline crack rather than a lit edge. */
+.hero-statement .portrait-disc { width: 3.5rem; --limb-w: 1.5px; }
 .hero-byline-say { min-width: 0; }
 /* Both lines already carry their own top margin for the stacked layout; in the
    byline they are a two-line block beside a disc, so the outer gap is the
@@ -1670,19 +1721,24 @@ h1, h2, h3 {
      hover", not a fenced box, so this buys presence rather than a border.
      The 3:1 rule does not apply here — a card is identified by its title, and
      unlike .btn-ghost its shape is not the affordance. */
+  /* The resting card is the ONE surface that deliberately does not take the
+     full --panel-edge: the lens is a hover cue here, and a card that already
+     had it would have nothing left to do when the pointer arrives. So it takes
+     the three static insets and adds its own quarter-strength lift.
+
+     That lift stays a literal rather than becoming --shadow, because both
+     --edge-top and --glass-ring are WHITE and therefore invisible on a bone
+     ground — the dark theme was taking all the benefit. Measured: resting edge
+     1.06 -> 1.47:1 dark, 1.05 -> 1.11:1 light.
+     Light stays quiet on purpose and this is where it stops. Every surface in
+     that theme sits in the same 1.05-1.13:1 band (.tag 1.13, .header 1.08,
+     .contact 1.08) — it is a paper language, not a weak version of the dark
+     one. Pushing .row alone to read like dark would make it the one card
+     shouting on a page of quiet ones. */
   box-shadow:
     inset 0 1px 0 var(--edge-top),
     inset 0 -1px 0 var(--edge-bottom),
     inset 0 0 0 1px var(--glass-ring),
-    /* A quarter-strength lift, because both --edge-top and --glass-ring are
-       WHITE and therefore invisible on a bone ground — the dark theme was
-       taking all the benefit. Measured: resting edge 1.06 -> 1.47:1 dark,
-       1.05 -> 1.11:1 light.
-       Light stays quiet on purpose and this is where it stops. Every surface
-       in that theme sits in the same 1.05-1.13:1 band (.tag 1.13, .header 1.08,
-       .contact 1.08) — it is a paper language, not a weak version of the dark
-       one. Pushing .row alone to read like dark would make it the one card
-       shouting on a page of quiet ones. */
     0 1px 2px -1px color-mix(in srgb, var(--edge-bottom) 60%, transparent);
   transition:
     background var(--ease-glass),
@@ -1721,13 +1777,9 @@ h1, h2, h3 {
   background: var(--glass);
   backdrop-filter: var(--glass-blur);
   transform: translateY(-3px);
-  box-shadow:
-    inset 0 1px 0 var(--edge-top),
-    inset 0 -1px 0 var(--edge-bottom),
-    inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
-    var(--shadow),
-    var(--glow);
+  /* Hover is where the card becomes a full panel: it picks up the lens the
+     resting state withholds, and the same warm-to-cool halo a button throws. */
+  box-shadow: var(--panel-edge), var(--shadow), var(--glow);
 }
 /* --ga carries the pointer's proximity, so the sheen arrives with the light
    rather than snapping on at the hover boundary. */
@@ -1858,8 +1910,24 @@ h1, h2, h3 {
    instead. Same object, different lighting, which is the same rule the rest of
    the page follows.
 
-   Reuses --art-ground, already defined per theme as "the render's own
-   ground", rather than minting a second token that means the same thing. */
+   THE FRAME IS GONE, and that is the point of this revision.
+
+   It was a card: 1px of --line, a radius, an opaque --art-ground and
+   `overflow: hidden`. Which meant the one object on this page whose entire
+   subject is light escaping past an edge was the one object whose light could
+   not leave its own box. The spill is a 120px blur; the card cropped it at
+   ~90px and squared it off at the corners. The page ground carries a corona
+   from the same event, and the plate sat on top of that corona hiding it
+   behind an opaque rectangle five levels off the page's own black.
+
+   So: no border, no background, no clip. The disc hangs in the page ground and
+   its spill lands on the real thing — the same light the glass refracts and
+   the sky already shows, now with one object actually casting it.
+
+   Nothing needs the clip. The disc is 38% of the width and centred, so it
+   cannot overflow; only the light does, which is the entire intent.
+   --art-ground and --art-halo went with the frame. They described "the render's
+   own ground" and "the halo the plate throws", and there is no plate. */
 .eclipse {
   position: relative;
   margin: 0 calc(-1 * var(--row-pad));
@@ -1869,34 +1937,11 @@ h1, h2, h3 {
 .eclipse-art {
   position: relative;
   aspect-ratio: 1536 / 640;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--art-ground);
-  box-shadow:
-    inset 0 1px 0 var(--edge-top),
-    inset 0 0 0 1px var(--glass-ring),
-    var(--art-halo);
 }
-/* A wide plate collapses to a letterbox on a phone and the disc has nowhere to
+/* A wide box collapses to a letterbox on a phone and the disc has nowhere to
    sit. Same reasoning, and the same fix, as the plate before it. */
 @media (max-width: 47.99rem) {
   .eclipse-art { aspect-ratio: 4 / 3; }
-}
-
-/* The disc. Two shadows: the near glow that makes the limb read as an edge
-   rather than a drawn circle, and the far spill. Both blur, no spread — they
-   are light, and light has no contour.
-   The lit edge itself is NOT here. See .eclipse-disc::before. */
-.eclipse-disc {
-  position: absolute; left: 50%; top: 50%;
-  width: min(38%, 250px); aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: var(--ecl-disc);
-  box-shadow:
-    0 0 30px 2px var(--ecl-rim-glow),
-    0 0 120px 20px var(--ecl-spill);
 }
 
 /* ---- the limb ------------------------------------------------------------
@@ -1919,8 +1964,33 @@ h1, h2, h3 {
    Drawn INSIDE the disc's edge in both themes. The pair of tokens this
    replaced existed because a bone ring outside the occluder is invisible on a
    bone plate; inside, the limb always has the disc's own dark behind it, so one
-   declaration now serves both grounds. */
-.eclipse-disc::before,
+   declaration now serves both grounds.
+
+   ---- [data-limb], and which objects get one --------------------------------
+
+   The rule is not "every circle". It is: ANYTHING YOU ONLY LOOK AT TAKES THE
+   LIMB; ANYTHING YOU CAN PRESS KEEPS AN EVEN EDGE.
+
+   That is a legibility constraint before it is a taste one. A control's border
+   is what WCAG 1.4.11 measures — .theme-toggle and .nav-trigger are icon-only,
+   so the disc IS the affordance and --edge-control is what carries it at 3:1.
+   A limb is 0.92 alpha on the lit bearing and 0.14 on the far side by design,
+   so pinning one to a button would put most of its circumference under the
+   floor and call it lighting. Controls keep --edge-control.
+
+   What is left is the objects: the eclipse's occluder, the portrait, and the
+   wordmark's mark. Three circles that are looked at, lit from one bearing,
+   which is what makes them read as the same family of thing rather than three
+   unrelated round holes.
+
+   THIS BLOCK SITS ABOVE .eclipse-disc ON PURPOSE. `[data-limb]` and
+   `.eclipse-disc` are both one selector of specificity, so whichever comes
+   last wins — and the disc is absolutely positioned for its centring.
+   Declared after, the `position: relative` below would quietly beat
+   `position: absolute` and drop the occluder into the top-left corner of the
+   artwork. Source order is the whole tiebreak here; do not move it down. */
+[data-limb] { position: relative; }
+[data-limb]::before,
 .eclipse-disc::after {
   content: "";
   position: absolute;
@@ -1928,8 +1998,10 @@ h1, h2, h3 {
   border-radius: inherit;
   pointer-events: none;
 }
-.eclipse-disc::before {
-  padding: 1px;
+[data-limb]::before {
+  /* --limb-w so a 32px mark and a 250px disc can carry proportionate edges;
+     1px is right for the big one and reads as a hairline crack on the small. */
+  padding: var(--limb-w, 1px);
   background: conic-gradient(from var(--ecl-bearing) at 50% 50%,
     var(--ecl-limb-hot)  0deg,
     var(--ecl-limb-mid)  42deg,
@@ -1945,6 +2017,21 @@ h1, h2, h3 {
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
+}
+
+/* The disc. Two shadows: the near glow that makes the limb read as an edge
+   rather than a drawn circle, and the far spill. Both blur, no spread — they
+   are light, and light has no contour.
+   The lit edge itself is NOT here. See .eclipse-disc::before. */
+.eclipse-disc {
+  position: absolute; left: 50%; top: 50%;
+  width: min(38%, 250px); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--ecl-disc);
+  box-shadow:
+    0 0 30px 2px var(--ecl-rim-glow),
+    0 0 120px 20px var(--ecl-spill);
 }
 
 /* ---- the atmosphere ------------------------------------------------------
@@ -1978,14 +2065,28 @@ h1, h2, h3 {
   -webkit-mask: radial-gradient(circle at 50% 50%, transparent 44%, #000 97%);
           mask: radial-gradient(circle at 50% 50%, transparent 44%, #000 97%);
 }
+/* The spill, and the thing that most needed the frame gone. At `inset: 0` it
+   was exactly the plate's rectangle, so the light stopped dead at four straight
+   lines — a glow with corners. Negative insets let it spread past the art box
+   into the page ground, which is now allowed to receive it.
+   Wider than tall: the box is a 2.4:1 letterbox, so equal insets would put far
+   more spread above and below the disc than beside it. */
 .eclipse-halo {
-  position: absolute; inset: 0;
-  background: radial-gradient(40% 62% at 50% 50%, var(--ecl-spill), transparent 68%);
+  position: absolute; inset: -34% -14%;
+  background: radial-gradient(46% 58% at 50% 50% in oklab,
+    var(--ecl-spill), transparent 72%);
 }
 /* A gradient this large with this small a luminance delta cannot be held in
-   8-bit sRGB, and the plate has an opaque background so the page's own dither
-   (fixed, z-index -1) is painted over rather than showing through. It needs
-   its own. Same 160px turbulence tile the body uses, so the two agree. */
+   8-bit sRGB. The page's own dither is fixed at z-index -1 and this artwork
+   paints above it, so the disc's ramps would be undithered without a local
+   layer. Same 160px turbulence tile the body uses, so the two agree.
+
+   MASKED, which it did not have to be while there was a card. `overflow:
+   hidden` used to end this tile on the plate's own border, where a hard edge
+   is what a border is for. With the frame gone an unmasked tile is a visible
+   rectangle of grain sitting on open page ground — a seam marking out a box
+   that no longer exists. The mask fades it to nothing well inside the art box,
+   so the grain belongs to the light rather than to a region. */
 .eclipse-art::after {
   content: "";
   position: absolute; inset: 0; pointer-events: none;
@@ -1996,6 +2097,16 @@ h1, h2, h3 {
      and disappears into it, at .68 it has a size. */
   opacity: .07;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* BOTH RADII MUST LAND INSIDE THE BOX, and the vertical one is the trap. In
+     `radial-gradient(Rx Ry …)` the percentages resolve against WIDTH and
+     HEIGHT, but the distance available from a centred origin is only HALF of
+     each — so any Ry above 50% reaches the element's edge before the ramp has
+     finished, and the box clips whatever alpha is left. Measured at 72%: the
+     grain was still ~30% opaque where the art box ended, which drew a hard
+     horizontal seam the full width of the section, at exactly the bottom edge
+     of the frame this revision had just removed. */
+  -webkit-mask: radial-gradient(44% 46% at 50% 50%, #000 30%, transparent 100%);
+          mask: radial-gradient(44% 46% at 50% 50%, #000 30%, transparent 100%);
 }
 
 /* The rim brightens and settles rather than pulsing on a beat: this is the one
@@ -2032,7 +2143,10 @@ h1, h2, h3 {
 
 .eclipse-cap {
   margin: 0;
-  padding-inline: max(calc(var(--row-pad) - 1px), var(--card-pad-min));
+  /* The -1px this used to carry was compensating for the plate's border, so
+     the caption would line up with content INSIDE the frame. There is no
+     frame and no border, so the caption lands on the section rail directly. */
+  padding-inline: max(var(--row-pad), var(--card-pad-min));
   max-width: 44ch;
   font-family: var(--font-mono); font-size: var(--t-mono-xs);
   letter-spacing: .1em; text-transform: uppercase;
@@ -2218,12 +2332,7 @@ h1, h2, h3 {
   backdrop-filter: var(--glass-blur);
   border: 1px solid transparent;
   border-radius: var(--radius);
-  box-shadow:
-    inset 0 1px 0 var(--edge-top),
-    inset 0 -1px 0 var(--edge-bottom),
-    inset 0 0 0 1px var(--glass-ring),
-    inset 0 0 var(--lens-depth) 0 var(--lens-rim),
-    var(--shadow-lift);
+  box-shadow: var(--panel-edge), var(--shadow-lift);
   margin-inline: calc(-1 * var(--row-pad));
   padding-block: var(--s-contact-block);
   padding-inline: max(calc(var(--row-pad) + clamp(var(--s-2), 2.5vw, var(--s-8))),
@@ -2598,6 +2707,16 @@ a, button { -webkit-tap-highlight-color: transparent; }
     backdrop-filter: none;
     border-color: var(--ink-2);
   }
+  /* The limb is a GRADED edge — .92 alpha on the lit bearing down to .14 on the
+     far side — which is the opposite of what someone asking for more contrast
+     wants out of a boundary. Swap it for an even one: the same move the
+     forced-colors block makes, for the same reason.
+     The eclipse's occluder keeps its limb. It is the subject rather than a
+     boundary, and flattening it would delete the picture instead of sharpening
+     it. */
+  .portrait-disc[data-limb]::before,
+  .wordmark .mark[data-limb]::before { display: none; }
+  .portrait-disc, .wordmark .mark { border: 1px solid var(--ink-2); }
   .dock-scrim { backdrop-filter: none; background: color-mix(in oklab, var(--bg) 88%, transparent); }
   /* The travelling pill IS the current-section signal here, so it needs a real
      edge rather than a 6% tint against an opaque panel. */

@@ -24,7 +24,7 @@ export function Eclipse() {
             {/* Order matters: the halo is the light spilling around the disc,
                 so it has to be painted under it. */}
             <div className="eclipse-halo" aria-hidden="true" />
-            <div className="eclipse-disc" aria-hidden="true" />
+            <div className="eclipse-disc" data-limb aria-hidden="true" />
           </div>
           <figcaption className="eclipse-cap" id="eclipse-cap">
             {eclipse.caption}
