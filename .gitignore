@@ -42,3 +42,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .preview/
+
+# claude code session machinery (worktrees, local settings)
+.claude/
