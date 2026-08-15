@@ -1143,7 +1143,11 @@ h1, h2, h3 {
   border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--surface-2) 80%, transparent);
   box-shadow: inset 0 1px 0 var(--edge-top);
+  /* Thicker so 32px reads as a rim, dimmer so it does not outshine the control
+     at the other end of the dock — and so it stops brightening the ground for
+     hero-band labels passing under the dock on a phone. See --limb-k. */
   --limb-w: 1.5px;
+  --limb-k: 55%;
 }
 .wordmark svg { color: var(--accent); flex: none; }
 .wordmark-text { white-space: nowrap; }
@@ -1647,7 +1651,7 @@ h1, h2, h3 {
 }
 /* The wrapper is what has a size now, and a small disc needs a proportionate
    limb — 1px on 56px reads as a hairline crack rather than a lit edge. */
-.hero-statement .portrait-disc { width: 3.5rem; --limb-w: 1.5px; }
+.hero-statement .portrait-disc { width: 3.5rem; --limb-w: 1.5px; --limb-k: 70%; }
 .hero-byline-say { min-width: 0; }
 /* Both lines already carry their own top margin for the stacked layout; in the
    byline they are a two-line block beside a disc, so the outer gap is the
@@ -1999,17 +2003,23 @@ h1, h2, h3 {
   pointer-events: none;
 }
 [data-limb]::before {
-  /* --limb-w so a 32px mark and a 250px disc can carry proportionate edges;
-     1px is right for the big one and reads as a hairline crack on the small. */
+  /* Two knobs, and a small disc needs BOTH.
+     --limb-w is thickness: 1px is right on a 250px occluder and reads as a
+     hairline crack on a 32px mark.
+     --limb-k is strength, and it is not vanity. The same peak alpha packed
+     into a tiny circumference reads far hotter, and a small lit disc is the
+     kind of object that ends up sitting behind other content — measured, the
+     dock mark at full strength put a hero-band label at 4.31:1 where it passes
+     under the dock on a phone. Brightness scales with the object. */
   padding: var(--limb-w, 1px);
   background: conic-gradient(from var(--ecl-bearing) at 50% 50%,
-    var(--ecl-limb-hot)  0deg,
-    var(--ecl-limb-mid)  42deg,
-    var(--ecl-limb-cool) 104deg,
-    var(--ecl-limb-dim)  188deg,
-    var(--ecl-limb-cool) 258deg,
-    var(--ecl-limb-mid)  318deg,
-    var(--ecl-limb-hot)  360deg);
+    color-mix(in srgb, var(--ecl-limb-hot)  var(--limb-k, 100%), transparent)   0deg,
+    color-mix(in srgb, var(--ecl-limb-mid)  var(--limb-k, 100%), transparent)  42deg,
+    color-mix(in srgb, var(--ecl-limb-cool) var(--limb-k, 100%), transparent) 104deg,
+    color-mix(in srgb, var(--ecl-limb-dim)  var(--limb-k, 100%), transparent) 188deg,
+    color-mix(in srgb, var(--ecl-limb-cool) var(--limb-k, 100%), transparent) 258deg,
+    color-mix(in srgb, var(--ecl-limb-mid)  var(--limb-k, 100%), transparent) 318deg,
+    color-mix(in srgb, var(--ecl-limb-hot)  var(--limb-k, 100%), transparent) 360deg);
   /* The -webkit- pair is pre-2023 Safari and has to stay, composite AFTER the
      shorthand: the shorthand resets it. Get this wrong and the mask subtracts
      nothing, so "1px of lit edge" paints as a solid plate over the whole disc. */
@@ -2075,6 +2085,53 @@ h1, h2, h3 {
   position: absolute; inset: -34% -14%;
   background: radial-gradient(46% 58% at 50% 50% in oklab,
     var(--ecl-spill), transparent 72%);
+}
+
+/* ---- the streamers -------------------------------------------------------
+   The shader layer. Sits on the spill and under the occluder, and takes the
+   SAME negative insets as the halo so the two describe one volume of light —
+   different insets would put the filaments' falloff and the spill's falloff on
+   two different circles, which reads as a ring inside a glow.
+
+   FADED IN BY THE SCRIPT, not by CSS load order. `opacity: 0` is the resting
+   state and [data-ready] is set from inside the render loop the first time a
+   frame actually reaches the buffer. So no-WebGL, a failed compile, a lost
+   context, a low-core phone and reduced motion all land on the same outcome —
+   the CSS artwork, alone, with no flash of an empty canvas on the way there.
+
+   The canvas is sized in CSS and rendered at a fraction of that; `width`/
+   `height` are set in JS to the smaller backing store and the compositor
+   upscales. A corona is all low-frequency gradient, so the loss is invisible
+   and it is most of the saving on a phone.
+
+   THE WRAPPER IS NOT DECORATION. A <canvas> is a REPLACED element, so
+   `width: auto` resolves to its intrinsic size — the width/height attributes,
+   i.e. the deliberately-reduced backing store — instead of stretching to the
+   inset box. Left/right both set then becomes over-constrained and `right` is
+   dropped. Measured: the layer rendered at 677x282 sitting in the top-left
+   corner of a box that should have been 1398x765. The wrapper takes the
+   insets; the canvas fills it at 100%, which for a replaced element is a real
+   stretch rather than an intrinsic size. */
+.eclipse-canvas-wrap {
+  position: absolute; inset: -34% -14%;
+  pointer-events: none;
+}
+.eclipse-canvas {
+  display: block;
+  width: 100%; height: 100%;
+  opacity: 0;
+  transition: opacity 900ms cubic-bezier(.22, 1, .36, 1);
+}
+.eclipse-canvas[data-ready] { opacity: 1; }
+/* Belt and braces: the component already refuses to start here, but if it is
+   ever made to run under reduced motion the layer still must not appear. */
+@media (prefers-reduced-motion: reduce) {
+  .eclipse-canvas-wrap { display: none; }
+}
+/* The OS owns the palette; a procedural corona in arbitrary colour is exactly
+   what it is overruling. The artwork is hidden wholesale here anyway. */
+@media (forced-colors: active) {
+  .eclipse-canvas-wrap { display: none; }
 }
 /* A gradient this large with this small a luminance delta cannot be held in
    8-bit sRGB. The page's own dither is fixed at z-index -1 and this artwork
