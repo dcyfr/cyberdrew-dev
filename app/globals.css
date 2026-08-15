@@ -63,11 +63,56 @@
      themes. Only the spill flips — on obsidian it is light escaping past the
      occluder; see the light block for what it becomes on bone. */
   --ecl-disc:     #050506;
-  --ecl-rim:      rgb(236 236 232 / .55);
-  --ecl-rim-in:   transparent;
-  --ecl-rim-hi:   rgb(236 236 232 / .70);
   --ecl-rim-glow: rgb(236 236 232 / .18);
   --ecl-spill:    rgb(200 210 255 / .10);
+  /* ---- where the light is ------------------------------------------------
+     The sky's corona sits off the top-LEFT corner (see body::before). The
+     artwork is the same event close up, so its limb has to be brightest on the
+     same bearing or the page is lit by two suns.
+
+     --ecl-bearing is the conic start angle: 0deg is twelve o'clock, running
+     clockwise, so 315deg puts the hot stop at the upper left. --ecl-lit-x/y is
+     that same direction expressed as a point inside the disc, for the radial
+     that paints the atmosphere. The pair is stated rather than derived through
+     sin()/cos() on purpose: a trig function this codebase has never shipped,
+     inside a gradient, fails by having the WHOLE declaration dropped — which is
+     precisely how the ambient layer went missing for months. Two numbers that
+     can drift beat one that can vanish, and design-intent.mjs asserts the limb
+     paints so the drift is caught. */
+  --ecl-bearing: 315deg;
+  --ecl-lit-x: 24%;
+  --ecl-lit-y: 20%;
+  /* ---- the limb ----------------------------------------------------------
+     The rim above is a perfectly even ring, and that is what makes it read as
+     a DRAWN CIRCLE rather than an occluded light: a real limb is brightest
+     where the source is behind it and dies away as it wraps round the far side.
+     These are the stops of that falloff, and the reason the hue is here rather
+     than in --ecl-disc.
+
+     Same hues as --rule-* above, and that is the point: there is one light on
+     this page. It runs along a section rule when you point at it and around the
+     disc all the time, and if the two disagreed about their colour they would
+     read as two effects rather than one source.
+
+     The HOT STOP IS NEARLY WHITE. Colour lives in the falloff, never at the
+     peak — the core of a bright light clips, and a tinted peak reads as a
+     coloured ring (a logo) instead of a lit edge. It is also what keeps this
+     safe for the contrast gate, which measures the brightest thing behind a
+     control. */
+  --ecl-limb-hot:  rgb(253 248 242 / .92);
+  --ecl-limb-mid:  rgb(255 196 146 / .52);
+  --ecl-limb-cool: rgb(148 178 255 / .30);
+  /* Never 0. A limb that decays to nothing is physically right and graphically
+     wrong: the far side of the silhouette dissolves into the plate and the
+     object stops having an outline. This is the floor that keeps the disc a
+     shape — low enough to read as unlit, high enough to still be an edge. */
+  --ecl-limb-dim:  rgb(148 178 255 / .14);
+  /* The atmosphere: the disc is not a hole, it is a body with a light behind
+     it. Masked to a band just inside the limb (see .eclipse-disc::after), which
+     is why these can sit above the alphas a full-face wash could carry. */
+  --ecl-atmo-hot:  rgb(255 206 156 / .22);
+  --ecl-atmo-mid:  rgb(255 150 180 / .13);
+  --ecl-atmo-cool: rgb(126 166 255 / .10);
   /* The travelling light on a section rule. Warm through the core, cooling
      outward, which is the sweep the macOS treatment runs. Held to a hairline
      plus a soft bleed so it stays a light source rather than a colour: this is
@@ -164,10 +209,26 @@
   /* The corona in the page ground. Same event as the section artwork, seen
      from further away: a thin bright annulus with nothing inside it.
      Held far lower than the artwork's rim — this sits behind every word on the
-     page, so it is a light you notice having seen rather than one you look at. */
-  --sky-corona-in:  rgb(236 236 232 / .028);
+     page, so it is a light you notice having seen rather than one you look at.
+
+     The annulus is warm on the inside and cool on the outside, which is the
+     same falloff the artwork's limb runs and the same one the travelling light
+     runs. The PEAK STOP STAYS NEUTRAL: it is the brightest pixel on the page,
+     --edge-control's 3.51:1 was solved against it, and tinting a peak is how a
+     light source turns into a coloured ring rather than a light.
+
+     EVERY ALPHA HERE IS UNCHANGED FROM THE MONOCHROME VERSION, and that is a
+     constraint rather than a coincidence: this layer sits behind every word on
+     the page, so its luminance is load-bearing and its hue is not.
+     Measured, on the way in — nudging --sky-corona-out from .038 to .042, four
+     thousandths on the DIMMEST of the three stops, put a dock nav link at
+     3.54:1 where the baseline had no finding at all. Re-tint freely, re-weight
+     never. If a stop ever does have to get brighter, run
+     scripts/a11y-contrast.mjs against a build of origin/main and diff the
+     transient list: the at-rest count stays green straight through this. */
+  --sky-corona-in:  rgb(255 228 200 / .028);
   --sky-corona:     rgb(236 236 232 / .075);
-  --sky-corona-out: rgb(210 220 255 / .038);
+  --sky-corona-out: rgb(198 214 255 / .038);
   /* the halo a panel throws when it lifts */
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
 
@@ -353,11 +414,15 @@
     --art-halo:   0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
     /* On bone, light spilling past the disc would be white on white. The spill
        becomes the shadow the object casts instead: same physics read the other
-       way round. The disc and rim are unchanged. */
+       way round.
+       The limb and the atmosphere are NOT re-stated here, and that is the fix
+       rather than an omission. They used to be: a bone ring outside the disc
+       (invisible on bone) plus a second one moved inside it, which is two
+       declarations of one edge that could disagree. The limb is now always
+       drawn just inside the disc, where it has the occluder's own dark to be
+       bright against in either theme — so the object is genuinely
+       theme-independent and inherits from :root. */
     --ecl-disc:     #0b0b0d;
-    --ecl-rim:      rgb(236 236 232 / .55);
-    --ecl-rim-in:   rgb(244 243 240 / .58);
-    --ecl-rim-hi:   rgb(236 236 232 / .72);
     --ecl-rim-glow: rgb(236 236 232 / .22);
     --ecl-spill:    rgb(40 32 24 / .12);
   }
@@ -403,11 +468,9 @@
   --art-halo:   0 2px 10px rgb(40 32 24 / .10), 0 18px 60px -18px rgb(40 32 24 / .30);
   /* On bone, light spilling past the disc would be white on white. The spill
      becomes the shadow the object casts instead: same physics read the other
-     way round. The disc and rim are unchanged. */
+     way round. The limb and atmosphere inherit from :root — see the note in
+     the prefers-color-scheme block above for why they are not re-stated. */
   --ecl-disc:     #0b0b0d;
-  --ecl-rim:      rgb(236 236 232 / .55);
-  --ecl-rim-in:   rgb(244 243 240 / .58);
-  --ecl-rim-hi:   rgb(236 236 232 / .72);
   --ecl-rim-glow: rgb(236 236 232 / .22);
   --ecl-spill:    rgb(40 32 24 / .12);
 }
@@ -443,10 +506,26 @@
   /* The corona in the page ground. Same event as the section artwork, seen
      from further away: a thin bright annulus with nothing inside it.
      Held far lower than the artwork's rim — this sits behind every word on the
-     page, so it is a light you notice having seen rather than one you look at. */
-  --sky-corona-in:  rgb(236 236 232 / .028);
+     page, so it is a light you notice having seen rather than one you look at.
+
+     The annulus is warm on the inside and cool on the outside, which is the
+     same falloff the artwork's limb runs and the same one the travelling light
+     runs. The PEAK STOP STAYS NEUTRAL: it is the brightest pixel on the page,
+     --edge-control's 3.51:1 was solved against it, and tinting a peak is how a
+     light source turns into a coloured ring rather than a light.
+
+     EVERY ALPHA HERE IS UNCHANGED FROM THE MONOCHROME VERSION, and that is a
+     constraint rather than a coincidence: this layer sits behind every word on
+     the page, so its luminance is load-bearing and its hue is not.
+     Measured, on the way in — nudging --sky-corona-out from .038 to .042, four
+     thousandths on the DIMMEST of the three stops, put a dock nav link at
+     3.54:1 where the baseline had no finding at all. Re-tint freely, re-weight
+     never. If a stop ever does have to get brighter, run
+     scripts/a11y-contrast.mjs against a build of origin/main and diff the
+     transient list: the at-rest count stays green straight through this. */
+  --sky-corona-in:  rgb(255 228 200 / .028);
   --sky-corona:     rgb(236 236 232 / .075);
-  --sky-corona-out: rgb(210 220 255 / .038);
+  --sky-corona-out: rgb(198 214 255 / .038);
   --glow: 0 0 44px -12px rgb(220 218 213 / .10);
   --shadow: 0 1px 2px rgb(0 0 0 / .35), 0 18px 40px -22px rgb(0 0 0 / .8);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / .3), 0 28px 60px -26px rgb(0 0 0 / .9);
@@ -456,11 +535,56 @@
      themes. Only the spill flips — on obsidian it is light escaping past the
      occluder; see the light block for what it becomes on bone. */
   --ecl-disc:     #050506;
-  --ecl-rim:      rgb(236 236 232 / .55);
-  --ecl-rim-in:   transparent;
-  --ecl-rim-hi:   rgb(236 236 232 / .70);
   --ecl-rim-glow: rgb(236 236 232 / .18);
   --ecl-spill:    rgb(200 210 255 / .10);
+  /* ---- where the light is ------------------------------------------------
+     The sky's corona sits off the top-LEFT corner (see body::before). The
+     artwork is the same event close up, so its limb has to be brightest on the
+     same bearing or the page is lit by two suns.
+
+     --ecl-bearing is the conic start angle: 0deg is twelve o'clock, running
+     clockwise, so 315deg puts the hot stop at the upper left. --ecl-lit-x/y is
+     that same direction expressed as a point inside the disc, for the radial
+     that paints the atmosphere. The pair is stated rather than derived through
+     sin()/cos() on purpose: a trig function this codebase has never shipped,
+     inside a gradient, fails by having the WHOLE declaration dropped — which is
+     precisely how the ambient layer went missing for months. Two numbers that
+     can drift beat one that can vanish, and design-intent.mjs asserts the limb
+     paints so the drift is caught. */
+  --ecl-bearing: 315deg;
+  --ecl-lit-x: 24%;
+  --ecl-lit-y: 20%;
+  /* ---- the limb ----------------------------------------------------------
+     The rim above is a perfectly even ring, and that is what makes it read as
+     a DRAWN CIRCLE rather than an occluded light: a real limb is brightest
+     where the source is behind it and dies away as it wraps round the far side.
+     These are the stops of that falloff, and the reason the hue is here rather
+     than in --ecl-disc.
+
+     Same hues as --rule-* above, and that is the point: there is one light on
+     this page. It runs along a section rule when you point at it and around the
+     disc all the time, and if the two disagreed about their colour they would
+     read as two effects rather than one source.
+
+     The HOT STOP IS NEARLY WHITE. Colour lives in the falloff, never at the
+     peak — the core of a bright light clips, and a tinted peak reads as a
+     coloured ring (a logo) instead of a lit edge. It is also what keeps this
+     safe for the contrast gate, which measures the brightest thing behind a
+     control. */
+  --ecl-limb-hot:  rgb(253 248 242 / .92);
+  --ecl-limb-mid:  rgb(255 196 146 / .52);
+  --ecl-limb-cool: rgb(148 178 255 / .30);
+  /* Never 0. A limb that decays to nothing is physically right and graphically
+     wrong: the far side of the silhouette dissolves into the plate and the
+     object stops having an outline. This is the floor that keeps the disc a
+     shape — low enough to read as unlit, high enough to still be an edge. */
+  --ecl-limb-dim:  rgb(148 178 255 / .14);
+  /* The atmosphere: the disc is not a hole, it is a body with a light behind
+     it. Masked to a band just inside the limb (see .eclipse-disc::after), which
+     is why these can sit above the alphas a full-face wash could carry. */
+  --ecl-atmo-hot:  rgb(255 206 156 / .22);
+  --ecl-atmo-mid:  rgb(255 150 180 / .13);
+  --ecl-atmo-cool: rgb(126 166 255 / .10);
 }
 
 /* A stepped transition strands on the previous theme's value across a swap
@@ -1760,10 +1884,10 @@ h1, h2, h3 {
   .eclipse-art { aspect-ratio: 4 / 3; }
 }
 
-/* The disc. Three shadows doing three jobs: the rim itself, the near glow that
-   makes the rim read as an edge rather than a drawn circle, and the far spill.
-   Spread on the first (it must stay exactly 1px at any DPR), blur on the other
-   two (they are light, and light has no contour). */
+/* The disc. Two shadows: the near glow that makes the limb read as an edge
+   rather than a drawn circle, and the far spill. Both blur, no spread — they
+   are light, and light has no contour.
+   The lit edge itself is NOT here. See .eclipse-disc::before. */
 .eclipse-disc {
   position: absolute; left: 50%; top: 50%;
   width: min(38%, 250px); aspect-ratio: 1;
@@ -1771,15 +1895,88 @@ h1, h2, h3 {
   border-radius: 50%;
   background: var(--ecl-disc);
   box-shadow:
-    /* --ecl-rim-in is the same rim seen from the other side. On obsidian the
-       corona sits OUTSIDE the occluder and reads immediately; on bone that
-       same bone-coloured ring is white on white and simply does not exist, so
-       light moves it just inside the disc's edge, where it has something dark
-       to be bright against. One ring, drawn on whichever side can show it. */
-    inset 0 0 0 1px var(--ecl-rim-in),
-    0 0 0 1px var(--ecl-rim),
     0 0 30px 2px var(--ecl-rim-glow),
     0 0 120px 20px var(--ecl-spill);
+}
+
+/* ---- the limb ------------------------------------------------------------
+   What replaced `box-shadow: 0 0 0 1px --ecl-rim`, and why.
+
+   A spread shadow is the same colour at every point on the circumference, so
+   it draws a circle of even weight. That is a RING, and a ring is a logo. The
+   thing that makes an eclipse an eclipse is that the light is BEHIND a specific
+   place: the limb blazes where the source is, decays as it wraps away, and is
+   nearly gone on the far side. Even weight all the way round is the one thing
+   a real occlusion never looks like.
+
+   A conic gradient can vary by angle and a box-shadow cannot, so the edge moves
+   to a pseudo-element and gets masked down to 1px of border — the same
+   two-mask/xor trick [data-ring-glow] uses, for the same reason: the ring
+   inherits the curve it rides instead of being told what the curve is, so it
+   cannot disagree with it. `padding` is the only number that sets its
+   thickness.
+
+   Drawn INSIDE the disc's edge in both themes. The pair of tokens this
+   replaced existed because a bone ring outside the occluder is invisible on a
+   bone plate; inside, the limb always has the disc's own dark behind it, so one
+   declaration now serves both grounds. */
+.eclipse-disc::before,
+.eclipse-disc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.eclipse-disc::before {
+  padding: 1px;
+  background: conic-gradient(from var(--ecl-bearing) at 50% 50%,
+    var(--ecl-limb-hot)  0deg,
+    var(--ecl-limb-mid)  42deg,
+    var(--ecl-limb-cool) 104deg,
+    var(--ecl-limb-dim)  188deg,
+    var(--ecl-limb-cool) 258deg,
+    var(--ecl-limb-mid)  318deg,
+    var(--ecl-limb-hot)  360deg);
+  /* The -webkit- pair is pre-2023 Safari and has to stay, composite AFTER the
+     shorthand: the shorthand resets it. Get this wrong and the mask subtracts
+     nothing, so "1px of lit edge" paints as a solid plate over the whole disc. */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+
+/* ---- the atmosphere ------------------------------------------------------
+   The disc was a flat fill, and a flat fill is why it read as a hole punched
+   in the plate rather than a body in front of a light — most obviously on bone,
+   where it landed as a black circle with a drop shadow.
+
+   This is the terminator, and the mask is the whole trick. The first version
+   was a radial from a point inside the disc, and it lit the entire FACE: a warm
+   wash across 100% of a body that is supposed to be occluding a light, which
+   read as a brown ball. Light bending round an edge does not illuminate the
+   middle of the thing it is bending round.
+
+   So: a conic for the angular falloff (hot on the source bearing, cooling as it
+   wraps, dead on the far side), masked by a radial that is transparent through
+   the core and only opens up near the rim. What survives is a band hugging the
+   inside of the limb, brightest where the limb is brightest. The core stays the
+   darkest thing in the frame, which is what an occluder is for.
+
+   Alphas can be higher than the face version's precisely because the area is
+   now small. Same ink, concentrated where it means something. */
+.eclipse-disc::after {
+  background: conic-gradient(from var(--ecl-bearing) at 50% 50%,
+    var(--ecl-atmo-hot)  0deg,
+    var(--ecl-atmo-mid)  58deg,
+    var(--ecl-atmo-cool) 126deg,
+    transparent          196deg,
+    transparent          252deg,
+    var(--ecl-atmo-cool) 306deg,
+    var(--ecl-atmo-hot)  360deg);
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 44%, #000 97%);
+          mask: radial-gradient(circle at 50% 50%, transparent 44%, #000 97%);
 }
 .eclipse-halo {
   position: absolute; inset: 0;
@@ -1792,27 +1989,41 @@ h1, h2, h3 {
 .eclipse-art::after {
   content: "";
   position: absolute; inset: 0; pointer-events: none;
-  opacity: .05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Raised from .05 and coarsened from .8, because the atmosphere added a
+     second very-low-delta ramp INSIDE the disc and the dither has to straddle
+     the quantisation step of both. The coarser tile is the part that reads as
+     film rather than as a screen door: at .8 the grain is near the pixel grid
+     and disappears into it, at .68 it has a size. */
+  opacity: .07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* The rim brightens and settles rather than pulsing on a beat: this is the one
    still object on the page and a heartbeat would make it a status indicator.
    Off entirely under reduced motion, where the disc is already complete. */
 @media (prefers-reduced-motion: no-preference) {
-  .eclipse-disc { animation: ecl-breathe 9s ease-in-out infinite; }
-  @keyframes ecl-breathe {
+  /* Two clocks on one event, and deliberately not the same one: the limb is the
+     source and the spill is the source seen through everything between, so the
+     spill lags. Equal periods would make them one pulse, which is a heartbeat,
+     which is a status indicator.
+     The limb animates OPACITY rather than its own colour stops — a composited
+     property, where the box-shadow interpolation this replaced repainted the
+     disc every frame for nine seconds, forever, on the one still object on the
+     page. */
+  .eclipse-disc::before { animation: ecl-limb 9s ease-in-out infinite; }
+  .eclipse-disc { animation: ecl-spill 14s ease-in-out infinite; }
+  @keyframes ecl-limb {
+    0%, 100% { opacity: .82; }
+    50%      { opacity: 1; }
+  }
+  @keyframes ecl-spill {
     0%, 100% {
       box-shadow:
-        inset 0 0 0 1px var(--ecl-rim-in),
-        0 0 0 1px var(--ecl-rim),
         0 0 30px 2px var(--ecl-rim-glow),
         0 0 120px 20px var(--ecl-spill);
     }
     50% {
       box-shadow:
-        inset 0 0 0 1px var(--ecl-rim-in),
-        0 0 0 1px var(--ecl-rim-hi),
         0 0 40px 4px var(--ecl-rim-glow),
         0 0 150px 26px var(--ecl-spill);
     }
