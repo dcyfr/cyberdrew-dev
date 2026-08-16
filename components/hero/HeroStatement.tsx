@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
-import { getLedger, hero } from "@/lib/site";
+import { eclipse, getLedger, hero } from "@/lib/site";
+import { Eclipse } from "../Eclipse";
 import {
   HeroActions,
   HeroCredentials,
@@ -69,7 +70,15 @@ export function HeroStatement() {
             </div>
           ))}
         </dl>
+
+        {/* The picture's caption, which survived the section the picture used
+            to have. It closes the hero the way it used to close the artwork:
+            claim, then proof, then the line that says why the proof matters. */}
+        <p className="hero-thesis">{eclipse.caption}</p>
       </div>
+
+      {/* Last in the DOM, behind everything on screen. See Eclipse.tsx. */}
+      <Eclipse />
     </section>
   );
 }

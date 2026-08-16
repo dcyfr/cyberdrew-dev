@@ -2,45 +2,40 @@ import { eclipse } from "@/lib/site";
 import { EclipseField } from "./EclipseField";
 
 /**
- * The one picture on the page, sitting between the claim and the evidence.
+ * The one picture on the page — now the hero's light source rather than a
+ * section of its own.
  *
- * It replaced a bitmap under a WebGL warp with a particle canvas over it. That
- * stack existed to animate a swarm inside a boundary; this says the same thing
- * with a disc and a rim of light, and says it with no asset. Everything that
- * carries the idea — the occluder, the limb, the atmosphere, the spill, the
- * grain — is still gradients on empty divs, so the section is complete with
- * scripting off, on a cold connection, and under prefers-reduced-motion.
+ * IT USED TO BE A BAND BETWEEN THE CLAIM AND THE EVIDENCE, and as a band it
+ * was mostly empty: a 2.4:1 letterbox holding one centred disc, costing a whole
+ * screen of scroll to say something the hero was already saying in words. Folded
+ * into the hero it stops being a picture ABOUT the statement and becomes the
+ * thing the statement is lit by — which is also what the rest of the page has
+ * claimed all along, since the corona in the page ground is this same event seen
+ * from further away.
  *
- * <EclipseField> is the one thing added back, and it is strictly additive: a
- * fragment shader drawing the streamers, which are the part of a corona a
- * box-shadow genuinely cannot do. It paints nothing until it has a frame, so
- * every way it can fail leaves exactly the picture described above. See the
- * note in that file for why it is raw WebGL2 and not a library.
+ * RENDERED LAST, PAINTED FIRST. It sits after the statement in the DOM so a
+ * screen reader reaches the claim before the picture of it, and behind the
+ * statement on screen via z-index inside the hero's own stacking context. Source
+ * order is for the reader; z-index is for the eye.
  *
- * Everything visible is painted rather than marked up, so there is nothing here
- * for a screen reader to reach. The <figure> carries the description and the
- * caption instead: role="img" plus an accessible name is what turns a box of
- * gradients into something announceable, and without it the section would be a
- * labelled region containing one line of text and nothing else.
+ * Everything that carries the idea is still CSS on empty divs — occluder, limb,
+ * atmosphere, spill, grain — so the hero is complete with scripting off, on a
+ * cold connection, and under prefers-reduced-motion. <EclipseField> adds the
+ * streamers on top of that and removes nothing if it never runs.
+ *
+ * role="img" plus a name is what turns a box of gradients into something
+ * announceable; the caption in the hero carries why it is here rather than what
+ * is in it.
  */
 export function Eclipse() {
   return (
-    <section className="bay eclipse-sec" aria-labelledby="eclipse-cap">
-      <div className="wide">
-        <figure className="eclipse" data-reveal>
-          <div className="eclipse-art" role="img" aria-label={eclipse.alt}>
-            {/* Order matters, and it is back to front: the halo is the light
-                spilling around the disc, the streamers stand on top of that
-                spill, and the occluder covers both — it is the thing in front. */}
-            <div className="eclipse-halo" aria-hidden="true" />
-            <EclipseField />
-            <div className="eclipse-disc" data-limb aria-hidden="true" />
-          </div>
-          <figcaption className="eclipse-cap" id="eclipse-cap">
-            {eclipse.caption}
-          </figcaption>
-        </figure>
-      </div>
-    </section>
+    <div className="hero-eclipse" data-eclipse role="img" aria-label={eclipse.alt}>
+      {/* Order matters, and it is back to front: the halo is the light spilling
+          around the disc, the streamers stand in that spill, and the occluder
+          covers both — it is the thing in front. */}
+      <div className="eclipse-halo" aria-hidden="true" />
+      <EclipseField />
+      <div className="eclipse-disc" data-limb aria-hidden="true" />
+    </div>
   );
 }

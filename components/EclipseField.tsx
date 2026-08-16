@@ -196,7 +196,11 @@ export function EclipseField() {
     // buffer is sized against; the artwork is where the occluder lives, and
     // that is a SIBLING of the wrapper rather than a descendant.
     const host = canvas.parentElement;
-    const art = canvas.closest<HTMLElement>(".eclipse-art");
+    // [data-eclipse] rather than a layout class: this component has already
+    // outlived one container (a section-width plate) and now lives in the
+    // hero. The hook says "the thing holding an eclipse", which is the only
+    // fact it actually needs.
+    const art = canvas.closest<HTMLElement>("[data-eclipse]");
     if (!host || !art) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;

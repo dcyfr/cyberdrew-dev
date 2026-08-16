@@ -54,12 +54,29 @@
   --ecl-rim-glow: rgb(236 236 232 / .18);
   --ecl-spill:    rgb(200 210 255 / .10);
   /* ---- where the light is ------------------------------------------------
-     The sky's corona sits off the top-LEFT corner (see body::before). The
-     artwork is the same event close up, so its limb has to be brightest on the
-     same bearing or the page is lit by two suns.
+     TWO DIFFERENT FACTS, and conflating them cost a revision:
+
+       WHERE THE OBJECT IS  -> body::before, the corona, anchored ON the disc.
+       WHERE ITS LIGHT IS   -> --ecl-bearing, the side of the disc the source
+                               peeks past.
+
+     The occluder hangs off the hero's top-right, so the corona moved there with
+     it. The bearing did NOT: pointing it out through the same corner put the
+     lit limb off-screen, which deletes the one part of the object worth seeing.
+     The source stays beyond the upper LEFT, so the limb faces into the page and
+     the streamers rake across the empty column toward the headline. At every
+     width the arc that survives the crop is the lit one.
+
+     Nothing else on the page has a bearing — the travelling rule and the ring
+     glows follow the pointer. Only the limb, the atmosphere and the sky.
 
      --ecl-bearing is the conic start angle: 0deg is twelve o'clock, running
-     clockwise, so 315deg puts the hot stop at the upper left. --ecl-lit-x/y is
+     clockwise, so 260deg puts the hot stop just below the disc's LEFT —
+     which is the arc that survives at every width. Cropped through the
+     top-right corner on a phone, what is left on screen is the bottom-left;
+     fully visible on a desktop, a left-facing limb rakes toward the headline.
+     295deg looked better on the desktop case alone and put the entire lit edge
+     off screen on the phone. --ecl-lit-x/y is
      that same direction expressed as a point inside the disc, for the radial
      that paints the atmosphere. The pair is stated rather than derived through
      sin()/cos() on purpose: a trig function this codebase has never shipped,
@@ -67,9 +84,9 @@
      precisely how the ambient layer went missing for months. Two numbers that
      can drift beat one that can vanish, and design-intent.mjs asserts the limb
      paints so the drift is caught. */
-  --ecl-bearing: 315deg;
-  --ecl-lit-x: 24%;
-  --ecl-lit-y: 20%;
+  --ecl-bearing: 260deg;
+  --ecl-lit-x: 20%;
+  --ecl-lit-y: 56%;
   /* ---- the limb ----------------------------------------------------------
      The rim above is a perfectly even ring, and that is what makes it read as
      a DRAWN CIRCLE rather than an occluded light: a real limb is brightest
@@ -576,12 +593,29 @@
   --ecl-rim-glow: rgb(236 236 232 / .18);
   --ecl-spill:    rgb(200 210 255 / .10);
   /* ---- where the light is ------------------------------------------------
-     The sky's corona sits off the top-LEFT corner (see body::before). The
-     artwork is the same event close up, so its limb has to be brightest on the
-     same bearing or the page is lit by two suns.
+     TWO DIFFERENT FACTS, and conflating them cost a revision:
+
+       WHERE THE OBJECT IS  -> body::before, the corona, anchored ON the disc.
+       WHERE ITS LIGHT IS   -> --ecl-bearing, the side of the disc the source
+                               peeks past.
+
+     The occluder hangs off the hero's top-right, so the corona moved there with
+     it. The bearing did NOT: pointing it out through the same corner put the
+     lit limb off-screen, which deletes the one part of the object worth seeing.
+     The source stays beyond the upper LEFT, so the limb faces into the page and
+     the streamers rake across the empty column toward the headline. At every
+     width the arc that survives the crop is the lit one.
+
+     Nothing else on the page has a bearing — the travelling rule and the ring
+     glows follow the pointer. Only the limb, the atmosphere and the sky.
 
      --ecl-bearing is the conic start angle: 0deg is twelve o'clock, running
-     clockwise, so 315deg puts the hot stop at the upper left. --ecl-lit-x/y is
+     clockwise, so 260deg puts the hot stop just below the disc's LEFT —
+     which is the arc that survives at every width. Cropped through the
+     top-right corner on a phone, what is left on screen is the bottom-left;
+     fully visible on a desktop, a left-facing limb rakes toward the headline.
+     295deg looked better on the desktop case alone and put the entire lit edge
+     off screen on the phone. --ecl-lit-x/y is
      that same direction expressed as a point inside the disc, for the radial
      that paints the atmosphere. The pair is stated rather than derived through
      sin()/cos() on purpose: a trig function this codebase has never shipped,
@@ -589,9 +623,9 @@
      precisely how the ambient layer went missing for months. Two numbers that
      can drift beat one that can vanish, and design-intent.mjs asserts the limb
      paints so the drift is caught. */
-  --ecl-bearing: 315deg;
-  --ecl-lit-x: 24%;
-  --ecl-lit-y: 20%;
+  --ecl-bearing: 260deg;
+  --ecl-lit-x: 20%;
+  --ecl-lit-y: 56%;
   /* ---- the limb ----------------------------------------------------------
      The rim above is a perfectly even ring, and that is what makes it read as
      a DRAWN CIRCLE rather than an occluded light: a real limb is brightest
@@ -749,23 +783,33 @@ body::before {
      refract this. Without it a blurred panel over a flat field really is just
      a slightly different flat field, exactly as the note on .glass warns. */
   /* ---- the eclipse ------------------------------------------------------
-     The page is lit by one source: an eclipse sitting mostly off the top-left
-     corner. It is the same light the glass refracts, the same light the
-     specular sweeps come from, and the same event the section artwork draws
-     close up. Three layers, painted back to front.
+     The page is lit by one source, and as of the hero merge there is a real
+     object casting it. This layer is that object's FAR FIELD: fixed to the
+     viewport, so it stays while the disc itself parallaxes away up the page.
 
-     It is deliberately mostly OFF FRAME. A corona centred in the viewport is a
+     The two are coincident at the top of the document and separate as you
+     scroll, which is the fiction this comment has always asserted — "the same
+     event seen from further away" — finally shown rather than claimed. It is
+     also what gives the page three honest depths: this (fixed), the disc
+     (slow), the words (full speed).
+
+     ANCHORED TO THE DISC, at 88% 14% — where the disc's own centre lands once
+     both placement clamps are resolved on a desktop viewport. It moved from 16% 6% when the artwork
+     moved into the hero's top-right; leaving it on the left would have put a
+     corona on one side of the screen and the thing making it on the other.
+
+     Still deliberately mostly OFF FRAME. A corona centred in the viewport is a
      logo; a corona cropped by the corner is a light source that happens to be
      there, and it keeps the brightest part away from the middle of the page
      where the reading happens.
 
-     --ecl-* tokens are shared with the section artwork, so if the disc's
-     lighting changes the ground follows it. */
+     --ecl-* tokens are shared with the artwork, so if the disc's lighting
+     changes the ground follows it. */
   background:
     /* 1. the corona itself: an annulus, transparent through the middle where
           the disc occludes it. Thin relative to its radius, which is what
           separates an eclipse from a glow. */
-    radial-gradient(circle 42vmax at 16% 6% in oklab,
+    radial-gradient(circle 42vmax at 88% 14% in oklab,
       transparent 0 39%,
       var(--sky-corona-in) 44%,
       var(--sky-corona) 47%,
@@ -782,12 +826,15 @@ body::before {
           and peaks at the ring before falling away outward. That drops the
           maximum (the bright region is now an annulus, not a filled disc) and
           lets the corona actually read. */
-    radial-gradient(circle 96vmax at 16% 6% in oklab,
+    radial-gradient(circle 96vmax at 88% 14% in oklab,
       transparent 0 16%,
       var(--bloom) 34%,
       transparent 74%),
     /* 3. a far counter-light, so the opposite corner is not dead ground */
-    radial-gradient(54vmax 54vmax at 88% 92% in oklab, var(--bloom-2) 0%, transparent 68%);
+    /* Moved with the corona, to stay OPPOSITE it. At 88% 92% it was under the
+       same corner as the source, which is not a counter-light, it is a second
+       lobe of the first one. */
+    radial-gradient(54vmax 54vmax at 12% 92% in oklab, var(--bloom-2) 0%, transparent 68%);
 }
 
 /* Dither. A gradient this large with this small a luminance delta cannot be
@@ -1502,6 +1549,13 @@ h1, h2, h3 {
 
 .hero {
   min-height: 100svh;
+  /* The hero holds the page's light source now, positioned against this box.
+     `isolation` is what keeps `z-index: -1` on .hero-eclipse meaning "behind
+     the statement" rather than "behind the hero" — without it the backdrop
+     drops through to the page ground and the body's own fixed layers paint on
+     top of the disc. */
+  position: relative;
+  isolation: isolate;
   /* grid, not flex: in a flex column the `.wide` rail's `margin-inline: auto`
      beats `align-items: stretch`, so the hero collapses to content width and
      centres. Grid stretches the item and still honours the auto margins. */
@@ -1928,24 +1982,151 @@ h1, h2, h3 {
    its spill lands on the real thing — the same light the glass refracts and
    the sky already shows, now with one object actually casting it.
 
-   Nothing needs the clip. The disc is 38% of the width and centred, so it
-   cannot overflow; only the light does, which is the entire intent.
+   Nothing needs the clip. Only the light overflows, which is the entire intent.
    --art-ground and --art-halo went with the frame. They described "the render's
-   own ground" and "the halo the plate throws", and there is no plate. */
-.eclipse {
-  position: relative;
-  margin: 0 calc(-1 * var(--row-pad));
-  display: grid;
-  gap: clamp(var(--s-4), 2vw, var(--s-6));
+   own ground" and "the halo the plate throws", and there is no plate.
+
+   AND THE SECTION IS GONE TOO. It was a 2.4:1 letterbox holding one centred
+   disc — a full screen of scroll spent on a picture of the thing the hero had
+   already said in words, with the artwork's own light quarantined into a band
+   where none of the type could be lit by it. In the hero it stops being a
+   picture ABOUT the statement and becomes what the statement is lit by, which
+   is what the page ground's corona has claimed all along.
+
+   ---- placement, and why it is one formula rather than breakpoints ----------
+
+   The requirement is fluid, so nothing below switches at a width. Two clamps
+   describe the whole range, and both are anchored to the TOP-RIGHT, because
+   that is the one region of this hero that is reliably empty: the headline
+   holds the upper left, the deck and buttons the middle left, the byline and
+   the band the bottom. Measured on the rendered page, everything right of ~62%
+   and above the band is ground.
+
+   SIZE tracks vmin, not vw. On a phone the short axis is the width, so the disc
+   can never outgrow the column; on a desktop it is the height, so the disc can
+   never outgrow the fold. One expression, opposite constraints, because vmin
+   already knows which axis is scarce.
+
+   BLEED is the other half, and it is what makes a single anchor work at both
+   ends. The right offset scales with the viewport, so the disc sits inside the
+   empty column on a desktop and slides progressively off the corner as the
+   viewport narrows — on a phone what is left on screen is a lit crescent above
+   the headline. That is not a degraded version of the desktop composition; a
+   cropped light source is the more evocative reading of the two, and it is why
+   the reference this came from is itself a crop. */
+.hero-eclipse {
+  position: absolute;
+  /* Behind the statement, inside the hero's own stacking context. The hero
+     sets `isolation: isolate` so this can never escape into the page. */
+  z-index: -1;
+  pointer-events: none;
+  --ecl-size: clamp(11rem, 34vmin, 24rem);
+  width: var(--ecl-size);
+  height: var(--ecl-size);
+  /* BOTH AXES ARE DRIVEN BY WIDTH, and that is the part that took measuring.
+
+     The obvious version — size on vmin, x on vw, y on vh — put a 468px disc
+     through the middle of "Rails that hold" at 1440 and left its lit limb
+     cropped off the right edge, which is the one part of the object worth
+     seeing. The constraint is not vertical space, it is HORIZONTAL: how much
+     empty column is left over once the headline has taken what it needs.
+
+     So both offsets share one input. Wide, there is an empty right column and
+     the disc descends into it. Narrow, there is none, and the same expressions
+     carry it up and out through the top-right corner until only its lower-left
+     arc is on screen. The type never has to share a line with it at any width,
+     and nothing switches at a breakpoint.
+
+     THE FLOORS ARE SET BY WHAT SURVIVES ON SCREEN, not by what is safest. At
+     -9rem/-9rem the phone case measured a 32x32px corner sliver: technically
+     clear of every glyph, and visually nothing at all. That is not a cropped
+     light source, it is a missing one. The floors below leave a real arc at 390
+     and still land the disc's bottom edge above the eyebrow, which starts at
+     y~67 once the hero's own top padding resolves.
+
+     Horizontal clearance is measured against RENDERED TEXT, not against the
+     <h1> box: that box spans the full rail and reports a false collision at
+     1440, where the glyphs stop at x~830 and the disc starts at 1169. */
+  right: clamp(-3rem, 22vw - 22rem, 5rem);
+  /* Here the dock is at the BOTTOM (see the dock block at the end of this
+     file), so the top-right corner is free and the disc exits through it. */
+  top: -7.5rem;
 }
-.eclipse-art {
-  position: relative;
-  aspect-ratio: 1536 / 640;
+
+/* THE ONE BREAKPOINT IN THIS COMPOSITION, and it is not a placement decision —
+   it is the dock's. At 48rem the dock moves from the bottom edge to the top,
+   and the corner the disc was escaping through stops being empty.
+
+   That matters more than an overlap normally would, because the dock is GLASS:
+   it samples what is behind it, and a near-black occluder behind a translucent
+   panel drags the whole panel down. Measured at top:-64px on a 1440 viewport,
+   the disc sat behind the dock's right end and put .theme-toggle — icon-only,
+   so its disc IS its affordance — at 2.99:1 in light, under the 3:1 floor
+   WCAG 1.4.11 asks for. It was design-intent.mjs that caught it, and the miss
+   is instructive: every collision check up to that point had been disc versus
+   TEXT, and the thing it actually hit was chrome.
+
+   So above the dock's own breakpoint the disc drops below the dock band into
+   the empty right column. Still one clamp, still fluid inside the regime; the
+   discontinuity is inherited from the layout rather than invented here. */
+@media (min-width: 48rem) {
+  .hero-eclipse {
+    top: clamp(6rem, 12vw - 3rem, 18rem);
+  }
 }
-/* A wide box collapses to a letterbox on a phone and the disc has nowhere to
-   sit. Same reasoning, and the same fix, as the plate before it. */
-@media (max-width: 47.99rem) {
-  .eclipse-art { aspect-ratio: 4 / 3; }
+
+/* ---- parallax ------------------------------------------------------------
+   The light source is further away than the words in front of it, so it must
+   travel slower than they do. Positive translate as the scroll advances IS the
+   lag: the object falls behind the content moving past it.
+
+   Scroll-driven CSS, not a listener. Same reasoning the progress readout and
+   the plate dissolve used before it — this runs on the compositor, so a
+   decorative parallax cannot cost a frame of scrolling. `scroll(root block)`
+   with an explicit range, because the timeline otherwise spans the whole
+   7900px document and the hero would drift by a pixel a screen.
+
+   Three depths now read as three: the sky (body::before, `fixed`, does not move
+   at all), this (moves slowly), and the statement (moves with the page). The
+   fixed sky is the same event's far field, so the two start coincident at the
+   top of the page and separate as you leave — which is the fiction the page
+   ground has always described, finally shown rather than asserted.
+
+   Scale and fade are part of the same gesture: an object receding gets smaller
+   and dimmer. It also keeps the disc from sitting brightly behind WORK's
+   heading, which is what a pure translate would do.
+
+   Wrapped in @supports so a browser without scroll timelines simply gets the
+   static composition, and behind reduced-motion because parallax is the
+   textbook trigger for it. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-eclipse {
+      animation-name: hero-eclipse-parallax;
+      /* Longhands and `auto`: the shorthand pins duration to 0s and a scroll
+         timeline then has no range to map onto. Documented once on the
+         progress readout, true every time. */
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 130vh;
+    }
+    @keyframes hero-eclipse-parallax {
+      from { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+      to   { transform: translate3d(0, 30vh, 0) scale(.88); opacity: .34; }
+    }
+  }
+}
+
+/* The caption the artwork's section used to carry. Mono, quiet, and the last
+   line of the hero: claim, proof, then why the proof matters. */
+.hero-thesis {
+  margin: clamp(var(--s-7), 3.5vh, var(--s-10)) 0 0;
+  max-width: 44ch;
+  font-family: var(--font-mono); font-size: var(--t-mono-xs);
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-mut);
 }
 
 /* ---- the limb ------------------------------------------------------------
@@ -2033,10 +2214,16 @@ h1, h2, h3 {
    rather than a drawn circle, and the far spill. Both blur, no spread — they
    are light, and light has no contour.
    The lit edge itself is NOT here. See .eclipse-disc::before. */
+/* The occluder now fills its container, because the container IS the disc's
+   box: .hero-eclipse is a square sized by one clamp, and everything else
+   (halo, streamers, grain) hangs off it by percentage. That is what makes the
+   whole object scale from one number — the old version sized the disc as a
+   fraction of a letterbox plate and then had to re-derive every layer's spread
+   against a changing aspect ratio.
+   No transform of its own either: the parallax animates the PARENT's
+   transform, and a translate here would be composited on top of it. */
 .eclipse-disc {
-  position: absolute; left: 50%; top: 50%;
-  width: min(38%, 250px); aspect-ratio: 1;
-  transform: translate(-50%, -50%);
+  position: absolute; inset: 0;
   border-radius: 50%;
   background: var(--ecl-disc);
   box-shadow:
@@ -2077,17 +2264,21 @@ h1, h2, h3 {
 }
 /* The spill, and the thing that most needed the frame gone. At `inset: 0` it
    was exactly the plate's rectangle, so the light stopped dead at four straight
-   lines — a glow with corners. Negative insets let it spread past the art box
-   into the page ground, which is now allowed to receive it.
-   Wider than tall: the box is a 2.4:1 letterbox, so equal insets would put far
-   more spread above and below the disc than beside it. */
+   lines — a glow with corners. Negative insets let it spread into the page
+   ground, which is now allowed to receive it.
+
+   SYMMETRIC now, where it used to be -34%/-14%. Those two numbers existed to
+   correct for a 2.4:1 letterbox: equal insets on a wide box put far more spread
+   above the disc than beside it. The container is a square, so the correction
+   is not just unnecessary, it would be the distortion. One number, and light
+   that spreads the same in every direction — which is what light does. */
 .eclipse-halo {
-  position: absolute; inset: -34% -14%;
-  background: radial-gradient(46% 58% at 50% 50% in oklab,
-    var(--ecl-spill), transparent 72%);
+  position: absolute; inset: -62%;
+  background: radial-gradient(closest-side at 50% 50% in oklab,
+    var(--ecl-spill), transparent 74%);
 }
 
-/* ---- the streamers -------------------------------------------------------
+/* ---- the streamers (see also the note above on symmetric insets) ----------
    The shader layer. Sits on the spill and under the occluder, and takes the
    SAME negative insets as the halo so the two describe one volume of light —
    different insets would put the filaments' falloff and the spill's falloff on
@@ -2112,8 +2303,11 @@ h1, h2, h3 {
    corner of a box that should have been 1398x765. The wrapper takes the
    insets; the canvas fills it at 100%, which for a replaced element is a real
    stretch rather than an intrinsic size. */
+/* Same inset as the halo, deliberately: the streamers and the spill are one
+   volume of light, and two different insets would put their falloffs on two
+   different circles — which reads as a ring inside a glow. */
 .eclipse-canvas-wrap {
-  position: absolute; inset: -34% -14%;
+  position: absolute; inset: -62%;
   pointer-events: none;
 }
 .eclipse-canvas {
@@ -2142,11 +2336,15 @@ h1, h2, h3 {
    hidden` used to end this tile on the plate's own border, where a hard edge
    is what a border is for. With the frame gone an unmasked tile is a visible
    rectangle of grain sitting on open page ground — a seam marking out a box
-   that no longer exists. The mask fades it to nothing well inside the art box,
-   so the grain belongs to the light rather than to a region. */
-.eclipse-art::after {
+   that no longer exists. The mask fades it to nothing well inside the box, so
+   the grain belongs to the light rather than to a region.
+
+   Spread to match the halo, since the light it is dithering now reaches that
+   far. A square container means the mask can be a circle, which is the other
+   half of why the two radii below are equal where they used to differ. */
+.hero-eclipse::after {
   content: "";
-  position: absolute; inset: 0; pointer-events: none;
+  position: absolute; inset: -62%; pointer-events: none;
   /* Raised from .05 and coarsened from .8, because the atmosphere added a
      second very-low-delta ramp INSIDE the disc and the dither has to straddle
      the quantisation step of both. The coarser tile is the part that reads as
@@ -2161,9 +2359,10 @@ h1, h2, h3 {
      finished, and the box clips whatever alpha is left. Measured at 72%: the
      grain was still ~30% opaque where the art box ended, which drew a hard
      horizontal seam the full width of the section, at exactly the bottom edge
-     of the frame this revision had just removed. */
-  -webkit-mask: radial-gradient(44% 46% at 50% 50%, #000 30%, transparent 100%);
-          mask: radial-gradient(44% 46% at 50% 50%, #000 30%, transparent 100%);
+     of the frame this revision had just removed.
+     Equal now, and safely under 50%, because the container is square. */
+  -webkit-mask: radial-gradient(46% 46% at 50% 50%, #000 24%, transparent 100%);
+          mask: radial-gradient(46% 46% at 50% 50%, #000 24%, transparent 100%);
 }
 
 /* The rim brightens and settles rather than pulsing on a beat: this is the one
@@ -2198,23 +2397,14 @@ h1, h2, h3 {
   }
 }
 
-.eclipse-cap {
-  margin: 0;
-  /* The -1px this used to carry was compensating for the plate's border, so
-     the caption would line up with content INSIDE the frame. There is no
-     frame and no border, so the caption lands on the section rail directly. */
-  padding-inline: max(var(--row-pad), var(--card-pad-min));
-  max-width: 44ch;
-  font-family: var(--font-mono); font-size: var(--t-mono-xs);
-  letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ink-mut);
-}
+/* .eclipse-cap is gone with the section. The caption is .hero-thesis now, set
+   on the hero's own rail rather than padded to clear a plate's border. */
 
 /* Forced colours own the palette, and an eclipse drawn in system colours is a
    grey circle. Drop the artwork and keep the caption, which carries the claim
    the picture was making anyway. */
 @media (forced-colors: active) {
-  .eclipse-art { display: none; }
+  .hero-eclipse { display: none; }
 }
 
 /* ------------------------------------------------------------------ loop -- */
