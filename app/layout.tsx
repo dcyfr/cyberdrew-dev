@@ -64,6 +64,25 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark light",
+  /**
+   * Without this the page is laid out inside the safe area, and iOS fills the
+   * strips it left over — behind the status bar, behind the home indicator —
+   * with a flat theme-color. That colour is --bg exactly, and it still read as
+   * black bars: the ground you actually see is --bg PLUS the fixed ambient
+   * layer lifting it, so a band painted with the raw token is visibly darker
+   * than the page it borders. The seam was the lift, not the hue.
+   *
+   * `cover` hands those strips to the document, so the ambient layer (fixed,
+   * inset 0) reaches them like everything else and there is one continuous
+   * ground from edge to edge.
+   *
+   * It also switches on every env(safe-area-inset-*) in globals.css. Those
+   * were written for notches and home indicators and have been resolving to 0
+   * on every iPhone since the day they landed — dead code that looked like
+   * handled cases. The dock, the footer and the side gutters start honouring
+   * them here.
+   */
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
     { media: "(prefers-color-scheme: light)", color: "#f4f3f0" },

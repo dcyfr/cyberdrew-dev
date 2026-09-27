@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 
@@ -31,6 +31,30 @@ const getServerSnapshot = (): Theme => "dark";
 
 export function ThemeToggle() {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  /**
+   * Keep the browser chrome on the same ground as the page.
+   *
+   * The two theme-color metas in layout.tsx are keyed to prefers-color-scheme,
+   * which is the OS answer — and this button exists precisely so the page can
+   * disagree with the OS. Choose light on a dark phone and iOS keeps painting
+   * its bars obsidian against a bone page: the same dark band viewport-fit was
+   * added to remove, arriving by the other route.
+   *
+   * Both tags get the resolved colour, so whichever one the browser matches is
+   * the right one. It is read from --bg rather than restated here, because a
+   * second copy of the ground's hex is a second thing to forget.
+   *
+   * Self-corrects if the OS scheme later changes: subscribe() is watching that
+   * media query too, so theme updates and this runs again.
+   */
+  useEffect(() => {
+    const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+    if (!bg) return;
+    for (const m of document.querySelectorAll('meta[name="theme-color"]')) {
+      m.setAttribute("content", bg);
+    }
+  }, [theme]);
 
   const swap = useCallback(() => {
     const next: Theme = theme === "light" ? "dark" : "light";
