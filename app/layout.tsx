@@ -134,7 +134,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema).replace(/</g, '\\u003c') }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema).replaceAll('<', String.raw`\u003c`) }}
         />
         {children}
         {/* Both are first-party: the scripts and their beacons are proxied
