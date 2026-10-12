@@ -219,3 +219,13 @@ silently misreads):
 ## Deploy
 
 Zero-config on **Vercel**. Set the production domain to `cyberdrew.dev`.
+
+## License
+
+The code is [MIT](LICENSE): reuse the components, layout and build setup as
+you like.
+
+The content is not. Posts and other written copy, the photo in `public/img/`,
+and the cyberdrew and DCYFR names and marks are © Drew Gowan, all rights
+reserved. The Archivo font ships under its own
+[SIL Open Font License](app/fonts/Archivo-LICENSE.txt).
