@@ -91,38 +91,54 @@ NEXT_DIST_DIR=.next-preview npx next dev --port 4321
 
 ## Structure
 
+All copy and links live in `lib/site.ts`. The components only render it, so a wording change is a one-file edit.
+
 ```
 app/
-  layout.tsx           metadata, JSON-LD, pre-paint theme boot
-  page.tsx             page composition
-  globals.css          the whole design system
-  opengraph-image.tsx  share card
-  icon.tsx             generated favicon, same star path
-  not-found.tsx        themed 404
-  llms.txt/route.ts    machine-readable site, GENERATED from lib/site.ts
-  fonts/               vendored Archivo Variable + licence
+  layout.tsx            metadata, JSON-LD, pre-paint theme boot, analytics
+  page.tsx              page composition
+  globals.css           the whole design system
+  opengraph-image.tsx   share card (reads the TTFs in app/og/)
+  icon.tsx              generated favicon, same star path
+  not-found.tsx         themed 404
+  robots.ts             robots rules and sitemap pointer
+  sitemap.ts            sitemap
+  llms.txt/route.ts     machine-readable site, GENERATED from lib/site.ts
+  fonts/                vendored Archivo Variable (woff2) + licence
+  og/                   static TTF cuts for the OG card (Archivo, PT Mono)
 components/
-  Header.tsx       sticky nav, star mark, static wordmark
-  Hero.tsx         statement, deck, actions, roles
-  Work.tsx         three hairline rows
-  Writing.tsx      four hairline rows, tighter
-  Contact.tsx      the single inverted block
-  SiteFooter.tsx   sign-off + elsewhere
-  ThemeToggle.tsx  light/dark, with the one-frame transition guard
-  TextCycler.tsx   token-streaming hero eyebrow (client)
-  NavSpy.tsx       marks the nav link owning the viewport (client)
-  ScrollReveal.tsx reveals [data-reveal] on entry (client)
-  NavMenu.tsx      inline links wide, disclosure narrow (client)
-  CursorGlow.tsx   warm-to-cool light under the pointer (client)
-  StarMark.tsx     renders lib/mark.ts
-  ArrowIcon.tsx    outbound arrow; follow it with \u00A0, never a glyph
+  Header.tsx            floating dock: star mark, wordmark, nav
+  NavMenu.tsx           inline links wide, disclosure narrow (client)
+  NavSpy.tsx            marks the nav link owning the viewport (client)
+  ThemeToggle.tsx       light/dark, with the one-frame transition guard (client)
+  hero/HeroStatement.tsx  the hero: statement, deck, figures
+  hero/parts.tsx        eyebrow, actions, roles, credentials, portrait
+  TextCycler.tsx        token-streaming hero eyebrow (client)
+  Eclipse.tsx           the one picture, a disc and a rim of light in CSS
+  Work.tsx              work cards
+  Loop.tsx              how the fleet runs unattended, as an ordered spine
+  Guardrails.tsx        the controls and their hard values
+  Writing.tsx           featured posts, read from the dcyfr.ai feed at build
+  Contact.tsx           engagement shapes and the booking link
+  SiteFooter.tsx        sign-off, socials, build stamp
+  SocialIcon.tsx        inline GitHub, LinkedIn and X marks
+  StarMark.tsx          renders lib/mark.ts
+  ArrowIcon.tsx         outbound arrow; follow it with \u00A0, never a glyph
+  ScrollReveal.tsx      reveals [data-reveal] on entry (client)
+  CursorGlow.tsx        warm-to-cool light under the pointer (client)
 lib/
-  site.ts          ALL copy and links — edit here
-  mark.ts          the star path, shared by header, status, favicon, OG
+  site.ts               ALL copy and links, edit here
+  feed.ts               dcyfr.ai blog feed client, falls back to a snapshot in site.ts
+  mark.ts               the star path, shared by header, status, favicon, OG
+scripts/
+  a11y-contrast.mjs     pixel-truth contrast audit (npm run audit:contrast)
+  design-intent.mjs     design-intent assertions (npm run audit:intent)
+public/img/             the portrait and other images
+.github/workflows/
+  visual-gates.yml      runs both audits on pull requests that touch app/, components/ or lib/
 ```
 
-Sections: **header · hero · work · writing · contact · footer**. The earlier
-loop / envelope / ledger sections are recoverable from git at `59f959e`.
+The page runs **header, hero, eclipse, work, loop, guardrails, writing, contact, footer**. An earlier loop / envelope / ledger layout is recoverable from git at `59f959e`.
 
 ## Invariants (learned the hard way, do not regress these)
 
@@ -209,16 +225,16 @@ silently misreads):
 - **No horizontal scroll at 360px**; nav survives the narrow breakpoint
 - `next build` + TypeScript + `eslint .` all clean
 
-## Before launch
+## Open
 
-- [ ] Confirm handles: `github.com/dcyfr`, `linkedin.com/in/dcyfr`, `x.com/dcyfr_`.
-- [ ] Decide whether the contact section should state real availability.
-- [ ] Decide how much agent-fleet detail should be public.
-- [ ] Point `cyberdrew.dev` at the Vercel deployment.
+The site is live, so the old "Before launch" checklist is retired. Of its four items, two are done in the repo (the domain is pointed, and the GitHub handle resolves) and one is decided (the page shows the guardrails as controls with hard values, and `lib/site.ts` keeps the spend ceiling as "enforced" rather than a figure). Two things are still mine to settle:
+
+- [ ] Confirm the LinkedIn (`linkedin.com/in/dcyfr`) and X (`x.com/dcyfr_`) handles still resolve. Only the GitHub one could be checked from here.
+- [ ] Decide whether the contact section should state real availability. It offers a booking link and three engagement shapes, with no statement of capacity.
 
 ## Deploy
 
-Zero-config on **Vercel**. Set the production domain to `cyberdrew.dev`.
+Zero-config on **Vercel**, from `main`. The production domain is `cyberdrew.dev` (it redirects to `www.cyberdrew.dev`).
 
 ## License
 
