@@ -73,8 +73,7 @@ export default function PrivacyPage() {
                 details to deliver the page and protect the service. See{" "}
                 <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noreferrer">
                   Vercel&apos;s privacy policy
-                </a>
-                .
+                </a>.
               </p>
 
               <h2>Links to other services</h2>
