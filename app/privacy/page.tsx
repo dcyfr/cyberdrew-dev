@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const LAST_UPDATED = "October 15, 2026";
+const LAST_UPDATED = "October 17, 2026";
 
 /**
  * Plain prose on the same ground as the rest of the site. No Header: its
@@ -93,6 +93,25 @@ export default function PrivacyPage() {
                 cannot find records about one particular visitor. You can still ask: email{" "}
                 <a href={`mailto:${person.email}`}>{person.email}</a> about the data, or to request
                 access, correction or deletion, and I will reply within 30 days.
+              </p>
+
+              <h2>If you are in the EU or the UK</h2>
+              <p>
+                I am the controller of the data described above. I rely on my legitimate interest in
+                knowing how many people visit and keeping the site fast (GDPR Article 6(1)(f)). You
+                can ask for access, correction, deletion, restriction or a portable copy, or object
+                to the processing, by email as above. You can also complain to your local data
+                protection authority; in the UK, that is the Information Commissioner&apos;s Office.
+              </p>
+
+              <h2>If you live in California, Colorado or Maryland</h2>
+              <p>
+                These states give their residents rights over personal information. A personal site
+                like this one is likely below the thresholds that make those laws apply, but I honour
+                the same rights for anyone who asks: to know what I hold and get a copy, to correct
+                it, and to delete it. There is nothing to opt out of, because I do not sell personal
+                information, share it for targeted advertising or use it for profiling. If I decline
+                a request, reply to appeal it and I will answer within 60 days.
               </p>
 
               <h2>Children</h2>
