@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const LAST_UPDATED = "October 17, 2026";
+const LAST_UPDATED = "October 18, 2026";
 
 /**
  * Plain prose on the same ground as the rest of the site. No Header: its
@@ -95,29 +95,54 @@ export default function PrivacyPage() {
                 access, correction or deletion, and I will reply within 30 days.
               </p>
 
-              <h2>If you are in the EU or the UK</h2>
+              <h2>Wherever you live</h2>
               <p>
-                I am the controller of the data described above. I rely on my legitimate interest in
-                knowing how many people visit and keeping the site fast (GDPR Article 6(1)(f)). You
-                can ask for access, correction, deletion, restriction or a portable copy, or object
-                to the processing, by email as above. You can also complain to your local data
-                protection authority; in the UK, that is the Information Commissioner&apos;s Office.
+                The rights on this page are not limited to one country. I honour them for anyone who
+                asks, and I will not treat you differently for asking. If a privacy law where you live
+                gives you a right this page does not name, ask for it and I will honour that too. That
+                includes Canada&apos;s PIPEDA, Brazil&apos;s LGPD, Switzerland&apos;s FADP,
+                Australia&apos;s Privacy Act and similar laws elsewhere.
               </p>
 
-              <h2>If you live in California, Colorado or Maryland</h2>
+              <h2>Where the data is processed, and for how long</h2>
               <p>
-                These states give their residents rights over personal information. A personal site
-                like this one is likely below the thresholds that make those laws apply, but I honour
-                the same rights for anyone who asks: to know what I hold and get a copy, to correct
-                it, and to delete it. There is nothing to opt out of, because I do not sell personal
-                information, share it for targeted advertising or use it for profiling. If I decline
-                a request, reply to appeal it and I will answer within 60 days.
+                Vercel may process the data above in the United States and in other countries where
+                it runs servers. For visitors from the EU, the UK and Switzerland, those transfers
+                rely on the safeguards in Vercel&apos;s data processing terms, such as the European
+                Commission&apos;s Standard Contractual Clauses. The visit statistics are kept only
+                in aggregate, for the period Vercel&apos;s analytics plan retains them, and then
+                deleted. I keep no copy of my own.
+              </p>
+
+              <h2>If you are in the EU, the UK or Switzerland</h2>
+              <p>
+                I am the controller of the data described above. I rely on my legitimate interest in
+                knowing how many people visit and keeping the site fast (GDPR and UK GDPR Article
+                6(1)(f)). You can ask for access, correction, deletion, restriction or a portable
+                copy, or object to the processing, by email as above. You can also complain to your
+                local data protection authority. In the UK that is the Information
+                Commissioner&apos;s Office, and in Switzerland the Federal Data Protection and
+                Information Commissioner.
+              </p>
+
+              <h2>If you live in the United States</h2>
+              <p>
+                A growing number of states give their residents rights over personal information,
+                among them California (CCPA, as amended by the CPRA), Colorado, Connecticut, Maryland
+                (MODPA), Oregon, Texas and Virginia. A personal site like this one is likely below the
+                thresholds that make those laws apply, but I honour the same rights for anyone who
+                asks: to know what I hold and get a copy, to correct it, and to delete it. There is
+                nothing to opt out of, because I do not sell personal information, share it for
+                targeted advertising or use it for profiling. A Global Privacy Control signal from
+                your browser is respected all the same. If I decline a request, reply to appeal it
+                and I will answer within 60 days.
               </p>
 
               <h2>Children</h2>
               <p>
-                This site is not directed at children under 13, and I do not knowingly collect their
-                information.
+                This site is not directed at children under 16, and I do not knowingly collect their
+                information. If you believe a child has sent me personal information, email me and I
+                will delete it.
               </p>
 
               <h2>Changes</h2>
