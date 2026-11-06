@@ -4,34 +4,26 @@ import { Eclipse } from "@/components/Eclipse";
 import { Work } from "@/components/Work";
 import { Loop } from "@/components/Loop";
 import { Guardrails } from "@/components/Guardrails";
+import { Trust } from "@/components/Trust";
 import { Writing } from "@/components/Writing";
 import { Contact } from "@/components/Contact";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavSpy } from "@/components/NavSpy";
-import { ScrollReveal } from "@/components/ScrollReveal";
-import { CursorGlow } from "@/components/CursorGlow";
 
 export default function Page() {
   return (
     <>
+      <a className="skip-link" href="#main">Skip to content</a>
       <NavSpy />
-      <ScrollReveal />
-      <CursorGlow />
-
       <Header />
 
-      <main id="main">
-        {/* Work answers "agents that act", Guardrails answers "rails that
-            hold" — the two halves of the headline, in the headline's order.
-            The loop sits between them: it is how the acting happens, and each
-            of its states names the guard that the next section then measures. */}
+      <main id="main" tabIndex={-1}>
         <HeroStatement />
-        {/* Between the claim and the evidence, buying the page a breath before
-            the lists start. */}
         <Eclipse />
         <Work />
         <Loop />
         <Guardrails />
+        <Trust />
         <Writing />
         <Contact />
       </main>

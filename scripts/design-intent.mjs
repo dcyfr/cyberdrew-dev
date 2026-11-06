@@ -191,12 +191,13 @@ const run = async () => {
       // mistake produced a confident "1.00:1" for a control whose edge is
       // actually 3.57:1 — it only looked plausible because a failing number
       // is what the check was written to find.
-      const found = await page.evaluate((s) => {
-        const el = document.querySelector(s);
-        if (!el) return false;
-        el.scrollIntoView({ block: "center" });
-        return true;
-      }, sel);
+  const found = await page.evaluate((s) => {
+    const el = document.querySelector(s);
+    if (!el) return false;
+    document.documentElement.style.scrollBehavior = "auto";
+    el.scrollIntoView({ block: "center" });
+    return true;
+  }, sel);
       if (!found) { check(`control edge ${sel}`, false, "element absent"); continue; }
       await page.waitForTimeout(500);
       const geo = await page.evaluate((s) => {

@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { writing } from "@/lib/site";
 import { getFeaturedPosts } from "@/lib/feed";
 import { ArrowIcon } from "./ArrowIcon";
@@ -13,39 +12,42 @@ export async function Writing() {
   return (
     <section className="bay" id="writing">
       <div className="wide">
-        <div className="sect-head" data-reveal data-rule-glow>
+        <div className="sect-head" data-rule-glow>
           <p className="eyebrow">
             <span className="idx">{writing.index}</span>
             {writing.eyebrow}
           </p>
           <h2 className="sect-h">{writing.headline}</h2>
+          <p className="sect-deck">{writing.deck}</p>
         </div>
 
-        <div className="rows">
-          {posts.map((p, i) => (
+        <div className="rows writing-list">
+          {posts.map((post, index) => (
             <a
-              className="row row-post"
-              key={p.href}
-              data-reveal
-              style={{ "--i": i } as CSSProperties}
-              href={p.href}
+              className={`row row-post${index === 0 ? " row-post-featured" : ""}`}
+              key={post.href}
+              href={post.href}
               target="_blank"
               rel="noreferrer"
             >
-              <span className="num">{p.num}</span>
-              <h3>
-                {p.title}
-                {"\u00A0"}
-                <ArrowIcon />
-              </h3>
+              <span className="num">{post.num}</span>
+              <div className="post-copy">
+                {index === 0 ? <span className="post-featured-label">Latest feature</span> : null}
+                <h3>
+                  {post.title}
+                  {"\u00A0"}
+                  <ArrowIcon />
+                </h3>
+              </div>
               <span className="meta">
-                {p.kind} · {p.date}
+                <span className="post-kind">{post.kind}</span>
+                <span>{post.date}</span>
               </span>
             </a>
           ))}
         </div>
 
-        <a className="more" data-reveal href={writing.more.href} target="_blank" rel="noreferrer">
+        <a className="more" href={writing.more.href} target="_blank" rel="noreferrer">
           {writing.more.label}
           {"\u00A0"}
           <ArrowIcon />

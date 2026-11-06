@@ -19,7 +19,7 @@ export function Eclipse() {
   return (
     <section className="bay eclipse-sec" aria-labelledby="eclipse-cap">
       <div className="wide">
-        <figure className="eclipse" data-reveal>
+        <figure className="eclipse">
           <div className="eclipse-art" role="img" aria-label={eclipse.alt}>
             {/* Order matters: the halo is the light spilling around the disc,
                 so it has to be painted under it. */}

@@ -1,9 +1,7 @@
 // ---------------------------------------------------------------------------
 // cyberdrew.dev — content model. Single source of truth for copy and links.
 //
-// Skeleton scope: header · hero · work · writing · contact · footer.
-// The earlier loop/envelope/ledger sections are recoverable from git at
-// 59f959e if they come back.
+// Page scope: hero · work · system loop · guardrails · trust · writing · contact.
 // ---------------------------------------------------------------------------
 
 export const person = {
@@ -19,6 +17,7 @@ export const nav = [
   { label: "Work", href: "#work" },
   { label: "The loop", href: "#loop" },
   { label: "Guardrails", href: "#guardrails" },
+  { label: "Trust", href: "#trust" },
   { label: "Writing", href: "#writing" },
   { label: "Contact", href: "#contact" },
 ];
@@ -50,13 +49,10 @@ export const credentials = {
 };
 
 // ---------------------------------------------------------------------------
-// Hero. Silhouette test: this has to work as one shape on one ground.
+// Hero. One clear statement, then three equal ways into the portfolio.
 // ---------------------------------------------------------------------------
 export const hero = {
-  // The eyebrow's tail cycles; the first entry is the resting state and the
-  // one the static surfaces (meta description, OG card) use.
-  eyebrowPrefix: "Secure architecture for",
-  eyebrowCycle: ["autonomous systems", "artificial intelligence", "agentic design"],
+  eyebrow: "Secure architecture for autonomous systems",
   headline: ["Agents that act", "Rails that hold"],
   deck:
     "I'm Drew, a cyber architect. I build autonomous systems that take real actions in production and the guardrails that make that a safe bet.",
@@ -65,13 +61,16 @@ export const hero = {
     { role: "Head of AI", org: "GameShark Labs", href: "https://gamesharklabs.com" },
     { role: "Principal Security Engineer", org: "Monks", href: "https://www.monks.com/" },
   ],
-  primary: { label: "See my work", href: "#work" },
-  secondary: { label: "Work with me", href: "#contact" },
+  paths: [
+    { label: "Projects", note: "Case studies and systems", href: "#work" },
+    { label: "Writing", note: "Notes from the build", href: "#writing" },
+    { label: "Contact", note: "Engagements and fit", href: "#contact" },
+  ],
 } as const;
 
 // ---------------------------------------------------------------------------
-// Ledger. Four figures beside the hero, so the claim above has something
-// standing next to it before the reader has scrolled anywhere.
+// Ledger. Four compact signals in the trust section, kept beside the evidence
+// that gives their context.
 //
 // SOURCING — every figure is drawn from the live workspace, and re-checked on
 // 2026-07-31. If one changes in the system, change it here. A stale number on
@@ -156,19 +155,24 @@ export type WorkItem = {
   title: string;
   href: string;
   desc: string;
+  outcome: string;
+  proofLabel: string;
   tags: string[];
   status: { label: string; kind: "open" | "running" | "live" };
 };
 
 export const work = {
   eyebrow: "Work", index: "01",
-  headline: "Projects and initiatives",
+  headline: "Selected work",
+  deck: "A reusable agent runtime, an operating fleet, and a live product—three views of autonomy in practice.",
   items: [
     {
       num: "01",
       title: "@dcyfr/ai",
       href: "https://www.dcyfr.ai/ai",
-      desc: "The portable TypeScript runtime the fleet thinks in: model routing across local and frontier tiers, tool-use, and MCP wiring you drop into an existing project.",
+      desc: "A portable TypeScript runtime for teams building agentic workflows with local and frontier models.",
+      outcome: "Model routing, tool use, and MCP wiring in one package for existing projects.",
+      proofLabel: "Explore the runtime",
       tags: ["Agent runtime", "TypeScript", "MCP"],
       status: { label: "Open source", kind: "open" },
     },
@@ -176,10 +180,9 @@ export const work = {
       num: "02",
       title: "The agentic fleet",
       href: "https://www.dcyfr.ai/about",
-      // Count tracks the ledger above — 69 ai.rei.* jobs loaded at the last
-      // check. Two different numbers for the same fleet on one page is the
-      // drift this file exists to prevent.
-      desc: "Sixty-odd daemons on a shared substrate, spanning research, code review, monitoring, and self-healing. They run autonomously on a local-first model stack under a hard budget.",
+      desc: "An autonomous fleet across research, code review, monitoring, and self-healing, operating on a shared substrate.",
+      outcome: "More than 60 daemons run on a local-first model stack under a hard budget.",
+      proofLabel: "Read the fleet overview",
       tags: ["Multi-agent", "Local-first", "Self-healing"],
       status: { label: "Running", kind: "running" },
     },
@@ -187,7 +190,9 @@ export const work = {
       num: "03",
       title: "SharkVault",
       href: "https://sharkvault.gamesharklabs.com",
-      desc: "Proof the fleet ships product and not just diffs: a backer-funded consumer app taken end to end, from auth to payments to content pipeline, largely by agents.",
+      desc: "A backer-funded consumer app delivered end to end, from authentication and payments through its content pipeline, largely by agents.",
+      outcome: "A live product showing autonomous delivery beyond code changes.",
+      proofLabel: "View the live product",
       tags: ["Autonomous delivery", "Next.js", "Product"],
       status: { label: "Live", kind: "live" },
     },
@@ -281,7 +286,12 @@ export const loop = {
 // the control — these are meant to read as mechanisms a client gets, not as a
 // spec sheet for one deployment.
 // ---------------------------------------------------------------------------
-export type Guard = { name: string; value: string; desc: string };
+export type Guard = {
+  group: "prevent" | "limit" | "stop" | "recover";
+  name: string;
+  value: string;
+  desc: string;
+};
 
 export const guardrails = {
   eyebrow: "Guardrails", index: "03",
@@ -290,6 +300,7 @@ export const guardrails = {
     "Autonomy is a claim about what happens when nobody is watching. These are the controls that make the claim checkable.",
   items: [
     {
+      group: "limit",
       name: "Spend ceiling",
       // Deliberately not a figure. The number this runs at is my own
       // workspace's, and printing it invites a reader to price the engagement
@@ -299,31 +310,42 @@ export const guardrails = {
       desc: "A hard monthly ceiling on model spend, sized to the deployment. Trip it and the kill switch fires. The fleet stops rather than degrading quietly.",
     },
     {
+      group: "stop",
       name: "Sender kill switch",
       value: "< 1 s",
       desc: "Every outbound path (mail, chat, webhooks) honours one pause flag. No sends within a second of it being set.",
     },
     {
+      group: "prevent",
       name: "Credential isolation",
       value: "per-process",
       desc: "Secrets resolve at exec time from the OS keychain. Nothing lands in an environment dump, a plist, or a prompt.",
     },
     {
+      group: "prevent",
       name: "Tool sandbox",
       value: "allowlist",
       desc: "The shell an agent gets is not your shell: fixed binaries, no metacharacters, no SSRF to localhost or private ranges.",
     },
     {
+      group: "stop",
       name: "Metacognition breaker",
       value: "6 cycles",
       desc: "An agent that keeps picking the same task without shipping is quarantined. Persistence is a failure mode too.",
     },
     {
+      group: "recover",
       name: "Self-heal watchdog",
       value: "3 / hr",
       desc: "Downed services restart on graduated trust. Dry-run first, and never more than three times an hour before escalation.",
     },
   ] as Guard[],
+};
+
+export const trust = {
+  eyebrow: "Trust", index: "04",
+  headline: "Evidence behind the work",
+  deck: "Independently verifiable credentials and operating context behind the work. Metrics describe my current environment—not a guarantee for every engagement.",
 };
 
 // ---------------------------------------------------------------------------
@@ -339,7 +361,8 @@ export const guardrails = {
 export type Post = { num: string; title: string; kind: string; date: string; href: string };
 
 export const writing = {
-  eyebrow: "Writing", index: "04",
+  eyebrow: "Writing", index: "05",
+  deck: "Featured essays, guides, and release notes from the work.",
   headline: "Notes from the build",
   posts: [
     {
@@ -383,7 +406,7 @@ export const writing = {
 export type Engagement = { num: string; name: string; desc: string; outcome: string };
 
 export const contact = {
-  eyebrow: "Contact", index: "05",
+  eyebrow: "Contact", index: "06",
   headline: "Ship autonomy you can defend",
   deck: "I work with teams putting agents into production. That usually looks like one of three things.",
   engagements: [

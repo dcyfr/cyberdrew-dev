@@ -7,6 +7,7 @@ import {
   loop,
   person,
   socials,
+  trust,
   work,
   writing,
 } from "@/lib/site";
@@ -43,10 +44,10 @@ function render(posts: readonly Post[]): string {
   const lines: string[] = [
     `# ${person.domain}: ${person.name} (${person.handle})`,
     "",
-    `> ${hero.eyebrowPrefix} ${hero.eyebrowCycle[0]}. ${hero.deck} ${roles}.`,
+    `> ${hero.eyebrow}. ${hero.deck} ${roles}.`,
     "",
     "## Key pages",
-    `- [${person.domain}](${SITE}): positioning, selected work, writing, and contact.`,
+    `- [${person.domain}](${SITE}): positioning, selected work, system design, trust, writing, and contact.`,
     ...hero.roles
       .filter((r) => r.href)
       .map((r) => `- [${r.org}](${r.href}): ${r.role}.`),
@@ -60,7 +61,7 @@ function render(posts: readonly Post[]): string {
     }),
     "",
     `## ${work.headline}`,
-    ...work.items.map((w) => `- ${w.title} (${w.status.label}): ${w.desc} ${w.href}`),
+    ...work.items.map((w) => `- ${w.title} (${w.status.label}): ${w.desc} Outcome: ${w.outcome} ${w.proofLabel}: ${w.href}`),
     "",
     `## ${loop.headline}`,
     `> ${loop.deck}`,
@@ -71,7 +72,10 @@ function render(posts: readonly Post[]): string {
     "",
     `## ${guardrails.headline}`,
     `> ${guardrails.deck}`,
-    ...guardrails.items.map((g) => `- ${g.name} (${g.value}): ${g.desc}`),
+    ...guardrails.items.map((g) => `- ${g.name} (${g.group}, ${g.value}): ${g.desc}`),
+    "",
+    `## ${trust.headline}`,
+    `> ${trust.deck}`,
     "",
     "## Certifications",
     ...credentials.items.map((c) => `- ${c.abbr}: ${c.name} (${c.issuer})`),

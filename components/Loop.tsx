@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { loop } from "@/lib/site";
 
 /**
@@ -18,7 +17,7 @@ export function Loop() {
   return (
     <section className="bay" id="loop">
       <div className="wide">
-        <div className="sect-head" data-reveal data-rule-glow>
+        <div className="sect-head" data-rule-glow>
           <p className="eyebrow">
             <span className="idx">{loop.index}</span>
             {loop.eyebrow}
@@ -27,26 +26,32 @@ export function Loop() {
           <p className="sect-deck">{loop.deck}</p>
         </div>
 
+        <div className="loop-flow" aria-hidden="true">
+          {loop.steps.map((step, index) => (
+            <div className="loop-flow-item" key={step.num}>
+              <span className="loop-flow-stage">{step.name}</span>
+              {index < loop.steps.length - 1 ? <span className="loop-flow-arrow">→</span> : null}
+            </div>
+          ))}
+        </div>
+
         <ol className="loop">
-          {loop.steps.map((s, i) => (
-            <li className="step" key={s.num} data-reveal style={{ "--i": i } as CSSProperties}>
-              <span className="step-num" aria-hidden="true">{s.num}</span>
+          {loop.steps.map((step) => (
+            <li className="step" key={step.num}>
+              <span className="step-num" aria-hidden="true">{step.num}</span>
               <div className="step-body">
                 <h3 className="step-head">
-                  <span className="step-name">{s.name}</span>
-                  <span className="step-tier">{s.tier}</span>
+                  <span className="step-name">{step.name}</span>
+                  <span className="step-tier">{step.tier}</span>
                 </h3>
-                <p className="step-desc">{s.desc}</p>
-                {/* The guard is the load-bearing half: any of these five can
-                    be described as "it does a thing", and the interesting
-                    claim is what happens when it does the wrong thing. */}
-                <p className="step-guard">{s.guard}</p>
+                <p className="step-desc">{step.desc}</p>
+                <p className="step-guard">{step.guard}</p>
               </div>
             </li>
           ))}
         </ol>
 
-        <p className="loop-close" data-reveal>{loop.close}</p>
+        <p className="loop-close">{loop.close}</p>
       </div>
     </section>
   );

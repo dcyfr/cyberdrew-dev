@@ -1,56 +1,26 @@
 import Image from "next/image";
-import { credentials, hero, person } from "@/lib/site";
-import { TextCycler } from "../TextCycler";
+import { hero, person } from "@/lib/site";
 import portrait from "@/public/img/drew.webp";
 
-/**
- * The pieces the hero is assembled from.
- *
- * Split out of HeroStatement rather than inlined, because each of these is a
- * self-contained thing with its own reason to exist and its own way of going
- * wrong — the eyebrow's hidden sizer, the abbreviation's three-way expansion,
- * the portrait's size-driven intrinsic request. Inlined, those notes would sit
- * inside a layout file that is about arrangement, and the arrangement is the
- * one part of the hero most likely to be rewritten again.
- */
-
-const longestPhrase = [...hero.eyebrowCycle].sort((a, b) => b.length - a.length)[0];
-
-/**
- * The cycling tail changes length, and at narrow widths the longer phrases wrap
- * to a second line while the shorter ones do not, which walked the whole hero
- * up and down. A hidden sizer holding the longest phrase shares one grid cell
- * with the live text, so the box is always the tallest state and nothing below
- * it moves.
- */
-export function HeroEyebrow({ className }: { className?: string }) {
-  return (
-    <p className={`eyebrow eyebrow-cycle${className ? ` ${className}` : ""}`}>
-      <span className="sizer" aria-hidden="true">
-        {hero.eyebrowPrefix} {longestPhrase}
-      </span>
-      <span className="live">
-        {hero.eyebrowPrefix}{" "}
-        <TextCycler
-          items={hero.eyebrowCycle}
-          label={`${hero.eyebrowCycle[0]}, artificial intelligence, and agentic design`}
-        />
-      </span>
-    </p>
-  );
+/** The pieces the hero is assembled from. */
+export function HeroEyebrow() {
+  return <p className="eyebrow">{hero.eyebrow}</p>;
 }
 
-/** The two real actions, in the order the page wants them taken. */
-export function HeroActions({ className }: { className?: string }) {
+export function HeroPathways() {
   return (
-    <div className={`hero-actions${className ? ` ${className}` : ""}`}>
-      <a className="btn btn-solid" href={hero.primary.href}>
-        {hero.primary.label}
-      </a>
-      <a className="btn btn-ghost" href={hero.secondary.href}>
-        {hero.secondary.label}
-      </a>
-    </div>
+    <nav className="hero-paths" aria-label="Explore the portfolio">
+      {hero.paths.map((path, index) => (
+        <a className="hero-path" href={path.href} key={path.href}>
+          <span className="hero-path-index" aria-hidden="true">0{index + 1}</span>
+          <span className="hero-path-copy">
+            <span className="hero-path-label">{path.label}</span>
+            <span className="hero-path-note">{path.note}</span>
+          </span>
+          <span className="hero-path-arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </nav>
   );
 }
 
@@ -66,30 +36,6 @@ export function HeroRoles({ className }: { className?: string }) {
           </a>
         </span>
       ))}
-    </p>
-  );
-}
-
-/**
- * What backs it, one step quieter than the roles.
- *
- * The abbreviation carries the visible line, because four expanded
- * certification names is a paragraph, not a credential strip. `title` covers a
- * hovering cursor and .sr-only covers everything else — `abbr[title]` alone is
- * not reliably announced, and title never reaches a touch device at all.
- */
-export function HeroCredentials({ className }: { className?: string }) {
-  return (
-    <p className={`creds${className ? ` ${className}` : ""}`}>
-      {credentials.items.map((c) => (
-        <abbr className="cred" key={c.abbr} title={`${c.name}, ${c.issuer}`}>
-          {c.abbr}
-          <span className="sr-only">{` (${c.name}, ${c.issuer})`}</span>
-        </abbr>
-      ))}
-      <a className="cred-more" href={credentials.href} target="_blank" rel="noreferrer">
-        {credentials.more}
-      </a>
     </p>
   );
 }

@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { contact } from "@/lib/site";
 
 /**
@@ -17,10 +16,7 @@ export function Contact() {
   return (
     <section className="bay" id="contact">
       <div className="wide">
-        {/* data-ring-glow, not data-rule-glow: this is a window, so the light
-            goes round the whole frame rather than along the top hairline of
-            it. See §the ring in globals.css. */}
-        <div className="contact" data-reveal data-ring-glow>
+        <div className="contact" data-ring-glow>
         <p className="eyebrow">
           <span className="idx">{contact.index}</span>
           {contact.eyebrow}
@@ -29,13 +25,16 @@ export function Contact() {
         <p>{contact.deck}</p>
 
         <ul className="engagements">
-          {contact.engagements.map((e, i) => (
-            <li className="engagement" key={e.num} style={{ "--i": i } as CSSProperties}>
-              <span className="num">{e.num}</span>
+          {contact.engagements.map((engagement) => (
+            <li className="engagement" key={engagement.num}>
+              <span className="num">{engagement.num}</span>
               <div>
-                <h3 className="engagement-name">{e.name}</h3>
-                <p className="engagement-desc">{e.desc}</p>
-                <p className="engagement-out">{e.outcome}</p>
+                <h3 className="engagement-name">{engagement.name}</h3>
+                <p className="engagement-desc">{engagement.desc}</p>
+                <p className="engagement-out">
+                  <span className="engagement-out-label">You leave with</span>
+                  {engagement.outcome}
+                </p>
               </div>
             </li>
           ))}

@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { guardrails } from "@/lib/site";
 
 /**
@@ -15,7 +14,7 @@ export function Guardrails() {
   return (
     <section className="bay" id="guardrails">
       <div className="wide">
-        <div className="sect-head" data-reveal data-rule-glow>
+        <div className="sect-head" data-rule-glow>
           <p className="eyebrow">
             <span className="idx">{guardrails.index}</span>
             {guardrails.eyebrow}
@@ -25,14 +24,10 @@ export function Guardrails() {
         </div>
 
         <dl className="guards">
-          {guardrails.items.map((g, i) => (
-            <div
-              className="guard"
-              key={g.name}
-              data-reveal
-              style={{ "--i": i } as CSSProperties}
-            >
+          {guardrails.items.map((g) => (
+            <div className="guard" key={g.name} data-group={g.group}>
               <dt className="guard-head">
+                <span className="guard-group">{g.group}</span>
                 <span className="guard-name">{g.name}</span>
                 <span className="guard-val">{g.value}</span>
               </dt>

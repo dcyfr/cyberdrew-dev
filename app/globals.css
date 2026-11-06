@@ -192,10 +192,7 @@
      what caught it; this value tracks the ground, so re-check it if the sky
      ever changes. */
   --edge-control: #7e7e86;
-  /* The specular sweep: where the light catches a curved surface. Driven by
-     CursorGlow, which already writes --gx/--gy/--ga per frame; at --ga 0 this
-     resolves to nothing, so a page with no pointer (or no JS) simply never
-     sees it. */
+  /* A low-opacity specular highlight reserved for deliberate hover states. */
   --spec: rgb(255 255 255 / .07);
   /* Amplitude is set by measurement, not by eye: with the gradient syntax
      fixed these render for the first time, and .07/.045 put the ground at
@@ -825,16 +822,13 @@ a { color: inherit; text-underline-offset: 3px; }
    one global rule covers the whole page. */
 ::selection { background: var(--accent); color: var(--on-accent); }
 
-/* Exposes a stable string to assistive tech where the visible text mutates
-   (see TextCycler). Not display:none, which would drop it from the a11y tree. */
+/* Visually hidden text remains available in the accessibility tree. */
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 
-/* No skip link: only five focusable elements precede <main>, so the bypass
-   burden WCAG 2.4.1 targets does not really exist here. #main stays as the
-   landmark. */
+/* The skip link becomes visible when keyboard users focus it. */
 
 /* ------------------------------------------------------------ typography -- */
 
@@ -852,12 +846,6 @@ h1, h2, h3 {
   letter-spacing: .19em; text-transform: uppercase;
   color: var(--ink-mut); margin: 0;
 }
-/* Sizer and live text share one grid cell, so the box is always as tall as
-   the longest phrase and the cycle cannot move the hero. */
-.eyebrow-cycle { display: grid; }
-.eyebrow-cycle > * { grid-area: 1 / 1; }
-.eyebrow-cycle .sizer { visibility: hidden; pointer-events: none; }
-
 /* Sections carry an index, like the rows do: the page reads as one addressed
    system rather than a stack of unrelated blocks. */
 .eyebrow .idx { color: var(--accent); margin-right: var(--s-head-gap); }
@@ -1690,20 +1678,8 @@ h1, h2, h3 {
     transform var(--ease-glass),
     backdrop-filter var(--ease-glass);
 }
-/* The specular sheen: a highlight where the light catches the curve. Sits
-   behind the content via z-index on an isolated stack.
-
-   It used to be pinned to the top-left corner and cross-faded on hover, which
-   reads as a card lighting up rather than as a surface catching light — the
-   highlight never moved, so nothing about it said "curved". It now tracks the
-   pointer through --gx/--gy, the same two properties CursorGlow already writes
-   for the display type, so one rAF loop drives both and the light on a panel
-   agrees with the light on the headline above it.
-
-   --ga gates the whole thing and is 0 until the pointer is near, so a page
-   with no pointer, no JS, or reduced motion never sees it and the resting
-   card is exactly what it was. The fallbacks in var() are what make that
-   true — without them an unset --gx would invalidate the gradient. */
+/* A restrained static sheen appears on hover; type remains untouched, and
+   the card is fully legible without this decorative layer. */
 .row::before {
   content: "";
   position: absolute; inset: 0; z-index: -1;
@@ -1711,7 +1687,7 @@ h1, h2, h3 {
   opacity: 0;
   background:
     radial-gradient(
-      42% 140% at var(--gx, 12%) var(--gy, -10%),
+      42% 140% at 12% 0%,
       var(--spec) 0%,
       transparent 62%
     );
@@ -1789,22 +1765,7 @@ h1, h2, h3 {
 }
 .status svg { color: var(--accent); flex: none; transform-origin: 50% 50%; }
 
-/* Each status animates to its own meaning, so the motion is information and
-   not decoration. All three collapse under reduced-motion, where the word
-   alone still carries the state. */
-@media (prefers-reduced-motion: no-preference) {
-  /* open source: a slow, even turn — freely in circulation, nothing running */
-  .status[data-kind="open"] svg { animation: star-turn 22s linear infinite; }
-  /* running: the same turn, stepped — agents move in discrete decisions */
-  .status[data-kind="running"] svg { animation: star-turn 6s steps(8, end) infinite; }
-  /* live: a broadcast beat */
-  .status[data-kind="live"] svg { animation: star-live 2.4s ease-in-out infinite; }
-}
-@keyframes star-turn { to { transform: rotate(360deg); } }
-@keyframes star-live {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%      { transform: scale(.72); opacity: .5; }
-}
+/* State is carried by the status label and shape; status markers remain still. */
 
 /* writing row. Grid declared mobile-first below. */
 .row-post { align-items: baseline; padding-block: var(--s-4); }
@@ -1998,37 +1959,7 @@ h1, h2, h3 {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* The rim brightens and settles rather than pulsing on a beat: this is the one
-   still object on the page and a heartbeat would make it a status indicator.
-   Off entirely under reduced motion, where the disc is already complete. */
-@media (prefers-reduced-motion: no-preference) {
-  /* Two clocks on one event, and deliberately not the same one: the limb is the
-     source and the spill is the source seen through everything between, so the
-     spill lags. Equal periods would make them one pulse, which is a heartbeat,
-     which is a status indicator.
-     The limb animates OPACITY rather than its own colour stops — a composited
-     property, where the box-shadow interpolation this replaced repainted the
-     disc every frame for nine seconds, forever, on the one still object on the
-     page. */
-  .eclipse-disc::before { animation: ecl-limb 9s ease-in-out infinite; }
-  .eclipse-disc { animation: ecl-spill 14s ease-in-out infinite; }
-  @keyframes ecl-limb {
-    0%, 100% { opacity: .82; }
-    50%      { opacity: 1; }
-  }
-  @keyframes ecl-spill {
-    0%, 100% {
-      box-shadow:
-        0 0 30px 2px var(--ecl-rim-glow),
-        0 0 120px 20px var(--ecl-spill);
-    }
-    50% {
-      box-shadow:
-        0 0 40px 4px var(--ecl-rim-glow),
-        0 0 150px 26px var(--ecl-spill);
-    }
-  }
-}
+/* The eclipse is a static signature image; its light and silhouette do not pulse. */
 
 .eclipse-cap {
   margin: 0;
@@ -2478,29 +2409,6 @@ a, button { -webkit-tap-highlight-color: transparent; }
   }
 }
 
-/* ---------------------------------------------------------------- reveal -- */
-/* Elements rise into place as they enter the viewport.
-   The hidden state is scoped to .js-reveal, which the pre-paint boot script
-   in layout.tsx sets on <html>. Without that gate a JS failure would strand
-   every section at opacity 0, and setting it after hydration would flash.
-   Transform + opacity only, so it stays on the compositor. */
-@media (prefers-reduced-motion: no-preference) {
-  .js-reveal [data-reveal] {
-    opacity: 0;
-    transform: translateY(22px);
-    will-change: opacity, transform;
-  }
-  .js-reveal [data-reveal].is-in {
-    opacity: 1;
-    transform: none;
-    /* stagger reads from --i, set inline per item */
-    transition:
-      opacity 620ms cubic-bezier(.16, 1, .3, 1) calc(var(--i, 0) * 70ms),
-      transform 620ms cubic-bezier(.16, 1, .3, 1) calc(var(--i, 0) * 70ms);
-    will-change: auto;
-  }
-}
-
 /* ------------------------------------------------------------ glow text -- */
 /* Removed. The headline used to paint a warm-to-cool gradient into its own
    glyphs with background-clip:text. It is now lit the same way everything else
@@ -2625,4 +2533,246 @@ a, button { -webkit-tap-highlight-color: transparent; }
   /* A focus ring at 2px is adequate against glass; against a hard-edged
      high-contrast panel it should be unmistakable. */
   :focus-visible { outline-width: 3px; }
+}
+
+/* ------------------------------------------------------ portfolio refactor -- */
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  inset-block-start: var(--s-3);
+  inset-inline-start: var(--gutter);
+  transform: translateY(calc(-100% - var(--s-3)));
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--edge-control);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  text-decoration: none;
+  transition: transform var(--ease);
+}
+.skip-link:focus { transform: translateY(0); }
+
+.hero-paths {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-2);
+  margin-top: var(--s-8);
+}
+.hero-path {
+  min-width: 0;
+  min-height: 4.5rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-block: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+  transition: background var(--ease), border-color var(--ease);
+}
+.hero-path:hover,
+.hero-path:focus-visible {
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  border-color: var(--line-2);
+}
+.hero-path-index,
+.hero-path-note,
+.case-label,
+.case-proof,
+.post-featured-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono-xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.hero-path-index { color: var(--ink-mut); }
+.hero-path-copy { display: grid; gap: var(--s-1); min-width: 0; }
+.hero-path-label { font-size: var(--t-body); font-weight: 650; letter-spacing: -.02em; }
+.hero-path-note { color: var(--ink-mut); letter-spacing: .04em; text-transform: none; }
+.hero-path-arrow { color: var(--ink-mut); font-size: 1.1rem; }
+.hero-path:hover .hero-path-arrow { color: var(--ink); }
+.hero-byline { margin-top: clamp(var(--s-6), 3vh, var(--s-9)); }
+
+.case-body { min-width: 0; }
+.case-desc { max-width: 58ch; }
+.case-outcome {
+  display: grid;
+  gap: var(--s-1);
+  margin-top: var(--s-4);
+  padding-left: var(--s-4);
+  border-left: 1px solid var(--line-2);
+}
+.case-label { color: var(--ink-mut); }
+.case-outcome p { margin: 0; color: var(--ink-2); }
+.case-proof {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  text-underline-offset: 4px;
+}
+.case-proof .arrow { color: var(--ink-mut); }
+.case-meta { flex-direction: row; align-items: center; gap: var(--s-3); }
+.case-meta .num, .case-meta .status, .post-featured-label { color: var(--ink-2); }
+@media (min-width: 48rem) {
+  .case-meta { flex-direction: column; align-items: flex-start; }
+}
+
+.loop-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-3);
+  margin-block: 0 var(--s-6);
+  padding-block: var(--s-4);
+  border-block: 1px solid var(--line);
+}
+.loop-flow-item { display: inline-flex; align-items: center; gap: var(--s-3); }
+.loop-flow-stage {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  letter-spacing: .04em;
+  color: var(--ink-2);
+}
+.loop-flow-arrow { color: var(--ink-mut); }
+
+.guard-head {
+  display: grid;
+  grid-template-columns: 5.25rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--s-2) var(--s-4);
+}
+.guard-group {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono-xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+}
+
+.trust-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+.trust-metric {
+  display: grid;
+  align-content: start;
+  gap: var(--s-2);
+  padding-block: var(--s-5);
+  border-bottom: 1px solid var(--line);
+}
+.trust-metric:nth-child(odd) { padding-right: var(--s-4); }
+.trust-metric:nth-child(even) { padding-left: var(--s-4); border-left: 1px solid var(--line); }
+.trust-value {
+  font-family: var(--font-mono);
+  font-size: var(--t-title);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.trust-label {
+  margin: 0;
+  color: var(--ink-mut);
+  font-family: var(--font-mono);
+  font-size: var(--t-mono-xs);
+  letter-spacing: .08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+.trust-credentials {
+  display: grid;
+  gap: var(--s-5);
+  margin-top: var(--s-10);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--line);
+}
+.trust-credentials-intro h3 {
+  margin-top: var(--s-2);
+  font-size: var(--t-title);
+  letter-spacing: -.025em;
+}
+.credential-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.credential-item {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: var(--s-2) var(--s-4);
+  padding-block: var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+.credential-abbr,
+.credential-issuer {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono-xs);
+  letter-spacing: .05em;
+}
+.credential-abbr { color: var(--ink); }
+.credential-name { color: var(--ink-2); }
+.credential-issuer { grid-column: 2; color: var(--ink-mut); }
+.trust-credentials .more { margin-top: 0; justify-self: start; }
+
+.row-post .post-copy { display: grid; gap: var(--s-2); min-width: 0; }
+.post-featured-label { color: var(--ink-2); }
+.row-post-featured { padding-block: var(--s-7); }
+.row-post-featured h3 { font-size: clamp(1.45rem, 2.8vw, 2rem); }
+.row-post .meta { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-3); white-space: normal; }
+.post-kind { color: var(--ink-2); }
+
+.engagement-out-label {
+  display: block;
+  margin-bottom: var(--s-1);
+  color: var(--ink-mut);
+  font-size: var(--t-mono-xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 48rem) {
+  .trust-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .trust-metric {
+    padding-inline: clamp(var(--s-4), 2vw, var(--s-7));
+    border-bottom: 0;
+    border-left: 1px solid var(--line);
+  }
+  .trust-metric:first-child { padding-left: 0; border-left: 0; }
+  .trust-metric:nth-child(odd) { padding-right: clamp(var(--s-4), 2vw, var(--s-7)); }
+  .trust-credentials { grid-template-columns: minmax(13rem, .75fr) minmax(0, 1.7fr); column-gap: clamp(var(--s-8), 4vw, var(--s-16)); }
+  .trust-credentials-intro { grid-row: 1 / span 2; }
+  .credential-list, .trust-credentials .more { grid-column: 2; }
+  .credential-item { grid-template-columns: 5.5rem minmax(0, 1fr) auto; align-items: baseline; }
+  .credential-issuer { grid-column: auto; }
+}
+
+@media (max-width: 47.99rem) {
+  .hero-paths { gap: var(--s-1); }
+  .hero-path {
+    min-height: 3.75rem;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 0;
+    padding-inline: var(--s-1);
+    text-align: center;
+  }
+  .hero-path-index, .hero-path-arrow, .hero-path-note { display: none; }
+  .hero-path-label { font-size: var(--t-mono-xs); }
+  .guard-head { grid-template-columns: 4.75rem minmax(0, 1fr); }
+  .guard-val { grid-column: 2; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .status svg,
+  .eclipse-disc,
+  .eclipse-disc::before { animation: none; }
 }
