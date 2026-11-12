@@ -106,15 +106,17 @@ export const hero = {
 //               not the baseline. Was "$0", which was true of the default tier
 //               but read as a claim about the size of the budget — see the
 //               spend ceiling note in §Guardrails for the same reasoning.
-//   N+ yrs      DERIVED, so it cannot go stale. Counts from the first security
-//               role in nexus/context/user/about-me.md (IT Security
-//               Specialist, Escambia County, 2020), which is what that file's
-//               own "6+ years" resolves to. Change the constant, not the copy.
+//   N+ yrs      DERIVED, so it cannot go stale. Counts whole years from
+//               September 2019, when I founded Information Security Network,
+//               and rolls over each September. That is the "7+ years" on my
+//               resume. Change the constants, not the copy.
 // ---------------------------------------------------------------------------
 export type Stat = { value: string; unit?: string; label: string };
 
-/** First security role — see the sourcing note above. */
-export const SECURITY_START_YEAR = 2020;
+/** Start of the count: September 2019. See the sourcing note above. */
+export const SECURITY_START_YEAR = 2019;
+/** Calendar month of the start, 1-based (9 = September). */
+export const SECURITY_START_MONTH = 9;
 
 /**
  * The ledger is a function rather than a constant because one of its figures
@@ -124,7 +126,10 @@ export const SECURITY_START_YEAR = 2020;
  * client bundle by NavMenu.
  */
 export function getLedger(): Stat[] {
-  const years = new Date().getUTCFullYear() - SECURITY_START_YEAR;
+  const now = new Date();
+  const beforeAnniversary = now.getUTCMonth() + 1 < SECURITY_START_MONTH;
+  const years =
+    now.getUTCFullYear() - SECURITY_START_YEAR - (beforeAnniversary ? 1 : 0);
 
   return [
     { value: "60", unit: "+", label: "agents on one substrate" },
