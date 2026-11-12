@@ -86,7 +86,15 @@ export default function PrivacyPage() {
               <p>
                 The email link opens your own mail app. Book a call goes to Cal.com, and the other
                 links go to GitHub, LinkedIn, X, Credly and the sites of the organisations I work
-                with. Once you follow one, that service&apos;s privacy policy applies.
+                with. Once you follow one, that service&apos;s privacy policy applies. The two that
+                ask for your details or show mine are{" "}
+                <a href="https://cal.com/privacy" target="_blank" rel="noreferrer">
+                  Cal.com&apos;s privacy policy
+                </a>{" "}
+                and{" "}
+                <a href="https://info.credly.com/privacy-policy" target="_blank" rel="noreferrer">
+                  Credly&apos;s privacy policy
+                </a>.
               </p>
 
               <h2>Selling and sharing</h2>
@@ -99,6 +107,11 @@ export default function PrivacyPage() {
                 cannot find records about one particular visitor. You can still ask: email{" "}
                 <a href={`mailto:${person.email}`}>{person.email}</a> about the data, or to request
                 access, correction or deletion, and I will reply within 30 days.
+              </p>
+              <p>
+                A Global Privacy Control signal from your browser is respected, wherever you live.
+                There is nothing for it to switch off, because I do not sell personal information or
+                share it for advertising.
               </p>
 
               <h2>Wherever you live</h2>
@@ -139,9 +152,8 @@ export default function PrivacyPage() {
                 thresholds that make those laws apply, but I honour the same rights for anyone who
                 asks: to know what I hold and get a copy, to correct it, and to delete it. There is
                 nothing to opt out of, because I do not sell personal information, share it for
-                targeted advertising or use it for profiling. A Global Privacy Control signal from
-                your browser is respected all the same. If I decline a request, reply to appeal it
-                and I will answer within 60 days.
+                targeted advertising or use it for profiling. If I decline a request, reply to appeal
+                it and I will answer within 60 days.
               </p>
 
               <h2>Children</h2>
