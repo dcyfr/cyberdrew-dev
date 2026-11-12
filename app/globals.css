@@ -2313,6 +2313,14 @@ h1, h2, h3 {
   color: var(--ink-2);
 }
 
+/* Availability, and where the offer sits in the wider practice. Body size:
+   it follows the three rows, so it must not compete with the deck above them. */
+.contact > p.contact-note {
+  margin-block: var(--s-8) 0;
+  font-size: var(--t-body); line-height: 1.55;
+}
+.contact-note a { text-decoration: underline; text-underline-offset: 0.2em; }
+
 .contact-actions {
   display: flex; flex-wrap: wrap;
   gap: var(--s-2); margin-top: var(--s-8);
