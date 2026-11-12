@@ -73,7 +73,6 @@ export const hero = {
   roles: [
     { role: "Founder", org: "DCYFR Labs", href: "https://www.dcyfr.ai" },
     { role: "Head of AI", org: "GameShark Labs", href: "https://gamesharklabs.com" },
-    { role: "Principal Security Engineer", org: "Monks", href: "https://www.monks.com/" },
   ],
   primary: { label: "See my work", href: "#work" },
   secondary: { label: "Work with me", href: "#contact" },
@@ -418,6 +417,13 @@ export const contact = {
       outcome: "Ranked findings, and the order to fix them in",
     },
   ] as Engagement[],
+  // Availability and where this offer sits. The three rows above are the
+  // agent-governance side of the DCYFR Labs practice, and dcyfr.ai/services
+  // names the same three, so a reader who sees both sites finds one offer.
+  note: {
+    lead: "I'm taking on new engagements. These three are the agent side of DCYFR Labs, and the full practice is at",
+    link: { label: "dcyfr.ai/services", href: "https://www.dcyfr.ai/services#agent-governance" },
+  },
   primary: { label: "Book an intro call", href: person.cal },
   secondary: { label: person.email, href: `mailto:${person.email}` },
 };

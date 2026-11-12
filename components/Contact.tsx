@@ -41,6 +41,13 @@ export function Contact() {
           ))}
         </ul>
 
+        <p className="contact-note">
+          {contact.note.lead}{" "}
+          <a href={contact.note.link.href} target="_blank" rel="noreferrer">
+            {contact.note.link.label}
+          </a>.
+        </p>
+
         <div className="contact-actions">
           <a
             className="btn btn-solid"
