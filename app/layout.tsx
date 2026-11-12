@@ -108,11 +108,15 @@ const personSchema = {
     "Security architecture",
     "TypeScript",
   ],
+  // The portrait the hero shows, at its stable public path. The hero imports
+  // the same file and gets a hashed URL, which changes on every rebuild.
+  image: `${SITE}/img/drew.webp`,
   sameAs: [
     "https://www.dcyfr.ai",
     "https://github.com/dcyfr",
     "https://linkedin.com/in/dcyfr",
     "https://x.com/dcyfr_",
+    "https://www.credly.com/users/dcyfr",
   ],
   worksFor: [
     { "@type": "Organization", name: "DCYFR Labs", url: "https://www.dcyfr.ai" },
@@ -132,6 +136,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: BOOT }} />
       </head>
       <body>
+        {/* First in the tab order on every route; both pages carry
+            <main id="main">. Hidden until focused: see .skip-link. */}
+        <a className="skip-link" href="#main">
+          Skip to main content
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema).replaceAll('<', String.raw`\u003c`) }}

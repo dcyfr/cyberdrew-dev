@@ -1,9 +1,10 @@
 // ---------------------------------------------------------------------------
 // cyberdrew.dev — content model. Single source of truth for copy and links.
 //
-// Skeleton scope: header · hero · work · writing · contact · footer.
-// The earlier loop/envelope/ledger sections are recoverable from git at
-// 59f959e if they come back.
+// Scope, in page order: header · hero · eclipse · work · loop · guardrails ·
+// writing · contact · footer. The loop, the ledger and the envelope (now
+// "guardrails") were cut once and have come back; their first versions are in
+// git at 59f959e.
 // ---------------------------------------------------------------------------
 
 export const person = {
@@ -13,6 +14,15 @@ export const person = {
   domain: "cyberdrew.dev",
   email: "hello@cyberdrew.dev",
   cal: "https://cal.com/dcyfr/intro",
+} as const;
+
+// ---------------------------------------------------------------------------
+// Legal. The date the privacy page was last changed, as an ISO day. The page
+// prints it and the sitemap reports it as that URL's lastmod, so the two
+// cannot disagree. Change it in the same commit as any edit to the notice.
+// ---------------------------------------------------------------------------
+export const legal = {
+  privacyUpdated: "2026-10-18",
 } as const;
 
 export const nav = [
