@@ -22,7 +22,7 @@ export const person = {
 // cannot disagree. Change it in the same commit as any edit to the notice.
 // ---------------------------------------------------------------------------
 export const legal = {
-  privacyUpdated: "2026-10-18",
+  privacyUpdated: "2026-11-12",
 } as const;
 
 export const nav = [
@@ -352,33 +352,35 @@ export const writing = {
   eyebrow: "Writing", index: "04",
   headline: "Notes from the build",
   posts: [
+    // Snapshot of the featured set as of 2026-11-12, newest first, with the
+    // titles and category labels the feed sends.
     {
       num: "01",
-      title: "What's new in @dcyfr/ai: the v3 line",
-      kind: "Release notes",
-      date: "Jun 2026",
-      href: "https://www.dcyfr.ai/blog/whats-new-in-dcyfr-ai-v3",
+      title: "Centaur or Minotaur: Who Is Deciding in Your Agent Stack?",
+      kind: "AI",
+      date: "Oct 2026",
+      href: "https://www.dcyfr.ai/blog/centaur-or-minotaur",
     },
     {
       num: "02",
-      title: "AI assistants as development partners",
-      kind: "AI workflows",
-      date: "Mar 2026",
-      href: "https://www.dcyfr.ai/blog/ai-assistants-as-development-partners",
+      title: "Prompt Cache Invariants: The Discipline That Keeps an AI Daemon Cheap",
+      kind: "Architecture",
+      date: "Sep 2026",
+      href: "https://www.dcyfr.ai/blog/prompt-cache-invariants",
     },
     {
       num: "03",
-      title: "OWASP Top 10 for agentic AI",
-      kind: "AI security",
-      date: "Dec 2025",
-      href: "https://www.dcyfr.ai/blog/owasp-top-10-agentic-ai",
+      title: "Kill Switches for Autonomous Agents",
+      kind: "DevSecOps",
+      date: "Aug 2026",
+      href: "https://www.dcyfr.ai/blog/kill-switches-for-autonomous-agents",
     },
     {
       num: "04",
-      title: "Building with AI",
-      kind: "Essay",
-      date: "Nov 2025",
-      href: "https://www.dcyfr.ai/blog/building-with-ai",
+      title: "What's New in @dcyfr/ai: The v3 Line",
+      kind: "AI",
+      date: "Jun 2026",
+      href: "https://www.dcyfr.ai/blog/whats-new-in-dcyfr-ai-v3",
     },
   ] as Post[],
   more: { label: "All writing at dcyfr.ai/blog", href: "https://www.dcyfr.ai/blog" },
