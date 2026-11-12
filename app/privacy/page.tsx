@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
-import { person } from "@/lib/site";
+import { legal, person } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy · cyberdrew.dev",
@@ -9,7 +9,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const LAST_UPDATED = "October 18, 2026";
+// Derived from the one date in lib/site.ts, which the sitemap also reports.
+// UTC on both ends: an ISO day parses as UTC midnight, and formatting it in a
+// timezone west of that would print the day before.
+const LAST_UPDATED = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "long",
+  timeZone: "UTC",
+}).format(new Date(legal.privacyUpdated));
 
 /**
  * Plain prose on the same ground as the rest of the site. No Header: its
