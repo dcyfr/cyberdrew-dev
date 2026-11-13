@@ -426,7 +426,7 @@ export const contact = {
   // agent-governance side of the DCYFR Labs practice; dcyfr.ai/services covers
   // the rest. No prices on either site until paid work goes live.
   note: {
-    lead: "I'm taking on new engagements. These three are the agent side of DCYFR Labs, and the full practice is at",
+    lead: "I'm not taking paid engagements right now, and advice is pro bono. These three are the agent side of DCYFR Labs, and the full practice is at",
     link: { label: "dcyfr.ai/services", href: "https://www.dcyfr.ai/services" },
   },
   primary: { label: "Book an intro call", href: person.cal },
