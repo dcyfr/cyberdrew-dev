@@ -30,6 +30,9 @@
     "postcss": "^8.5.23",
     "nanoid": "^3.3.17",
     "js-yaml": "^4.3.2",
-    "sharp": "^0.35.0"
+    "sharp": "^0.35.0",
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.5"
+    }
   }
 }
