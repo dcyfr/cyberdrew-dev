@@ -393,41 +393,40 @@ export const writing = {
 // ---------------------------------------------------------------------------
 // Contact.
 // ---------------------------------------------------------------------------
-// Three fixed-scope engagements, each a row a visitor can point at and say
-// "that one". Names, prices and delivery windows match dcyfr.ai/services
-// (src/data/services.ts there); change them there and here together. They are
-// offers, so word them as commitments and never as history ("usually").
+// The deck used to name three engagement shapes in one sentence. As prose it
+// reads as a list of adjectives; as three rows it is a thing a visitor can
+// point at and say "that one". Same three shapes, same order.
 export type Engagement = { num: string; name: string; desc: string; outcome: string };
 
 export const contact = {
   eyebrow: "Contact", index: "05",
   headline: "Ship autonomy you can defend",
-  deck: "I work with teams putting agents into production. There are three ways to start, each with a fixed scope and a published price.",
+  deck: "I work with teams putting agents into production. That usually looks like one of three things.",
   engagements: [
     {
       num: "01",
-      name: "Agent Security Snapshot",
-      desc: "A review of one agent or LLM application against the OWASP Top 10 for Agentic Applications: ranked findings, a fix for each, a readout call, and a re-check within 30 days.",
-      outcome: "$3,500 fixed. Report within 5 business days",
+      name: "Your first secure agent",
+      desc: "You have a use case and nothing in production yet. We scope the smallest agent that earns its keep and ship it with the controls already in place.",
+      outcome: "A running agent, and the envelope it runs inside",
     },
     {
       num: "02",
-      name: "Agent Threat Model and Architecture Review",
-      desc: "A full threat model of an agent system: trust boundaries, tool access, delegation, and the data each one can reach. It ends in a remediation plan in priority order.",
-      outcome: "$9,000 fixed. Delivered within 3 weeks",
+      name: "A governed fleet",
+      desc: "Agents already run. The open question is what stops them: spend, sends, credentials, the blast radius of a bad tool call.",
+      outcome: "Kill switches, ceilings, and an audit trail that holds up",
     },
     {
       num: "03",
-      name: "Advisory retainer",
-      desc: "Ongoing security architecture advice while you build: design and pull-request review, scheduled re-checks, and a monthly note on open risks.",
-      outcome: "$4,000 a month, up to 8 hours",
+      name: "A hard look at what you run",
+      desc: "An audit of the system you already have: where an agent can act, what it can reach, and what happens when one of them goes wrong.",
+      outcome: "Ranked findings, and the order to fix them in",
     },
   ] as Engagement[],
-  // Availability and where this offer sits. dcyfr.ai/services lists the same
-  // three with what each includes, so a reader who sees both sites finds one
-  // offer.
+  // Availability and where this offer sits. The three rows above are the
+  // agent-governance side of the DCYFR Labs practice; dcyfr.ai/services covers
+  // the rest. No prices on either site until paid work goes live.
   note: {
-    lead: "I'm taking on new engagements. The first two are at a founding price, and what each includes is at",
+    lead: "I'm not taking paid engagements right now, and advice is pro bono. These three are the agent side of DCYFR Labs, and the full practice is at",
     link: { label: "dcyfr.ai/services", href: "https://www.dcyfr.ai/services" },
   },
   primary: { label: "Book an intro call", href: person.cal },
