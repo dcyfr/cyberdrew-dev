@@ -423,11 +423,11 @@ export const contact = {
     },
   ] as Engagement[],
   // Availability and where this offer sits. The three rows above are the
-  // agent-governance side of the DCYFR Labs practice, and dcyfr.ai/services
-  // names the same three, so a reader who sees both sites finds one offer.
+  // agent-governance side of the DCYFR Labs practice; dcyfr.ai/services covers
+  // the rest. No prices on either site until paid work goes live.
   note: {
     lead: "I'm taking on new engagements. These three are the agent side of DCYFR Labs, and the full practice is at",
-    link: { label: "dcyfr.ai/services", href: "https://www.dcyfr.ai/services#agent-governance" },
+    link: { label: "dcyfr.ai/services", href: "https://www.dcyfr.ai/services" },
   },
   primary: { label: "Book an intro call", href: person.cal },
   secondary: { label: person.email, href: `mailto:${person.email}` },
