@@ -20,8 +20,10 @@ ground and ink (`--accent` / `--on-accent`).
 
 Two consequences worth keeping:
 
-- **The contact block is the only full inversion on the page.** It is the
-  strongest move the system has, so it is spent exactly once, on the conversion.
+- **Inversion is reserved for controls and selection.** The solid button wears
+  the accent material and text selection swaps ground and ink. The contact
+  block used to be a full inversion; it is now the same glass as the header,
+  so the button inside it carries the emphasis.
 - **State can't lean on hue**, so it never does: status markers are a filled
   identity star plus a word. That is automatically colour-blind- and greyscale-safe.
 
@@ -64,7 +66,7 @@ Key display text carries a warm-to-cool light under the pointer
 - No Tailwind here. Hand-tuned CSS in [`app/globals.css`](app/globals.css)
   driven by tokens. Dark is default; light via `prefers-color-scheme` and an
   explicit `data-theme` toggle.
-- One self-hosted variable grotesk (Archivo, 36KB Latin subset) via
+- One self-hosted variable grotesk (Archivo, 35 KB Latin subset) via
   `next/font/local`, preloaded with a metric-matched fallback. Mono and the
   OG card fall back to system/vendored faces.
 
@@ -101,8 +103,9 @@ app/
   opengraph-image.tsx   share card (reads the TTFs in app/og/)
   icon.tsx              generated favicon, same star path
   not-found.tsx         themed 404
-  robots.ts             robots rules and sitemap pointer
-  sitemap.ts            sitemap
+  privacy/page.tsx      the privacy notice, linked from the footer
+  robots.ts             robots rules, the AI crawlers named and allowed, sitemap pointer
+  sitemap.ts            sitemap: the home page (build stamp) and /privacy (the notice's own date)
   llms.txt/route.ts     machine-readable site, GENERATED from lib/site.ts
   fonts/                vendored Archivo Variable (woff2) + licence
   og/                   static TTF cuts for the OG card (Archivo, PT Mono)
@@ -120,7 +123,7 @@ components/
   Guardrails.tsx        the controls and their hard values
   Writing.tsx           featured posts, read from the dcyfr.ai feed at build
   Contact.tsx           engagement shapes and the booking link
-  SiteFooter.tsx        sign-off, socials, build stamp
+  SiteFooter.tsx        sign-off, socials, build stamp, privacy link
   SocialIcon.tsx        inline GitHub, LinkedIn and X marks
   StarMark.tsx          renders lib/mark.ts
   ArrowIcon.tsx         outbound arrow; follow it with \u00A0, never a glyph
@@ -135,7 +138,8 @@ scripts/
   design-intent.mjs     design-intent assertions (npm run audit:intent)
 public/img/             the portrait and other images
 .github/workflows/
-  visual-gates.yml      runs both audits on pull requests that touch app/, components/ or lib/
+  visual-gates.yml      builds the site and runs both audits on pull requests that touch app/, components/,
+                        lib/, the two audit scripts or the workflow itself (also on manual dispatch)
 ```
 
 The page runs **header, hero, eclipse, work, loop, guardrails, writing, contact, footer**. An earlier loop / envelope / ledger layout is recoverable from git at `59f959e`.
@@ -223,14 +227,14 @@ silently misreads):
 
 - **0 WCAG AA failures** across every rendered text node, in **both** themes
 - **No horizontal scroll at 360px**; nav survives the narrow breakpoint
-- `next build` + TypeScript + `eslint .` all clean
+- `eslint` and `tsc --noEmit` clean as of 2026-11-17 (run `tsc` after a build, which generates the route types)
+- `next build` compiles, type-checks and prerenders all 9 pages, then exits 1 on Next.js 16.4.1 because the framework's own security-advisory check rejects that version. A Dependabot pull request bumping `next` to 16.4.6 is open
 
 ## Open
 
-The site is live, so the old "Before launch" checklist is retired. Of its four items, two are done in the repo (the domain is pointed, and the GitHub handle resolves) and one is decided (the page shows the guardrails as controls with hard values, and `lib/site.ts` keeps the spend ceiling as "enforced" rather than a figure). Two things are still mine to settle:
+The site is live, so the old "Before launch" checklist is retired. Of its four items, two are done in the repo (the domain is pointed, and the GitHub handle resolves) and one is decided (the page shows the guardrails as controls with hard values, and `lib/site.ts` keeps the spend ceiling as "enforced" rather than a figure). The contact section also now states availability: no paid engagements right now, advice pro bono. One thing is still mine to settle:
 
 - [ ] Confirm the LinkedIn (`linkedin.com/in/dcyfr`) and X (`x.com/dcyfr_`) handles still resolve. Only the GitHub one could be checked from here.
-- [ ] Decide whether the contact section should state real availability. It offers a booking link and three engagement shapes, with no statement of capacity.
 
 ## Deploy
 
